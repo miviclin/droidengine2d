@@ -1,0 +1,27 @@
+# Detect all text files automatically and normalize them (default)
+*               text=auto
+
+# These files are text and should be normalized
+*.java          text
+*.xml           text
+*.txt           text
+*.project       text
+*.properties    text
+*.classpath     text
+*.prefs         text
+*.md            text
+*.c             text
+*.cpp           text
+*.h             text
+*.mk            text
+
+# These files are binary and should be left untouched
+*.jar           binary
+*.so            binary
+*.png           binary
+*.jpg           binary
+*.gif           binary
+*.bmp           binary
+*.mp3           binary
+*.ogg           binary
+*.wav           binary
