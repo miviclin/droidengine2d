@@ -10,7 +10,7 @@ import com.miviclin.droidengine2d.util.MutexLock;
  * @author Miguel Vicente Linares
  * 
  */
-public class GameThread implements Runnable {
+public class GameThread implements Runnable { // TODO: Traducir
 	
 	private enum Estado {
 		INICIALIZANDO,
@@ -63,7 +63,7 @@ public class GameThread implements Runnable {
 	 */
 	public GameThread(int maxFPS, int maxFramesSaltados, Game juego, EngineLock engineLock) {
 		if (juego == null) {
-			throw new RuntimeException("El Juego no puede ser null");
+			//throw new RuntimeException("El Juego no puede ser null"); // TODO: Reactivar cuando se implemente el juego
 		}
 		if (maxFPS <= 0) {
 			throw new RuntimeException("maxFPS debe ser mayor que 0");
