@@ -11,8 +11,8 @@ import com.miviclin.droidengine2d.util.MutexLock;
  * @author Miguel Vicente Linares
  * 
  */
-public class GameThread implements Runnable { // TODO: Traducir
-
+public class GameThread implements Runnable {
+	
 	private enum State {
 		INITIALIZING,
 		RUNNING,
@@ -21,28 +21,26 @@ public class GameThread implements Runnable { // TODO: Traducir
 	}
 	
 	private final int maxSkippedFrames;
-	private final float idealTimePerFrame; // tiempo ideal para procesar 1 frame (ms)
+	private final float idealTimePerFrame;
+	private final Game game;
+	private final GLView glView;
+	private final EngineLock engineLock;
+	private final MutexLock pauseLock;
 	
 	private State currentState;
-	private Game game;
-	private final EngineLock engineLock;
-	
-	private GLView glView;
-	
-	private MutexLock sPausaHilo; // TODO: quitar si sobra
-	private boolean glInicializado; // TODO: quitar si sobra
+	private boolean started;
 	
 	/**
 	 * Constructor. Crea un nuevo HiloJuego. Por defecto, el maximo de FPS al que funcionara el juego es 30 y el numero de frames que puede
 	 * actualizar sin renderizar es 5.
 	 * 
-	 * @param maxFPS Maximos FPS a los que va a actualizarse el juego. En caso de que el dispositivo no sea capaz de mantener los FPS
-	 *            especificados, el juego podria experimentar ralentizacionas.
 	 * @param game Juego que va a gestionar este hilo
+	 * @param glView GLView en la que se representa el juego
+	 * @param engineLock Utilizado para sincronizar correctamente los hilos
 	 */
 	public GameThread(Game game, GLView glView, EngineLock engineLock) {
-		this(30, 5, game, engineLock);
-		this.glView = glView;
+		this(30, 5, game, glView, engineLock);
+		
 	}
 	
 	/**
@@ -51,9 +49,11 @@ public class GameThread implements Runnable { // TODO: Traducir
 	 * @param maxFPS Maximos FPS a los que va a actualizarse el juego. En caso de que el dispositivo no sea capaz de mantener los FPS
 	 *            especificados, el juego podria experimentar ralentizacionas.
 	 * @param game Juego que va a gestionar este hilo
+	 * @param glView GLView en la que se representa el juego
+	 * @param engineLock Utilizado para sincronizar correctamente los hilos
 	 */
-	public GameThread(int maxFPS, Game game, EngineLock engineLock) {
-		this(maxFPS, 5, game, engineLock);
+	public GameThread(int maxFPS, Game game, GLView glView, EngineLock engineLock) {
+		this(maxFPS, 5, game, glView, engineLock);
 	}
 	
 	/**
@@ -63,8 +63,10 @@ public class GameThread implements Runnable { // TODO: Traducir
 	 * @param maxSkippedFrames Maximos frames seguidos que se puede saltar sin renderizar en caso de que una vuelta del bucle principal del
 	 *            juego tarde mas de lo estipulado.
 	 * @param game Juego que va a gestionar este hilo
+	 * @param glView GLView en la que se representa el juego
+	 * @param engineLock Utilizado para sincronizar correctamente los hilos
 	 */
-	public GameThread(int maxFPS, int maxSkippedFrames, Game game, EngineLock engineLock) {
+	public GameThread(int maxFPS, int maxSkippedFrames, Game game, GLView glView, EngineLock engineLock) {
 		if (game == null) {
 			throw new IllegalArgumentException("The Game can not be null");
 		}
@@ -75,11 +77,10 @@ public class GameThread implements Runnable { // TODO: Traducir
 		this.maxSkippedFrames = maxSkippedFrames;
 		this.idealTimePerFrame = 1000 / maxFPS;
 		this.game = game;
+		this.glView = glView;
 		this.engineLock = engineLock;
-		
-		
-		this.sPausaHilo = new MutexLock();
-		this.glInicializado = false;
+		this.pauseLock = new MutexLock();
+		this.started = false;
 	}
 	
 	@Override
@@ -89,22 +90,15 @@ public class GameThread implements Runnable { // TODO: Traducir
 		long waitingTime;
 		int skippedFrames;
 		
-		if (currentState == State.INITIALIZING) {
-			Log.d("WaitNotify", "wait iniGL");
-			// sInicializacionGL.doWait();
-			glInicializado = true;
-			currentState = State.RUNNING;
-		}
 		while (currentState != State.TERMINATED) {
 			if (currentState == State.PAUSED) {
 				game.onEnginePaused();
 				Log.d("WaitNotify", "wait pausa");
-				sPausaHilo.lock();
+				pauseLock.lock();
 			}
 			if (currentState == State.RUNNING) {
 				startingTime = System.currentTimeMillis();
 				skippedFrames = 0;
-				// juego.actualizar((float) tIdealFrame);
 				Log.d("WaitNotify", "wait render");
 				if (engineLock.allowUpdate.get()) {
 					synchronized (engineLock.lock) {
@@ -117,11 +111,7 @@ public class GameThread implements Runnable { // TODO: Traducir
 				waitingTime = (long) (idealTimePerFrame - frameTime);
 				
 				if (waitingTime > 0) {
-					/*try {
-						Thread.sleep(waitingTime);
-					} catch (InterruptedException e) {
-					}*/
-					sleep(waitingTime, 0.333f); // TODO: Provisional, hacer pruebas.
+					sleep(waitingTime, 0.333f);
 				}
 				while ((waitingTime < 0) && (skippedFrames < maxSkippedFrames) && (currentState == State.RUNNING)) {
 					game.update((float) idealTimePerFrame);
@@ -145,7 +135,8 @@ public class GameThread implements Runnable { // TODO: Traducir
 			if (diff < limit) {
 				try {
 					Thread.sleep(1);
-				} catch (Exception exc) {
+				} catch (InterruptedException e) {
+					Log.w(GameThread.class.getSimpleName(), e.getMessage());
 				}
 			}
 			else {
@@ -158,9 +149,15 @@ public class GameThread implements Runnable { // TODO: Traducir
 	 * Inicia el hilo
 	 */
 	public void start() {
-		Thread hilo = new Thread(this);
-		hilo.setDaemon(true);
-		hilo.start();
+		Thread thread;
+		if (started) {
+			throw new IllegalThreadStateException("Thread already started.");
+		}
+		thread = new Thread(this);
+		thread.setDaemon(true);
+		started = true;
+		currentState = State.RUNNING;
+		thread.start();
 	}
 	
 	/**
@@ -168,11 +165,7 @@ public class GameThread implements Runnable { // TODO: Traducir
 	 */
 	public void terminate() {
 		currentState = State.TERMINATED;
-		Log.d("WaitNotify", "notify iniGL");
-		// sInicializacionGL.doNotify();
-		Log.d("WaitNotify", "notify pausa");
-		sPausaHilo.unlock();
-		Log.d("WaitNotify", "notify render");
+		pauseLock.unlock();
 		engineLock.allowUpdate.set(true);
 	}
 	
@@ -181,7 +174,6 @@ public class GameThread implements Runnable { // TODO: Traducir
 	 */
 	public void pause() {
 		currentState = State.PAUSED;
-		Log.d("WaitNotify", "notify render pausar");
 		engineLock.allowUpdate.set(true);
 	}
 	
@@ -189,21 +181,11 @@ public class GameThread implements Runnable { // TODO: Traducir
 	 * Reanuda el hilo del juego
 	 */
 	public void resume() {
-		// Este metodo se llama en el onResume() de la Activity, que se llama al crear la Activity por primera
-		// vez y luego cada vez que vuelve de background. Por eso hay que diferenciar si se ha llamado antes de
-		// que se complete la inicializacion, o se ha llamado porque la Activity vuelve de background.
-		State estado = currentState;
-		if (!glInicializado) {
-			currentState = State.INITIALIZING;
-		} else {
+		if (currentState == State.PAUSED) {
 			currentState = State.RUNNING;
-		}
-		if (estado == State.PAUSED) {
 			game.onEngineResumed();
-			Log.d("WaitNotify", "wait render - reset");
 			engineLock.allowUpdate.set(true);
-			Log.d("WaitNotify", "notify pausa");
-			sPausaHilo.unlock();
+			pauseLock.unlock();
 		}
 	}
 	
