@@ -2,6 +2,7 @@ package com.miviclin.droidengine2d.engine;
 
 import android.util.Log;
 
+import com.miviclin.droidengine2d.graphics.GLView;
 import com.miviclin.droidengine2d.util.MutexLock;
 
 /**
@@ -11,24 +12,25 @@ import com.miviclin.droidengine2d.util.MutexLock;
  * 
  */
 public class GameThread implements Runnable { // TODO: Traducir
-	
-	private enum Estado {
-		INICIALIZANDO,
-		CORRIENDO,
-		PAUSADO,
-		TERMINADO;
+
+	private enum State {
+		INITIALIZING,
+		RUNNING,
+		PAUSED,
+		TERMINATED;
 	}
 	
-	private Estado estadoActual;
+	private final int maxSkippedFrames;
+	private final float idealTimePerFrame; // tiempo ideal para procesar 1 frame (ms)
 	
-	private final int maxFramesSaltados;
-	private final float tIdealFrame; // tiempo ideal para procesar 1 frame (ms)
-	
-	private Game juego;
-	// private DobleBufferRenderizado bufferRenderizado; // TODO: reimplementar el buffer
+	private State currentState;
+	private Game game;
 	private final EngineLock engineLock;
-	private MutexLock sPausaHilo;
-	private boolean glInicializado;
+	
+	private GLView glView;
+	
+	private MutexLock sPausaHilo; // TODO: quitar si sobra
+	private boolean glInicializado; // TODO: quitar si sobra
 	
 	/**
 	 * Constructor. Crea un nuevo HiloJuego. Por defecto, el maximo de FPS al que funcionara el juego es 30 y el numero de frames que puede
@@ -36,10 +38,11 @@ public class GameThread implements Runnable { // TODO: Traducir
 	 * 
 	 * @param maxFPS Maximos FPS a los que va a actualizarse el juego. En caso de que el dispositivo no sea capaz de mantener los FPS
 	 *            especificados, el juego podria experimentar ralentizacionas.
-	 * @param juego Juego que va a gestionar este hilo
+	 * @param game Juego que va a gestionar este hilo
 	 */
-	public GameThread(Game juego, EngineLock engineLock) {
-		this(30, 5, juego, engineLock);
+	public GameThread(Game game, GLView glView, EngineLock engineLock) {
+		this(30, 5, game, engineLock);
+		this.glView = glView;
 	}
 	
 	/**
@@ -47,97 +50,114 @@ public class GameThread implements Runnable { // TODO: Traducir
 	 * 
 	 * @param maxFPS Maximos FPS a los que va a actualizarse el juego. En caso de que el dispositivo no sea capaz de mantener los FPS
 	 *            especificados, el juego podria experimentar ralentizacionas.
-	 * @param juego Juego que va a gestionar este hilo
+	 * @param game Juego que va a gestionar este hilo
 	 */
-	public GameThread(int maxFPS, Game juego, EngineLock engineLock) {
-		this(maxFPS, 5, juego, engineLock);
+	public GameThread(int maxFPS, Game game, EngineLock engineLock) {
+		this(maxFPS, 5, game, engineLock);
 	}
 	
 	/**
 	 * Constructor
 	 * 
 	 * @param maxFPS Maximos FPS a los que va a actualizarse el juego
-	 * @param maxFramesSaltados Maximos frames seguidos que se puede saltar sin renderizar en caso de que una vuelta del bucle principal del
+	 * @param maxSkippedFrames Maximos frames seguidos que se puede saltar sin renderizar en caso de que una vuelta del bucle principal del
 	 *            juego tarde mas de lo estipulado.
-	 * @param juego Juego que va a gestionar este hilo
+	 * @param game Juego que va a gestionar este hilo
 	 */
-	public GameThread(int maxFPS, int maxFramesSaltados, Game juego, EngineLock engineLock) {
-		if (juego == null) {
-			//throw new RuntimeException("El Juego no puede ser null"); // TODO: Reactivar cuando se implemente el juego
+	public GameThread(int maxFPS, int maxSkippedFrames, Game game, EngineLock engineLock) {
+		if (game == null) {
+			throw new IllegalArgumentException("The Game can not be null");
 		}
 		if (maxFPS <= 0) {
-			throw new RuntimeException("maxFPS debe ser mayor que 0");
+			throw new IllegalArgumentException("maxFPS must be greater than 0");
 		}
-		this.estadoActual = Estado.INICIALIZANDO;
-		this.maxFramesSaltados = maxFramesSaltados;
-		this.tIdealFrame = 1000 / maxFPS;
-		this.juego = juego;
-		// this.bufferRenderizado = juego.getGLView().getBufferRenderizado();
+		this.currentState = State.INITIALIZING;
+		this.maxSkippedFrames = maxSkippedFrames;
+		this.idealTimePerFrame = 1000 / maxFPS;
+		this.game = game;
 		this.engineLock = engineLock;
-		this.sPausaHilo = new MutexLock();
 		
+		
+		this.sPausaHilo = new MutexLock();
 		this.glInicializado = false;
 	}
 	
 	@Override
 	public void run() {
-		long tInicio;
-		long tFrame;
-		long tEspera;
-		int framesSaltados;
+		long startingTime;
+		long frameTime;
+		long waitingTime;
+		int skippedFrames;
 		
-		if (estadoActual == Estado.INICIALIZANDO) {
+		if (currentState == State.INITIALIZING) {
 			Log.d("WaitNotify", "wait iniGL");
 			// sInicializacionGL.doWait();
 			glInicializado = true;
-			estadoActual = Estado.CORRIENDO;
+			currentState = State.RUNNING;
 		}
-		while (estadoActual != Estado.TERMINADO) {
-			if (estadoActual == Estado.PAUSADO) {
-				juego.onEnginePaused();
+		while (currentState != State.TERMINATED) {
+			if (currentState == State.PAUSED) {
+				game.onEnginePaused();
 				Log.d("WaitNotify", "wait pausa");
 				sPausaHilo.lock();
 			}
-			if (estadoActual == Estado.CORRIENDO) {
-				tInicio = System.currentTimeMillis();
-				framesSaltados = 0;
+			if (currentState == State.RUNNING) {
+				startingTime = System.currentTimeMillis();
+				skippedFrames = 0;
 				// juego.actualizar((float) tIdealFrame);
 				Log.d("WaitNotify", "wait render");
-				engineLock.waitUntilCanUpdate();
-				// Hacemos esta doble comprobacion para evitar enviar los elementos actualizados en caso de que
-				// se haya pausado el hilo antes de que el hilo del GLRenderer haya terminado de pintar.
-				if (estadoActual == Estado.CORRIENDO) {
-					// bufferRenderizado.intercambiarBuffers();
-					Log.d("WaitNotify", "notify actualizacion");
-					engineLock.notifyCanRender();
-				}
-				tFrame = System.currentTimeMillis() - tInicio;
-				tEspera = (long) (tIdealFrame - tFrame);
-				
-				if (tEspera > 0) {
-					try {
-						Thread.sleep(tEspera);
-					} catch (InterruptedException e) {
+				if (engineLock.allowUpdate.get()) {
+					synchronized (engineLock.lock) {
+						game.update((float) idealTimePerFrame);
+						engineLock.allowUpdate.set(false);
+						glView.requestRender();
 					}
 				}
-				while ((tEspera < 0) && (framesSaltados < maxFramesSaltados) && (estadoActual == Estado.CORRIENDO)) {
-					// juego.actualizar((float) tIdealFrame);
-					tEspera += tIdealFrame;
-					framesSaltados++;
+				frameTime = System.currentTimeMillis() - startingTime;
+				waitingTime = (long) (idealTimePerFrame - frameTime);
+				
+				if (waitingTime > 0) {
+					/*try {
+						Thread.sleep(waitingTime);
+					} catch (InterruptedException e) {
+					}*/
+					sleep(waitingTime, 0.333f); // TODO: Provisional, hacer pruebas.
 				}
-				Log.d("FramesSaltados", framesSaltados + "");
-				Log.d("TiempoFrame", (System.currentTimeMillis() - tInicio) + "ms");
+				while ((waitingTime < 0) && (skippedFrames < maxSkippedFrames) && (currentState == State.RUNNING)) {
+					game.update((float) idealTimePerFrame);
+					waitingTime += idealTimePerFrame;
+					skippedFrames++;
+				}
+				Log.d("FramesSaltados", skippedFrames + "");
+				Log.d("TiempoFrame", (System.currentTimeMillis() - startingTime) + "ms");
 			}
 		}
-		juego.onEngineDisposed();
-		// bufferRenderizado.vaciar();
+		game.onEngineDisposed();
 		Log.d("Finish", "hilo terminado");
+	}
+	
+	private void sleep(long sleepTimeMillis, float sleepTimePercentage) {
+		long diff;
+		long prev = System.nanoTime();
+		long sleep = sleepTimeMillis * 1000000;
+		long limit = (long) (sleep * sleepTimePercentage);
+		while ((diff = System.nanoTime() - prev) < sleep) {
+			if (diff < limit) {
+				try {
+					Thread.sleep(1);
+				} catch (Exception exc) {
+				}
+			}
+			else {
+				Thread.yield();
+			}
+		}
 	}
 	
 	/**
 	 * Inicia el hilo
 	 */
-	public void iniciar() {
+	public void start() {
 		Thread hilo = new Thread(this);
 		hilo.setDaemon(true);
 		hilo.start();
@@ -146,47 +166,44 @@ public class GameThread implements Runnable { // TODO: Traducir
 	/**
 	 * Para el hilo del juego. Llamar solo cuando no se vaya a utilizar nunca mas, por ejemplo al salir de la aplicacion.
 	 */
-	public void parar() {
-		estadoActual = Estado.TERMINADO;
+	public void terminate() {
+		currentState = State.TERMINATED;
 		Log.d("WaitNotify", "notify iniGL");
 		// sInicializacionGL.doNotify();
 		Log.d("WaitNotify", "notify pausa");
-		sPausaHilo.lock();
+		sPausaHilo.unlock();
 		Log.d("WaitNotify", "notify render");
-		engineLock.notifyCanRender();
+		engineLock.allowUpdate.set(true);
 	}
 	
 	/**
 	 * Pausa el hilo del juego
 	 */
-	public void pausar() {
-		estadoActual = Estado.PAUSADO;
+	public void pause() {
+		currentState = State.PAUSED;
 		Log.d("WaitNotify", "notify render pausar");
-		engineLock.notifyCanRender();
+		engineLock.allowUpdate.set(true);
 	}
 	
 	/**
 	 * Reanuda el hilo del juego
 	 */
-	public void reanudar() {
+	public void resume() {
 		// Este metodo se llama en el onResume() de la Activity, que se llama al crear la Activity por primera
 		// vez y luego cada vez que vuelve de background. Por eso hay que diferenciar si se ha llamado antes de
 		// que se complete la inicializacion, o se ha llamado porque la Activity vuelve de background.
-		Estado estado = estadoActual;
+		State estado = currentState;
 		if (!glInicializado) {
-			estadoActual = Estado.INICIALIZANDO;
+			currentState = State.INITIALIZING;
 		} else {
-			estadoActual = Estado.CORRIENDO;
+			currentState = State.RUNNING;
 		}
-		if (estado == Estado.PAUSADO) {
-			juego.onEngineResumed();
-			// Reiniciamos el semaforo sRenderizado por precaucion
-			Log.d("WaitNotify", "notify render - reset");
-			engineLock.notifyCanRender();
+		if (estado == State.PAUSED) {
+			game.onEngineResumed();
 			Log.d("WaitNotify", "wait render - reset");
-			engineLock.waitUntilCanRender();
+			engineLock.allowUpdate.set(true);
 			Log.d("WaitNotify", "notify pausa");
-			sPausaHilo.lock();
+			sPausaHilo.unlock();
 		}
 	}
 	

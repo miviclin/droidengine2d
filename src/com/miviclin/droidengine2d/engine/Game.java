@@ -18,4 +18,8 @@ public abstract class Game {
 	
 	public abstract void onEngineDisposed();
 	
+	public abstract void update(float delta);
+	
+	public abstract void draw(); // TODO: Pasarle un SpriteBatch o algo que se encargue de pintar en pantalla
+	
 }

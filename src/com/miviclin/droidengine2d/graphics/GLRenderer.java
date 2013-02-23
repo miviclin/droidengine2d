@@ -9,6 +9,7 @@ import android.opengl.GLSurfaceView;
 import android.util.Log;
 
 import com.miviclin.droidengine2d.engine.EngineLock;
+import com.miviclin.droidengine2d.engine.Game;
 
 public class GLRenderer implements GLSurfaceView.Renderer {
 	
@@ -27,7 +28,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 	
 	float p = 0.0f;
 	
-	public GLRenderer(Context context, EngineLock engineLock) {
+	public GLRenderer(Game game, EngineLock engineLock, Context context) {
 		this.context = context;
 		this.engineLock = engineLock;
 		this.justCreated = true;
@@ -35,11 +36,15 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 	
 	@Override
 	public void onDrawFrame(GL10 glUnused) {
-		if (justCreated) {
-			justCreated = false;
-			engineLock.notifyCanUpdate();
+		if (!engineLock.allowUpdate.get()) {
+			synchronized (engineLock.lock) {
+				draw();				
+				engineLock.allowUpdate.set(true);
+			}
 		}
-		engineLock.waitUntilCanRender();
+	}
+	
+	private void draw() {
 		// Contador de FPS improvisado, mejorar mas adelante
 		if (nFrames++ == 9) {
 			if (tInicio != 0) {
@@ -71,7 +76,6 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 		s1.setPosition(0.0f, 300.0f);
 		spriteBatch.draw(s1, camera);
 		spriteBatch.end();
-		engineLock.notifyCanUpdate();
 	}
 	
 	@Override

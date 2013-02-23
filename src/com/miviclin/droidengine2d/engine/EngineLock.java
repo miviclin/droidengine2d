@@ -1,6 +1,6 @@
-package com.miviclin.droidengine2d.engine;
+﻿package com.miviclin.droidengine2d.engine;
 
-import com.miviclin.droidengine2d.util.MutexLock;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * EngineLock se utiliza para controlar la sincronizacion entre el hilo de actualizacion del juego y el hilo de renderizado.
@@ -10,28 +10,12 @@ import com.miviclin.droidengine2d.util.MutexLock;
  */
 public class EngineLock {
 	
-	private final MutexLock updateLock;
-	private final MutexLock renderLock;
+	public final AtomicBoolean allowUpdate;
+	public final Object lock;
 	
 	public EngineLock() {
-		this.updateLock = new MutexLock();
-		this.renderLock = new MutexLock();
-	}
-	
-	public void waitUntilCanUpdate() {
-		updateLock.lock();
-	}
-	
-	public void notifyCanUpdate() {
-		updateLock.unlock();
-	}
-	
-	public void waitUntilCanRender() {
-		renderLock.lock();
-	}
-	
-	public void notifyCanRender() {
-		renderLock.unlock();
+		this.allowUpdate = new AtomicBoolean();
+		this.lock = new Object();
 	}
 	
 }

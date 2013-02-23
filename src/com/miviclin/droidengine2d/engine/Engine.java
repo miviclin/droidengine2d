@@ -3,6 +3,7 @@ package com.miviclin.droidengine2d.engine;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.ConfigurationInfo;
+import android.opengl.GLSurfaceView;
 
 import com.miviclin.droidengine2d.graphics.GLRenderer;
 import com.miviclin.droidengine2d.graphics.GLView;
@@ -25,17 +26,19 @@ public class Engine {
 	 * 
 	 * @param context
 	 */
-	public Engine(Context context) {
+	public Engine(Game game, Context context) { // XXX: Usar Builder Pattern mas adelante
 		EngineLock engineLock = new EngineLock();
-		this.renderer = new GLRenderer(context, engineLock);
-		this.gameThread = new GameThread(null, engineLock); // TODO: Implementar Game
+		
+		this.gameThread = new GameThread(game, glView, engineLock);
+		this.renderer = new GLRenderer(game, engineLock, context);
 		
 		this.glView = new GLView(context);
 		//if (detectOpenGLES20()) {
 			glView.setEGLContextClientVersion(2);
 		//}
 		// TODO: En caso de que no sea compatible, buscar solucion
-		
+			this.gameThread = new GameThread(game, glView, engineLock);
+			this.renderer = new GLRenderer(game, engineLock, context);
 		this.context = context;
 	}
 	
@@ -54,8 +57,9 @@ public class Engine {
 	 * Lanza los hilos del Juego y GLView e inicia el juego
 	 */
 	public void startGame() {
-		gameThread.iniciar();
+		gameThread.start();
 		glView.setRenderer(renderer);
+		glView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
 	}
 	
 	/**
@@ -63,7 +67,7 @@ public class Engine {
 	 */
 	public void onPause() {
 		glView.onPause();
-		gameThread.pausar();
+		gameThread.pause();
 	}
 	
 	/**
@@ -71,14 +75,14 @@ public class Engine {
 	 */
 	public void onResume() {
 		glView.onResume();
-		gameThread.reanudar();
+		gameThread.resume();
 	}
 	
 	/**
 	 * Para el juego. Llamar cuando se termine la aplicacion.
 	 */
 	public void onFinish() {
-		gameThread.parar();
+		gameThread.terminate();
 	}
 	
 	/**
