@@ -40,7 +40,7 @@ public class Engine {
 		if (game == null) {
 			throw new IllegalArgumentException("The Game can not be null");
 		}
-		this.glView = new GLView(game.getActivity());
+		this.glView = game.getGLView();
 		this.glView.setEGLContextClientVersion(2);
 		this.gameThread = new GameThread(game, glView, engineLock);
 		this.renderer = new GLRenderer(game, engineLock);
@@ -52,7 +52,7 @@ public class Engine {
 	 * 
 	 * @return GLView
 	 */
-	public GLView getGlView() {
+	public GLView getGLView() {
 		return glView;
 	}
 	
