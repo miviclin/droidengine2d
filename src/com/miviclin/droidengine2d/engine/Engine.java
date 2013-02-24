@@ -1,6 +1,5 @@
 package com.miviclin.droidengine2d.engine;
 
-import android.content.Context;
 import android.opengl.GLSurfaceView;
 
 import com.miviclin.droidengine2d.graphics.GLRenderer;
@@ -31,14 +30,18 @@ public class Engine {
 	 * }
 	 * </pre>
 	 * 
-	 * @param context
+	 * @param game Juego
+	 * @throws IllegalArgumentException Si el juego es null
 	 */
-	public Engine(Game game, Context context) { // XXX: Usar Builder Pattern mas adelante
+	public Engine(Game game) {
 		EngineLock engineLock = new EngineLock();
-		this.glView = new GLView(context);
+		if (game == null) {
+			throw new IllegalArgumentException("The Game can not be null");
+		}
+		this.glView = new GLView(game.getActivity());
 		this.glView.setEGLContextClientVersion(2);
 		this.gameThread = new GameThread(game, glView, engineLock);
-		this.renderer = new GLRenderer(game, engineLock, context);
+		this.renderer = new GLRenderer(game, engineLock);
 	}
 	
 	/**

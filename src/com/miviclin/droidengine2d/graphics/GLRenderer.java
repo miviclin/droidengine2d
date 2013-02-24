@@ -28,8 +28,8 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 	
 	float p = 0.0f;
 	
-	public GLRenderer(Game game, EngineLock engineLock, Context context) {
-		this.context = context;
+	public GLRenderer(Game game, EngineLock engineLock) {
+		this.context = game.getActivity();
 		this.engineLock = engineLock;
 		this.justCreated = true;
 	}

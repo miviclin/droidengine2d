@@ -1,5 +1,7 @@
 package com.miviclin.droidengine2d.engine;
 
+import android.app.Activity;
+
 /**
  * Game
  * 
@@ -8,8 +10,17 @@ package com.miviclin.droidengine2d.engine;
  */
 public abstract class Game {
 	
-	public Game() {
-		
+	private Activity activity;
+	
+	public Game(Activity activity) {
+		if (activity == null) {
+			throw new IllegalArgumentException("The Activity can not be null");
+		}
+		this.activity = activity;
+	}
+	
+	public Activity getActivity() {
+		return activity;
 	}
 	
 	public abstract void onEnginePaused();
