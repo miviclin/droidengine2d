@@ -1,5 +1,6 @@
 package com.miviclin.droidengine2d.engine;
 
+import android.app.Activity;
 import android.opengl.GLSurfaceView;
 
 import com.miviclin.droidengine2d.graphics.GLRenderer;
@@ -16,6 +17,7 @@ public class Engine {
 	private GameThread gameThread;
 	private GLRenderer renderer;
 	private GLView glView;
+	private Activity activity;
 	
 	/**
 	 * Crea un Engine.<br>
@@ -42,6 +44,16 @@ public class Engine {
 		this.glView.setEGLContextClientVersion(2);
 		this.gameThread = new GameThread(game, glView, engineLock);
 		this.renderer = new GLRenderer(game, engineLock);
+		this.activity = game.getActivity();
+	}
+	
+	/**
+	 * Devuelve el GLView
+	 * 
+	 * @return GLView
+	 */
+	public GLView getGlView() {
+		return glView;
 	}
 	
 	/**
@@ -54,11 +66,15 @@ public class Engine {
 	}
 	
 	/**
-	 * Pausa los hilos del juego. Llamar en Activity.onPause()
+	 * Pausa los hilos del juego. Llamar en Activity.onPause()<br>
+	 * Si se ha llamado a onPause() porque la Activity se esta cerrando, este metodo llama a {@link Engine#onFinish()}
 	 */
 	public void onPause() {
 		glView.onPause();
 		gameThread.pause();
+		if (activity.isFinishing()) {
+			onFinish();
+		}
 	}
 	
 	/**
@@ -70,19 +86,13 @@ public class Engine {
 	}
 	
 	/**
-	 * Para el juego. Llamar cuando se termine la aplicacion.
+	 * Para el hilo del juego. Llamar cuando se termine la aplicacion.<br>
+	 * Si se sobreescribe este metodo, se debe llamar a {@code super.onFinish()} para que el hilo del juego se destruya al salir de la
+	 * aplicacion, de lo contrario podria quedarse funcionando en segundo plano. Este metodo es llamado por {@link Engine#onPause()} cuando
+	 * la Activity se esta cerrando.
 	 */
-	public void onFinish() {
+	protected void onFinish() {
 		gameThread.terminate();
-	}
-	
-	/**
-	 * Devuelve el GLView
-	 * 
-	 * @return GLView
-	 */
-	public GLView getGlView() {
-		return glView;
 	}
 	
 }
