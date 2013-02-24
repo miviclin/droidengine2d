@@ -1,4 +1,4 @@
-package com.miviclin.droidengine2d.engine.resources;
+package com.miviclin.droidengine2d.resources;
 
 import java.io.IOException;
 import java.io.InputStream;
