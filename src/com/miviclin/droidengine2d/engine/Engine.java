@@ -1,8 +1,6 @@
 package com.miviclin.droidengine2d.engine;
 
-import android.app.ActivityManager;
 import android.content.Context;
-import android.content.pm.ConfigurationInfo;
 import android.opengl.GLSurfaceView;
 
 import com.miviclin.droidengine2d.graphics.GLRenderer;
@@ -19,38 +17,28 @@ public class Engine {
 	private GameThread gameThread;
 	private GLRenderer renderer;
 	private GLView glView;
-	private Context context;
 	
 	/**
-	 * Crea un Engine
+	 * Crea un Engine.<br>
+	 * AndroidEngine utiliza OpenGL ES 2.0, por tanto, es recomendable comprobar primero si el dispositivo soporta OpenGL ES 2.0. Ejemplo:
+	 * 
+	 * <pre>
+	 * {@code Engine engine;
+	 * if (detectOpenGLES20()) {
+	 *     engine = new Engine(...);
+	 * } else {
+	 *     // Indicar al usuario que su dispositivo no soporta OpenGL ES 2.0 y cerrar la app
+	 * }
+	 * </pre>
 	 * 
 	 * @param context
 	 */
 	public Engine(Game game, Context context) { // XXX: Usar Builder Pattern mas adelante
 		EngineLock engineLock = new EngineLock();
-		
+		this.glView = new GLView(context);
+		this.glView.setEGLContextClientVersion(2);
 		this.gameThread = new GameThread(game, glView, engineLock);
 		this.renderer = new GLRenderer(game, engineLock, context);
-		
-		this.glView = new GLView(context);
-		//if (detectOpenGLES20()) {
-			glView.setEGLContextClientVersion(2);
-		//}
-		// TODO: En caso de que no sea compatible, buscar solucion
-			this.gameThread = new GameThread(game, glView, engineLock);
-			this.renderer = new GLRenderer(game, engineLock, context);
-		this.context = context;
-	}
-	
-	/**
-	 * Detecta si el dispositivo soporta OpenGL ES 2.0
-	 * 
-	 * @return true si lo soporta, false en caso contrario
-	 */
-	private boolean detectOpenGLES20() {
-		ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-		ConfigurationInfo info = am.getDeviceConfigurationInfo();
-		return (info.reqGlEsVersion >= 0x20000);
 	}
 	
 	/**
