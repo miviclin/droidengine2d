@@ -10,6 +10,13 @@ import android.util.Log;
 
 import com.miviclin.droidengine2d.engine.EngineLock;
 import com.miviclin.droidengine2d.engine.Game;
+import com.miviclin.droidengine2d.graphics.camera.Camera;
+import com.miviclin.droidengine2d.graphics.camera.OrthographicCamera;
+import com.miviclin.droidengine2d.graphics.shader.DynamicSpriteBatchShaderProgram;
+import com.miviclin.droidengine2d.graphics.sprites.DynamicSpriteBatch;
+import com.miviclin.droidengine2d.graphics.sprites.Sprite;
+import com.miviclin.droidengine2d.graphics.textures.GLTexture;
+import com.miviclin.droidengine2d.graphics.textures.TextureRegion;
 
 public class GLRenderer implements GLSurfaceView.Renderer {
 	

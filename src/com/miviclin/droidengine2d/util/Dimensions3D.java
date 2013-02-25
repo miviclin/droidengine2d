@@ -1,23 +1,27 @@
-package com.miviclin.droidengine2d.graphics;
+package com.miviclin.droidengine2d.util;
 
-public class Dimensions2D {
+public class Dimensions3D {
 	
 	private float width;
 	private float height;
+	private float depth;
 	
-	public Dimensions2D(float width, float height) {
+	public Dimensions3D(float width, float height, float depth) {
 		this.width = width;
 		this.height = height;
+		this.depth = depth;
 	}
 	
-	public void set(float width, float height) {
+	public void set(float width, float height, float depth) {
 		this.width = width;
 		this.height = height;
+		this.depth = depth;
 	}
 	
-	public void set(Dimensions2D dimensions) {
+	public void set(Dimensions3D dimensions) {
 		this.width = dimensions.width;
 		this.height = dimensions.height;
+		this.depth = dimensions.depth;
 	}
 	
 	public float getWidth() {
@@ -34,6 +38,14 @@ public class Dimensions2D {
 	
 	public void setHeight(float height) {
 		this.height = height;
+	}
+	
+	public float getDepth() {
+		return depth;
+	}
+	
+	public void setDepth(float depth) {
+		this.depth = depth;
 	}
 	
 }

@@ -1,4 +1,4 @@
-package com.miviclin.droidengine2d.graphics;
+package com.miviclin.droidengine2d.graphics.camera;
 
 public class OrthographicCamera extends Camera {
 	

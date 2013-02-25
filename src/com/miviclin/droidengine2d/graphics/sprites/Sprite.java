@@ -1,4 +1,8 @@
-package com.miviclin.droidengine2d.graphics;
+package com.miviclin.droidengine2d.graphics.sprites;
+
+import com.miviclin.droidengine2d.graphics.textures.TextureRegion;
+import com.miviclin.droidengine2d.util.Dimensions2D;
+import com.miviclin.droidengine2d.util.Point2D;
 
 public class Sprite {
 	

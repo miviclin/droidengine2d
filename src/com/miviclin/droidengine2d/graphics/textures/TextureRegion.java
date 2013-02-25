@@ -1,4 +1,4 @@
-package com.miviclin.droidengine2d.graphics;
+package com.miviclin.droidengine2d.graphics.textures;
 
 public class TextureRegion { // TODO: revisar el calculo de U y V (restar medio texel?)
 

@@ -1,4 +1,4 @@
-package com.miviclin.droidengine2d.graphics;
+package com.miviclin.droidengine2d.graphics.textures;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -6,6 +6,7 @@ import android.opengl.GLES20;
 import android.opengl.GLUtils;
 
 import com.miviclin.droidengine2d.resources.AssetsLoader;
+import com.miviclin.droidengine2d.util.Dimensions2D;
 
 public class GLTexture implements Comparable<GLTexture> {
 	

@@ -1,4 +1,6 @@
-package com.miviclin.droidengine2d.graphics;
+package com.miviclin.droidengine2d.graphics.sprites;
+
+import com.miviclin.droidengine2d.graphics.camera.Camera;
 
 public interface SpriteBatch {
 	

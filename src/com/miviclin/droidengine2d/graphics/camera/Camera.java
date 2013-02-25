@@ -1,7 +1,8 @@
-package com.miviclin.droidengine2d.graphics;
+package com.miviclin.droidengine2d.graphics.camera;
 
 import com.miviclin.droidengine2d.math.Matrix4;
 import com.miviclin.droidengine2d.math.Vector3;
+import com.miviclin.droidengine2d.util.Dimensions2D;
 
 public abstract class Camera {
 	

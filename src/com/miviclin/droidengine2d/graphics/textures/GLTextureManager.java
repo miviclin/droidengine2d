@@ -1,4 +1,4 @@
-package com.miviclin.droidengine2d.graphics;
+package com.miviclin.droidengine2d.graphics.textures;
 
 import java.util.ArrayList;
 
