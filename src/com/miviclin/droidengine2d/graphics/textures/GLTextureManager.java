@@ -166,4 +166,19 @@ public final class GLTextureManager {
 		}
 	}
 	
+	/**
+	 * Carga todas las texturas.<br>
+	 * NOTA: Este metodo debe ejecutarse en el hilo del GLRenderer
+	 */
+	public void loadAllTextures() {
+		for (int i = 0; i < activeTextures.size(); i++) {
+			activeTextures.get(i).loadTexture(context);
+			texturesToLoad--;
+			if (texturesToLoad == 0) {
+				break;
+			}
+		}
+		texturesToLoad = 0;
+	}
+	
 }

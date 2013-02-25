@@ -3,6 +3,10 @@ package com.miviclin.droidengine2d.engine;
 import android.app.Activity;
 
 import com.miviclin.droidengine2d.graphics.GLView;
+import com.miviclin.droidengine2d.graphics.camera.Camera;
+import com.miviclin.droidengine2d.graphics.camera.OrthographicCamera;
+import com.miviclin.droidengine2d.graphics.sprites.SpriteBatch;
+import com.miviclin.droidengine2d.graphics.textures.GLTextureManager;
 import com.miviclin.droidengine2d.ui.GameView;
 
 /**
@@ -14,8 +18,10 @@ import com.miviclin.droidengine2d.ui.GameView;
  */
 public abstract class Game {
 	
-	private Activity activity;
-	private GLView glView;
+	private final Activity activity;
+	private final GLView glView;
+	private final GLTextureManager textureManager;
+	private Camera camera;
 	
 	/**
 	 * Constructor
@@ -28,6 +34,8 @@ public abstract class Game {
 		}
 		this.activity = activity;
 		this.glView = new GLView(activity);
+		this.textureManager = new GLTextureManager(activity);
+		this.camera = new OrthographicCamera();
 	}
 	
 	/**
@@ -59,6 +67,36 @@ public abstract class Game {
 	}
 	
 	/**
+	 * Devuelve el GLTextureManager.
+	 * 
+	 * @return GLTextureManager
+	 */
+	public GLTextureManager getTextureManager() {
+		return textureManager;
+	}
+	
+	/**
+	 * Devuelve la camara.
+	 * 
+	 * @return Camera
+	 */
+	public Camera getCamera() {
+		return camera;
+	}
+	
+	/**
+	 * Asigna una nueva camara al juego.
+	 * 
+	 * @param camera Nueva camara. No puede ser null
+	 */
+	public void setCamera(Camera camera) {
+		if (camera == null) {
+			throw new IllegalArgumentException("The camera can not be null");
+		}
+		this.camera = camera;
+	}
+	
+	/**
 	 * Se llama cuando se pausa el GameThread, normalmente debido a que la Activity recibe una llamada a onPause()
 	 */
 	public abstract void onEnginePaused();
@@ -86,6 +124,6 @@ public abstract class Game {
 	 * Renderiza los elementos del juego de forma que puedan verse en pantalla.<br>
 	 * Este metodo se ejecuta en el hilo del GLRenderer tras ejecutar {@link #update(float)} en el GameThread
 	 */
-	public abstract void draw(); // TODO: Pasarle un SpriteBatch o algo que se encargue de pintar en pantalla
+	public abstract void draw(SpriteBatch spriteBatch);
 	
 }
