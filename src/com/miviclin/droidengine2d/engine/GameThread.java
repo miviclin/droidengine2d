@@ -93,13 +93,11 @@ public class GameThread implements Runnable {
 		while (currentState != State.TERMINATED) {
 			if (currentState == State.PAUSED) {
 				game.onEnginePaused();
-				Log.d("WaitNotify", "wait pausa");
 				pauseLock.lock();
 			}
 			if (currentState == State.RUNNING) {
 				startingTime = System.currentTimeMillis();
 				skippedFrames = 0;
-				Log.d("WaitNotify", "wait render");
 				if (engineLock.allowUpdate.get()) {
 					synchronized (engineLock.lock) {
 						game.update((float) idealTimePerFrame);
@@ -123,7 +121,6 @@ public class GameThread implements Runnable {
 			}
 		}
 		game.onEngineDisposed();
-		Log.d("Finish", "hilo terminado");
 	}
 	
 	private void sleep(long sleepTimeMillis, float sleepTimePercentage) {
