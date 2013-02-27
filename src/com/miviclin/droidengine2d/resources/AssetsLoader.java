@@ -9,7 +9,7 @@ import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-import com.miviclin.droidengine2d.graphics.Dimensions2D;
+import com.miviclin.droidengine2d.util.Dimensions2D;
 
 /**
  * Cargador de recursos. Clase de utilidad, no instanciable

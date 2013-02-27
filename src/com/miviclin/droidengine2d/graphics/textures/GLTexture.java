@@ -1,4 +1,4 @@
-package com.miviclin.droidengine2d.graphics;
+package com.miviclin.droidengine2d.graphics.textures;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -6,7 +6,14 @@ import android.opengl.GLES20;
 import android.opengl.GLUtils;
 
 import com.miviclin.droidengine2d.resources.AssetsLoader;
+import com.miviclin.droidengine2d.util.Dimensions2D;
 
+/**
+ * GLTexture representa una textura
+ * 
+ * @author Miguel Vicente Linares
+ * 
+ */
 public class GLTexture implements Comparable<GLTexture> {
 	
 	private String path;
@@ -19,6 +26,12 @@ public class GLTexture implements Comparable<GLTexture> {
 	private int height;
 	private boolean loaded;
 	
+	/**
+	 * Crea un GLTexture
+	 * 
+	 * @param context Context en el que se ejecuta el juego
+	 * @param path Ruta Ruta de la textura (ruta relativa a la carpeta de assets)
+	 */
 	public GLTexture(Context context, String path) {
 		Dimensions2D bitmapBounds = AssetsLoader.getBitmapBounds(context, path);
 		this.path = path;
@@ -35,6 +48,11 @@ public class GLTexture implements Comparable<GLTexture> {
 		this.loaded = false;
 	}
 	
+	/**
+	 * Carga la textura y le asigna los filtros y el wrapmode
+	 * 
+	 * @param context Context en el que se ejecuta el juego
+	 */
 	public void loadTexture(Context context) {
 		Bitmap bitmap;
 		allocateTextureID();
@@ -50,6 +68,9 @@ public class GLTexture implements Comparable<GLTexture> {
 		loaded = true;
 	}
 	
+	/**
+	 * Hace que OpenGL asigne un ID a la textura.
+	 */
 	protected void allocateTextureID() {
 		int[] textures = new int[1];
 		if (textureID != 0) {
@@ -59,14 +80,26 @@ public class GLTexture implements Comparable<GLTexture> {
 		textureID = textures[0];
 	}
 	
+	/**
+	 * Enlaza la textura al contexto de OpenGL
+	 */
 	public void bind() {
 		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureID);
 	}
 	
+	/**
+	 * Desenlaza la textura del contexto de OpenGL
+	 */
 	public void unBind() {
 		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
 	}
 	
+	/**
+	 * Asigna los filtros a la textura
+	 * 
+	 * @param minFilter Min Filter
+	 * @param magFilter Mag Filter
+	 */
 	public void setFilters(int minFilter, int magFilter) {
 		this.minFilter = minFilter;
 		this.magFilter = magFilter;
@@ -74,6 +107,12 @@ public class GLTexture implements Comparable<GLTexture> {
 		GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, magFilter);
 	}
 	
+	/**
+	 * Asigna el wrapmode a la textura
+	 * 
+	 * @param wrapS Wrap S
+	 * @param wrapT Wrap T
+	 */
 	public void setWrapMode(int wrapS, int wrapT) {
 		this.wrapS = wrapS;
 		this.wrapT = wrapT;
@@ -81,6 +120,10 @@ public class GLTexture implements Comparable<GLTexture> {
 		GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, wrapT);
 	}
 	
+	/**
+	 * Elimina la textura del contexto de OpenGL.<br>
+	 * Es recomendable llamar a este metodo para liberar recursos cuando la textura no se vaya a utilizar mas.
+	 */
 	public void delete() {
 		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureID);
 		int[] textures = new int[1];
@@ -88,14 +131,29 @@ public class GLTexture implements Comparable<GLTexture> {
 		GLES20.glDeleteTextures(1, textures, 0);
 	}
 	
+	/**
+	 * Devuelve el ancho de la textura
+	 * 
+	 * @return ancho de la textura
+	 */
 	public int getWidth() {
 		return width;
 	}
 	
+	/**
+	 * Devuelve el alto de la textura
+	 * 
+	 * @return alto de la textura
+	 */
 	public int getHeight() {
 		return height;
 	}
 	
+	/**
+	 * Devuelve si la textura ya ha sido cargada
+	 * 
+	 * @return true si la textura ha sido cargada, false en caso contrario
+	 */
 	public boolean isLoaded() {
 		return loaded;
 	}

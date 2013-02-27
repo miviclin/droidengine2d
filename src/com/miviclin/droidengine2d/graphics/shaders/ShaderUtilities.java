@@ -1,4 +1,6 @@
-package com.miviclin.droidengine2d.graphics;
+package com.miviclin.droidengine2d.graphics.shaders;
+
+import com.miviclin.droidengine2d.graphics.GLDebug;
 
 import android.opengl.GLES20;
 import android.util.Log;

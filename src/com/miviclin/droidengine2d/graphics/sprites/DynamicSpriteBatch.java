@@ -1,4 +1,4 @@
-package com.miviclin.droidengine2d.graphics;
+package com.miviclin.droidengine2d.graphics.sprites;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -9,8 +9,19 @@ import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
 
+import com.miviclin.droidengine2d.graphics.GLDebug;
+import com.miviclin.droidengine2d.graphics.TransformUtilities;
+import com.miviclin.droidengine2d.graphics.cameras.Camera;
+import com.miviclin.droidengine2d.graphics.shaders.DynamicSpriteBatchShaderProgram;
+import com.miviclin.droidengine2d.graphics.textures.GLTexture;
 import com.miviclin.droidengine2d.math.Matrix4;
 
+/**
+ * SpriteBatch que permite renderizar en una llamada hasta 32 sprites con transformaciones (traslacion, rotacion y escala) distintas.
+ * 
+ * @author Miguel Vicente Linares
+ * 
+ */
 public class DynamicSpriteBatch implements SpriteBatch {
 	
 	private static final int FLOAT_SIZE_BYTES = 4;
@@ -42,6 +53,12 @@ public class DynamicSpriteBatch implements SpriteBatch {
 	private boolean inBeginEndPair;
 	private boolean requestTextureBind;
 	
+	/**
+	 * Crea un DynamicSpriteBatch
+	 * 
+	 * @param context Context en el que se ejecuta el juego
+	 * @param shaderProgram programa de shaders que se utilizara para renderizar los batches
+	 */
 	public DynamicSpriteBatch(Context context, DynamicSpriteBatchShaderProgram shaderProgram) {
 		this.context = context;
 		this.shaderProgram = shaderProgram;
@@ -75,6 +92,9 @@ public class DynamicSpriteBatch implements SpriteBatch {
 		mvpIndexBuffer.put(mvpIndices).flip();
 	}
 	
+	/**
+	 * Inicializa el array de indices de los vertices que definen la geometria de la malla de sprites
+	 */
 	private void setupIndices() {
 		for (int i = 0, j = 0; i < indices.length; i += 6, j += 4) {
 			indices[i + 0] = (short) (j + 0);
@@ -86,6 +106,9 @@ public class DynamicSpriteBatch implements SpriteBatch {
 		}
 	}
 	
+	/**
+	 * Inicializa el array de indices que permiten acceder a las matrices MVP en el vertex shader.
+	 */
 	private void setupMVPIndices() {
 		float value = 0.0f;
 		for (int i = 0; i < mvpIndices.length; i++) {
@@ -96,6 +119,9 @@ public class DynamicSpriteBatch implements SpriteBatch {
 		}
 	}
 	
+	/**
+	 * Inicializa el array de vertices que definen la geometria de la malla del batch
+	 */
 	private void setupVerticesData() {
 		for (int i = 0; i < verticesData.length; i += 20) {
 			// Bottom-Left
@@ -154,6 +180,9 @@ public class DynamicSpriteBatch implements SpriteBatch {
 		inBeginEndPair = false;
 	}
 	
+	/**
+	 * Prepara los datos de la geometria para ser enviados a los shaders
+	 */
 	public void setupVertexShaderVariables() {
 		int aPositionHandle = shaderProgram.getPositionAttributeHandle();
 		int aTextureHandle = shaderProgram.getTextureCoordAttributeHandle();
@@ -184,6 +213,13 @@ public class DynamicSpriteBatch implements SpriteBatch {
 		GLDebug.checkGLError("glVertexAttribPointer aMVPMatrixIndexHandle");
 	}
 	
+	/**
+	 * Agrega el Sprite al batch.<br>
+	 * En caso de que el batch estuviera lleno, se renderiza en 1 sola llamada y se vacia para agregar el nuevo sprite.
+	 * 
+	 * @param sprite Sprite a agregar
+	 * @param camera Camara
+	 */
 	private void drawSprite(Sprite sprite, Camera camera) {
 		boolean textureChanged = checkTextureChanged(sprite);
 		if ((batchSize > 0) && ((batchSize == batchCapacity) || textureChanged)) {
@@ -195,6 +231,9 @@ public class DynamicSpriteBatch implements SpriteBatch {
 		batchSize++;
 	}
 	
+	/**
+	 * Renderizatodos los sprites del batch en 1 sola llamada
+	 */
 	private void drawBatch() {
 		vertexBuffer.clear();
 		vertexBuffer.put(verticesData).position(batchSize * VERTICES_DATA_STRIDE * 4).flip();
@@ -211,6 +250,12 @@ public class DynamicSpriteBatch implements SpriteBatch {
 		batchSize = 0;
 	}
 	
+	/**
+	 * Comprueba si la textura es distinta a la textura utilizada en el anterior sprite que se agrego
+	 * 
+	 * @param sprite Sprite cuya textura se va a comprobar
+	 * @return true si la textura ha cambiado, false en caso contrario
+	 */
 	private boolean checkTextureChanged(Sprite sprite) {
 		boolean textureChanged = false;
 		if (texture == null) {
@@ -221,6 +266,12 @@ public class DynamicSpriteBatch implements SpriteBatch {
 		return textureChanged;
 	}
 	
+	/**
+	 * Prepara la textura. La recarga y enlaza si es necesario.
+	 * 
+	 * @param sprite Proximo sprite que se pretende renderizar
+	 * @param textureChanged Indica si es necesario reenlazar la textura
+	 */
 	private void setupTexture(Sprite sprite, boolean textureChanged) {
 		if (textureChanged || requestTextureBind) {
 			if (textureChanged) {
@@ -234,6 +285,11 @@ public class DynamicSpriteBatch implements SpriteBatch {
 		}
 	}
 	
+	/**
+	 * Actualiza las coordenadas UV del sprite en la geometria de la malla del batch.
+	 * 
+	 * @param sprite Sprite que se va a renderizar
+	 */
 	private void setSpriteVerticesData(Sprite sprite) {
 		int i = batchSize * VERTICES_DATA_STRIDE * 4;
 		// Bottom-Left
@@ -250,6 +306,12 @@ public class DynamicSpriteBatch implements SpriteBatch {
 		verticesData[i + 19] = sprite.getTextureRegion().getV1();
 	}
 	
+	/**
+	 * Transforma los vertices asociados al sprite especificado
+	 * 
+	 * @param sprite Sprite que contiene los datos necesarios para la transformacion
+	 * @param camera Camara
+	 */
 	private void updateSpriteMVPMatrix(Sprite sprite, Camera camera) {
 		int mvpOffset;
 		float tx = sprite.getPosition().getX() + sprite.getCenter().getX();
