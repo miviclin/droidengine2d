@@ -4,7 +4,13 @@ import com.miviclin.droidengine2d.graphics.GLDebug;
 
 import android.opengl.GLES20;
 
-public class DynamicSpriteBatchShaderProgram {
+/**
+ * ShaderProgram configurado para renderizar DynamicSpriteBatch
+ * 
+ * @author Miguel Vicente Linares
+ * 
+ */
+public class DynamicSpriteBatchShaderProgram extends ShaderProgram {
 	
 	public final static String VERTEX_SHADER = "" +
 			"uniform mat4 uMVPMatrix[32];\n" +
@@ -25,29 +31,36 @@ public class DynamicSpriteBatchShaderProgram {
 			"    gl_FragColor = texture2D(sTexture, vTextureCoord);\n" +
 			"}";
 	
-	private int program;
 	private int aPositionHandle;
 	private int aTextureHandle;
 	private int uMVPMatrixHandle;
 	private int aMVPMatrixIndexHandle;
 	
-	private boolean linked;
-	
+	/**
+	 * Crea un DynamicSpriteBatchShaderProgram
+	 */
 	public DynamicSpriteBatchShaderProgram() {
-		this.linked = false;
+		super();
 	}
 	
+	@Override
 	public void link() {
 		int programID = ShaderUtilities.createProgram(VERTEX_SHADER, FRAGMENT_SHADER);
-		link(programID);
-	}
-	
-	private void link(int program) {
-		if (program == 0) {
+		if (programID == 0) {
 			return;
 		}
-		setProgram(program);
-		
+		setProgram(programID);
+		link(programID);
+		setLinked();
+	}
+	
+	/**
+	 * Enlaza los atributos de los shaders con el program.<br>
+	 * La forma comun de llamar a este metodo es: {@code link(getProgram())}
+	 * 
+	 * @param program ID del program (el ID asignado por OpenGL al compilar)
+	 */
+	private void link(int program) {
 		aPositionHandle = GLES20.glGetAttribLocation(program, "aPosition");
 		GLDebug.checkGLError("glGetAttribLocation aPosition");
 		if (aPositionHandle == -1) {
@@ -68,40 +81,42 @@ public class DynamicSpriteBatchShaderProgram {
 		if (uMVPMatrixHandle == -1) {
 			throw new RuntimeException("Could not get attrib location for uMVPMatrix");
 		}
-		
-		linked = true;
 	}
 	
-	public void use() {
-		GLES20.glUseProgram(program);
-	}
-	
-	public int getProgram() {
-		return program;
-	}
-	
-	private void setProgram(int program) {
-		this.program = program;
-	}
-	
+	/**
+	 * Devuelve el handle del attribute "aPosition"
+	 * 
+	 * @return aPositionHandle
+	 */
 	public int getPositionAttributeHandle() {
 		return aPositionHandle;
 	}
 	
+	/**
+	 * Devuelve el handle del attribute "aTextureCoord"
+	 * 
+	 * @return aTextureHandle
+	 */
 	public int getTextureCoordAttributeHandle() {
 		return aTextureHandle;
 	}
 	
-	public int getMVPMatrixUniformHandle() {
-		return uMVPMatrixHandle;
-	}
-	
+	/**
+	 * Devuelve el handle del attribute "aMVPMatrixIndex"
+	 * 
+	 * @return aMVPMatrixIndexHandle
+	 */
 	public int getMVPMatrixIndexAttributeHandle() {
 		return aMVPMatrixIndexHandle;
 	}
 	
-	public boolean isLinked() {
-		return linked;
+	/**
+	 * Devuelve el handle del uniform "uMVPMatrix"
+	 * 
+	 * @return uMVPMatrixHandle
+	 */
+	public int getMVPMatrixUniformHandle() {
+		return uMVPMatrixHandle;
 	}
 	
 }
