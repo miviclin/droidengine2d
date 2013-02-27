@@ -14,6 +14,12 @@ import com.miviclin.droidengine2d.graphics.shaders.DynamicSpriteBatchShaderProgr
 import com.miviclin.droidengine2d.graphics.sprites.DynamicSpriteBatch;
 import com.miviclin.droidengine2d.graphics.sprites.SpriteBatch;
 
+/**
+ * Responsable de relizar las llamadas a OpenGL para renderizar los elementos del juego.
+ * 
+ * @author Miguel Vicente Linares
+ * 
+ */
 public class GLRenderer implements GLSurfaceView.Renderer {
 	
 	private Game game;
@@ -23,6 +29,12 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 	
 	private SpriteBatch spriteBatch;
 	
+	/**
+	 * Crea un GLRenderer
+	 * 
+	 * @param game Juego
+	 * @param engineLock Utilizado para sincronizar correctamente los hilos
+	 */
 	public GLRenderer(Game game, EngineLock engineLock) {
 		this.game = game;
 		this.camera = game.getCamera();
