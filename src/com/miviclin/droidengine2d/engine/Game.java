@@ -1,6 +1,10 @@
 package com.miviclin.droidengine2d.engine;
 
 import android.app.Activity;
+import android.view.View.OnClickListener;
+import android.view.View.OnKeyListener;
+import android.view.View.OnLongClickListener;
+import android.view.View.OnTouchListener;
 
 import com.miviclin.droidengine2d.graphics.GLView;
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
@@ -94,6 +98,42 @@ public abstract class Game {
 			throw new IllegalArgumentException("The camera can not be null");
 		}
 		this.camera = camera;
+	}
+	
+	/**
+	 * Registra un listener que permitira recibir eventos Click sobre el View en el que se desarrolla el juego.
+	 * 
+	 * @param listener OnClickListener, o null para eliminar un listener existente
+	 */
+	public void setClickListener(OnClickListener listener) {
+		glView.setOnClickListener(listener);
+	}
+	
+	/**
+	 * Registra un listener que permitira recibir eventos LongClick sobre el View en el que se desarrolla el juego.
+	 * 
+	 * @param listener OnLongClickListener, o null para eliminar un listener existente
+	 */
+	public void setLongClickListener(OnLongClickListener listener) {
+		glView.setOnLongClickListener(listener);
+	}
+	
+	/**
+	 * Registra un listener que permitira recibir eventos de pulsacion de tecla sobre el View en el que se desarrolla el juego.
+	 * 
+	 * @param listener OnKeyListener, o null para eliminar un listener existente
+	 */
+	public void setKeyListener(OnKeyListener listener) {
+		glView.setOnKeyListener(listener);
+	}
+	
+	/**
+	 * Registra un listener que permitira recibir eventos Touch sobre el View en el que se desarrolla el juego.
+	 * 
+	 * @param listener OnTouchListener, o null para eliminar un listener existente
+	 */
+	public void setTouchListener(OnTouchListener listener) {
+		glView.setOnTouchListener(listener);
 	}
 	
 	/**
