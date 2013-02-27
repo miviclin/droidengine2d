@@ -11,8 +11,8 @@ import android.opengl.Matrix;
 
 import com.miviclin.droidengine2d.graphics.GLDebug;
 import com.miviclin.droidengine2d.graphics.TransformUtilities;
-import com.miviclin.droidengine2d.graphics.camera.Camera;
-import com.miviclin.droidengine2d.graphics.shader.DynamicSpriteBatchShaderProgram;
+import com.miviclin.droidengine2d.graphics.cameras.Camera;
+import com.miviclin.droidengine2d.graphics.shaders.DynamicSpriteBatchShaderProgram;
 import com.miviclin.droidengine2d.graphics.textures.GLTexture;
 import com.miviclin.droidengine2d.math.Matrix4;
 

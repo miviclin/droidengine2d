@@ -1,4 +1,4 @@
-package com.miviclin.droidengine2d.graphics.camera;
+package com.miviclin.droidengine2d.graphics.cameras;
 
 import com.miviclin.droidengine2d.math.Matrix4;
 import com.miviclin.droidengine2d.math.Vector3;

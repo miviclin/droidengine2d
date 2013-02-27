@@ -9,8 +9,8 @@ import android.opengl.GLSurfaceView;
 
 import com.miviclin.droidengine2d.engine.EngineLock;
 import com.miviclin.droidengine2d.engine.Game;
-import com.miviclin.droidengine2d.graphics.camera.Camera;
-import com.miviclin.droidengine2d.graphics.shader.DynamicSpriteBatchShaderProgram;
+import com.miviclin.droidengine2d.graphics.cameras.Camera;
+import com.miviclin.droidengine2d.graphics.shaders.DynamicSpriteBatchShaderProgram;
 import com.miviclin.droidengine2d.graphics.sprites.DynamicSpriteBatch;
 import com.miviclin.droidengine2d.graphics.sprites.SpriteBatch;
 

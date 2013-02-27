@@ -1,4 +1,4 @@
-package com.miviclin.droidengine2d.graphics.camera;
+package com.miviclin.droidengine2d.graphics.cameras;
 
 /**
  * Camara con proyeccion ortografica

@@ -1,6 +1,6 @@
 package com.miviclin.droidengine2d.graphics.sprites;
 
-import com.miviclin.droidengine2d.graphics.camera.Camera;
+import com.miviclin.droidengine2d.graphics.cameras.Camera;
 
 /**
  * SpriteBatch permite pintar varios sprites en una sola llamada.

@@ -3,8 +3,8 @@ package com.miviclin.droidengine2d.engine;
 import android.app.Activity;
 
 import com.miviclin.droidengine2d.graphics.GLView;
-import com.miviclin.droidengine2d.graphics.camera.Camera;
-import com.miviclin.droidengine2d.graphics.camera.OrthographicCamera;
+import com.miviclin.droidengine2d.graphics.cameras.Camera;
+import com.miviclin.droidengine2d.graphics.cameras.OrthographicCamera;
 import com.miviclin.droidengine2d.graphics.sprites.SpriteBatch;
 import com.miviclin.droidengine2d.graphics.textures.GLTextureManager;
 import com.miviclin.droidengine2d.ui.GameView;
