@@ -2,8 +2,8 @@ package com.miviclin.droidengine2d.graphics;
 
 import android.opengl.Matrix;
 
-import com.miviclin.droidengine2d.math.Matrix4;
-import com.miviclin.droidengine2d.math.MatrixFix;
+import com.miviclin.droidengine2d.util.math.Matrix4;
+import com.miviclin.droidengine2d.util.math.MatrixFix;
 
 /**
  * Clase que contiene varios metodos para aplicar transformaciones sobre matrices

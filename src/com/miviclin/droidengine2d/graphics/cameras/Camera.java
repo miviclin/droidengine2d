@@ -1,8 +1,8 @@
 package com.miviclin.droidengine2d.graphics.cameras;
 
-import com.miviclin.droidengine2d.math.Matrix4;
-import com.miviclin.droidengine2d.math.Vector3;
 import com.miviclin.droidengine2d.util.Dimensions2D;
+import com.miviclin.droidengine2d.util.math.Matrix4;
+import com.miviclin.droidengine2d.util.math.Vector3;
 
 /**
  * Contiene las matrices VIEW Y PROJECTION y es la clase base para los distintos tipos de camara.

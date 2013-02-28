@@ -14,7 +14,7 @@ import com.miviclin.droidengine2d.graphics.TransformUtilities;
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
 import com.miviclin.droidengine2d.graphics.shaders.DynamicSpriteBatchShaderProgram;
 import com.miviclin.droidengine2d.graphics.textures.GLTexture;
-import com.miviclin.droidengine2d.math.Matrix4;
+import com.miviclin.droidengine2d.util.math.Matrix4;
 
 /**
  * SpriteBatch que permite renderizar en una llamada hasta 32 sprites con transformaciones (traslacion, rotacion y escala) distintas.

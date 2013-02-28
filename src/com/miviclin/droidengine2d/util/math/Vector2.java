@@ -1,4 +1,4 @@
-package com.miviclin.droidengine2d.math;
+package com.miviclin.droidengine2d.util.math;
 
 public class Vector2 {
 	
