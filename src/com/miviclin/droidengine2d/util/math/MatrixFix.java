@@ -2,6 +2,12 @@ package com.miviclin.droidengine2d.util.math;
 
 import android.opengl.Matrix;
 
+/**
+ * Clase de utilidad que mejora algunos de los metodos de la clase Matrix
+ * 
+ * @author Miguel Vicente Linares
+ * @see Matrix
+ */
 public class MatrixFix {
 	
 	private static float[] temp = new float[32];
