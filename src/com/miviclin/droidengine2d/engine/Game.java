@@ -11,7 +11,6 @@ import com.miviclin.droidengine2d.graphics.cameras.Camera;
 import com.miviclin.droidengine2d.graphics.cameras.OrthographicCamera;
 import com.miviclin.droidengine2d.graphics.sprites.SpriteBatch;
 import com.miviclin.droidengine2d.graphics.textures.GLTextureManager;
-import com.miviclin.droidengine2d.ui.GameView;
 
 /**
  * Game.<br>
@@ -52,12 +51,21 @@ public abstract class Game {
 	}
 	
 	/**
-	 * Devuelve el GameView en el que se representa el juego
+	 * Devuelve el ancho del View en el que se representa el juego
 	 * 
-	 * @return GameView en el que se representa el juego
+	 * @return ancho del View en el que se representa el juego
 	 */
-	public GameView getGameView() {
-		return glView;
+	public int getGameViewWidth() {
+		return glView.getWidth();
+	}
+	
+	/**
+	 * Devuelve el alto del View en el que se representa el juego
+	 * 
+	 * @return alto del View en el que se representa el juego
+	 */
+	public int getGameViewHeight() {
+		return glView.getHeight();
 	}
 	
 	/**

@@ -4,15 +4,13 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 
-import com.miviclin.droidengine2d.ui.GameView;
-
 /**
  * View sobre la que se representan los elementos del juego.
  * 
  * @author Miguel Vicente Linares
  * 
  */
-public class GLView extends GLSurfaceView implements GameView {
+public class GLView extends GLSurfaceView {
 	
 	/**
 	 * Constructor
