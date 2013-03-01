@@ -2,6 +2,7 @@ package com.miviclin.droidengine2d.engine;
 
 import android.util.Log;
 
+import com.miviclin.droidengine2d.BuildConfig;
 import com.miviclin.droidengine2d.graphics.GLView;
 import com.miviclin.droidengine2d.util.MutexLock;
 
@@ -116,8 +117,10 @@ public class GameThread implements Runnable {
 					waitingTime += idealTimePerFrame;
 					skippedFrames++;
 				}
-				Log.d("FramesSaltados", skippedFrames + "");
-				Log.d("TiempoFrame", (System.currentTimeMillis() - startingTime) + "ms");
+				if (BuildConfig.DEBUG) {
+					Log.d("FramesSaltados", skippedFrames + "");
+					Log.d("TiempoFrame", (System.currentTimeMillis() - startingTime) + "ms");
+				}
 			}
 		}
 		game.onEngineDisposed();
