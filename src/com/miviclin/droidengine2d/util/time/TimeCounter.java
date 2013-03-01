@@ -68,7 +68,7 @@ public class TimeCounter {
 	 * @return tiempo en minutos
 	 */
 	public long getMinutes() {
-		return milliseconds / (TimeConstants.MILLISECONDS_PER_SECOND * TimeConstants.SECONDS_PER_MINUTE);
+		return milliseconds / TimeConstants.MILLISECONDS_PER_MINUTE;
 	}
 	
 	/**
@@ -77,7 +77,7 @@ public class TimeCounter {
 	 * @return tiempo en horas
 	 */
 	public long getHours() {
-		return milliseconds / (TimeConstants.MILLISECONDS_PER_SECOND * TimeConstants.SECONDS_PER_MINUTE * TimeConstants.MINUTES_PER_HOUR);
+		return milliseconds / TimeConstants.MILLISECONDS_PER_HOUR;
 	}
 	
 	/**
@@ -86,8 +86,7 @@ public class TimeCounter {
 	 * @return tiempo en dias
 	 */
 	public long getDays() {
-		int millisecondsPerMinute = TimeConstants.MILLISECONDS_PER_SECOND * TimeConstants.SECONDS_PER_MINUTE;
-		return milliseconds / (millisecondsPerMinute * TimeConstants.MINUTES_PER_HOUR * TimeConstants.HOURS_PER_DAY);
+		return milliseconds / TimeConstants.MILLISECONDS_PER_DAY;
 	}
 	
 	@Override
