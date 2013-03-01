@@ -61,7 +61,7 @@ public class ActivityUtilities {
 	 * 
 	 * @param activity Activity sobre la que opera este metodo
 	 */
-	public static void setToFullScreen(Activity activity) {
+	public static void setToFullscreen(Activity activity) {
 		activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
 	}
