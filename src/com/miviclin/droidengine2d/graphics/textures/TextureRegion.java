@@ -13,8 +13,8 @@ public class TextureRegion { // TODO: revisar el calculo de U y V (restar medio 
 	private float v1;
 	private float u2;
 	private float v2;
-	private float offsetX;
-	private float offsetY;
+	private float x;
+	private float y;
 	private float width;
 	private float height;
 	
@@ -22,20 +22,20 @@ public class TextureRegion { // TODO: revisar el calculo de U y V (restar medio 
 	 * Crea un nuevo TextureRegion
 	 * 
 	 * @param texture Textura a la que pertenece la region
-	 * @param offsetX Offset de la region en el eje X, relativo a la esquina superior izquierda de la textura
-	 * @param offsetY Offset de la region en el eje Y, relativo a la esquina superior izquierda de la textura
+	 * @param x Posicion de la region en el eje X, relativo a la esquina superior izquierda de la textura (en pixeles)
+	 * @param y Posicion de la region en el eje Y, relativo a la esquina superior izquierda de la textura (en pixeles)
 	 * @param width Ancho de la region
 	 * @param height Alto de la region
 	 */
-	public TextureRegion(GLTexture texture, float offsetX, float offsetY, float width, float height) {
+	public TextureRegion(GLTexture texture, float x, float y, float width, float height) {
 		if (texture == null) {
 			throw new IllegalArgumentException("texture can not be null");
 		}
 		this.texture = texture;
 		setWidth(width);
 		setHeight(height);
-		setOffsetX(offsetX);
-		setOffsetY(offsetY);
+		setX(x);
+		setY(y);
 	}
 	
 	/**
@@ -108,55 +108,55 @@ public class TextureRegion { // TODO: revisar el calculo de U y V (restar medio 
 	}
 	
 	/**
-	 * Devuelve el offset en el eje X de la region con respecto a la esquina superior izquierda de la textura, en pixeles
+	 * Devuelve la posicion en el eje X de la region con respecto a la esquina superior izquierda de la textura, en pixeles
 	 * 
-	 * @return offset en el eje X
+	 * @return posicion en el eje X
 	 */
-	public final float getOffsetX() {
-		return offsetX;
+	public final float getX() {
+		return x;
 	}
 	
 	/**
-	 * Asigna el offset en el eje X de la region con respecto a la esquina superior izquierda de la textura, en pixeles
+	 * Asigna la posicion en el eje X de la region con respecto a la esquina superior izquierda de la textura, en pixeles
 	 * 
-	 * @param offsetX Nuevo offset en el eje X
+	 * @param x Nueva posicion en el eje X
 	 */
-	public final void setOffsetX(float offsetX) {
-		if (offsetX < 0) {
+	public final void setX(float x) {
+		if (x < 0) {
 			throw new IllegalArgumentException("offsetX must be equal or greater than 0");
 		}
-		if ((offsetX + width) > texture.getWidth()) {
+		if ((x + width) > texture.getWidth()) {
 			throw new IllegalArgumentException("The TextureRegion must be fully contained inside the texture");
 		}
-		this.u1 = offsetX / texture.getWidth();
-		this.u2 = (offsetX + width) / texture.getWidth();
-		this.offsetX = offsetX;
+		this.u1 = x / texture.getWidth();
+		this.u2 = (x + width) / texture.getWidth();
+		this.x = x;
 	}
 	
 	/**
-	 * Devuelve el offset en el eje Y de la region con respecto a la esquina superior izquierda de la textura, en pixeles
+	 * Devuelve la posicion en el eje Y de la region con respecto a la esquina superior izquierda de la textura, en pixeles
 	 * 
-	 * @return offset en el eje Y
+	 * @return posicion en el eje Y
 	 */
-	public final float getOffsetY() {
-		return offsetY;
+	public final float getY() {
+		return y;
 	}
 	
 	/**
-	 * Asigna el offset en el eje Y de la region con respecto a la esquina superior izquierda de la textura, en pixeles
+	 * Asigna la posicion en el eje Y de la region con respecto a la esquina superior izquierda de la textura, en pixeles
 	 * 
-	 * @param offsetY Nuevo offset en el eje Y
+	 * @param y Nueva posicion en el eje Y
 	 */
-	public final void setOffsetY(float offsetY) {
-		if (offsetY < 0) {
+	public final void setY(float y) {
+		if (y < 0) {
 			throw new IllegalArgumentException("offsetY must be equal or greater than 0");
 		}
-		if ((offsetY + height) > texture.getHeight()) {
+		if ((y + height) > texture.getHeight()) {
 			throw new IllegalArgumentException("The TextureRegion must be fully contained inside the texture");
 		}
-		this.v1 = offsetY / texture.getHeight();
-		this.v2 = (offsetY + height) / texture.getHeight();
-		this.offsetY = offsetY;
+		this.v1 = y / texture.getHeight();
+		this.v2 = (y + height) / texture.getHeight();
+		this.y = y;
 	}
 	
 	/**
