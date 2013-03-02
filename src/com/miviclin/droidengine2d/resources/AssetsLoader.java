@@ -31,24 +31,24 @@ public class AssetsLoader {
 	 * Devuelve un InputStream para poder leer un asset
 	 * 
 	 * @param context Context
-	 * @param nombreArchivo Ruta del asset, relativa a la carpeta de assets
+	 * @param path Ruta del asset, relativa a la carpeta de assets
 	 * @return InputStream
 	 * @throws IOException
 	 */
-	public static InputStream getAsset(Context context, String nombreArchivo) throws IOException {
-		return context.getAssets().open(nombreArchivo);
+	public static InputStream getAsset(Context context, String path) throws IOException {
+		return context.getAssets().open(path);
 	}
 	
 	/**
 	 * Devuelve un InputStream para poder leer un asset
 	 * 
 	 * @param assetManager AssetManager de la aplicacion
-	 * @param nombreArchivo Ruta del asset, relativa a la carpeta de assets
+	 * @param path Ruta del asset, relativa a la carpeta de assets
 	 * @return InputStream
 	 * @throws IOException
 	 */
-	public static InputStream getAsset(AssetManager assetManager, String nombreArchivo) throws IOException {
-		return assetManager.open(nombreArchivo);
+	public static InputStream getAsset(AssetManager assetManager, String path) throws IOException {
+		return assetManager.open(path);
 	}
 	
 	/**
