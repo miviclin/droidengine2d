@@ -123,7 +123,7 @@ public class TextureRegion { // TODO: revisar el calculo de U y V (restar medio 
 	 */
 	public final void setX(float x) {
 		if (x < 0) {
-			throw new IllegalArgumentException("offsetX must be equal or greater than 0");
+			throw new IllegalArgumentException("x must be equal or greater than 0");
 		}
 		if ((x + width) > texture.getWidth()) {
 			throw new IllegalArgumentException("The TextureRegion must be fully contained inside the texture");
@@ -149,7 +149,7 @@ public class TextureRegion { // TODO: revisar el calculo de U y V (restar medio 
 	 */
 	public final void setY(float y) {
 		if (y < 0) {
-			throw new IllegalArgumentException("offsetY must be equal or greater than 0");
+			throw new IllegalArgumentException("y must be equal or greater than 0");
 		}
 		if ((y + height) > texture.getHeight()) {
 			throw new IllegalArgumentException("The TextureRegion must be fully contained inside the texture");
@@ -200,5 +200,4 @@ public class TextureRegion { // TODO: revisar el calculo de U y V (restar medio 
 		}
 		this.height = height;
 	}
-	
 }
