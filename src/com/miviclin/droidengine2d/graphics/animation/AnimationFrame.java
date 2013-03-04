@@ -1,4 +1,4 @@
-package com.miviclin.droidengine2d.graphics.sprites;
+package com.miviclin.droidengine2d.graphics.animation;
 
 import com.miviclin.droidengine2d.graphics.textures.TextureRegion;
 
