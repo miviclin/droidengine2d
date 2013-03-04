@@ -16,7 +16,7 @@ public class AnimationFrame {
 	/**
 	 * Crea un AnimationFrame
 	 * 
-	 * @param delay Tiempo que se mostrara este frame antes de actualizar al siguiente
+	 * @param delay Tiempo minimo que se mostrara este frame antes de actualizar al siguiente
 	 * @param textureRegion TextureRegion que se mostrara en este frame
 	 */
 	public AnimationFrame(float delay, TextureRegion textureRegion) {
@@ -26,7 +26,7 @@ public class AnimationFrame {
 	}
 	
 	/**
-	 * Devuelve el tiempo que se mostrara este frame antes de actualizar al siguiente
+	 * Devuelve el tiempo minimo que se mostrara este frame antes de actualizar al siguiente
 	 * 
 	 * @return tiempo que se mostrara este frame antes de actualizar al siguiente
 	 */
@@ -35,7 +35,7 @@ public class AnimationFrame {
 	}
 	
 	/**
-	 * Asigna el tiempo que se mostrara este frame antes de actualizar al siguiente
+	 * Asigna el tiempo minimo que se mostrara este frame antes de actualizar al siguiente
 	 * 
 	 * @param delay Nuevo valor
 	 */
