@@ -18,7 +18,7 @@ public class Animation {
 	
 	private ArrayList<AnimationFrame> frames;
 	private int currentFrameIndex;
-	private int elapsedTime;
+	private float elapsedTime;
 	private boolean repetitionEnabled;
 	private State state;
 	
@@ -63,11 +63,24 @@ public class Animation {
 	}
 	
 	/**
-	 * Actualiza la animacion
+	 * Devuelve el frame actual
+	 * 
+	 * @return AnimationFrame o null si la lista de frames esta vacia
+	 */
+	public AnimationFrame getCurrentFrame() {
+		if (frames.size() > 0) {
+			return frames.get(currentFrameIndex);
+		}
+		return null;
+	}
+	
+	/**
+	 * Actualiza la animacion y devuelve el frame actual
 	 * 
 	 * @param delta Tiempo transcurrido desde la ultima actualizacion
+	 * @return AnimationFrame o null si la lista de frames esta vacia
 	 */
-	public void update(float delta) {
+	public AnimationFrame getCurrentFrame(float delta) {
 		if ((state == State.RUNNING) && (frames.size() > 1)) {
 			elapsedTime += delta;
 			if (elapsedTime > frames.get(currentFrameIndex).getDelay()) {
@@ -81,6 +94,10 @@ public class Animation {
 				}
 			}
 		}
+		if (frames.size() > 0) {
+			return frames.get(currentFrameIndex);
+		}
+		return null;
 	}
 	
 	/**
@@ -100,15 +117,6 @@ public class Animation {
 		elapsedTime = 0;
 		state = State.RUNNING;
 		frames.clear();
-	}
-	
-	/**
-	 * Devuelve el frame seleccionado actualmente
-	 * 
-	 * @return AnimationFrame
-	 */
-	public AnimationFrame getCurrentFrame() {
-		return frames.get(currentFrameIndex);
 	}
 	
 	/**
