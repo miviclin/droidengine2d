@@ -14,44 +14,44 @@ import com.miviclin.droidengine2d.util.Pool;
  * @author Miguel Vicente Linares
  * 
  */
-public final class GLTextureManager {
+public final class TextureManager {
 	
 	private Context context;
-	private ArrayList<GLTexture> activeTextures;
-	private Pool<GLTexture> removedTextures;
+	private ArrayList<Texture> activeTextures;
+	private Pool<Texture> removedTextures;
 	private int texturesToLoad;
 	
 	/**
-	 * Crea un GLTextureManager con una capacidad inicial de 16
+	 * Crea un TextureManager con una capacidad inicial de 16
 	 * 
 	 * @param context Context en el que se ejecuta el juego, necesario para poder cargar las texturas
 	 */
-	public GLTextureManager(Context context) {
+	public TextureManager(Context context) {
 		this(16, context);
 	}
 	
 	/**
-	 * Crea un GLTextureManager
+	 * Crea un TextureManager
 	 * 
-	 * @param initialCapacity Capacidad inicial del GLTextureManager
+	 * @param initialCapacity Capacidad inicial del TextureManager
 	 * @param context Context en el que se ejecuta el juego, necesario para poder cargar las texturas
 	 */
-	public GLTextureManager(int initialCapacity, Context context) {
+	public TextureManager(int initialCapacity, Context context) {
 		this.context = context;
-		this.activeTextures = new ArrayList<GLTexture>(initialCapacity);
-		this.removedTextures = new Pool<GLTexture>(initialCapacity);
+		this.activeTextures = new ArrayList<Texture>(initialCapacity);
+		this.removedTextures = new Pool<Texture>(initialCapacity);
 		this.texturesToLoad = 0;
 	}
 	
 	/**
-	 * Agrega la textura al GLTextureManager.
+	 * Agrega la textura al TextureManager.
 	 * 
-	 * @param texture GLTexture que se va a agregar
+	 * @param texture Texture que se va a agregar
 	 * @return true si se ha agregado, false si ya se encontraba insertada otra textura con el mismo identificador (ruta del asset)
 	 */
-	public boolean addTexture(GLTexture texture) {
+	public boolean addTexture(Texture texture) {
 		int j;
-		GLTexture aux;
+		Texture aux;
 		if (activeTextures.contains(texture)) {
 			return false;
 		}
@@ -83,8 +83,8 @@ public final class GLTextureManager {
 	 * 
 	 * @param texture Textura que se va a eliminar
 	 */
-	public void removeTexture(GLTexture texture) {
-		GLTexture removedTexture;
+	public void removeTexture(Texture texture) {
+		Texture removedTexture;
 		int mid;
 		int low = 0;
 		int high = activeTextures.size() - 1;
@@ -118,7 +118,7 @@ public final class GLTextureManager {
 	}
 	
 	/**
-	 * Elimina por completo las texturas del Pool de texturas previamente eliminadas con {@link #removeTexture(GLTexture)} o
+	 * Elimina por completo las texturas del Pool de texturas previamente eliminadas con {@link #removeTexture(Texture)} o
 	 * {@link #removeAllTextures()}<br>
 	 * NOTA: Este metodo debe ejecutarse en el hilo del GLRenderer
 	 */
@@ -129,7 +129,7 @@ public final class GLTextureManager {
 	}
 	
 	/**
-	 * Elimina por completo todas las texturas almacenadas en el GLTextureManager.<br>
+	 * Elimina por completo todas las texturas almacenadas en el TextureManager.<br>
 	 * NOTA: Este metodo debe ejecutarse en el hilo del GLRenderer
 	 */
 	public void clearAll() {

@@ -10,7 +10,7 @@ import com.miviclin.droidengine2d.graphics.GLView;
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
 import com.miviclin.droidengine2d.graphics.cameras.OrthographicCamera;
 import com.miviclin.droidengine2d.graphics.sprites.SpriteBatch;
-import com.miviclin.droidengine2d.graphics.textures.GLTextureManager;
+import com.miviclin.droidengine2d.graphics.textures.TextureManager;
 
 /**
  * Game.<br>
@@ -21,24 +21,36 @@ import com.miviclin.droidengine2d.graphics.textures.GLTextureManager;
  */
 public abstract class Game {
 	
+	private final String name;
 	private final Activity activity;
 	private final GLView glView;
-	private final GLTextureManager textureManager;
+	private final TextureManager textureManager;
 	private Camera camera;
 	
 	/**
 	 * Constructor
 	 * 
+	 * @param name Nombre del juego
 	 * @param activity Activity en la que se ejecuta el juego
 	 */
-	public Game(Activity activity) {
+	public Game(String name, Activity activity) {
 		if (activity == null) {
 			throw new IllegalArgumentException("The Activity can not be null");
 		}
+		this.name = name;
 		this.activity = activity;
 		this.glView = new GLView(activity);
-		this.textureManager = new GLTextureManager(activity);
+		this.textureManager = new TextureManager(activity);
 		this.camera = new OrthographicCamera();
+	}
+	
+	/**
+	 * Devuelve el nombre del juego
+	 * 
+	 * @return
+	 */
+	public String getName() {
+		return name;
 	}
 	
 	/**
@@ -79,11 +91,11 @@ public abstract class Game {
 	}
 	
 	/**
-	 * Devuelve el GLTextureManager.
+	 * Devuelve el TextureManager.
 	 * 
-	 * @return GLTextureManager
+	 * @return TextureManager
 	 */
-	public GLTextureManager getTextureManager() {
+	public TextureManager getTextureManager() {
 		return textureManager;
 	}
 	

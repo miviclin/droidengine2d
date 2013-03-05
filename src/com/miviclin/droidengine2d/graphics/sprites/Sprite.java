@@ -160,8 +160,10 @@ public class Sprite {
 	 * Asigna un TextureRegion al sprite
 	 * 
 	 * @param textureRegion Nuevo TextureRegion
+	 * @throws IllegalArgumentException Si el TextureRegion especificado es null
 	 */
 	public void setTextureRegion(TextureRegion textureRegion) {
+		checkTextureRegion(textureRegion);
 		this.textureRegion = textureRegion;
 	}
 	
