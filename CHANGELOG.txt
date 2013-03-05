@@ -1,0 +1,20 @@
+----------------------------------------------------------------------------
+v0.2.0 (2013-03-05)
+------------------------------------------------------------------------
+
+Cambios:
+
+  - Agregada la posibilidad de crear animaciones.
+  - Eliminada la posibilidad de crear Sprites sin TextureRegion.
+  - Renombrado GLTexture a Texture.
+  - Renombrado GLTextureManager a TextureManager.
+  - Movido TransformUtilities a com.miviclin.droidengine2d.util.
+  - Agregada la posibilidad de ponerle nombre al juego.
+
+
+------------------------------------------------------------------------
+v0.1.0 (2013-03-03)
+------------------------------------------------------------------------
+
+Primera version.
+
