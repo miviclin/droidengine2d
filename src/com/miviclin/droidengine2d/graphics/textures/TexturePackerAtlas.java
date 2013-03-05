@@ -13,7 +13,7 @@ import com.miviclin.droidengine2d.resources.AssetsLoader;
 
 public class TexturePackerAtlas implements TextureAtlas {
 	
-	private GLTexture sourceTexture;
+	private Texture sourceTexture;
 	private HashMap<String, TextureRegion> regions;
 	
 	public TexturePackerAtlas() {
@@ -67,7 +67,7 @@ public class TexturePackerAtlas implements TextureAtlas {
 						} else {
 							// Not trimmed
 							if (sourceTexture == null) {
-								sourceTexture = new GLTexture(context, texturePath);
+								sourceTexture = new Texture(context, texturePath);
 							}
 							region = new TextureRegion(sourceTexture, x, y, width, height);
 							regions.put(regionName, region);
@@ -91,7 +91,7 @@ public class TexturePackerAtlas implements TextureAtlas {
 	}
 	
 	@Override
-	public GLTexture getSourceTexture() {
+	public Texture getSourceTexture() {
 		return sourceTexture;
 	}
 	

@@ -9,12 +9,12 @@ import com.miviclin.droidengine2d.resources.AssetsLoader;
 import com.miviclin.droidengine2d.util.Dimensions2D;
 
 /**
- * GLTexture representa una textura
+ * Texture representa una textura
  * 
  * @author Miguel Vicente Linares
  * 
  */
-public class GLTexture implements Comparable<GLTexture> {
+public class Texture implements Comparable<Texture> {
 	
 	private String path;
 	private int textureID;
@@ -27,12 +27,12 @@ public class GLTexture implements Comparable<GLTexture> {
 	private boolean loaded;
 	
 	/**
-	 * Crea un GLTexture
+	 * Crea un Texture
 	 * 
 	 * @param context Context en el que se ejecuta el juego
 	 * @param path Ruta Ruta de la textura (ruta relativa a la carpeta de assets)
 	 */
-	public GLTexture(Context context, String path) {
+	public Texture(Context context, String path) {
 		Dimensions2D bitmapBounds = AssetsLoader.getBitmapBounds(context, path);
 		this.path = path;
 		this.textureID = 0;
@@ -159,7 +159,7 @@ public class GLTexture implements Comparable<GLTexture> {
 	}
 	
 	@Override
-	public int compareTo(GLTexture texture) {
+	public int compareTo(Texture texture) {
 		return path.compareTo(texture.path);
 	}
 	
@@ -187,7 +187,7 @@ public class GLTexture implements Comparable<GLTexture> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		GLTexture other = (GLTexture) obj;
+		Texture other = (Texture) obj;
 		if (height != other.height)
 			return false;
 		if (loaded != other.loaded)

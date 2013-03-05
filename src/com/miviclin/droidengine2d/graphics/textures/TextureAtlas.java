@@ -21,9 +21,9 @@ public interface TextureAtlas {
 	/**
 	 * Devuelve la textura que define este TextureAtlas
 	 * 
-	 * @return GLTexture
+	 * @return Texture
 	 */
-	public GLTexture getSourceTexture();
+	public Texture getSourceTexture();
 	
 	/**
 	 * Devuelve la region especificada de este TextureAtlas

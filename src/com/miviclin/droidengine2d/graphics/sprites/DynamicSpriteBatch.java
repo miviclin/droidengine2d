@@ -13,7 +13,7 @@ import com.miviclin.droidengine2d.graphics.GLDebug;
 import com.miviclin.droidengine2d.graphics.TransformUtilities;
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
 import com.miviclin.droidengine2d.graphics.shaders.DynamicSpriteBatchShaderProgram;
-import com.miviclin.droidengine2d.graphics.textures.GLTexture;
+import com.miviclin.droidengine2d.graphics.textures.Texture;
 import com.miviclin.droidengine2d.util.math.Matrix4;
 
 /**
@@ -47,7 +47,7 @@ public class DynamicSpriteBatch implements SpriteBatch {
 	private int batchSize;
 	
 	private Matrix4 modelMatrix;
-	private GLTexture texture;
+	private Texture texture;
 	private Context context;
 	private DynamicSpriteBatchShaderProgram shaderProgram;
 	private boolean inBeginEndPair;

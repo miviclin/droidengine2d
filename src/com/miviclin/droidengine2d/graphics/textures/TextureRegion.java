@@ -8,7 +8,7 @@ package com.miviclin.droidengine2d.graphics.textures;
  */
 public class TextureRegion { // TODO: revisar el calculo de U y V (restar medio texel?)
 
-	private final GLTexture texture;
+	private final Texture texture;
 	private float u1;
 	private float v1;
 	private float u2;
@@ -27,7 +27,7 @@ public class TextureRegion { // TODO: revisar el calculo de U y V (restar medio 
 	 * @param width Ancho de la region
 	 * @param height Alto de la region
 	 */
-	public TextureRegion(GLTexture texture, float x, float y, float width, float height) {
+	public TextureRegion(Texture texture, float x, float y, float width, float height) {
 		if (texture == null) {
 			throw new IllegalArgumentException("texture can not be null");
 		}
@@ -65,9 +65,9 @@ public class TextureRegion { // TODO: revisar el calculo de U y V (restar medio 
 	/**
 	 * Devuelve la textura a la que pertenece esta region
 	 * 
-	 * @return GLTexture
+	 * @return Texture
 	 */
-	public final GLTexture getTexture() {
+	public final Texture getTexture() {
 		return texture;
 	}
 	
