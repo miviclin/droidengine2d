@@ -7,8 +7,8 @@ import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 
-import com.miviclin.droidengine2d.engine.EngineLock;
-import com.miviclin.droidengine2d.engine.Game;
+import com.miviclin.droidengine2d.EngineLock;
+import com.miviclin.droidengine2d.Game;
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
 import com.miviclin.droidengine2d.graphics.shaders.DynamicSpriteBatchShaderProgram;
 import com.miviclin.droidengine2d.graphics.sprites.DynamicSpriteBatch;
