@@ -3,6 +3,7 @@ package com.miviclin.droidengine2d;
 import android.app.Activity;
 import android.opengl.GLSurfaceView;
 
+import com.miviclin.droidengine2d.graphics.EngineRenderer;
 import com.miviclin.droidengine2d.graphics.GLRenderer;
 import com.miviclin.droidengine2d.graphics.GLView;
 
@@ -33,17 +34,21 @@ public class Engine {
 	 * </pre>
 	 * 
 	 * @param game Juego
+	 * @param renderer EngineRenderer
 	 * @throws IllegalArgumentException Si el juego es null
 	 */
-	public Engine(Game game) {
+	public Engine(Game game, EngineRenderer renderer) {
 		EngineLock engineLock = new EngineLock();
 		if (game == null) {
 			throw new IllegalArgumentException("The Game can not be null");
 		}
+		if (renderer == null) {
+			throw new IllegalArgumentException("The Renderer can not be null");
+		}
 		this.glView = game.getGLView();
 		this.glView.setEGLContextClientVersion(2);
 		this.gameThread = new GameThread(game, glView, engineLock);
-		this.renderer = new GLRenderer(game, engineLock);
+		this.renderer = new GLRenderer(renderer, engineLock);
 		this.activity = game.getActivity();
 	}
 	
