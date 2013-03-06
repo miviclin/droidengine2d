@@ -90,6 +90,7 @@ public class Animation {
 					currentFrameIndex = 0;
 					if (!repetitionEnabled) {
 						state = State.FINISHED;
+						currentFrameIndex = frames.size() - 1;
 					}
 				}
 			}
@@ -137,6 +138,7 @@ public class Animation {
 		this.repetitionEnabled = repetitionEnabled;
 		if (state == State.FINISHED) {
 			state = State.RUNNING;
+			currentFrameIndex = 0;
 		}
 	}
 	
