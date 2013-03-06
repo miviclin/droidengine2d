@@ -1,6 +1,9 @@
-package com.miviclin.droidengine2d;
+﻿package com.miviclin.droidengine2d;
 
 import android.app.Activity;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
 import android.view.View.OnLongClickListener;
@@ -19,7 +22,7 @@ import com.miviclin.droidengine2d.graphics.textures.TextureManager;
  * @author Miguel Vicente Linares
  * 
  */
-public abstract class Game {
+public abstract class Game implements OnClickListener, OnLongClickListener, OnKeyListener, OnTouchListener {
 	
 	private final String name;
 	private final Activity activity;
@@ -121,39 +124,121 @@ public abstract class Game {
 	}
 	
 	/**
-	 * Registra un listener que permitira recibir eventos Click sobre el View en el que se desarrolla el juego.
-	 * 
-	 * @param listener OnClickListener, o null para eliminar un listener existente
+	 * Registra este juego para que sea notificado cuando se produzcan eventos Click sobre la View en el que se desarrolla el juego.
 	 */
-	public void setClickListener(OnClickListener listener) {
-		glView.setOnClickListener(listener);
+	public void enableClickListener() {
+		glView.setOnClickListener(this);
 	}
 	
 	/**
-	 * Registra un listener que permitira recibir eventos LongClick sobre el View en el que se desarrolla el juego.
-	 * 
-	 * @param listener OnLongClickListener, o null para eliminar un listener existente
+	 * Si este juego estaba registrado para ser notificado de los eventos Click que se produjeran en la View en la que se desarrolla el
+	 * juego, dejara de estarlo tras llamar a este metodo.
 	 */
-	public void setLongClickListener(OnLongClickListener listener) {
-		glView.setOnLongClickListener(listener);
+	public void disableClickListener() {
+		glView.setOnClickListener(null);
 	}
 	
 	/**
-	 * Registra un listener que permitira recibir eventos de pulsacion de tecla sobre el View en el que se desarrolla el juego.
-	 * 
-	 * @param listener OnKeyListener, o null para eliminar un listener existente
+	 * Registra este juego para que sea notificado cuando se produzcan eventos LongClick sobre la View en el que se desarrolla el juego.
 	 */
-	public void setKeyListener(OnKeyListener listener) {
-		glView.setOnKeyListener(listener);
+	public void enableLongClickListener() {
+		glView.setOnLongClickListener(this);
 	}
 	
 	/**
-	 * Registra un listener que permitira recibir eventos Touch sobre el View en el que se desarrolla el juego.
-	 * 
-	 * @param listener OnTouchListener, o null para eliminar un listener existente
+	 * Si este juego estaba registrado para ser notificado de los eventos LongClick que se produjeran en la View en la que se desarrolla el
+	 * juego, dejara de estarlo tras llamar a este metodo.
 	 */
-	public void setTouchListener(OnTouchListener listener) {
-		glView.setOnTouchListener(listener);
+	public void disableLongClickListener() {
+		glView.setOnLongClickListener(null);
+	}
+	
+	/**
+	 * Registra este juego para que sea notificado cuando se produzcan eventos Key sobre la View en el que se desarrolla el juego.
+	 */
+	public void enableKeyListener() {
+		glView.setOnKeyListener(this);
+	}
+	
+	/**
+	 * Si este juego estaba registrado para ser notificado de los eventos Key que se produjeran en la View en la que se desarrolla el juego,
+	 * dejara de estarlo tras llamar a este metodo.
+	 */
+	public void disableKeyListener() {
+		glView.setOnKeyListener(null);
+	}
+	
+	/**
+	 * Registra este juego para que sea notificado cuando se produzcan eventos Touch sobre la View en el que se desarrolla el juego.
+	 */
+	public void enableTouchListener() {
+		glView.setOnTouchListener(this);
+	}
+	
+	/**
+	 * Si este juego estaba registrado para ser notificado de los eventos Touch que se produjeran en la View en la que se desarrolla el
+	 * juego, dejara de estarlo tras llamar a este metodo.
+	 */
+	public void disableTouchListener() {
+		glView.setOnTouchListener(null);
+	}
+	
+	/**
+	 * Se llama cuando en la View en la que se produce un evento Click.<br>
+	 * Para que este metodo sea llamado, se debe haber registrado este juego para que reciba eventos Click mediante una llamada a
+	 * {@link Game#enableClickListener()}<br>
+	 * Por defecto este metodo no realiza ninguna accion. Sobreescribir si es necesario.
+	 * 
+	 * @param v La View en la que se ha hecho click
+	 */
+	@Override
+	public void onClick(View v) {
+		
+	}
+	
+	/**
+	 * Se llama cuando en la View en la que se produce un evento LongClick.<br>
+	 * Para que este metodo sea llamado, se debe haber registrado este juego para que reciba eventos LongClick mediante una llamada a
+	 * {@link Game#enableLongClickListener()}<br>
+	 * Por defecto este metodo no realiza ninguna accion. Sobreescribir si es necesario.
+	 * 
+	 * @param v La View en la que se ha hecho click
+	 * @return true si el callback consume el evento, false en caso contrario
+	 */
+	@Override
+	public boolean onLongClick(View v) {
+		return false;
+	}
+	
+	/**
+	 * Se llama cuando en la View en la que se produce un evento Key.<br>
+	 * Para que este metodo sea llamado, se debe haber registrado este juego para que reciba eventos Key mediante una llamada a
+	 * {@link Game#enableKeyListener()}<br>
+	 * Por defecto este metodo no realiza ninguna accion. Sobreescribir si es necesario.
+	 * 
+	 * @param v La View en la que se ha hecho click
+	 * @param keyCode Codigo que identifica la tecla fisica pulsada
+	 * @param event KeyEvent que contiene la informacion del evento
+	 * @return true si el listener consume el evento, false en caso contrario
+	 */
+	@Override
+	public boolean onKey(View v, int keyCode, KeyEvent event) {
+		return false;
+	}
+	
+	/**
+	 * Se llama cuando en la View en la que se produce un evento Touch.<br>
+	 * Para que este metodo sea llamado, se debe haber registrado este juego para que reciba eventos Key mediante una llamada a
+	 * {@link Game#enableTouchListener()}<br>
+	 * Por defecto este metodo no realiza ninguna accion. Sobreescribir si es necesario.
+	 * 
+	 * @param v La View en la que se ha hecho click
+	 * @param event MotionEvent que contiene la informacion del evento
+	 * @return true si el listener consume el evento, false en caso contrario
+	 */
+	@Override
+	public boolean onTouch(View v, MotionEvent event) {
+		return false;
 	}
 	
 	/**
