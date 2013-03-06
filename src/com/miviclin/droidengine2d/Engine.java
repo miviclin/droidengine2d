@@ -26,7 +26,7 @@ public class Engine {
 	 * 
 	 * <pre>
 	 * {@code Engine engine;
-	 * if (detectOpenGLES20()) {
+	 * if (ActivityUtilities.detectOpenGLES20(activity)) {
 	 *     engine = new Engine(...);
 	 * } else {
 	 *     // Indicar al usuario que su dispositivo no soporta OpenGL ES 2.0 y cerrar la app
