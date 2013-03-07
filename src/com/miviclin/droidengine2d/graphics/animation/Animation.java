@@ -63,6 +63,15 @@ public class Animation {
 	}
 	
 	/**
+	 * Devuelve todos los frames de la animacion
+	 * 
+	 * @return Frames de la animacion
+	 */
+	public ArrayList<AnimationFrame> getFrames() {
+		return frames;
+	}
+	
+	/**
 	 * Devuelve el frame actual
 	 * 
 	 * @return AnimationFrame o null si la lista de frames esta vacia
