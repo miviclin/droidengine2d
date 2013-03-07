@@ -242,6 +242,14 @@ public abstract class Game implements OnClickListener, OnLongClickListener, OnKe
 	}
 	
 	/**
+	 * Llamado por {@link Engine#onBackPressed()}<br>
+	 * Sobreescribir este metodo para implementar acciones que deban ejecutarse al pulsar el boton BACK del dispositivo
+	 */
+	public void onBackPressed() {
+		
+	}
+	
+	/**
 	 * Se llama cuando se pausa el GameThread, normalmente debido a que la Activity recibe una llamada a onPause()
 	 */
 	public abstract void onEnginePaused();

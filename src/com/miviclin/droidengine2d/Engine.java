@@ -15,6 +15,7 @@ import com.miviclin.droidengine2d.graphics.GLView;
  */
 public class Engine {
 	
+	private Game game;
 	private GameThread gameThread;
 	private GLRenderer renderer;
 	private GLView glView;
@@ -45,6 +46,7 @@ public class Engine {
 		if (renderer == null) {
 			throw new IllegalArgumentException("The Renderer can not be null");
 		}
+		this.game = game;
 		this.glView = game.getGLView();
 		this.glView.setEGLContextClientVersion(2);
 		this.gameThread = new GameThread(game, glView, engineLock);
@@ -98,6 +100,14 @@ public class Engine {
 	 */
 	protected void onFinish() {
 		gameThread.terminate();
+	}
+	
+	/**
+	 * Llamar desde {@link Activity#onBackPressed()} para que el juego pueda interceptar las pulsaciones del boton BACK del dispositivo y
+	 * pueda realizar acciones antes de que la activity sea destruida.
+	 */
+	public void onBackPressed() {
+		game.onBackPressed();
 	}
 	
 }
