@@ -11,6 +11,7 @@ import java.util.ArrayList;
 public class Animation {
 	
 	private enum State {
+		INITIALIZED,
 		RUNNING,
 		PAUSED,
 		FINISHED;
@@ -52,7 +53,7 @@ public class Animation {
 		this.currentFrameIndex = 0;
 		this.elapsedTime = 0;
 		this.loopModeEnabled = repeat;
-		this.state = State.RUNNING;
+		this.state = State.INITIALIZED;
 	}
 	
 	/**
@@ -92,16 +93,23 @@ public class Animation {
 	 * @return AnimationFrame o null si la lista de frames esta vacia
 	 */
 	public AnimationFrame getCurrentFrame(float delta) {
+		if (state == State.INITIALIZED) {
+			state = State.RUNNING;
+			notifyAnimationStarted();
+		}
 		if ((state == State.RUNNING) && (frames.size() > 1)) {
 			elapsedTime += delta;
 			if (elapsedTime > frames.get(currentFrameIndex).getDelay()) {
 				elapsedTime = 0;
 				currentFrameIndex++;
+				notifyAnimationFrameChanged();
 				if (currentFrameIndex >= frames.size()) {
 					currentFrameIndex = 0;
+					notifyAnimationLoopFinished();
 					if (!loopModeEnabled) {
 						state = State.FINISHED;
 						currentFrameIndex = frames.size() - 1;
+						notifyAnimationFinished();
 					}
 				}
 			}
@@ -118,7 +126,7 @@ public class Animation {
 	public void reset() {
 		currentFrameIndex = 0;
 		elapsedTime = 0;
-		state = State.RUNNING;
+		state = State.INITIALIZED;
 	}
 	
 	/**
@@ -127,7 +135,7 @@ public class Animation {
 	public void clear() {
 		currentFrameIndex = 0;
 		elapsedTime = 0;
-		state = State.RUNNING;
+		state = State.INITIALIZED;
 		frames.clear();
 	}
 	
@@ -159,6 +167,7 @@ public class Animation {
 	public void pause() {
 		if (state != State.FINISHED) {
 			state = State.PAUSED;
+			notifyAnimationPaused();
 		}
 	}
 	
@@ -168,6 +177,7 @@ public class Animation {
 	public void resume() {
 		if (state == State.PAUSED) {
 			state = State.RUNNING;
+			notifyAnimationResumed();
 		}
 	}
 	
@@ -229,6 +239,26 @@ public class Animation {
 	}
 	
 	/**
+	 * Notifica a todos los listeners que la animacion ha sido pausada.<br>
+	 * Llama a {@link AnimationStateListener#onAnimationStarted(Animation)}
+	 */
+	protected void notifyAnimationPaused() {
+		for (int i = 0; i < listeners.size(); i++) {
+			listeners.get(i).onAnimationPaused(this);
+		}
+	}
+	
+	/**
+	 * Notifica a todos los listeners que la animacion ha sido reanudada tras haber sido pausada previamente.<br>
+	 * Llama a {@link AnimationStateListener#onAnimationStarted(Animation)}
+	 */
+	protected void notifyAnimationResumed() {
+		for (int i = 0; i < listeners.size(); i++) {
+			listeners.get(i).onAnimationResumed(this);
+		}
+	}
+	
+	/**
 	 * Notifica a todos los listeners que la animacion ha pasado de un frame a otro.<br>
 	 * Llama a {@link AnimationStateListener#onAnimationFrameChanged(Animation)}
 	 */
@@ -273,6 +303,20 @@ public class Animation {
 		 * @param animation Animation que llama a este metodo
 		 */
 		public void onAnimationStarted(Animation animation);
+		
+		/**
+		 * Callback que se llama cuando se pausa la animacion
+		 * 
+		 * @param animation Animation que llama a este metodo
+		 */
+		public void onAnimationPaused(Animation animation);
+		
+		/**
+		 * Callback que se llama cuando se reanuda la la animacion tras haber sido pausada previamente
+		 * 
+		 * @param animation Animation que llama a este metodo
+		 */
+		public void onAnimationResumed(Animation animation);
 		
 		/**
 		 * Callback que se llama cada vez que la Animation pasa de un AnimationFrame a otro
