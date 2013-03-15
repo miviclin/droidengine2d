@@ -37,12 +37,23 @@ public abstract class Game implements OnClickListener, OnLongClickListener, OnKe
 	 * @param activity Activity en la que se ejecuta el juego
 	 */
 	public Game(String name, Activity activity) {
+		this(name, new GLView(activity), activity);
+	}
+	
+	/**
+	 * Constructor
+	 * 
+	 * @param name Nombre del juego
+	 * @param glView GLView en la que se representara el juego
+	 * @param activity Activity en la que se ejecuta el juego
+	 */
+	public Game(String name, GLView glView, Activity activity) {
 		if (activity == null) {
 			throw new IllegalArgumentException("The Activity can not be null");
 		}
 		this.name = name;
 		this.activity = activity;
-		this.glView = new GLView(activity);
+		this.glView = glView;
 		this.textureManager = new TextureManager(activity);
 		this.camera = new OrthographicCamera();
 	}
