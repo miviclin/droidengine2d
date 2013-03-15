@@ -197,4 +197,35 @@ public class MusicManager implements OnCompletionListener {
 		}
 	}
 	
+	/**
+	 * Comprueba si MusicManager es capaz de reproducir el archivo especificado
+	 * 
+	 * @param context Context
+	 * @param ruta Ruta del archivo
+	 * @return true si lo soporta, false en caso contrario (o si la ruta especificada no es valida)
+	 */
+	public static boolean checkFileCompatibility(Context context, String ruta) {
+		AssetFileDescriptor descriptor;
+		MediaPlayer mp = new MediaPlayer();
+		if (ruta.matches("[a-z]+://.+")) {
+			try {
+				mp.setDataSource(ruta);
+				mp.prepare();
+			} catch (Exception e) {
+				return false;
+			}
+		} else {
+			descriptor = AssetsLoader.getAssetFileDescriptor(context, ruta);
+			try {
+				mp.setDataSource(descriptor.getFileDescriptor(), descriptor.getStartOffset(), descriptor.getLength());
+				descriptor.close();
+				mp.prepare();
+			} catch (Exception e) {
+				return false;
+			}
+		}
+		mp.release();
+		return true;
+	}
+	
 }
