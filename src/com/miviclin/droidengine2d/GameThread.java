@@ -27,6 +27,7 @@ public class GameThread implements Runnable {
 	private final GLView glView;
 	private final EngineLock engineLock;
 	private final MutexLock pauseLock;
+	private final MutexLock terminateLock;
 	
 	private State currentState;
 	private boolean started;
@@ -81,6 +82,7 @@ public class GameThread implements Runnable {
 		this.glView = glView;
 		this.engineLock = engineLock;
 		this.pauseLock = new MutexLock();
+		this.terminateLock = new MutexLock();
 		this.started = false;
 	}
 	
@@ -124,6 +126,7 @@ public class GameThread implements Runnable {
 			}
 		}
 		game.onEngineDisposed();
+		terminateLock.unlock();
 	}
 	
 	private void sleep(long sleepTimeMillis, float sleepTimePercentage) {
@@ -167,6 +170,7 @@ public class GameThread implements Runnable {
 		currentState = State.TERMINATED;
 		pauseLock.unlock();
 		engineLock.allowUpdate.set(true);
+		terminateLock.lock();
 	}
 	
 	/**
