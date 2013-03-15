@@ -2,7 +2,6 @@ package com.miviclin.droidengine2d;
 
 import android.util.Log;
 
-import com.miviclin.droidengine2d.BuildConfig;
 import com.miviclin.droidengine2d.graphics.GLView;
 import com.miviclin.droidengine2d.util.MutexLock;
 

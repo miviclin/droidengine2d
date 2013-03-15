@@ -2,6 +2,7 @@ package com.miviclin.droidengine2d;
 
 import android.app.Activity;
 import android.opengl.GLSurfaceView;
+import android.util.Log;
 
 import com.miviclin.droidengine2d.graphics.EngineRenderer;
 import com.miviclin.droidengine2d.graphics.GLRenderer;
@@ -77,10 +78,28 @@ public class Engine {
 	 * Si se ha llamado a onPause() porque la Activity se esta cerrando, este metodo llama a {@link Engine#onFinish()}
 	 */
 	public void onPause() {
+		if (BuildConfig.DEBUG) {
+			Log.d("Finish", "entra a engine.onPause()");
+		}
 		glView.onPause();
+		if (BuildConfig.DEBUG) {
+			Log.d("Finish", "GLView pausado");
+		}
 		gameThread.pause();
+		if (BuildConfig.DEBUG) {
+			Log.d("Finish", "GameThread pausado");
+		}
 		if (activity.isFinishing()) {
+			if (BuildConfig.DEBUG) {
+				Log.d("Finish", "activity.isFinishing() == true");
+			}
 			onFinish();
+			if (BuildConfig.DEBUG) {
+				Log.d("Finish", "GameThread destruido");
+			}
+		}
+		if (BuildConfig.DEBUG) {
+			Log.d("Finish", "sale de engine.onPause()");
 		}
 	}
 	
