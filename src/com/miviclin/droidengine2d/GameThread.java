@@ -128,6 +128,20 @@ public class GameThread implements Runnable {
 		terminateLock.unlock();
 	}
 	
+	/**
+	 * Tiene un comportamiento similar a {@code Thread#sleep(long)}. Pone el hilo en espera durante el tiempo especificado.<br>
+	 * Para llevar esto a cabo, se hace uso de {@code Thread#sleep(long)} hasta que se sobrepase el porcentaje de tiempo especificado, a
+	 * partir de ahi, se llama a {@code Thread#yield()} hasta completar el tiempo total.<br>
+	 * Este metodo pretende ser mas preciso que {@code Thread#sleep(long)}. Cuanto mayor sea el porcentaje especificado, mas CPU consumira
+	 * la espera (si el porcentaje es 0, la espera no consume CPU), sin embargo, {@code Thread#sleep(long)} puede ser bastante impreciso,
+	 * por lo que puede ser conveniente cargar un poco mas la CPU si se necesita mas precision en el tiempo de espera.<br>
+	 * Especificando como porcentaje 0.333f parece ser lo suficientemente preciso y no carga la CPU al 100%
+	 * 
+	 * @param sleepTimeMillis Tiempo total de espera
+	 * @param sleepTimePercentage Porcentaje del tiempo total que se hara uso de {@code Thread#sleep(long)} (Valor entre 0 y 1)
+	 * @see Thread#sleep(long)
+	 * @see Thread#yield()
+	 */
 	private void sleep(long sleepTimeMillis, float sleepTimePercentage) {
 		long diff;
 		long prev = System.nanoTime();

@@ -2,14 +2,27 @@ package com.miviclin.droidengine2d;
 
 import android.app.Activity;
 import android.opengl.GLSurfaceView;
-import android.util.Log;
 
 import com.miviclin.droidengine2d.graphics.EngineRenderer;
 import com.miviclin.droidengine2d.graphics.GLRenderer;
 import com.miviclin.droidengine2d.graphics.GLView;
 
 /**
- * Gestor principal del engine. Maneja el hilo del juego y el hilo del renderer.
+ * Gestor principal del engine. Maneja el hilo del juego y el hilo del renderer.<br>
+ * <br>
+ * ATENCION: Para que el Engine actue de acuerdo al ciclo de vide de la Activity en la que se utiliza, es necesario llamar a
+ * {@link Engine#onPause()}, {@link Engine#onResume()} y {@link Engine#onDestroy()} en los metodos correspondientes de la Activity.<br>
+ * Tambien se puede interceptar el boton back llamando a {@link Engine#onBackPressed()} desde {@link Activity#onBackPressed()}<br>
+ * AndroidEngine utiliza OpenGL ES 2.0, por tanto, es recomendable comprobar primero si el dispositivo soporta OpenGL ES 2.0. Ejemplo:
+ * 
+ * <pre>
+ * {@code Engine engine;
+ * if (ActivityUtilities.detectOpenGLES20(activity)) {
+ *     engine = new Engine(...);
+ * } else {
+ *     // Indicar al usuario que su dispositivo no soporta OpenGL ES 2.0 y cerrar la app
+ * }
+ * </pre>
  * 
  * @author Miguel Vicente Linares
  * 
@@ -21,19 +34,11 @@ public class Engine {
 	private GLRenderer renderer;
 	private GLView glView;
 	private Activity activity;
+	private boolean destroyed;
 	
 	/**
 	 * Crea un Engine.<br>
-	 * AndroidEngine utiliza OpenGL ES 2.0, por tanto, es recomendable comprobar primero si el dispositivo soporta OpenGL ES 2.0. Ejemplo:
-	 * 
-	 * <pre>
-	 * {@code Engine engine;
-	 * if (ActivityUtilities.detectOpenGLES20(activity)) {
-	 *     engine = new Engine(...);
-	 * } else {
-	 *     // Indicar al usuario que su dispositivo no soporta OpenGL ES 2.0 y cerrar la app
-	 * }
-	 * </pre>
+	 * LEER: {@link Engine}
 	 * 
 	 * @param game Juego
 	 * @param renderer EngineRenderer
@@ -53,6 +58,7 @@ public class Engine {
 		this.gameThread = new GameThread(game, glView, engineLock);
 		this.renderer = new GLRenderer(renderer, engineLock);
 		this.activity = game.getActivity();
+		this.destroyed = false;
 	}
 	
 	/**
@@ -71,40 +77,24 @@ public class Engine {
 		gameThread.start();
 		glView.setRenderer(renderer);
 		glView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+		destroyed = false;
 	}
 	
 	/**
-	 * Pausa los hilos del juego. Llamar en Activity.onPause()<br>
+	 * Pausa los hilos del juego. Llamar en {@link Activity.onPause()}<br>
 	 * Si se ha llamado a onPause() porque la Activity se esta cerrando, este metodo llama a {@link Engine#onFinish()}
 	 */
 	public void onPause() {
-		if (BuildConfig.DEBUG) {
-			Log.d("Finish", "entra a engine.onPause()");
-		}
 		glView.onPause();
-		if (BuildConfig.DEBUG) {
-			Log.d("Finish", "GLView pausado");
-		}
 		gameThread.pause();
-		if (BuildConfig.DEBUG) {
-			Log.d("Finish", "GameThread pausado");
-		}
-		if (activity.isFinishing()) {
-			if (BuildConfig.DEBUG) {
-				Log.d("Finish", "activity.isFinishing() == true");
-			}
-			onFinish();
-			if (BuildConfig.DEBUG) {
-				Log.d("Finish", "GameThread destruido");
-			}
-		}
-		if (BuildConfig.DEBUG) {
-			Log.d("Finish", "sale de engine.onPause()");
+		if (activity.isFinishing() && !destroyed) {
+			onDestroy();
+			destroyed = true;
 		}
 	}
 	
 	/**
-	 * Reanuda los hilos del juego. Llamar en Activity.onResume()
+	 * Reanuda los hilos del juego. Llamar en {@link Activity.onResume()}
 	 */
 	public void onResume() {
 		glView.onResume();
@@ -112,13 +102,13 @@ public class Engine {
 	}
 	
 	/**
-	 * Para el hilo del juego. Llamar cuando se termine la aplicacion.<br>
-	 * Si se sobreescribe este metodo, se debe llamar a {@code super.onFinish()} para que el hilo del juego se destruya al salir de la
-	 * aplicacion, de lo contrario podria quedarse funcionando en segundo plano. Este metodo es llamado por {@link Engine#onPause()} cuando
-	 * la Activity se esta cerrando.
+	 * Destruye el hilo del juego y libera recursos. Llamar en {@link Activity#onDestroy()}
 	 */
-	protected void onFinish() {
-		gameThread.terminate();
+	public void onDestroy() {
+		if (!destroyed) {
+			gameThread.terminate();
+			destroyed = true;
+		}
 	}
 	
 	/**
