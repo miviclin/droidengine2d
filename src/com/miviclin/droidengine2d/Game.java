@@ -254,10 +254,11 @@ public abstract class Game implements OnClickListener, OnLongClickListener, OnKe
 	
 	/**
 	 * Llamado por {@link Engine#onBackPressed()}<br>
+	 * Destruye la Activity en la que se ejecuta el juego.<br>
 	 * Sobreescribir este metodo para implementar acciones que deban ejecutarse al pulsar el boton BACK del dispositivo
 	 */
 	public void onBackPressed() {
-		
+		getActivity().finish();
 	}
 	
 	/**
