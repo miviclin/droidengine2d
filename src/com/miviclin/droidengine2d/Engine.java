@@ -3,6 +3,7 @@ package com.miviclin.droidengine2d;
 import android.app.Activity;
 import android.opengl.GLSurfaceView;
 
+import com.miviclin.droidengine2d.graphics.DefaultRenderer;
 import com.miviclin.droidengine2d.graphics.EngineRenderer;
 import com.miviclin.droidengine2d.graphics.GLRenderer;
 import com.miviclin.droidengine2d.graphics.GLView;
@@ -44,19 +45,14 @@ public class Engine {
 	 * @param renderer EngineRenderer
 	 * @throws IllegalArgumentException Si el juego es null
 	 */
-	public Engine(Game game, EngineRenderer renderer) {
-		EngineLock engineLock = new EngineLock();
-		if (game == null) {
-			throw new IllegalArgumentException("The Game can not be null");
+	private Engine(EngineBuilder engineBuilder) {
+		if (engineBuilder == null) {
+			throw new IllegalArgumentException("The EngineBuilder can not be null");
 		}
-		if (renderer == null) {
-			throw new IllegalArgumentException("The Renderer can not be null");
-		}
-		this.game = game;
-		this.glView = game.getGLView();
-		this.glView.setEGLContextClientVersion(2);
-		this.gameThread = new GameThread(game, glView, engineLock);
-		this.renderer = new GLRenderer(renderer, engineLock);
+		this.game = engineBuilder.game;
+		this.glView = engineBuilder.glView;
+		this.gameThread = engineBuilder.gameThread;
+		this.renderer = engineBuilder.glRenderer;
 		this.activity = game.getActivity();
 		this.destroyed = false;
 	}
@@ -117,6 +113,97 @@ public class Engine {
 	 */
 	public void onBackPressed() {
 		game.onBackPressed();
+	}
+	
+	/**
+	 * Builder que se utiliza para construir un {@link Engine}.
+	 * 
+	 * @author Miguel Vicente Linares
+	 * 
+	 */
+	public final static class EngineBuilder {
+		
+		private final Game game;
+		private final GLView glView;
+		private EngineRenderer renderer;
+		private GLRenderer glRenderer;
+		private GameThread gameThread;
+		private int maxFPS;
+		private int maxSkippedFrames;
+		
+		/**
+		 * Crea un EngineBuilder.<br>
+		 * LEER: {@link Engine}
+		 * 
+		 * @param game Juego
+		 * @throws IllegalArgumentException Si el juego es null
+		 */
+		public EngineBuilder(Game game) {
+			if (game == null) {
+				throw new IllegalArgumentException("The Game can not be null");
+			}
+			this.game = game;
+			this.glView = game.getGLView();
+			this.glView.setEGLContextClientVersion(2);
+			this.renderer = new DefaultRenderer(game);
+			this.glRenderer = null;
+			this.gameThread = null;
+			this.maxFPS = 30;
+			this.maxSkippedFrames = 5;
+		}
+		
+		/**
+		 * Asigna el renderer que utilizara el Engine.<br>
+		 * El renderer por defecto es {@link DefaultRenderer}
+		 * 
+		 * @param renderer Renderer que se utilizara
+		 * @return El propio EngineBuilder, para poder encadenar llamadas a metodos
+		 */
+		public EngineBuilder setRenderer(EngineRenderer renderer) {
+			if (renderer == null) {
+				throw new IllegalArgumentException("The Renderer can not be null");
+			}
+			this.renderer = renderer;
+			return this;
+		}
+		
+		/**
+		 * Asigna el maximo numero de FPS al que se actualizara y se repintara el juego.<br>
+		 * Si se asigna un valor alto es posible que el rendimiento decrezca en los dispositivos menos potentes.<br>
+		 * El valor por defecto es 30.
+		 * 
+		 * @param maxFPS Nuevo valor
+		 * @return El propio EngineBuilder, para poder encadenar llamadas a metodos
+		 */
+		public EngineBuilder setMaxFPS(int maxFPS) {
+			this.maxFPS = maxFPS;
+			return this;
+		}
+		
+		/**
+		 * Asigna el maximo numero de frames seguidos que se puede actualizar sin renderizar en caso de que una vuelta del bucle principal
+		 * del juego tarde mas de lo estipulado.
+		 * 
+		 * @param maxSkippedFrames Nuevo valor
+		 * @return El propio EngineBuilder, para poder encadenar llamadas a metodos
+		 */
+		public EngineBuilder setMaxSkippedFrames(int maxSkippedFrames) {
+			this.maxSkippedFrames = maxSkippedFrames;
+			return this;
+		}
+		
+		/**
+		 * Construye un {@link Engine} a partir de la configuracion del EngineBuilder
+		 * 
+		 * @return Engine
+		 */
+		public Engine build() {
+			EngineLock engineLock = new EngineLock();
+			this.glRenderer = new GLRenderer(renderer, engineLock);
+			this.gameThread = new GameThread(maxFPS, maxSkippedFrames, game, glView, engineLock);
+			return new Engine(this);
+		}
+		
 	}
 	
 }
