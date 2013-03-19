@@ -1,7 +1,10 @@
 package com.miviclin.droidengine2d;
 
 import android.app.Activity;
+import android.content.Context;
 import android.opengl.GLSurfaceView;
+import android.view.Display;
+import android.view.WindowManager;
 
 import com.miviclin.droidengine2d.graphics.DefaultRenderer;
 import com.miviclin.droidengine2d.graphics.EngineRenderer;
@@ -167,6 +170,9 @@ public class Engine {
 		
 		/**
 		 * Asigna el maximo numero de FPS al que se actualizara y se repintara el juego.<br>
+		 * La frecuencia de actualizacion del juego no superara la frecuencia de refresco de la pantalla, por tanto, si el valor
+		 * especificado es mayor que la frecuencia de refresco de la pantalla, la frecuencia de actualizacion del juego coincidira con la
+		 * frecuencia de refresco de la pantalla, independientemente del valor especificado.<br>
 		 * Si se asigna un valor alto es posible que el rendimiento decrezca en los dispositivos menos potentes.<br>
 		 * El valor por defecto es 30.
 		 * 
@@ -174,7 +180,9 @@ public class Engine {
 		 * @return El propio EngineBuilder, para poder encadenar llamadas a metodos
 		 */
 		public EngineBuilder setMaxFPS(int maxFPS) {
-			this.maxFPS = maxFPS;
+			Display display = ((WindowManager) game.getActivity().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+			int refreshRate = (int) display.getRefreshRate();
+			this.maxFPS = (maxFPS > refreshRate) ? refreshRate : maxFPS;
 			return this;
 		}
 		
