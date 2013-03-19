@@ -34,7 +34,6 @@ public class Engine {
 	private GameThread gameThread;
 	private GLRenderer renderer;
 	private GLView glView;
-	private Activity activity;
 	private boolean destroyed;
 	
 	/**
@@ -53,7 +52,6 @@ public class Engine {
 		this.glView = engineBuilder.glView;
 		this.gameThread = engineBuilder.gameThread;
 		this.renderer = engineBuilder.glRenderer;
-		this.activity = game.getActivity();
 		this.destroyed = false;
 	}
 	
@@ -83,7 +81,7 @@ public class Engine {
 	public void onPause() {
 		glView.onPause();
 		gameThread.pause();
-		if (activity.isFinishing() && !destroyed) {
+		if (game.getActivity().isFinishing() && !destroyed) {
 			onDestroy();
 			destroyed = true;
 		}
