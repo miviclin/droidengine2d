@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 
@@ -37,10 +38,23 @@ public class MusicManager implements OnCompletionListener {
 	 * @param nombreArchivo Ruta relativa a la carpeta de assets
 	 */
 	public void loadMusic(Context context, String path) {
+		loadMusic(context, path, AudioManager.STREAM_MUSIC);
+	}
+	
+	/**
+	 * Carga una cancion a partir de una ruta y la prepara para reproducir. Por defecto se activa la opcion de 'loop'
+	 * 
+	 * @param context
+	 * @param nombreArchivo Ruta relativa a la carpeta de assets
+	 * @param streamType Tipo de stream de audio. Utilizar {@link AudioManager#STREAM_ALARM}, {@link AudioManager#STREAM_DTMF},
+	 *            {@link AudioManager#STREAM_MUSIC}, {@link AudioManager#STREAM_NOTIFICATION}, {@link AudioManager#STREAM_RING},
+	 *            {@link AudioManager#STREAM_SYSTEM}, o {@link AudioManager#STREAM_VOICE_CALL}
+	 */
+	public void loadMusic(Context context, String path, int streamType) {
 		if (path.matches("[a-z]+://.+")) {
-			loadExternalMusic(path);
+			loadExternalMusic(path, streamType);
 		} else {
-			loadMusicFromAssets(context, path);
+			loadMusicFromAssets(context, path, streamType);
 		}
 	}
 	
@@ -50,9 +64,22 @@ public class MusicManager implements OnCompletionListener {
 	 * @param nombreArchivo Ruta relativa a la carpeta de assets
 	 */
 	public void loadExternalMusic(String path) {
+		loadExternalMusic(path, AudioManager.STREAM_MUSIC);
+	}
+	
+	/**
+	 * Carga una cancion a partir de una ruta y la prepara para reproducir. Por defecto se activa la opcion de 'loop'
+	 * 
+	 * @param nombreArchivo Ruta relativa a la carpeta de assets
+	 * @param streamType Tipo de stream de audio. Utilizar {@link AudioManager#STREAM_ALARM}, {@link AudioManager#STREAM_DTMF},
+	 *            {@link AudioManager#STREAM_MUSIC}, {@link AudioManager#STREAM_NOTIFICATION}, {@link AudioManager#STREAM_RING},
+	 *            {@link AudioManager#STREAM_SYSTEM}, o {@link AudioManager#STREAM_VOICE_CALL}
+	 */
+	public void loadExternalMusic(String path, int streamType) {
 		mediaPlayer = new MediaPlayer();
 		try {
 			mediaPlayer.setDataSource(path);
+			mediaPlayer.setAudioStreamType(streamType);
 			mediaPlayer.prepare();
 			prepared = true;
 			mediaPlayer.setLooping(true);
@@ -71,11 +98,25 @@ public class MusicManager implements OnCompletionListener {
 	 * @param path Ruta relativa a la carpeta de assets
 	 */
 	public void loadMusicFromAssets(Context context, String path) {
+		loadMusicFromAssets(context, path, AudioManager.STREAM_MUSIC);
+	}
+	
+	/**
+	 * Carga una cancion a partir de un asset y la prepara para reproducir. Por defecto se activa la opcion de 'loop'
+	 * 
+	 * @param context Context
+	 * @param path Ruta relativa a la carpeta de assets
+	 * @param streamType Tipo de stream de audio. Utilizar {@link AudioManager#STREAM_ALARM}, {@link AudioManager#STREAM_DTMF},
+	 *            {@link AudioManager#STREAM_MUSIC}, {@link AudioManager#STREAM_NOTIFICATION}, {@link AudioManager#STREAM_RING},
+	 *            {@link AudioManager#STREAM_SYSTEM}, o {@link AudioManager#STREAM_VOICE_CALL}
+	 */
+	public void loadMusicFromAssets(Context context, String path, int streamType) {
 		AssetFileDescriptor descriptor = AssetsLoader.getAssetFileDescriptor(context, path);
 		mediaPlayer = new MediaPlayer();
 		try {
 			mediaPlayer.setDataSource(descriptor.getFileDescriptor(), descriptor.getStartOffset(), descriptor.getLength());
 			descriptor.close();
+			mediaPlayer.setAudioStreamType(streamType);
 			mediaPlayer.prepare();
 			prepared = true;
 			mediaPlayer.setLooping(true);
