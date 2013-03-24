@@ -1,5 +1,7 @@
 package com.miviclin.droidengine2d.graphics.textures;
 
+import java.util.Map;
+
 import android.content.Context;
 
 /**
@@ -39,4 +41,10 @@ public interface TextureAtlas {
 	 */
 	public void clearAtlas();
 	
+	/**
+	 * Devuelve el mapa de TextureRegions que contiene todos los TextureRegion del TextureAtlas indexados por su correspondiente clave
+	 * 
+	 * @return {@code Map<String, TextureRegion}
+	 */
+	public Map<String, TextureRegion> getTextureRegions();
 }
