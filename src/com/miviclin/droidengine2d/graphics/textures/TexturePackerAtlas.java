@@ -23,7 +23,7 @@ public class TexturePackerAtlas implements TextureAtlas {
 	}
 	
 	@Override
-	public void loadFromXML(Context context, String path) {
+	public void loadFromXML(String path, Context context) {
 		XmlPullParserFactory factory;
 		XmlPullParser xpp;
 		int eventType, x, y, width, height, index;

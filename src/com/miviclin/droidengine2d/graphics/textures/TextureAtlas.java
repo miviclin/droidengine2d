@@ -15,10 +15,10 @@ public interface TextureAtlas {
 	/**
 	 * Carga el TextureAtlas desde un archivo XML
 	 * 
-	 * @param context Context
 	 * @param path Ruta del archivo XML
+	 * @param context Context
 	 */
-	public void loadFromXML(Context context, String path);
+	public void loadFromXML(String path, Context context);
 	
 	/**
 	 * Devuelve la textura que define este TextureAtlas
