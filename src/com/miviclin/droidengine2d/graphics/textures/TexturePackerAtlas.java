@@ -2,6 +2,7 @@ package com.miviclin.droidengine2d.graphics.textures;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -22,7 +23,7 @@ public class TexturePackerAtlas implements TextureAtlas {
 	}
 	
 	@Override
-	public void loadFromXML(Context context, String path) {
+	public void loadFromXML(String path, Context context) {
 		XmlPullParserFactory factory;
 		XmlPullParser xpp;
 		int eventType, x, y, width, height, index;
@@ -103,6 +104,11 @@ public class TexturePackerAtlas implements TextureAtlas {
 	@Override
 	public void clearAtlas() {
 		regions.clear();
+	}
+
+	@Override
+	public Map<String, TextureRegion> getTextureRegions() {
+		return regions;
 	}
 	
 }

@@ -1,5 +1,7 @@
 package com.miviclin.droidengine2d.graphics.textures;
 
+import java.util.Map;
+
 import android.content.Context;
 
 /**
@@ -13,10 +15,10 @@ public interface TextureAtlas {
 	/**
 	 * Carga el TextureAtlas desde un archivo XML
 	 * 
-	 * @param context Context
 	 * @param path Ruta del archivo XML
+	 * @param context Context
 	 */
-	public void loadFromXML(Context context, String path);
+	public void loadFromXML(String path, Context context);
 	
 	/**
 	 * Devuelve la textura que define este TextureAtlas
@@ -39,4 +41,10 @@ public interface TextureAtlas {
 	 */
 	public void clearAtlas();
 	
+	/**
+	 * Devuelve el mapa de TextureRegions que contiene todos los TextureRegion del TextureAtlas indexados por su correspondiente clave
+	 * 
+	 * @return {@code Map<String, TextureRegion}
+	 */
+	public Map<String, TextureRegion> getTextureRegions();
 }
