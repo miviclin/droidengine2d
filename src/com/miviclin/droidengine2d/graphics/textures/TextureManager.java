@@ -1,6 +1,8 @@
 package com.miviclin.droidengine2d.graphics.textures;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import android.content.Context;
 
@@ -17,6 +19,7 @@ import com.miviclin.droidengine2d.util.Pool;
 public final class TextureManager {
 	
 	private Context context;
+	private HashMap<String, TextureRegion> textureRegions;
 	private ArrayList<Texture> activeTextures;
 	private Pool<Texture> removedTextures;
 	private int texturesToLoad;
@@ -27,20 +30,84 @@ public final class TextureManager {
 	 * @param context Context en el que se ejecuta el juego, necesario para poder cargar las texturas
 	 */
 	public TextureManager(Context context) {
-		this(16, context);
+		this(16, 16, context);
 	}
 	
 	/**
 	 * Crea un TextureManager
 	 * 
-	 * @param initialCapacity Capacidad inicial del TextureManager
+	 * @param initialCapacityForTextures Capacidad inicial del TextureManager para Textures
+	 * @param initialCapacityForTextureRegions Capacidad inicial del TextureManager para TextureRegions
 	 * @param context Context en el que se ejecuta el juego, necesario para poder cargar las texturas
 	 */
-	public TextureManager(int initialCapacity, Context context) {
+	public TextureManager(int initialCapacityForTextures, int initialCapacityForTextureRegions, Context context) {
 		this.context = context;
-		this.activeTextures = new ArrayList<Texture>(initialCapacity);
-		this.removedTextures = new Pool<Texture>(initialCapacity);
+		this.textureRegions = new HashMap<String, TextureRegion>((int) ((initialCapacityForTextureRegions / 0.75f) + 1));
+		this.activeTextures = new ArrayList<Texture>(initialCapacityForTextures);
+		this.removedTextures = new Pool<Texture>(initialCapacityForTextures);
 		this.texturesToLoad = 0;
+	}
+	
+	/**
+	 * Agrega un TextureRegion al TextureManager. La clave especificada permitira identificar al TextureRegion agregado. Si se inserta
+	 * posteriormente otro TextureRegion con la misma clave, se reemplazara al que hubiera, no puede haber 2 TextureRegion registrados con
+	 * la misma clave.
+	 * 
+	 * @param key Clave que identifica al TextureRegion agregado
+	 * @param textureRegion TextureRegion
+	 * @return Devuelve el TextureRegion que hubiera previamente registrado con la clave especificada o null si no habia ninguno
+	 */
+	public TextureRegion addTextureRegion(String key, TextureRegion textureRegion) {
+		addTexture(textureRegion.getTexture());
+		return textureRegions.put(key, textureRegion);
+	}
+	
+	/**
+	 * Elimina el TextureRegion asociado a la clave especificada. El objeto Texture asociado al TextureRegion eliminado no sera eliminado
+	 * del TextureManager.
+	 * 
+	 * @param key Clave
+	 * @return TextureRegion eliminado o null si no hay ninguno asociado a dicha clave
+	 */
+	public TextureRegion removeTextureRegion(String key) {
+		return textureRegions.remove(key);
+	}
+	
+	/**
+	 * Devuelve el TextureRegion asociado a la clave especificada.
+	 * 
+	 * @param key Clave
+	 * @return TextureRegion registrado con la clave especificada o null si no hay ninguno asociado a dicha clave
+	 */
+	public TextureRegion getTextureRegion(String key) {
+		return textureRegions.get(key);
+	}
+	
+	/**
+	 * Agrega todos los TextureRegion del TextureAtlas especificado al TextureManager, de forma que se podra acceder por su clave
+	 * posteriormente.
+	 * 
+	 * @param textureAtlas TextureAtlas especificado
+	 */
+	public void addTextureAtlas(TextureAtlas textureAtlas) {
+		Map<String, TextureRegion> atlasContent = textureAtlas.getTextureRegions();
+		for (Map.Entry<String, TextureRegion> entry : atlasContent.entrySet()) {
+			textureRegions.put(entry.getKey(), entry.getValue());
+		}
+		addTexture(textureAtlas.getSourceTexture());
+	}
+	
+	/**
+	 * Elimina todos los TextureRegion del TextureAtlas especificado al TextureManager. El objeto Texture asociado al TextureAtlas
+	 * especificado no sera eliminado del TextureManager al llamar a este metodo.
+	 * 
+	 * @param textureAtlas TextureAtlas especificado
+	 */
+	public void removeTextureAtlas(TextureAtlas textureAtlas) {
+		Map<String, TextureRegion> atlasContent = textureAtlas.getTextureRegions();
+		for (Map.Entry<String, TextureRegion> entry : atlasContent.entrySet()) {
+			textureRegions.remove(entry.getKey());
+		}
 	}
 	
 	/**
@@ -129,7 +196,7 @@ public final class TextureManager {
 	}
 	
 	/**
-	 * Elimina por completo todas las texturas almacenadas en el TextureManager.<br>
+	 * Elimina por completo todas las texturas y TextureRegions almacenadas en el TextureManager, dejandolo vacio.<br>
 	 * NOTA: Este metodo debe ejecutarse en el hilo del GLRenderer
 	 */
 	public void clearAll() {
@@ -145,6 +212,7 @@ public final class TextureManager {
 			}
 		}
 		texturesToLoad = 0;
+		textureRegions.clear();
 	}
 	
 	/**
