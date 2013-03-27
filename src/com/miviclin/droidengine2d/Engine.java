@@ -37,7 +37,6 @@ public class Engine {
 	private GameThread gameThread;
 	private GLRenderer renderer;
 	private GLView glView;
-	private boolean destroyed;
 	
 	/**
 	 * Crea un Engine.<br>
@@ -55,7 +54,6 @@ public class Engine {
 		this.glView = engineBuilder.glView;
 		this.gameThread = engineBuilder.gameThread;
 		this.renderer = engineBuilder.glRenderer;
-		this.destroyed = false;
 	}
 	
 	/**
@@ -74,7 +72,6 @@ public class Engine {
 		gameThread.start();
 		glView.setRenderer(renderer);
 		glView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
-		destroyed = false;
 	}
 	
 	/**
@@ -84,10 +81,6 @@ public class Engine {
 	public void onPause() {
 		glView.onPause();
 		gameThread.pause();
-		if (game.getActivity().isFinishing() && !destroyed) {
-			onDestroy();
-			destroyed = true;
-		}
 	}
 	
 	/**
@@ -102,10 +95,7 @@ public class Engine {
 	 * Destruye el hilo del juego y libera recursos. Llamar en {@link Activity#onDestroy()}
 	 */
 	public void onDestroy() {
-		if (!destroyed) {
-			gameThread.terminate();
-			destroyed = true;
-		}
+		gameThread.terminate();
 	}
 	
 	/**
