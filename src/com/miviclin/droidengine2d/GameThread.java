@@ -119,8 +119,9 @@ public class GameThread implements Runnable {
 					skippedFrames++;
 				}
 				if (BuildConfig.DEBUG) {
-					Log.d("FramesSaltados", skippedFrames + "");
-					Log.d("TiempoFrame", (System.currentTimeMillis() - startingTime) + "ms");
+					if (skippedFrames > 0) {
+						Log.d("SkippedFrames", skippedFrames + "");
+					}
 				}
 			}
 		}
