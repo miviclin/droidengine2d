@@ -26,9 +26,13 @@ public abstract class Game implements OnClickListener, OnLongClickListener, OnKe
 	
 	private final String name;
 	private final Activity activity;
-	private final GLView glView;
 	private final TextureManager textureManager;
+	private GLView glView;
 	private Camera camera;
+	private boolean onClickListener;
+	private boolean onLongClickListener;
+	private boolean onKeyListener;
+	private boolean onTouchListener;
 	
 	/**
 	 * Constructor
@@ -56,6 +60,10 @@ public abstract class Game implements OnClickListener, OnLongClickListener, OnKe
 		this.glView = glView;
 		this.textureManager = new TextureManager(activity);
 		this.camera = new OrthographicCamera();
+		this.onClickListener = false;
+		this.onLongClickListener = false;
+		this.onKeyListener = false;
+		this.onTouchListener = false;
 	}
 	
 	/**
@@ -105,6 +113,38 @@ public abstract class Game implements OnClickListener, OnLongClickListener, OnKe
 	}
 	
 	/**
+	 * Asigna un GLView para representar el juego. Translada los listeners del GLView antiguo al nuevo.<br>
+	 * Este metodo se utiliza internamente en el engine para configurar el GLView.
+	 * 
+	 * @param nuevo GLView
+	 */
+	void setGLView(GLView glView) {
+		boolean onClickListener = this.onClickListener;
+		boolean onLongClickListener = this.onLongClickListener;
+		boolean onKeyListener = this.onKeyListener;
+		boolean onTouchListener = this.onTouchListener;
+		if (this.glView != null) {
+			disableClickListener();
+			disableLongClickListener();
+			disableKeyListener();
+			disableTouchListener();
+		}
+		this.glView = glView;
+		if (onClickListener) {
+			enableClickListener();
+		}
+		if (onLongClickListener) {
+			enableLongClickListener();
+		}
+		if (onKeyListener) {
+			enableKeyListener();
+		}
+		if (onTouchListener) {
+			enableTouchListener();
+		}
+	}
+	
+	/**
 	 * Devuelve el TextureManager.
 	 * 
 	 * @return TextureManager
@@ -139,6 +179,7 @@ public abstract class Game implements OnClickListener, OnLongClickListener, OnKe
 	 */
 	public void enableClickListener() {
 		glView.setOnClickListener(this);
+		onClickListener = true;
 	}
 	
 	/**
@@ -147,6 +188,7 @@ public abstract class Game implements OnClickListener, OnLongClickListener, OnKe
 	 */
 	public void disableClickListener() {
 		glView.setOnClickListener(null);
+		onClickListener = false;
 	}
 	
 	/**
@@ -154,6 +196,7 @@ public abstract class Game implements OnClickListener, OnLongClickListener, OnKe
 	 */
 	public void enableLongClickListener() {
 		glView.setOnLongClickListener(this);
+		onLongClickListener = true;
 	}
 	
 	/**
@@ -162,6 +205,7 @@ public abstract class Game implements OnClickListener, OnLongClickListener, OnKe
 	 */
 	public void disableLongClickListener() {
 		glView.setOnLongClickListener(null);
+		onLongClickListener = false;
 	}
 	
 	/**
@@ -169,6 +213,7 @@ public abstract class Game implements OnClickListener, OnLongClickListener, OnKe
 	 */
 	public void enableKeyListener() {
 		glView.setOnKeyListener(this);
+		onKeyListener = true;
 	}
 	
 	/**
@@ -177,6 +222,7 @@ public abstract class Game implements OnClickListener, OnLongClickListener, OnKe
 	 */
 	public void disableKeyListener() {
 		glView.setOnKeyListener(null);
+		onKeyListener = false;
 	}
 	
 	/**
@@ -184,6 +230,7 @@ public abstract class Game implements OnClickListener, OnLongClickListener, OnKe
 	 */
 	public void enableTouchListener() {
 		glView.setOnTouchListener(this);
+		onTouchListener = true;
 	}
 	
 	/**
@@ -192,6 +239,7 @@ public abstract class Game implements OnClickListener, OnLongClickListener, OnKe
 	 */
 	public void disableTouchListener() {
 		glView.setOnTouchListener(null);
+		onTouchListener = false;
 	}
 	
 	/**

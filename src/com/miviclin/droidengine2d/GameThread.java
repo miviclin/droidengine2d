@@ -23,10 +23,10 @@ public class GameThread implements Runnable {
 	private final int maxSkippedFrames;
 	private final float idealTimePerFrame;
 	private final Game game;
-	private final GLView glView;
 	private final EngineLock engineLock;
 	private final MutexLock pauseLock;
 	private final MutexLock terminateLock;
+	private GLView glView;
 	
 	private State currentState;
 	private boolean started;
@@ -205,6 +205,16 @@ public class GameThread implements Runnable {
 			engineLock.allowUpdate.set(true);
 			pauseLock.unlock();
 		}
+	}
+	
+	/**
+	 * Asigna un GLView para representar el juego. Translada los listeners del GLView antiguo al nuevo.<br>
+	 * Este metodo se utiliza internamente en el engine para configurar el GLView.
+	 * 
+	 * @param nuevo GLView
+	 */
+	void setGLView(GLView glView) {
+		this.glView = glView;
 	}
 	
 }

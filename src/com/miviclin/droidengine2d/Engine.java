@@ -66,6 +66,22 @@ public class Engine {
 	}
 	
 	/**
+	 * Asigna un nuevo GLView, le asigna el renderer del Engine y lanza el hilo de OpenGL.<br>
+	 * No es necesario llamar a este metodo la primera vez que se lanza el Engine, solo si se quiere cambiar el GLView en mitad de la
+	 * ejecucion.
+	 * 
+	 * @param GLView nuevo GLView
+	 */
+	public void setGLView(GLView glView) {
+		this.glView = glView;
+		this.glView.setEGLContextClientVersion(2);
+		this.game.setGLView(glView);
+		this.gameThread.setGLView(glView);
+		glView.setRenderer(renderer);
+		glView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+	}
+	
+	/**
 	 * Lanza los hilos del Juego y GLView e inicia el juego
 	 */
 	public void startGame() {
