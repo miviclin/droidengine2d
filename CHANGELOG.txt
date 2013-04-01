@@ -1,4 +1,53 @@
 ------------------------------------------------------------------------
+v0.4.0 (2013-04-01)
+------------------------------------------------------------------------
+
+Cambios:
+
+  - Cambiada la forma de gestionar los eventos desde el juego.
+
+  - Agregada la posibilidad de interceptar el boton back.
+
+  - Cambiado el color de fondo de DefaultRenderer a negro.
+
+  - Agregado AnimationStateListener y cambios menores en Animacion.
+
+  - Agregada la posibilidad de comporbar si un archivo es compatible con
+    MusicManager.
+
+  - Agregada a Game la posibilidad de especificar el GLView.
+
+  - Engine se construye utilizando EngineBuilder.
+
+  - El TextureManager gestiona los TextureRegions.
+
+  - Activado back face culling en DefaultRenderer.
+
+
+Bugs corregidos:
+
+  - Corregido un bug al actualizar animaciones con 1 solo frame.
+
+  - Corregido un bug que permitia llamar a DynamicSpriteBatch.draw() sin
+    haber llamado a DynamicSpriteBatch.begin().
+
+  - Corregido un bug en la codificacion de Game y EngineLock. Se ha
+    cambiado la codificacion de ambos archivos a UTF-8 sin BOM.
+
+  - Corregido un bug en Sprite.setPosition(Point2D). Ahora el valor se
+    asigna correctamente.
+
+  - Corregido un bug que permitia que se destruyera el hilo del juego
+    antes de liberar todos los recursos.
+
+  - Corregido un bug que provocaba que detectOpenGLES20() siempre
+    devolviera false en el emulador de Android.
+
+  - Corregido un bug relacionado con la liberacion de recursos. Ahora
+    los recursos se liberan siempre en onDestroy().
+
+
+------------------------------------------------------------------------
 v0.3.0 (2013-03-06)
 ------------------------------------------------------------------------
 
