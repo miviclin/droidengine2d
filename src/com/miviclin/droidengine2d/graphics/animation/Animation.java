@@ -97,7 +97,7 @@ public class Animation {
 			state = State.RUNNING;
 			notifyAnimationStarted();
 		}
-		if ((state == State.RUNNING) && (frames.size() > 1)) {
+		if ((state == State.RUNNING) && (frames.size() > 0)) {
 			elapsedTime += delta;
 			if (elapsedTime > frames.get(currentFrameIndex).getDelay()) {
 				elapsedTime = 0;
