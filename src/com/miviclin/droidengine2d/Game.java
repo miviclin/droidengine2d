@@ -1,6 +1,9 @@
 package com.miviclin.droidengine2d;
 
 import android.app.Activity;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
 import android.view.View.OnLongClickListener;
@@ -19,13 +22,17 @@ import com.miviclin.droidengine2d.graphics.textures.TextureManager;
  * @author Miguel Vicente Linares
  * 
  */
-public abstract class Game {
+public abstract class Game implements OnClickListener, OnLongClickListener, OnKeyListener, OnTouchListener {
 	
 	private final String name;
 	private final Activity activity;
-	private final GLView glView;
 	private final TextureManager textureManager;
+	private GLView glView;
 	private Camera camera;
+	private boolean onClickListener;
+	private boolean onLongClickListener;
+	private boolean onKeyListener;
+	private boolean onTouchListener;
 	
 	/**
 	 * Constructor
@@ -34,14 +41,29 @@ public abstract class Game {
 	 * @param activity Activity en la que se ejecuta el juego
 	 */
 	public Game(String name, Activity activity) {
+		this(name, new GLView(activity), activity);
+	}
+	
+	/**
+	 * Constructor
+	 * 
+	 * @param name Nombre del juego
+	 * @param glView GLView en la que se representara el juego
+	 * @param activity Activity en la que se ejecuta el juego
+	 */
+	public Game(String name, GLView glView, Activity activity) {
 		if (activity == null) {
 			throw new IllegalArgumentException("The Activity can not be null");
 		}
 		this.name = name;
 		this.activity = activity;
-		this.glView = new GLView(activity);
+		this.glView = glView;
 		this.textureManager = new TextureManager(activity);
 		this.camera = new OrthographicCamera();
+		this.onClickListener = false;
+		this.onLongClickListener = false;
+		this.onKeyListener = false;
+		this.onTouchListener = false;
 	}
 	
 	/**
@@ -91,6 +113,38 @@ public abstract class Game {
 	}
 	
 	/**
+	 * Asigna un GLView para representar el juego. Translada los listeners del GLView antiguo al nuevo.<br>
+	 * Este metodo se utiliza internamente en el engine para configurar el GLView.
+	 * 
+	 * @param nuevo GLView
+	 */
+	void setGLView(GLView glView) {
+		boolean onClickListener = this.onClickListener;
+		boolean onLongClickListener = this.onLongClickListener;
+		boolean onKeyListener = this.onKeyListener;
+		boolean onTouchListener = this.onTouchListener;
+		if (this.glView != null) {
+			disableClickListener();
+			disableLongClickListener();
+			disableKeyListener();
+			disableTouchListener();
+		}
+		this.glView = glView;
+		if (onClickListener) {
+			enableClickListener();
+		}
+		if (onLongClickListener) {
+			enableLongClickListener();
+		}
+		if (onKeyListener) {
+			enableKeyListener();
+		}
+		if (onTouchListener) {
+			enableTouchListener();
+		}
+	}
+	
+	/**
 	 * Devuelve el TextureManager.
 	 * 
 	 * @return TextureManager
@@ -121,39 +175,138 @@ public abstract class Game {
 	}
 	
 	/**
-	 * Registra un listener que permitira recibir eventos Click sobre el View en el que se desarrolla el juego.
-	 * 
-	 * @param listener OnClickListener, o null para eliminar un listener existente
+	 * Registra este juego para que sea notificado cuando se produzcan eventos Click sobre la View en el que se desarrolla el juego.
 	 */
-	public void setClickListener(OnClickListener listener) {
-		glView.setOnClickListener(listener);
+	public void enableClickListener() {
+		glView.setOnClickListener(this);
+		onClickListener = true;
 	}
 	
 	/**
-	 * Registra un listener que permitira recibir eventos LongClick sobre el View en el que se desarrolla el juego.
-	 * 
-	 * @param listener OnLongClickListener, o null para eliminar un listener existente
+	 * Si este juego estaba registrado para ser notificado de los eventos Click que se produjeran en la View en la que se desarrolla el
+	 * juego, dejara de estarlo tras llamar a este metodo.
 	 */
-	public void setLongClickListener(OnLongClickListener listener) {
-		glView.setOnLongClickListener(listener);
+	public void disableClickListener() {
+		glView.setOnClickListener(null);
+		onClickListener = false;
 	}
 	
 	/**
-	 * Registra un listener que permitira recibir eventos de pulsacion de tecla sobre el View en el que se desarrolla el juego.
-	 * 
-	 * @param listener OnKeyListener, o null para eliminar un listener existente
+	 * Registra este juego para que sea notificado cuando se produzcan eventos LongClick sobre la View en el que se desarrolla el juego.
 	 */
-	public void setKeyListener(OnKeyListener listener) {
-		glView.setOnKeyListener(listener);
+	public void enableLongClickListener() {
+		glView.setOnLongClickListener(this);
+		onLongClickListener = true;
 	}
 	
 	/**
-	 * Registra un listener que permitira recibir eventos Touch sobre el View en el que se desarrolla el juego.
-	 * 
-	 * @param listener OnTouchListener, o null para eliminar un listener existente
+	 * Si este juego estaba registrado para ser notificado de los eventos LongClick que se produjeran en la View en la que se desarrolla el
+	 * juego, dejara de estarlo tras llamar a este metodo.
 	 */
-	public void setTouchListener(OnTouchListener listener) {
-		glView.setOnTouchListener(listener);
+	public void disableLongClickListener() {
+		glView.setOnLongClickListener(null);
+		onLongClickListener = false;
+	}
+	
+	/**
+	 * Registra este juego para que sea notificado cuando se produzcan eventos Key sobre la View en el que se desarrolla el juego.
+	 */
+	public void enableKeyListener() {
+		glView.setOnKeyListener(this);
+		onKeyListener = true;
+	}
+	
+	/**
+	 * Si este juego estaba registrado para ser notificado de los eventos Key que se produjeran en la View en la que se desarrolla el juego,
+	 * dejara de estarlo tras llamar a este metodo.
+	 */
+	public void disableKeyListener() {
+		glView.setOnKeyListener(null);
+		onKeyListener = false;
+	}
+	
+	/**
+	 * Registra este juego para que sea notificado cuando se produzcan eventos Touch sobre la View en el que se desarrolla el juego.
+	 */
+	public void enableTouchListener() {
+		glView.setOnTouchListener(this);
+		onTouchListener = true;
+	}
+	
+	/**
+	 * Si este juego estaba registrado para ser notificado de los eventos Touch que se produjeran en la View en la que se desarrolla el
+	 * juego, dejara de estarlo tras llamar a este metodo.
+	 */
+	public void disableTouchListener() {
+		glView.setOnTouchListener(null);
+		onTouchListener = false;
+	}
+	
+	/**
+	 * Se llama cuando en la View en la que se produce un evento Click.<br>
+	 * Para que este metodo sea llamado, se debe haber registrado este juego para que reciba eventos Click mediante una llamada a
+	 * {@link Game#enableClickListener()}<br>
+	 * Por defecto este metodo no realiza ninguna accion. Sobreescribir si es necesario.
+	 * 
+	 * @param v La View en la que se ha hecho click
+	 */
+	@Override
+	public void onClick(View v) {
+		
+	}
+	
+	/**
+	 * Se llama cuando en la View en la que se produce un evento LongClick.<br>
+	 * Para que este metodo sea llamado, se debe haber registrado este juego para que reciba eventos LongClick mediante una llamada a
+	 * {@link Game#enableLongClickListener()}<br>
+	 * Por defecto este metodo no realiza ninguna accion. Sobreescribir si es necesario.
+	 * 
+	 * @param v La View en la que se ha hecho click
+	 * @return true si el callback consume el evento, false en caso contrario
+	 */
+	@Override
+	public boolean onLongClick(View v) {
+		return false;
+	}
+	
+	/**
+	 * Se llama cuando en la View en la que se produce un evento Key.<br>
+	 * Para que este metodo sea llamado, se debe haber registrado este juego para que reciba eventos Key mediante una llamada a
+	 * {@link Game#enableKeyListener()}<br>
+	 * Por defecto este metodo no realiza ninguna accion. Sobreescribir si es necesario.
+	 * 
+	 * @param v La View en la que se ha hecho click
+	 * @param keyCode Codigo que identifica la tecla fisica pulsada
+	 * @param event KeyEvent que contiene la informacion del evento
+	 * @return true si el listener consume el evento, false en caso contrario
+	 */
+	@Override
+	public boolean onKey(View v, int keyCode, KeyEvent event) {
+		return false;
+	}
+	
+	/**
+	 * Se llama cuando en la View en la que se produce un evento Touch.<br>
+	 * Para que este metodo sea llamado, se debe haber registrado este juego para que reciba eventos Key mediante una llamada a
+	 * {@link Game#enableTouchListener()}<br>
+	 * Por defecto este metodo no realiza ninguna accion. Sobreescribir si es necesario.
+	 * 
+	 * @param v La View en la que se ha hecho click
+	 * @param event MotionEvent que contiene la informacion del evento
+	 * @return true si el listener consume el evento, false en caso contrario
+	 */
+	@Override
+	public boolean onTouch(View v, MotionEvent event) {
+		return false;
+	}
+	
+	/**
+	 * Llamado por {@link Engine#onBackPressed()}<br>
+	 * Destruye la Activity en la que se ejecuta el juego.<br>
+	 * Sobreescribir este metodo para implementar acciones que deban ejecutarse al pulsar el boton BACK del dispositivo
+	 */
+	public void onBackPressed() {
+		getActivity().finish();
 	}
 	
 	/**

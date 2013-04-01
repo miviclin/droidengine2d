@@ -65,7 +65,7 @@ public class Sprite {
 	 * @param position posicion en la pantalla
 	 */
 	public void setPosition(Point2D position) {
-		position.set(position);
+		this.position.set(position);
 	}
 	
 	/**

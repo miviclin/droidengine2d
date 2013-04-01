@@ -2,7 +2,6 @@ package com.miviclin.droidengine2d;
 
 import android.util.Log;
 
-import com.miviclin.droidengine2d.BuildConfig;
 import com.miviclin.droidengine2d.graphics.GLView;
 import com.miviclin.droidengine2d.util.MutexLock;
 
@@ -24,9 +23,10 @@ public class GameThread implements Runnable {
 	private final int maxSkippedFrames;
 	private final float idealTimePerFrame;
 	private final Game game;
-	private final GLView glView;
 	private final EngineLock engineLock;
 	private final MutexLock pauseLock;
+	private final MutexLock terminateLock;
+	private GLView glView;
 	
 	private State currentState;
 	private boolean started;
@@ -81,6 +81,7 @@ public class GameThread implements Runnable {
 		this.glView = glView;
 		this.engineLock = engineLock;
 		this.pauseLock = new MutexLock();
+		this.terminateLock = new MutexLock();
 		this.started = false;
 	}
 	
@@ -118,14 +119,30 @@ public class GameThread implements Runnable {
 					skippedFrames++;
 				}
 				if (BuildConfig.DEBUG) {
-					Log.d("FramesSaltados", skippedFrames + "");
-					Log.d("TiempoFrame", (System.currentTimeMillis() - startingTime) + "ms");
+					if (skippedFrames > 0) {
+						Log.d("SkippedFrames", skippedFrames + "");
+					}
 				}
 			}
 		}
 		game.onEngineDisposed();
+		terminateLock.unlock();
 	}
 	
+	/**
+	 * Tiene un comportamiento similar a {@code Thread#sleep(long)}. Pone el hilo en espera durante el tiempo especificado.<br>
+	 * Para llevar esto a cabo, se hace uso de {@code Thread#sleep(long)} hasta que se sobrepase el porcentaje de tiempo especificado, a
+	 * partir de ahi, se llama a {@code Thread#yield()} hasta completar el tiempo total.<br>
+	 * Este metodo pretende ser mas preciso que {@code Thread#sleep(long)}. Cuanto mayor sea el porcentaje especificado, mas CPU consumira
+	 * la espera (si el porcentaje es 0, la espera no consume CPU), sin embargo, {@code Thread#sleep(long)} puede ser bastante impreciso,
+	 * por lo que puede ser conveniente cargar un poco mas la CPU si se necesita mas precision en el tiempo de espera.<br>
+	 * Especificando como porcentaje 0.333f parece ser lo suficientemente preciso y no carga la CPU al 100%
+	 * 
+	 * @param sleepTimeMillis Tiempo total de espera
+	 * @param sleepTimePercentage Porcentaje del tiempo total que se hara uso de {@code Thread#sleep(long)} (Valor entre 0 y 1)
+	 * @see Thread#sleep(long)
+	 * @see Thread#yield()
+	 */
 	private void sleep(long sleepTimeMillis, float sleepTimePercentage) {
 		long diff;
 		long prev = System.nanoTime();
@@ -167,6 +184,7 @@ public class GameThread implements Runnable {
 		currentState = State.TERMINATED;
 		pauseLock.unlock();
 		engineLock.allowUpdate.set(true);
+		terminateLock.lock();
 	}
 	
 	/**
@@ -187,6 +205,16 @@ public class GameThread implements Runnable {
 			engineLock.allowUpdate.set(true);
 			pauseLock.unlock();
 		}
+	}
+	
+	/**
+	 * Asigna un GLView para representar el juego. Translada los listeners del GLView antiguo al nuevo.<br>
+	 * Este metodo se utiliza internamente en el engine para configurar el GLView.
+	 * 
+	 * @param nuevo GLView
+	 */
+	void setGLView(GLView glView) {
+		this.glView = glView;
 	}
 	
 }

@@ -1,4 +1,4 @@
-﻿package com.miviclin.droidengine2d;
+package com.miviclin.droidengine2d;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 

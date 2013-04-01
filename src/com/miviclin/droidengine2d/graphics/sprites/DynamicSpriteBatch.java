@@ -166,6 +166,9 @@ public class DynamicSpriteBatch implements SpriteBatch {
 	
 	@Override
 	public void draw(Sprite sprite, Camera camera) {
+		if (!inBeginEndPair) {
+			throw new RuntimeException("begin() must be called once before calling draw(Sprite, Camera)");
+		}
 		drawSprite(sprite, camera);
 	}
 	
