@@ -188,7 +188,7 @@ public class Engine {
 		public EngineBuilder setMaxFPS(int maxFPS) {
 			Display display = ((WindowManager) game.getActivity().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
 			int refreshRate = (int) display.getRefreshRate();
-			this.maxFPS = (maxFPS > refreshRate) ? refreshRate : maxFPS;
+			this.maxFPS = (maxFPS > refreshRate) ? ((refreshRate > 30) ? refreshRate : 30) : maxFPS;
 			return this;
 		}
 		
