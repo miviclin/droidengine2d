@@ -326,6 +326,11 @@ public abstract class Game implements OnClickListener, OnLongClickListener, OnKe
 	public abstract void onEngineDisposed();
 	
 	/**
+	 * Inicializa el juego
+	 */
+	public abstract void initialize();
+	
+	/**
 	 * Actualiza la logica del juego.<br>
 	 * Este metodo es llamado periodicamente por GameThread.
 	 * 

@@ -57,6 +57,15 @@ public class Engine {
 	}
 	
 	/**
+	 * Devuelve el Game
+	 * 
+	 * @return Game
+	 */
+	public Game getGame() {
+		return game;
+	}
+	
+	/**
 	 * Devuelve el GLView
 	 * 
 	 * @return GLView
