@@ -14,6 +14,7 @@ import com.miviclin.droidengine2d.graphics.cameras.Camera;
 import com.miviclin.droidengine2d.graphics.cameras.OrthographicCamera;
 import com.miviclin.droidengine2d.graphics.sprites.SpriteBatch;
 import com.miviclin.droidengine2d.graphics.textures.TextureManager;
+import com.miviclin.droidengine2d.scenes.SceneManager;
 
 /**
  * Game.<br>
@@ -27,6 +28,7 @@ public abstract class Game implements OnClickListener, OnLongClickListener, OnKe
 	private final String name;
 	private final Activity activity;
 	private final TextureManager textureManager;
+	private final SceneManager sceneManager;
 	private GLView glView;
 	private Camera camera;
 	private boolean onClickListener;
@@ -59,6 +61,7 @@ public abstract class Game implements OnClickListener, OnLongClickListener, OnKe
 		this.activity = activity;
 		this.glView = glView;
 		this.textureManager = new TextureManager(activity);
+		this.sceneManager = new SceneManager();
 		this.camera = new OrthographicCamera();
 		this.onClickListener = false;
 		this.onLongClickListener = false;
@@ -151,6 +154,15 @@ public abstract class Game implements OnClickListener, OnLongClickListener, OnKe
 	 */
 	public TextureManager getTextureManager() {
 		return textureManager;
+	}
+	
+	/**
+	 * Devuelve el SceneManager.
+	 * 
+	 * @return SceneManager
+	 */
+	public SceneManager getSceneManager() {
+		return sceneManager;
 	}
 	
 	/**
@@ -312,23 +324,24 @@ public abstract class Game implements OnClickListener, OnLongClickListener, OnKe
 	/**
 	 * Se llama cuando se pausa el GameThread, normalmente debido a que la Activity recibe una llamada a onPause()
 	 */
-	public abstract void onEnginePaused();
+	public void onEnginePaused() {
+		sceneManager.pause();
+	}
 	
 	/**
 	 * Se llama cuando se reanuda el GameThread tras haber sido pausado, normalmente debido a que la Activity recibe una llamada a
 	 * onResume()
 	 */
-	public abstract void onEngineResumed();
+	public void onEngineResumed() {
+		sceneManager.resume();
+	}
 	
 	/**
 	 * Se llama cuando se para el GameThread, normalmente debido a que la Activity ha sido destruida.
 	 */
-	public abstract void onEngineDisposed();
-	
-	/**
-	 * Inicializa el juego
-	 */
-	public abstract void initialize();
+	public void onEngineDisposed() {
+		sceneManager.dispose();
+	}
 	
 	/**
 	 * Actualiza la logica del juego.<br>
@@ -336,12 +349,21 @@ public abstract class Game implements OnClickListener, OnLongClickListener, OnKe
 	 * 
 	 * @param delta Tiempo transcurrido, en milisegundos, desde la ultima actualizacion.
 	 */
-	public abstract void update(float delta);
+	public void update(float delta) {
+		sceneManager.update(delta);
+	}
 	
 	/**
 	 * Renderiza los elementos del juego de forma que puedan verse en pantalla.<br>
 	 * Este metodo se ejecuta en el hilo del GLRenderer tras ejecutar {@link #update(float)} en el GameThread
 	 */
-	public abstract void draw(SpriteBatch spriteBatch);
+	public void draw(SpriteBatch spriteBatch) {
+		sceneManager.draw(spriteBatch);
+	}
+	
+	/**
+	 * Inicializa el juego
+	 */
+	public abstract void initialize();
 	
 }
