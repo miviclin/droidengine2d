@@ -1,6 +1,5 @@
 package com.miviclin.droidengine2d.scenes;
 
-import com.miviclin.droidengine2d.Game;
 import com.miviclin.droidengine2d.graphics.sprites.SpriteBatch;
 
 /**
@@ -13,17 +12,18 @@ public abstract class Scene {
 	
 	/**
 	 * Actualiza los elementos de la Scene.<br>
-	 * Este metodo se llama desde {@link Game#update(float)}
+	 * Este metodo se llama desde {@link SceneManager#update(float)}
 	 * 
 	 * @param delta Tiempo transcurrido, en milisegundos, desde la ultima actualizacion.
 	 */
-	public abstract void onUpdate(float delta);
+	public abstract void update(float delta);
 	
 	/**
 	 * Renderiza los elementos de la Scene de forma que puedan verse en pantalla.<br>
-	 * Este metodo se ejecuta en el hilo del GLRenderer tras ejecutar {@link Scene#update(float)} en el GameThread
+	 * Este metodo se llama desde {@link SceneManager#draw(SpriteBatch)} Este metodo se ejecuta en el hilo del GLRenderer tras ejecutar
+	 * {@link Scene#update(float)} en el GameThread
 	 */
-	public abstract void onDraw(SpriteBatch spriteBatch);
+	public abstract void draw(SpriteBatch spriteBatch);
 	
 	/**
 	 * Llamado cuando esta Scene se registra en el {@link SceneManager}
@@ -31,17 +31,22 @@ public abstract class Scene {
 	public abstract void onRegister();
 	
 	/**
-	 * Llamado cuando esta Scene se hace visible
+	 * Llamado cuando esta Scene pasa a ser la Scene activa mediante el {@link SceneManager}
 	 */
-	public abstract void onShow();
+	public abstract void onActivation();
 	
 	/**
-	 * Llamado cuando el juego se va a background si esta Scene es la Scene activa del juego
+	 * Llamado cuando esta Scene deja de ser la Scene activa mediante el {@link SceneManager}
+	 */
+	public abstract void onDeactivation();
+	
+	/**
+	 * Llamado cuando el juego se va a background desde {@link SceneManager#pause()}
 	 */
 	public abstract void onPause();
 	
 	/**
-	 * Llamado cuando el juego vuelve de background si esta Scene es la Scene activa del juego
+	 * Llamado cuando el juego vuelve de background desde {@link SceneManager#resume()}
 	 */
 	public abstract void onResume();
 	

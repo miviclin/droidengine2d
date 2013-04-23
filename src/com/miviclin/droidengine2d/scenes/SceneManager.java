@@ -1,6 +1,10 @@
 package com.miviclin.droidengine2d.scenes;
 
 import java.util.HashMap;
+import java.util.Map;
+
+import com.miviclin.droidengine2d.Game;
+import com.miviclin.droidengine2d.graphics.sprites.SpriteBatch;
 
 /**
  * Gestor de Scenes
@@ -35,19 +39,24 @@ public class SceneManager {
 	 * Si ya habia una Scene registrada con el mismo sceneID, se sustituira la que habia antes por la nueva.
 	 * 
 	 * @param sceneID Identificador que permite obtener la Scene
-	 * @param scene Scene a agregar
+	 * @param scene Scene a agregar. No puede ser null
 	 */
 	public void registerScene(String sceneID, Scene scene) {
+		if (scene == null) {
+			throw new IllegalArgumentException("The Scene can not be null");
+		}
 		scenes.put(sceneID, scene);
+		scene.onRegister();
 	}
 	
 	/**
 	 * Elimina la Scene asociada al identificador especificado. Si no habia ninguna Scene registrada con este identificador no hace nada.
 	 * 
 	 * @param sceneID Identificador de la Scene a eliminar
+	 * @return Scene eliminada o null
 	 */
-	public void unregisterScene(String sceneID) {
-		scenes.remove(sceneID);
+	public Scene unregisterScene(String sceneID) {
+		return scenes.remove(sceneID);
 	}
 	
 	/**
@@ -77,7 +86,66 @@ public class SceneManager {
 	 * @param sceneID Identificador de la Scene que queremos asignar como Scene activa
 	 */
 	public void setActiveScene(String sceneID) {
+		if (activeScene != null) {
+			activeScene.onDeactivation();
+		}
 		this.activeScene = scenes.get(sceneID);
+		if (activeScene != null) {
+			activeScene.onActivation();
+		}
+	}
+	
+	/**
+	 * Llamado cuando el juego se va a background. Llama a {@link Scene#onPause()} en la Scene activa
+	 */
+	public void pause() {
+		if (activeScene != null) {
+			activeScene.onPause();
+		}
+	}
+	
+	/**
+	 * Llamado cuando el juego vuelve de background. Llama a {@link Scene#onResume()} en la Scene activa
+	 */
+	public void resume() {
+		if (activeScene != null) {
+			activeScene.onResume();
+		}
+	}
+	
+	/**
+	 * Libera los recursos de todas las Scenes registradas en el SceneManager. Llama a {@link Scene#dispose()} en todas las Scenes.<br>
+	 * El SceneManager quedara vacio.
+	 */
+	public void dispose() {
+		for (Map.Entry<String, Scene> entry : scenes.entrySet()) {
+			entry.getValue().dispose();
+			entry.setValue(null);
+		}
+		scenes.clear();
+	}
+	
+	/**
+	 * Actualiza los elementos de la Scene activa.<br>
+	 * Este metodo se llama desde {@link Game#update(float)}
+	 * 
+	 * @param delta Tiempo transcurrido, en milisegundos, desde la ultima actualizacion.
+	 */
+	public void update(float delta) {
+		if (activeScene != null) {
+			activeScene.update(delta);
+		}
+	}
+	
+	/**
+	 * Renderiza los elementos de la Scene activa de forma que puedan verse en pantalla.<br>
+	 * Este metodo se llama desde {@link Game#draw(SpriteBatch)}<br>
+	 * Este metodo se ejecuta en el hilo del GLRenderer tras ejecutar {@link SceneManager#update(float)} en el GameThread
+	 */
+	public void draw(SpriteBatch spriteBatch) {
+		if (activeScene != null) {
+			activeScene.draw(spriteBatch);
+		}
 	}
 	
 }
