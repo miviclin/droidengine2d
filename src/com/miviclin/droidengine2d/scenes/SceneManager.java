@@ -42,11 +42,26 @@ public class SceneManager {
 	 * @param scene Scene a agregar. No puede ser null
 	 */
 	public void registerScene(String sceneID, Scene scene) {
+		registerScene(sceneID, scene, false);
+	}
+	
+	/**
+	 * Registra una Scene en el SceneManager identificada por el sceneID especificado.<br>
+	 * Si ya habia una Scene registrada con el mismo sceneID, se sustituira la que habia antes por la nueva.
+	 * 
+	 * @param sceneID Identificador que permite obtener la Scene
+	 * @param scene Scene a agregar. No puede ser null
+	 * @param activate Indica si esta Scene pasara a ser la Scene activa
+	 */
+	public void registerScene(String sceneID, Scene scene, boolean activate) {
 		if (scene == null) {
 			throw new IllegalArgumentException("The Scene can not be null");
 		}
 		scenes.put(sceneID, scene);
 		scene.onRegister();
+		if (activate) {
+			setActiveScene(sceneID);
+		}
 	}
 	
 	/**
