@@ -1,5 +1,6 @@
 package com.miviclin.droidengine2d.scenes;
 
+import com.miviclin.droidengine2d.Game;
 import com.miviclin.droidengine2d.graphics.sprites.SpriteBatch;
 
 /**
@@ -9,6 +10,26 @@ import com.miviclin.droidengine2d.graphics.sprites.SpriteBatch;
  * 
  */
 public abstract class Scene {
+	
+	private final Game game;
+	
+	/**
+	 * Crea una Scene del juego especificado
+	 * 
+	 * @param game Game al que pertenece la Scene
+	 */
+	public Scene(Game game) {
+		this.game = game;
+	}
+	
+	/**
+	 * Devuelve el juego al que pertenece esta Scene
+	 * 
+	 * @return Game
+	 */
+	public Game getGame() {
+		return game;
+	}
 	
 	/**
 	 * Actualiza los elementos de la Scene.<br>
