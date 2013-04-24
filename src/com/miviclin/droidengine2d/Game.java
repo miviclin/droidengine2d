@@ -31,6 +31,8 @@ public abstract class Game implements OnClickListener, OnLongClickListener, OnKe
 	private final SceneManager sceneManager;
 	private GLView glView;
 	private Camera camera;
+	private boolean prepared;
+	private volatile boolean initialized;
 	private boolean onClickListener;
 	private boolean onLongClickListener;
 	private boolean onKeyListener;
@@ -63,6 +65,8 @@ public abstract class Game implements OnClickListener, OnLongClickListener, OnKe
 		this.textureManager = new TextureManager(activity);
 		this.sceneManager = new SceneManager();
 		this.camera = new OrthographicCamera();
+		this.prepared = false;
+		this.initialized = false;
 		this.onClickListener = false;
 		this.onLongClickListener = false;
 		this.onKeyListener = false;
@@ -184,6 +188,22 @@ public abstract class Game implements OnClickListener, OnLongClickListener, OnKe
 			throw new IllegalArgumentException("The camera can not be null");
 		}
 		this.camera = camera;
+	}
+	
+	/**
+	 * Indica si el core del juego ha sido inicializado y esta preparado para inicializar las Scenes
+	 * 
+	 * @return true si se puede comenzar a inicializar los elementos del juego (Scenes, jugador, enemigos, etc)
+	 */
+	public boolean isPrepared() {
+		return prepared;
+	}
+	
+	/**
+	 * Indica que el core del juego ha sido inicializado y esta preparado para inicializar las Scenes
+	 */
+	public void prepare() {
+		this.prepared = true;
 	}
 	
 	/**
@@ -325,7 +345,9 @@ public abstract class Game implements OnClickListener, OnLongClickListener, OnKe
 	 * Se llama cuando se pausa el GameThread, normalmente debido a que la Activity recibe una llamada a onPause()
 	 */
 	public void onEnginePaused() {
-		sceneManager.pause();
+		if (initialized) {
+			sceneManager.pause();
+		}
 	}
 	
 	/**
@@ -333,14 +355,18 @@ public abstract class Game implements OnClickListener, OnLongClickListener, OnKe
 	 * onResume()
 	 */
 	public void onEngineResumed() {
-		sceneManager.resume();
+		if (initialized) {
+			sceneManager.resume();
+		}
 	}
 	
 	/**
 	 * Se llama cuando se para el GameThread, normalmente debido a que la Activity ha sido destruida.
 	 */
 	public void onEngineDisposed() {
-		sceneManager.dispose();
+		if (initialized) {
+			sceneManager.dispose();
+		}
 	}
 	
 	/**
@@ -350,7 +376,13 @@ public abstract class Game implements OnClickListener, OnLongClickListener, OnKe
 	 * @param delta Tiempo transcurrido, en milisegundos, desde la ultima actualizacion.
 	 */
 	public void update(float delta) {
-		sceneManager.update(delta);
+		if (initialized) {
+			sceneManager.update(delta);
+		}
+		if (!initialized && prepared) {
+			initialize();
+			initialized = true;
+		}
 	}
 	
 	/**
@@ -358,7 +390,9 @@ public abstract class Game implements OnClickListener, OnLongClickListener, OnKe
 	 * Este metodo se ejecuta en el hilo del GLRenderer tras ejecutar {@link #update(float)} en el GameThread
 	 */
 	public void draw(SpriteBatch spriteBatch) {
-		sceneManager.draw(spriteBatch);
+		if (initialized) {
+			sceneManager.draw(spriteBatch);
+		}
 	}
 	
 	/**
