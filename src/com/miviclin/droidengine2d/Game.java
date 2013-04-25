@@ -1,12 +1,8 @@
 package com.miviclin.droidengine2d;
 
 import android.app.Activity;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnKeyListener;
-import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
 
 import com.miviclin.droidengine2d.graphics.GLView;
@@ -14,6 +10,7 @@ import com.miviclin.droidengine2d.graphics.cameras.Camera;
 import com.miviclin.droidengine2d.graphics.cameras.OrthographicCamera;
 import com.miviclin.droidengine2d.graphics.sprites.SpriteBatch;
 import com.miviclin.droidengine2d.graphics.textures.TextureManager;
+import com.miviclin.droidengine2d.scenes.Scene;
 import com.miviclin.droidengine2d.scenes.SceneManager;
 
 /**
@@ -23,7 +20,7 @@ import com.miviclin.droidengine2d.scenes.SceneManager;
  * @author Miguel Vicente Linares
  * 
  */
-public abstract class Game implements OnClickListener, OnLongClickListener, OnKeyListener, OnTouchListener {
+public abstract class Game implements OnTouchListener {
 	
 	private final String name;
 	private final Activity activity;
@@ -33,9 +30,6 @@ public abstract class Game implements OnClickListener, OnLongClickListener, OnKe
 	private Camera camera;
 	private boolean prepared;
 	private volatile boolean initialized;
-	private boolean onClickListener;
-	private boolean onLongClickListener;
-	private boolean onKeyListener;
 	private boolean onTouchListener;
 	
 	/**
@@ -67,9 +61,6 @@ public abstract class Game implements OnClickListener, OnLongClickListener, OnKe
 		this.camera = new OrthographicCamera();
 		this.prepared = false;
 		this.initialized = false;
-		this.onClickListener = false;
-		this.onLongClickListener = false;
-		this.onKeyListener = false;
 		this.onTouchListener = false;
 	}
 	
@@ -126,26 +117,11 @@ public abstract class Game implements OnClickListener, OnLongClickListener, OnKe
 	 * @param nuevo GLView
 	 */
 	void setGLView(GLView glView) {
-		boolean onClickListener = this.onClickListener;
-		boolean onLongClickListener = this.onLongClickListener;
-		boolean onKeyListener = this.onKeyListener;
 		boolean onTouchListener = this.onTouchListener;
 		if (this.glView != null) {
-			disableClickListener();
-			disableLongClickListener();
-			disableKeyListener();
 			disableTouchListener();
 		}
 		this.glView = glView;
-		if (onClickListener) {
-			enableClickListener();
-		}
-		if (onLongClickListener) {
-			enableLongClickListener();
-		}
-		if (onKeyListener) {
-			enableKeyListener();
-		}
 		if (onTouchListener) {
 			enableTouchListener();
 		}
@@ -207,57 +183,6 @@ public abstract class Game implements OnClickListener, OnLongClickListener, OnKe
 	}
 	
 	/**
-	 * Registra este juego para que sea notificado cuando se produzcan eventos Click sobre la View en el que se desarrolla el juego.
-	 */
-	public void enableClickListener() {
-		glView.setOnClickListener(this);
-		onClickListener = true;
-	}
-	
-	/**
-	 * Si este juego estaba registrado para ser notificado de los eventos Click que se produjeran en la View en la que se desarrolla el
-	 * juego, dejara de estarlo tras llamar a este metodo.
-	 */
-	public void disableClickListener() {
-		glView.setOnClickListener(null);
-		onClickListener = false;
-	}
-	
-	/**
-	 * Registra este juego para que sea notificado cuando se produzcan eventos LongClick sobre la View en el que se desarrolla el juego.
-	 */
-	public void enableLongClickListener() {
-		glView.setOnLongClickListener(this);
-		onLongClickListener = true;
-	}
-	
-	/**
-	 * Si este juego estaba registrado para ser notificado de los eventos LongClick que se produjeran en la View en la que se desarrolla el
-	 * juego, dejara de estarlo tras llamar a este metodo.
-	 */
-	public void disableLongClickListener() {
-		glView.setOnLongClickListener(null);
-		onLongClickListener = false;
-	}
-	
-	/**
-	 * Registra este juego para que sea notificado cuando se produzcan eventos Key sobre la View en el que se desarrolla el juego.
-	 */
-	public void enableKeyListener() {
-		glView.setOnKeyListener(this);
-		onKeyListener = true;
-	}
-	
-	/**
-	 * Si este juego estaba registrado para ser notificado de los eventos Key que se produjeran en la View en la que se desarrolla el juego,
-	 * dejara de estarlo tras llamar a este metodo.
-	 */
-	public void disableKeyListener() {
-		glView.setOnKeyListener(null);
-		onKeyListener = false;
-	}
-	
-	/**
 	 * Registra este juego para que sea notificado cuando se produzcan eventos Touch sobre la View en el que se desarrolla el juego.
 	 */
 	public void enableTouchListener() {
@@ -275,49 +200,6 @@ public abstract class Game implements OnClickListener, OnLongClickListener, OnKe
 	}
 	
 	/**
-	 * Se llama cuando en la View en la que se produce un evento Click.<br>
-	 * Para que este metodo sea llamado, se debe haber registrado este juego para que reciba eventos Click mediante una llamada a
-	 * {@link Game#enableClickListener()}<br>
-	 * Por defecto este metodo no realiza ninguna accion. Sobreescribir si es necesario.
-	 * 
-	 * @param v La View en la que se ha hecho click
-	 */
-	@Override
-	public void onClick(View v) {
-		
-	}
-	
-	/**
-	 * Se llama cuando en la View en la que se produce un evento LongClick.<br>
-	 * Para que este metodo sea llamado, se debe haber registrado este juego para que reciba eventos LongClick mediante una llamada a
-	 * {@link Game#enableLongClickListener()}<br>
-	 * Por defecto este metodo no realiza ninguna accion. Sobreescribir si es necesario.
-	 * 
-	 * @param v La View en la que se ha hecho click
-	 * @return true si el callback consume el evento, false en caso contrario
-	 */
-	@Override
-	public boolean onLongClick(View v) {
-		return false;
-	}
-	
-	/**
-	 * Se llama cuando en la View en la que se produce un evento Key.<br>
-	 * Para que este metodo sea llamado, se debe haber registrado este juego para que reciba eventos Key mediante una llamada a
-	 * {@link Game#enableKeyListener()}<br>
-	 * Por defecto este metodo no realiza ninguna accion. Sobreescribir si es necesario.
-	 * 
-	 * @param v La View en la que se ha hecho click
-	 * @param keyCode Codigo que identifica la tecla fisica pulsada
-	 * @param event KeyEvent que contiene la informacion del evento
-	 * @return true si el listener consume el evento, false en caso contrario
-	 */
-	@Override
-	public boolean onKey(View v, int keyCode, KeyEvent event) {
-		return false;
-	}
-	
-	/**
 	 * Se llama cuando en la View en la que se produce un evento Touch.<br>
 	 * Para que este metodo sea llamado, se debe haber registrado este juego para que reciba eventos Key mediante una llamada a
 	 * {@link Game#enableTouchListener()}<br>
@@ -329,7 +211,11 @@ public abstract class Game implements OnClickListener, OnLongClickListener, OnKe
 	 */
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
-		return false;
+		Scene activeScene = getSceneManager().getActiveScene();
+		if (activeScene != null) {
+			activeScene.getTouchController().setMotionEvent(event);
+		}
+		return true;
 	}
 	
 	/**
