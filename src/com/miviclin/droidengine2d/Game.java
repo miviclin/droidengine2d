@@ -1,8 +1,10 @@
 package com.miviclin.droidengine2d;
 
 import android.app.Activity;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnKeyListener;
 import android.view.View.OnTouchListener;
 
 import com.miviclin.droidengine2d.graphics.GLView;
@@ -20,7 +22,7 @@ import com.miviclin.droidengine2d.scenes.SceneManager;
  * @author Miguel Vicente Linares
  * 
  */
-public abstract class Game implements OnTouchListener {
+public abstract class Game implements OnTouchListener, OnKeyListener {
 	
 	private final String name;
 	private final Activity activity;
@@ -31,6 +33,7 @@ public abstract class Game implements OnTouchListener {
 	private boolean prepared;
 	private volatile boolean initialized;
 	private boolean onTouchListener;
+	private boolean onKeyListener;
 	
 	/**
 	 * Constructor
@@ -62,6 +65,7 @@ public abstract class Game implements OnTouchListener {
 		this.prepared = false;
 		this.initialized = false;
 		this.onTouchListener = false;
+		this.onKeyListener = false;
 	}
 	
 	/**
@@ -118,12 +122,17 @@ public abstract class Game implements OnTouchListener {
 	 */
 	void setGLView(GLView glView) {
 		boolean onTouchListener = this.onTouchListener;
+		boolean onKeyListener = this.onKeyListener;
 		if (this.glView != null) {
 			disableTouchListener();
+			disableKeyListener();
 		}
 		this.glView = glView;
 		if (onTouchListener) {
 			enableTouchListener();
+		}
+		if (onKeyListener) {
+			enableKeyListener();
 		}
 	}
 	
@@ -200,6 +209,23 @@ public abstract class Game implements OnTouchListener {
 	}
 	
 	/**
+	 * Registra este juego para que sea notificado cuando se produzcan eventos Key sobre la View en el que se desarrolla el juego.
+	 */
+	public void enableKeyListener() {
+		glView.setOnKeyListener(this);
+		onKeyListener = true;
+	}
+	
+	/**
+	 * Si este juego estaba registrado para ser notificado de los eventos Key que se produjeran en la View en la que se desarrolla el juego,
+	 * dejara de estarlo tras llamar a este metodo.
+	 */
+	public void disableKeyListener() {
+		glView.setOnKeyListener(null);
+		onKeyListener = false;
+	}
+	
+	/**
 	 * Se llama cuando en la View en la que se produce un evento Touch.<br>
 	 * Para que este metodo sea llamado, se debe haber registrado este juego para que reciba eventos Key mediante una llamada a
 	 * {@link Game#enableTouchListener()}<br>
@@ -214,6 +240,26 @@ public abstract class Game implements OnTouchListener {
 		Scene activeScene = getSceneManager().getActiveScene();
 		if (activeScene != null) {
 			activeScene.getTouchController().setMotionEvent(event);
+		}
+		return true;
+	}
+	
+	/**
+	 * Se llama cuando en la View en la que se produce un evento Key.<br>
+	 * Para que este metodo sea llamado, se debe haber registrado este juego para que reciba eventos Key mediante una llamada a
+	 * {@link Game#enableKeyListener()}<br>
+	 * Por defecto este metodo no realiza ninguna accion. Sobreescribir si es necesario.
+	 * 
+	 * @param v La View en la que se ha hecho click
+	 * @param keyCode Codigo que identifica la tecla fisica pulsada
+	 * @param event KeyEvent que contiene la informacion del evento
+	 * @return true si el listener consume el evento, false en caso contrario
+	 */
+	@Override
+	public boolean onKey(View v, int keyCode, KeyEvent event) {
+		Scene activeScene = getSceneManager().getActiveScene();
+		if (activeScene != null) {
+			activeScene.getKeyController().setKeyEvent(keyCode, event);
 		}
 		return true;
 	}

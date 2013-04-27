@@ -2,6 +2,7 @@ package com.miviclin.droidengine2d.scenes;
 
 import com.miviclin.droidengine2d.Game;
 import com.miviclin.droidengine2d.graphics.sprites.SpriteBatch;
+import com.miviclin.droidengine2d.input.KeyController;
 import com.miviclin.droidengine2d.input.TouchController;
 
 /**
@@ -14,6 +15,7 @@ public abstract class Scene {
 	
 	private final Game game;
 	private TouchController touchController;
+	private KeyController keyController;
 	
 	/**
 	 * Crea una Scene del juego especificado
@@ -23,6 +25,7 @@ public abstract class Scene {
 	public Scene(Game game) {
 		this.game = game;
 		this.touchController = new TouchController();
+		this.keyController = new KeyController();
 	}
 	
 	/**
@@ -35,12 +38,21 @@ public abstract class Scene {
 	}
 	
 	/**
-	 * Devuelve el TouchListener
+	 * Devuelve el TouchController
 	 * 
 	 * @return TouchController
 	 */
 	public TouchController getTouchController() {
 		return touchController;
+	}
+	
+	/**
+	 * Devuelve el KeyController
+	 * 
+	 * @return KeyController
+	 */
+	public KeyController getKeyController() {
+		return keyController;
 	}
 	
 	/**
