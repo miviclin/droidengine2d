@@ -15,7 +15,7 @@ public abstract class AndroidEngineActivity extends FragmentActivity {
 	
 	private Engine engine;
 	private Game game;
-	private boolean juegoInicializado;
+	private boolean juegoPreparado;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -48,9 +48,9 @@ public abstract class AndroidEngineActivity extends FragmentActivity {
 				} else {
 					glView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
 				}
-				if (!juegoInicializado) {
-					juegoInicializado = true;
-					game.initialize();
+				if (!juegoPreparado) {
+					juegoPreparado = true;
+					game.prepare();
 				}
 			}
 		});

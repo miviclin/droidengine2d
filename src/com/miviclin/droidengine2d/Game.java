@@ -4,9 +4,7 @@ import android.app.Activity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
-import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
 
 import com.miviclin.droidengine2d.graphics.GLView;
@@ -14,6 +12,8 @@ import com.miviclin.droidengine2d.graphics.cameras.Camera;
 import com.miviclin.droidengine2d.graphics.cameras.OrthographicCamera;
 import com.miviclin.droidengine2d.graphics.sprites.SpriteBatch;
 import com.miviclin.droidengine2d.graphics.textures.TextureManager;
+import com.miviclin.droidengine2d.scenes.Scene;
+import com.miviclin.droidengine2d.scenes.SceneManager;
 
 /**
  * Game.<br>
@@ -22,17 +22,18 @@ import com.miviclin.droidengine2d.graphics.textures.TextureManager;
  * @author Miguel Vicente Linares
  * 
  */
-public abstract class Game implements OnClickListener, OnLongClickListener, OnKeyListener, OnTouchListener {
+public abstract class Game implements OnTouchListener, OnKeyListener {
 	
 	private final String name;
 	private final Activity activity;
 	private final TextureManager textureManager;
+	private final SceneManager sceneManager;
 	private GLView glView;
 	private Camera camera;
-	private boolean onClickListener;
-	private boolean onLongClickListener;
-	private boolean onKeyListener;
+	private boolean prepared;
+	private volatile boolean initialized;
 	private boolean onTouchListener;
+	private boolean onKeyListener;
 	
 	/**
 	 * Constructor
@@ -59,11 +60,12 @@ public abstract class Game implements OnClickListener, OnLongClickListener, OnKe
 		this.activity = activity;
 		this.glView = glView;
 		this.textureManager = new TextureManager(activity);
+		this.sceneManager = new SceneManager();
 		this.camera = new OrthographicCamera();
-		this.onClickListener = false;
-		this.onLongClickListener = false;
-		this.onKeyListener = false;
+		this.prepared = false;
+		this.initialized = false;
 		this.onTouchListener = false;
+		this.onKeyListener = false;
 	}
 	
 	/**
@@ -119,28 +121,18 @@ public abstract class Game implements OnClickListener, OnLongClickListener, OnKe
 	 * @param nuevo GLView
 	 */
 	void setGLView(GLView glView) {
-		boolean onClickListener = this.onClickListener;
-		boolean onLongClickListener = this.onLongClickListener;
-		boolean onKeyListener = this.onKeyListener;
 		boolean onTouchListener = this.onTouchListener;
+		boolean onKeyListener = this.onKeyListener;
 		if (this.glView != null) {
-			disableClickListener();
-			disableLongClickListener();
-			disableKeyListener();
 			disableTouchListener();
+			disableKeyListener();
 		}
 		this.glView = glView;
-		if (onClickListener) {
-			enableClickListener();
-		}
-		if (onLongClickListener) {
-			enableLongClickListener();
+		if (onTouchListener) {
+			enableTouchListener();
 		}
 		if (onKeyListener) {
 			enableKeyListener();
-		}
-		if (onTouchListener) {
-			enableTouchListener();
 		}
 	}
 	
@@ -151,6 +143,15 @@ public abstract class Game implements OnClickListener, OnLongClickListener, OnKe
 	 */
 	public TextureManager getTextureManager() {
 		return textureManager;
+	}
+	
+	/**
+	 * Devuelve el SceneManager.
+	 * 
+	 * @return SceneManager
+	 */
+	public SceneManager getSceneManager() {
+		return sceneManager;
 	}
 	
 	/**
@@ -175,54 +176,19 @@ public abstract class Game implements OnClickListener, OnLongClickListener, OnKe
 	}
 	
 	/**
-	 * Registra este juego para que sea notificado cuando se produzcan eventos Click sobre la View en el que se desarrolla el juego.
+	 * Indica si el core del juego ha sido inicializado y esta preparado para inicializar las Scenes
+	 * 
+	 * @return true si se puede comenzar a inicializar los elementos del juego (Scenes, jugador, enemigos, etc)
 	 */
-	public void enableClickListener() {
-		glView.setOnClickListener(this);
-		onClickListener = true;
+	public boolean isPrepared() {
+		return prepared;
 	}
 	
 	/**
-	 * Si este juego estaba registrado para ser notificado de los eventos Click que se produjeran en la View en la que se desarrolla el
-	 * juego, dejara de estarlo tras llamar a este metodo.
+	 * Indica que el core del juego ha sido inicializado y esta preparado para inicializar las Scenes
 	 */
-	public void disableClickListener() {
-		glView.setOnClickListener(null);
-		onClickListener = false;
-	}
-	
-	/**
-	 * Registra este juego para que sea notificado cuando se produzcan eventos LongClick sobre la View en el que se desarrolla el juego.
-	 */
-	public void enableLongClickListener() {
-		glView.setOnLongClickListener(this);
-		onLongClickListener = true;
-	}
-	
-	/**
-	 * Si este juego estaba registrado para ser notificado de los eventos LongClick que se produjeran en la View en la que se desarrolla el
-	 * juego, dejara de estarlo tras llamar a este metodo.
-	 */
-	public void disableLongClickListener() {
-		glView.setOnLongClickListener(null);
-		onLongClickListener = false;
-	}
-	
-	/**
-	 * Registra este juego para que sea notificado cuando se produzcan eventos Key sobre la View en el que se desarrolla el juego.
-	 */
-	public void enableKeyListener() {
-		glView.setOnKeyListener(this);
-		onKeyListener = true;
-	}
-	
-	/**
-	 * Si este juego estaba registrado para ser notificado de los eventos Key que se produjeran en la View en la que se desarrolla el juego,
-	 * dejara de estarlo tras llamar a este metodo.
-	 */
-	public void disableKeyListener() {
-		glView.setOnKeyListener(null);
-		onKeyListener = false;
+	public void prepare() {
+		this.prepared = true;
 	}
 	
 	/**
@@ -243,30 +209,39 @@ public abstract class Game implements OnClickListener, OnLongClickListener, OnKe
 	}
 	
 	/**
-	 * Se llama cuando en la View en la que se produce un evento Click.<br>
-	 * Para que este metodo sea llamado, se debe haber registrado este juego para que reciba eventos Click mediante una llamada a
-	 * {@link Game#enableClickListener()}<br>
-	 * Por defecto este metodo no realiza ninguna accion. Sobreescribir si es necesario.
-	 * 
-	 * @param v La View en la que se ha hecho click
+	 * Registra este juego para que sea notificado cuando se produzcan eventos Key sobre la View en el que se desarrolla el juego.
 	 */
-	@Override
-	public void onClick(View v) {
-		
+	public void enableKeyListener() {
+		glView.setOnKeyListener(this);
+		onKeyListener = true;
 	}
 	
 	/**
-	 * Se llama cuando en la View en la que se produce un evento LongClick.<br>
-	 * Para que este metodo sea llamado, se debe haber registrado este juego para que reciba eventos LongClick mediante una llamada a
-	 * {@link Game#enableLongClickListener()}<br>
+	 * Si este juego estaba registrado para ser notificado de los eventos Key que se produjeran en la View en la que se desarrolla el juego,
+	 * dejara de estarlo tras llamar a este metodo.
+	 */
+	public void disableKeyListener() {
+		glView.setOnKeyListener(null);
+		onKeyListener = false;
+	}
+	
+	/**
+	 * Se llama cuando en la View en la que se produce un evento Touch.<br>
+	 * Para que este metodo sea llamado, se debe haber registrado este juego para que reciba eventos Key mediante una llamada a
+	 * {@link Game#enableTouchListener()}<br>
 	 * Por defecto este metodo no realiza ninguna accion. Sobreescribir si es necesario.
 	 * 
 	 * @param v La View en la que se ha hecho click
-	 * @return true si el callback consume el evento, false en caso contrario
+	 * @param event MotionEvent que contiene la informacion del evento
+	 * @return true si el listener consume el evento, false en caso contrario
 	 */
 	@Override
-	public boolean onLongClick(View v) {
-		return false;
+	public boolean onTouch(View v, MotionEvent event) {
+		Scene activeScene = getSceneManager().getActiveScene();
+		if (activeScene != null) {
+			activeScene.getTouchController().setMotionEvent(event);
+		}
+		return true;
 	}
 	
 	/**
@@ -282,22 +257,11 @@ public abstract class Game implements OnClickListener, OnLongClickListener, OnKe
 	 */
 	@Override
 	public boolean onKey(View v, int keyCode, KeyEvent event) {
-		return false;
-	}
-	
-	/**
-	 * Se llama cuando en la View en la que se produce un evento Touch.<br>
-	 * Para que este metodo sea llamado, se debe haber registrado este juego para que reciba eventos Key mediante una llamada a
-	 * {@link Game#enableTouchListener()}<br>
-	 * Por defecto este metodo no realiza ninguna accion. Sobreescribir si es necesario.
-	 * 
-	 * @param v La View en la que se ha hecho click
-	 * @param event MotionEvent que contiene la informacion del evento
-	 * @return true si el listener consume el evento, false en caso contrario
-	 */
-	@Override
-	public boolean onTouch(View v, MotionEvent event) {
-		return false;
+		Scene activeScene = getSceneManager().getActiveScene();
+		if (activeScene != null) {
+			activeScene.getKeyController().setKeyEvent(keyCode, event);
+		}
+		return true;
 	}
 	
 	/**
@@ -312,23 +276,30 @@ public abstract class Game implements OnClickListener, OnLongClickListener, OnKe
 	/**
 	 * Se llama cuando se pausa el GameThread, normalmente debido a que la Activity recibe una llamada a onPause()
 	 */
-	public abstract void onEnginePaused();
+	public void onEnginePaused() {
+		if (initialized) {
+			sceneManager.pause();
+		}
+	}
 	
 	/**
 	 * Se llama cuando se reanuda el GameThread tras haber sido pausado, normalmente debido a que la Activity recibe una llamada a
 	 * onResume()
 	 */
-	public abstract void onEngineResumed();
+	public void onEngineResumed() {
+		if (initialized) {
+			sceneManager.resume();
+		}
+	}
 	
 	/**
 	 * Se llama cuando se para el GameThread, normalmente debido a que la Activity ha sido destruida.
 	 */
-	public abstract void onEngineDisposed();
-	
-	/**
-	 * Inicializa el juego
-	 */
-	public abstract void initialize();
+	public void onEngineDisposed() {
+		if (initialized) {
+			sceneManager.dispose();
+		}
+	}
 	
 	/**
 	 * Actualiza la logica del juego.<br>
@@ -336,12 +307,29 @@ public abstract class Game implements OnClickListener, OnLongClickListener, OnKe
 	 * 
 	 * @param delta Tiempo transcurrido, en milisegundos, desde la ultima actualizacion.
 	 */
-	public abstract void update(float delta);
+	public void update(float delta) {
+		if (initialized) {
+			sceneManager.update(delta);
+		}
+		if (!initialized && prepared) {
+			initialize();
+			initialized = true;
+		}
+	}
 	
 	/**
 	 * Renderiza los elementos del juego de forma que puedan verse en pantalla.<br>
 	 * Este metodo se ejecuta en el hilo del GLRenderer tras ejecutar {@link #update(float)} en el GameThread
 	 */
-	public abstract void draw(SpriteBatch spriteBatch);
+	public void draw(SpriteBatch spriteBatch) {
+		if (initialized) {
+			sceneManager.draw(spriteBatch);
+		}
+	}
+	
+	/**
+	 * Inicializa el juego
+	 */
+	public abstract void initialize();
 	
 }
