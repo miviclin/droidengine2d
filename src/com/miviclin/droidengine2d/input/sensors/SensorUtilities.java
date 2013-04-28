@@ -1,4 +1,4 @@
-package com.miviclin.droidengine2d.sensors;
+package com.miviclin.droidengine2d.input.sensors;
 
 /**
  * Utilidades para trabajar con los sensores
