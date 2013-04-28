@@ -1,7 +1,8 @@
-package com.miviclin.droidengine2d.input;
+package com.miviclin.droidengine2d;
 
 import android.view.MotionEvent;
 
+import com.miviclin.droidengine2d.input.TouchListener;
 import com.miviclin.droidengine2d.scenes.Scene;
 
 /**
@@ -26,12 +27,11 @@ public class TouchController {
 	}
 	
 	/**
-	 * Asigna un MotionEvent al TouchController. Este MotionEvent sera el que se le pase a {@link TouchListener#onTouch(MotionEvent)}.<br>
-	 * Este metodo no deberia llamarse manualmente, lo utiliza internamente el framework.
+	 * Asigna un MotionEvent al TouchController. Este MotionEvent sera el que se le pase a {@link TouchListener#onTouch(MotionEvent)}.
 	 * 
 	 * @param motionEvent MotionEvent
 	 */
-	public void setMotionEvent(MotionEvent motionEvent) {
+	void setMotionEvent(MotionEvent motionEvent) {
 		this.motionEvent = motionEvent;
 		if (motionEvent != null) {
 			touchDetected = true;

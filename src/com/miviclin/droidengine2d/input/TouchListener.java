@@ -1,5 +1,7 @@
 package com.miviclin.droidengine2d.input;
 
+import com.miviclin.droidengine2d.TouchController;
+
 import android.view.MotionEvent;
 
 /**

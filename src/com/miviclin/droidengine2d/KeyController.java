@@ -1,7 +1,8 @@
-package com.miviclin.droidengine2d.input;
+package com.miviclin.droidengine2d;
 
 import android.view.KeyEvent;
 
+import com.miviclin.droidengine2d.input.KeyListener;
 import com.miviclin.droidengine2d.scenes.Scene;
 
 /**
@@ -28,13 +29,12 @@ public class KeyController {
 	}
 	
 	/**
-	 * Asigna un KeyEvent al KeyController. Este KeyEvent sera el que se le pase a {@link KeyListener#onKey(int, KeyEvent)}.<br>
-	 * Este metodo no deberia llamarse manualmente, lo utiliza internamente el framework.
+	 * Asigna un KeyEvent al KeyController. Este KeyEvent sera el que se le pase a {@link KeyListener#onKey(int, KeyEvent)}.
 	 * 
 	 * @param keyCode Codigo de tecla
 	 * @param keyEvent KeyEvent
 	 */
-	public void setKeyEvent(int keyCode, KeyEvent keyEvent) {
+	void setKeyEvent(int keyCode, KeyEvent keyEvent) {
 		this.keyCode = keyCode;
 		this.keyEvent = keyEvent;
 		if (keyEvent != null) {
