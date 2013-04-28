@@ -195,25 +195,25 @@ public class DynamicSpriteBatch implements SpriteBatch {
 		GLES20.glUniformMatrix4fv(uMVPMatrixHandle, batchSize, false, mvpMatrices, 0);
 		
 		GLES20.glEnableVertexAttribArray(aPositionHandle);
-		GLDebug.checkGLError("glEnableVertexAttribArray aPositionHandle");
+		GLDebug.checkGLError();
 		
 		vertexBuffer.position(VERTICES_DATA_POS_OFFSET);
 		GLES20.glVertexAttribPointer(aPositionHandle, 3, GLES20.GL_FLOAT, false, VERTICES_DATA_STRIDE_BYTES, vertexBuffer);
-		GLDebug.checkGLError("glVertexAttribPointer aPositionHandle");
+		GLDebug.checkGLError();
 		
 		GLES20.glEnableVertexAttribArray(aTextureHandle);
-		GLDebug.checkGLError("glEnableVertexAttribArray aTextureHandle");
+		GLDebug.checkGLError();
 		
 		vertexBuffer.position(VERTICES_DATA_UV_OFFSET);
 		GLES20.glVertexAttribPointer(aTextureHandle, 2, GLES20.GL_FLOAT, false, VERTICES_DATA_STRIDE_BYTES, vertexBuffer);
-		GLDebug.checkGLError("glVertexAttribPointer aTextureHandle");
+		GLDebug.checkGLError();
 		
 		GLES20.glEnableVertexAttribArray(aMVPMatrixIndexHandle);
-		GLDebug.checkGLError("glEnableVertexAttribArray aMVPMatrixIndexHandle");
+		GLDebug.checkGLError();
 		
 		mvpIndexBuffer.position(0);
 		GLES20.glVertexAttribPointer(aMVPMatrixIndexHandle, 1, GLES20.GL_FLOAT, false, FLOAT_SIZE_BYTES, mvpIndexBuffer);
-		GLDebug.checkGLError("glVertexAttribPointer aMVPMatrixIndexHandle");
+		GLDebug.checkGLError();
 	}
 	
 	/**
@@ -248,7 +248,7 @@ public class DynamicSpriteBatch implements SpriteBatch {
 		setupVertexShaderVariables();
 		
 		GLES20.glDrawElements(GLES20.GL_TRIANGLES, indexBuffer.limit(), GLES20.GL_UNSIGNED_SHORT, indexBuffer);
-		GLDebug.checkGLError("glDrawElements");
+		GLDebug.checkGLError();
 		
 		batchSize = 0;
 	}
