@@ -2,7 +2,7 @@ package com.miviclin.droidengine2d.graphics.shaders;
 
 import android.opengl.GLES20;
 
-import com.miviclin.droidengine2d.graphics.GLDebug;
+import com.miviclin.droidengine2d.graphics.GLDebugger;
 
 /**
  * ShaderProgram configurado para renderizar DynamicSpriteBatch
@@ -62,22 +62,22 @@ public class DynamicSpriteBatchShaderProgram extends ShaderProgram {
 	 */
 	private void link(int program) {
 		aPositionHandle = GLES20.glGetAttribLocation(program, "aPosition");
-		GLDebug.checkGLError();
+		GLDebugger.getInstance().passiveCheckGLError();
 		if (aPositionHandle == -1) {
 			throw new RuntimeException("Could not get attrib location for aPosition");
 		}
 		aTextureHandle = GLES20.glGetAttribLocation(program, "aTextureCoord");
-		GLDebug.checkGLError();
+		GLDebugger.getInstance().passiveCheckGLError();
 		if (aTextureHandle == -1) {
 			throw new RuntimeException("Could not get attrib location for aTextureCoord");
 		}
 		aMVPMatrixIndexHandle = GLES20.glGetAttribLocation(program, "aMVPMatrixIndex");
-		GLDebug.checkGLError();
+		GLDebugger.getInstance().passiveCheckGLError();
 		if (aMVPMatrixIndexHandle == -1) {
 			throw new RuntimeException("Could not get attrib location for aMVPMatrixIndex");
 		}
 		uMVPMatrixHandle = GLES20.glGetUniformLocation(program, "uMVPMatrix");
-		GLDebug.checkGLError();
+		GLDebugger.getInstance().passiveCheckGLError();
 		if (uMVPMatrixHandle == -1) {
 			throw new RuntimeException("Could not get attrib location for uMVPMatrix");
 		}

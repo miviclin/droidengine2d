@@ -9,7 +9,7 @@ import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
 
-import com.miviclin.droidengine2d.graphics.GLDebug;
+import com.miviclin.droidengine2d.graphics.GLDebugger;
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
 import com.miviclin.droidengine2d.graphics.shaders.DynamicSpriteBatchShaderProgram;
 import com.miviclin.droidengine2d.graphics.textures.Texture;
@@ -195,25 +195,25 @@ public class DynamicSpriteBatch implements SpriteBatch {
 		GLES20.glUniformMatrix4fv(uMVPMatrixHandle, batchSize, false, mvpMatrices, 0);
 		
 		GLES20.glEnableVertexAttribArray(aPositionHandle);
-		GLDebug.checkGLError();
+		GLDebugger.getInstance().passiveCheckGLError();
 		
 		vertexBuffer.position(VERTICES_DATA_POS_OFFSET);
 		GLES20.glVertexAttribPointer(aPositionHandle, 3, GLES20.GL_FLOAT, false, VERTICES_DATA_STRIDE_BYTES, vertexBuffer);
-		GLDebug.checkGLError();
+		GLDebugger.getInstance().passiveCheckGLError();
 		
 		GLES20.glEnableVertexAttribArray(aTextureHandle);
-		GLDebug.checkGLError();
+		GLDebugger.getInstance().passiveCheckGLError();
 		
 		vertexBuffer.position(VERTICES_DATA_UV_OFFSET);
 		GLES20.glVertexAttribPointer(aTextureHandle, 2, GLES20.GL_FLOAT, false, VERTICES_DATA_STRIDE_BYTES, vertexBuffer);
-		GLDebug.checkGLError();
+		GLDebugger.getInstance().passiveCheckGLError();
 		
 		GLES20.glEnableVertexAttribArray(aMVPMatrixIndexHandle);
-		GLDebug.checkGLError();
+		GLDebugger.getInstance().passiveCheckGLError();
 		
 		mvpIndexBuffer.position(0);
 		GLES20.glVertexAttribPointer(aMVPMatrixIndexHandle, 1, GLES20.GL_FLOAT, false, FLOAT_SIZE_BYTES, mvpIndexBuffer);
-		GLDebug.checkGLError();
+		GLDebugger.getInstance().passiveCheckGLError();
 	}
 	
 	/**
@@ -248,7 +248,7 @@ public class DynamicSpriteBatch implements SpriteBatch {
 		setupVertexShaderVariables();
 		
 		GLES20.glDrawElements(GLES20.GL_TRIANGLES, indexBuffer.limit(), GLES20.GL_UNSIGNED_SHORT, indexBuffer);
-		GLDebug.checkGLError();
+		GLDebugger.getInstance().passiveCheckGLError();
 		
 		batchSize = 0;
 	}
