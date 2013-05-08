@@ -21,6 +21,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 	/**
 	 * Crea un GLRenderer
 	 * 
+	 * @param engineRenderer EngineRenderer utilizado por el GLRenderer para renderizar el juego
 	 * @param engineLock Utilizado para sincronizar correctamente los hilos
 	 */
 	public GLRenderer(EngineRenderer engineRenderer, EngineLock engineLock) {
@@ -33,6 +34,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 		if (!engineLock.allowUpdate.get()) {
 			synchronized (engineLock.lock) {
 				engineRenderer.onDrawFrame(glUnused);
+				GLDebugger.getInstance().checkGLError();
 				engineLock.allowUpdate.set(true);
 			}
 		}
