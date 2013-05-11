@@ -1,9 +1,9 @@
 package com.miviclin.droidengine2d.input;
 
+import android.view.KeyEvent;
+
 import com.miviclin.droidengine2d.KeyController;
 import com.miviclin.droidengine2d.TouchController;
-
-import android.view.KeyEvent;
 
 /**
  * Interfaz que se utiliza para los eventos Key
@@ -20,7 +20,8 @@ public interface KeyListener {
 	 * 
 	 * @param keyCode Codigo que identifica la tecla fisica pulsada
 	 * @param event KeyEvent que contiene la informacion del evento
+	 * @return true si se ha consumido el evento, false en caso contrario
 	 */
-	public void onKey(int keyCode, KeyEvent event);
+	public boolean onKey(int keyCode, KeyEvent event);
 	
 }
