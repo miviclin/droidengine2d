@@ -34,6 +34,7 @@ public abstract class Game implements OnTouchListener, OnKeyListener {
 	private volatile boolean initialized;
 	private boolean onTouchListener;
 	private boolean onKeyListener;
+	private boolean reloadTextures;
 	
 	/**
 	 * Constructor
@@ -66,6 +67,7 @@ public abstract class Game implements OnTouchListener, OnKeyListener {
 		this.initialized = false;
 		this.onTouchListener = false;
 		this.onKeyListener = false;
+		this.reloadTextures = true;
 	}
 	
 	/**
@@ -280,6 +282,7 @@ public abstract class Game implements OnTouchListener, OnKeyListener {
 		if (initialized) {
 			sceneManager.pause();
 		}
+		reloadTextures = true;
 	}
 	
 	/**
@@ -323,6 +326,10 @@ public abstract class Game implements OnTouchListener, OnKeyListener {
 	 */
 	public void draw(SpriteBatch spriteBatch) {
 		if (initialized) {
+			if (reloadTextures) {
+				reloadTextures = false;
+				getTextureManager().loadAllTextures();
+			}
 			sceneManager.draw(spriteBatch);
 		}
 	}
