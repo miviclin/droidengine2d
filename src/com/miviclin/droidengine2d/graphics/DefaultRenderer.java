@@ -50,8 +50,6 @@ public class DefaultRenderer implements EngineRenderer {
 		GLES20.glDisable(GLES20.GL_DEPTH_TEST);
 		
 		game.getTextureManager().loadAllTextures();
-		
-		System.gc();
 	}
 	
 	@Override
@@ -62,6 +60,7 @@ public class DefaultRenderer implements EngineRenderer {
 	
 	@Override
 	public void onDrawFrame(GL10 glUnused) {
+		GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
 		game.draw(spriteBatch);
 	}
 	
