@@ -54,6 +54,7 @@ public class DefaultRenderer implements EngineRenderer {
 	public void onSurfaceChanged(GL10 glUnused, int width, int height) {
 		camera.setViewportDimensions(width, height);
 		camera.update();
+		game.getTextureManager().loadAllTextures();
 	}
 	
 	@Override
