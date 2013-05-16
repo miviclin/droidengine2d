@@ -29,7 +29,7 @@ public class Vector2 {
 	 * @param y
 	 * @return Referencia al propio vector para poder encadenar operaciones
 	 */
-	public void set(float x, float y) {
+	public final void set(float x, float y) {
 		this.x = x;
 		this.y = y;
 	}
@@ -40,10 +40,21 @@ public class Vector2 {
 	 * @param vector Vector2 cuyos valores sobreescribiran a los valores de x, y de este vector
 	 * @return Referencia al propio vector para poder encadenar operaciones
 	 */
-	public Vector2 set(Vector2 vector) {
+	public final Vector2 set(Vector2 vector) {
 		this.x = vector.x;
 		this.y = vector.y;
 		return this;
+	}
+	
+	/**
+	 * Copia el vector especificado en output
+	 * 
+	 * @param output Resultado de la operacion
+	 * @param vector Vector cuyas coordenadas se quieren copiar en output
+	 */
+	public final static void copy(Vector2 output, Vector2 vector) {
+		output.x = vector.x;
+		output.y = vector.y;
 	}
 	
 	/**
@@ -52,10 +63,22 @@ public class Vector2 {
 	 * @param scalar Valor que se sumara a las 2 coordenadas del vector
 	 * @return Referencia al propio vector para poder encadenar operaciones
 	 */
-	public Vector2 add(float scalar) {
+	public final Vector2 add(float scalar) {
 		this.x += scalar;
 		this.y += scalar;
 		return this;
+	}
+	
+	/**
+	 * Suma vector + scalar y almacena el resultado en output
+	 * 
+	 * @param output Resultado de la operacion
+	 * @param vector Vector original
+	 * @param escalar Valor que se sumara a ambas coordenadas
+	 */
+	public final static void add(Vector2 output, Vector2 vector, float scalar) {
+		output.x = vector.x + scalar;
+		output.y = vector.y + scalar;
 	}
 	
 	/**
@@ -65,7 +88,7 @@ public class Vector2 {
 	 * @param y Valor que se sumara a la coordenada Y
 	 * @return Referencia al propio vector para poder encadenar operaciones
 	 */
-	public Vector2 add(float x, float y) {
+	public final Vector2 add(float x, float y) {
 		this.x += x;
 		this.y += y;
 		return this;
@@ -77,10 +100,22 @@ public class Vector2 {
 	 * @param vector
 	 * @return Referencia al propio vector para poder encadenar operaciones
 	 */
-	public Vector2 add(Vector2 vector) {
+	public final Vector2 add(Vector2 vector) {
 		this.x += vector.x;
 		this.y += vector.y;
 		return this;
+	}
+	
+	/**
+	 * Suma v1 + v2 y almacena el resultado en output
+	 * 
+	 * @param output Resultado de la operacion
+	 * @param v1 Operando 1
+	 * @param v2 Operando 2
+	 */
+	public final static void add(Vector2 output, Vector2 v1, Vector2 v2) {
+		output.x = v1.x + v2.x;
+		output.y = v1.y + v2.y;
 	}
 	
 	/**
@@ -89,10 +124,22 @@ public class Vector2 {
 	 * @param scalar Valor que se restara a las 2 coordenadas del vector
 	 * @return Referencia al propio vector para poder encadenar operaciones
 	 */
-	public Vector2 subtract(float scalar) {
+	public final Vector2 subtract(float scalar) {
 		this.x -= scalar;
 		this.y -= scalar;
 		return this;
+	}
+	
+	/**
+	 * Resta vector - scalar y almacena el resultado en output
+	 * 
+	 * @param output Resultado de la operacion
+	 * @param vector Vector original
+	 * @param escalar Valor que se restara a ambas coordenadas
+	 */
+	public final static void subtract(Vector2 output, Vector2 vector, float scalar) {
+		output.x = vector.x - scalar;
+		output.y = vector.y - scalar;
 	}
 	
 	/**
@@ -102,7 +149,7 @@ public class Vector2 {
 	 * @param y Valor que se restara a la coordenada Y
 	 * @return Referencia al propio vector para poder encadenar operaciones
 	 */
-	public Vector2 subtract(float x, float y) {
+	public final Vector2 subtract(float x, float y) {
 		this.x -= x;
 		this.y -= y;
 		return this;
@@ -114,10 +161,22 @@ public class Vector2 {
 	 * @param vector
 	 * @return Referencia al propio vector para poder encadenar operaciones
 	 */
-	public Vector2 subtract(Vector2 vector) {
+	public final Vector2 subtract(Vector2 vector) {
 		this.x -= vector.x;
 		this.y -= vector.y;
 		return this;
+	}
+	
+	/**
+	 * Resta v1 - v2 y almacena el resultado en output
+	 * 
+	 * @param output Resultado de la operacion
+	 * @param v1 Operando 1
+	 * @param v2 Operando 2
+	 */
+	public final static void subtract(Vector2 output, Vector2 v1, Vector2 v2) {
+		output.x = v1.x - v2.x;
+		output.y = v1.y - v2.y;
 	}
 	
 	/**
@@ -126,10 +185,22 @@ public class Vector2 {
 	 * @param scalar Valor por el cual se multiplicaran las 2 coordenadas del vector
 	 * @return Referencia al propio vector para poder encadenar operaciones
 	 */
-	public Vector2 multiply(float scalar) {
+	public final Vector2 multiply(float scalar) {
 		this.x *= scalar;
 		this.y *= scalar;
 		return this;
+	}
+	
+	/**
+	 * Multiplica vector * scalar y almacena el resultado en output
+	 * 
+	 * @param output Resultado de la operacion
+	 * @param vector Vector original
+	 * @param escalar Valor por el que se multiplicaran ambas coordenadas
+	 */
+	public final static void multiply(Vector2 output, Vector2 vector, float scalar) {
+		output.x = vector.x * scalar;
+		output.y = vector.y * scalar;
 	}
 	
 	/**
@@ -139,7 +210,7 @@ public class Vector2 {
 	 * @param y Valor por el cual se multiplicara la coordenada Y
 	 * @return Referencia al propio vector para poder encadenar operaciones
 	 */
-	public Vector2 multiply(float x, float y) {
+	public final Vector2 multiply(float x, float y) {
 		this.x *= x;
 		this.y *= y;
 		return this;
@@ -151,10 +222,22 @@ public class Vector2 {
 	 * @param vector Las coordenadas del vector seran multiplicadas por la coordenadas de el vector especificado
 	 * @return Referencia al propio vector para poder encadenar operaciones
 	 */
-	public Vector2 multiply(Vector2 vector) {
+	public final Vector2 multiply(Vector2 vector) {
 		this.x *= vector.x;
 		this.y *= vector.y;
 		return this;
+	}
+	
+	/**
+	 * Multiplica v1 * v2 y almacena el resultado en output
+	 * 
+	 * @param output Resultado de la operacion
+	 * @param v1 Operando 1
+	 * @param v2 Operando 2
+	 */
+	public final static void multiply(Vector2 output, Vector2 v1, Vector2 v2) {
+		output.x = v1.x * v2.x;
+		output.y = v1.y * v2.y;
 	}
 	
 	/**
@@ -163,10 +246,22 @@ public class Vector2 {
 	 * @param scalar Valor por el cual se dividiran las 2 coordenadas del vector
 	 * @return Referencia al propio vector para poder encadenar operaciones
 	 */
-	public Vector2 divide(float scalar) {
+	public final Vector2 divide(float scalar) {
 		this.x /= scalar;
 		this.y /= scalar;
 		return this;
+	}
+	
+	/**
+	 * Divide vector / scalar y almacena el resultado en output
+	 * 
+	 * @param output Resultado de la operacion
+	 * @param vector Vector original
+	 * @param escalar Valor por el que se dividiran ambas coordenadas
+	 */
+	public final static void divide(Vector2 output, Vector2 vector, float scalar) {
+		output.x = vector.x / scalar;
+		output.y = vector.y / scalar;
 	}
 	
 	/**
@@ -176,7 +271,7 @@ public class Vector2 {
 	 * @param y Valor por el cual se dividira la coordenada Y
 	 * @return Referencia al propio vector para poder encadenar operaciones
 	 */
-	public Vector2 divide(float x, float y) {
+	public final Vector2 divide(float x, float y) {
 		this.x /= x;
 		this.y /= y;
 		return this;
@@ -188,10 +283,22 @@ public class Vector2 {
 	 * @param vector Las coordenadas del vector seran divididas por la coordenadas de el vector especificado
 	 * @return Referencia al propio vector para poder encadenar operaciones
 	 */
-	public Vector2 divide(Vector2 vector) {
+	public final Vector2 divide(Vector2 vector) {
 		this.x /= vector.x;
 		this.y /= vector.y;
 		return this;
+	}
+	
+	/**
+	 * Divide v1 / v2 y almacena el resultado en output
+	 * 
+	 * @param output Resultado de la operacion
+	 * @param v1 Operando 1
+	 * @param v2 Operando 2
+	 */
+	public final static void divide(Vector2 output, Vector2 v1, Vector2 v2) {
+		output.x = v1.x / v2.x;
+		output.y = v1.y / v2.y;
 	}
 	
 	/**
@@ -201,7 +308,7 @@ public class Vector2 {
 	 * @param y Coordenada Y
 	 * @return Referencia al propio vector para poder encadenar operaciones
 	 */
-	public float dotProduct(float x, float y) {
+	public final float dotProduct(float x, float y) {
 		return this.x * x + this.y * y;
 	}
 	
@@ -211,8 +318,19 @@ public class Vector2 {
 	 * @param vector
 	 * @return Referencia al propio vector para poder encadenar operaciones
 	 */
-	public float dotProduct(Vector2 vector) {
+	public final float dotProduct(Vector2 vector) {
 		return x * vector.x + y * vector.y;
+	}
+	
+	/**
+	 * Realiza el producto escalar de v1 y v2
+	 * 
+	 * @param v1 Operando 1
+	 * @param v2 Operando 2
+	 * @return Producto escalar de v1 y v2
+	 */
+	public final static float dotProduct(Vector2 v1, Vector2 v2) {
+		return v1.x * v2.x + v1.y * v2.y;
 	}
 	
 	/**
@@ -220,8 +338,18 @@ public class Vector2 {
 	 * 
 	 * @return Modulo de este vector
 	 */
-	public float length() {
+	public final float length() {
 		return (float) Math.sqrt(x * x + y * y);
+	}
+	
+	/**
+	 * Calcula el modulo del vector especificado
+	 * 
+	 * @param vector
+	 * @return Modulo del vector
+	 */
+	public final static float length(Vector2 vector) {
+		return (float) Math.sqrt(vector.x * vector.x + vector.y * vector.y);
 	}
 	
 	/**
@@ -229,7 +357,7 @@ public class Vector2 {
 	 * 
 	 * @return Referencia al propio vector para poder encadenar operaciones
 	 */
-	public Vector2 normalize() {
+	public final Vector2 normalize() {
 		float length = (float) Math.sqrt(x * x + y * y);
 		if (length == 0) {
 			return this;
@@ -238,11 +366,48 @@ public class Vector2 {
 	}
 	
 	/**
+	 * Normaliza el vector especificado y almacena las coordenadas del vector normalizado en output
+	 * 
+	 * @param output Vector normalizado
+	 * @param vector Vector sin normalizar
+	 */
+	public final static void normalize(Vector2 output, Vector2 vector) {
+		float length = Vector2.length(vector);
+		if (length == 0) {
+			Vector2.copy(output, vector);
+			return;
+		}
+		Vector2.copy(output, vector.divide(length));
+	}
+	
+	/**
+	 * Convierte las coordenadas de este vector a valor absoluto
+	 * 
+	 * @return Referencia al propio vector para poder encadenar operaciones
+	 */
+	public final Vector2 abs() {
+		this.x = Math.abs(this.x);
+		this.y = Math.abs(this.y);
+		return this;
+	}
+	
+	/**
+	 * Convierte las coordenadas de vector a valor absoluto y las almacena en output
+	 * 
+	 * @param output Vector con las coordenadas de vector en valor absoluto
+	 * @param vector Vector especificado
+	 */
+	public final static void abs(Vector2 output, Vector2 vector) {
+		output.x = Math.abs(vector.x);
+		output.y = Math.abs(vector.y);
+	}
+	
+	/**
 	 * Devuelve la coordenada X de este vector
 	 * 
 	 * @return X
 	 */
-	public float getX() {
+	public final float getX() {
 		return x;
 	}
 	
@@ -251,7 +416,7 @@ public class Vector2 {
 	 * 
 	 * @param x Nuevo valor
 	 */
-	public void setX(float x) {
+	public final void setX(float x) {
 		this.x = x;
 	}
 	
@@ -260,7 +425,7 @@ public class Vector2 {
 	 * 
 	 * @return Y
 	 */
-	public float getY() {
+	public final float getY() {
 		return y;
 	}
 	
@@ -269,7 +434,7 @@ public class Vector2 {
 	 * 
 	 * @param y Nuevo valor
 	 */
-	public void setY(float y) {
+	public final void setY(float y) {
 		this.y = y;
 	}
 	
