@@ -8,7 +8,7 @@ import android.opengl.GLES20;
 
 import com.miviclin.droidengine2d.Game;
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
-import com.miviclin.droidengine2d.graphics.shaders.DynamicSpriteBatchShaderProgram;
+import com.miviclin.droidengine2d.graphics.shaders.PositionTextureBatchShaderProgram;
 import com.miviclin.droidengine2d.graphics.sprites.DynamicSpriteBatch;
 import com.miviclin.droidengine2d.graphics.sprites.SpriteBatch;
 
@@ -39,7 +39,7 @@ public class DefaultRenderer implements EngineRenderer {
 	
 	@Override
 	public void onSurfaceCreated(GL10 glUnused, EGLConfig config) {
-		DynamicSpriteBatchShaderProgram shaderProgram = new DynamicSpriteBatchShaderProgram();
+		PositionTextureBatchShaderProgram shaderProgram = new PositionTextureBatchShaderProgram();
 		shaderProgram.link();
 		spriteBatch = new DynamicSpriteBatch(context, shaderProgram);
 		

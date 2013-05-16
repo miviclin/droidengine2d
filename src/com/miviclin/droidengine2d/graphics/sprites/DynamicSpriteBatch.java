@@ -11,7 +11,7 @@ import android.opengl.Matrix;
 
 import com.miviclin.droidengine2d.graphics.GLDebugger;
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
-import com.miviclin.droidengine2d.graphics.shaders.DynamicSpriteBatchShaderProgram;
+import com.miviclin.droidengine2d.graphics.shaders.PositionTextureBatchShaderProgram;
 import com.miviclin.droidengine2d.graphics.textures.Texture;
 import com.miviclin.droidengine2d.util.TransformUtilities;
 import com.miviclin.droidengine2d.util.math.Matrix4;
@@ -49,7 +49,7 @@ public class DynamicSpriteBatch implements SpriteBatch {
 	private Matrix4 modelMatrix;
 	private Texture texture;
 	private Context context;
-	private DynamicSpriteBatchShaderProgram shaderProgram;
+	private PositionTextureBatchShaderProgram shaderProgram;
 	private boolean inBeginEndPair;
 	private boolean requestTextureBind;
 	
@@ -59,7 +59,7 @@ public class DynamicSpriteBatch implements SpriteBatch {
 	 * @param context Context en el que se ejecuta el juego
 	 * @param shaderProgram programa de shaders que se utilizara para renderizar los batches
 	 */
-	public DynamicSpriteBatch(Context context, DynamicSpriteBatchShaderProgram shaderProgram) {
+	public DynamicSpriteBatch(Context context, PositionTextureBatchShaderProgram shaderProgram) {
 		this.context = context;
 		this.shaderProgram = shaderProgram;
 		this.batchCapacity = 32;
