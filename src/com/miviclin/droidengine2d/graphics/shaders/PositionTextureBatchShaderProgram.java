@@ -1,5 +1,7 @@
 package com.miviclin.droidengine2d.graphics.shaders;
 
+import java.nio.FloatBuffer;
+
 import android.opengl.GLES20;
 
 import com.miviclin.droidengine2d.graphics.GLDebugger;
@@ -84,39 +86,65 @@ public class PositionTextureBatchShaderProgram extends ShaderProgram {
 	}
 	
 	/**
-	 * Devuelve el handle del attribute "aPosition"
+	 * Especifica las coordenadas de los vertices que se van a enviar al vertex shader
 	 * 
-	 * @return aPositionHandle
+	 * @param buffer Buffer que contiene las coordenadas de los vertices
+	 * @param offset Posicion del buffer en la que se encuentra la primera coordenada
+	 * @param size Numero de coordenadas que se especifican por vertice
+	 * @param stride Numero de bytes que hay en el buffer entre la primera coordenada de un vertice y la primera coordenada del siguiente
 	 */
-	public int getPositionAttributeHandle() {
-		return aPositionHandle;
+	public void specifyVerticesPosition(FloatBuffer buffer, int offset, int size, int stride) {
+		GLES20.glEnableVertexAttribArray(aPositionHandle);
+		GLDebugger.getInstance().passiveCheckGLError();
+		
+		buffer.position(offset);
+		GLES20.glVertexAttribPointer(aPositionHandle, size, GLES20.GL_FLOAT, false, stride, buffer);
+		GLDebugger.getInstance().passiveCheckGLError();
 	}
 	
 	/**
-	 * Devuelve el handle del attribute "aTextureCoord"
+	 * Especifica las coordenadas UV de las texturas para los vertices que se van a enviar al vertex shader
 	 * 
-	 * @return aTextureHandle
+	 * @param buffer Buffer que contiene las coordenadas de las texturas para cada vertice
+	 * @param offset Posicion del buffer en la que se encuentra la primera coordenada
+	 * @param size Numero de coordenadas que se especifican por vertice
+	 * @param stride Numero de bytes que hay en el buffer entre la primera coordenada de un vertice y la primera coordenada del siguiente
 	 */
-	public int getTextureCoordAttributeHandle() {
-		return aTextureHandle;
+	public void specifyVerticesTextureCoords(FloatBuffer buffer, int offset, int size, int stride) {
+		GLES20.glEnableVertexAttribArray(aTextureHandle);
+		GLDebugger.getInstance().passiveCheckGLError();
+		
+		buffer.position(offset);
+		GLES20.glVertexAttribPointer(aTextureHandle, size, GLES20.GL_FLOAT, false, stride, buffer);
+		GLDebugger.getInstance().passiveCheckGLError();
 	}
 	
 	/**
-	 * Devuelve el handle del attribute "aMVPMatrixIndex"
+	 * Especifica los indices del array de MVP que se van a enviar al vertex shader
 	 * 
-	 * @return aMVPMatrixIndexHandle
+	 * @param buffer Buffer que contiene los indices asociados a cada vertice
+	 * @param offset Posicion del buffer en la que se encuentra el primer indice
+	 * @param stride Numero de bytes que hay en el buffer entre un indice y el siguiente
 	 */
-	public int getMVPMatrixIndexAttributeHandle() {
-		return aMVPMatrixIndexHandle;
+	public void specifyVerticesMVPIndices(FloatBuffer buffer, int offset, int stride) {
+		GLES20.glEnableVertexAttribArray(aMVPMatrixIndexHandle);
+		GLDebugger.getInstance().passiveCheckGLError();
+		
+		buffer.position(offset);
+		GLES20.glVertexAttribPointer(aMVPMatrixIndexHandle, 1, GLES20.GL_FLOAT, false, stride, buffer);
+		GLDebugger.getInstance().passiveCheckGLError();
 	}
 	
 	/**
-	 * Devuelve el handle del uniform "uMVPMatrix"
+	 * Especifica las matrices MVP que se van a enviar al vertex shader
 	 * 
-	 * @return uMVPMatrixHandle
+	 * @param mvpMatrices Todas las matrices MVP concatenadas en un unico array
+	 * @param offset Posicion del array en la que esta el primer elemento de la primera matriz
+	 * @param batchSize Numero de matrices que se enviaran
 	 */
-	public int getMVPMatrixUniformHandle() {
-		return uMVPMatrixHandle;
+	public void specifyMVPMatrices(float[] mvpMatrices, int offset, int batchSize) {
+		GLES20.glUniformMatrix4fv(uMVPMatrixHandle, batchSize, false, mvpMatrices, offset);
+		GLDebugger.getInstance().passiveCheckGLError();
 	}
 	
 }

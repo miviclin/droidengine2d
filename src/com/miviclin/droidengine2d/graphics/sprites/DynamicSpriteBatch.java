@@ -165,7 +165,7 @@ public class DynamicSpriteBatch implements SpriteBatch {
 	}
 	
 	@Override
-	public void draw(Sprite sprite, Camera camera) {
+	public <T extends PositionTextureBatchShaderProgram> void draw(Sprite sprite, Camera camera, T shaderProgram) {
 		if (!inBeginEndPair) {
 			throw new RuntimeException("begin() must be called once before calling draw(Sprite, Camera)");
 		}
