@@ -10,43 +10,43 @@ import java.util.HashMap;
  */
 public class ShaderProgramsManager {
 	
-	private HashMap<String, ShaderProgram> shaderPrograms;
+	private HashMap<Class<? extends ShaderProgram>, ShaderProgram> shaderPrograms;
 	
 	/**
 	 * Constructor
 	 */
 	public ShaderProgramsManager() {
-		this.shaderPrograms = new HashMap<String, ShaderProgram>();
+		this.shaderPrograms = new HashMap<Class<? extends ShaderProgram>, ShaderProgram>();
 	}
 	
 	/**
-	 * Devuelve un ShaderProgram indexado por ID
+	 * Devuelve un ShaderProgram indexado por clase
 	 * 
-	 * @param id ID con el que se registro el ShaderProgram
-	 * @return ShaderProgram asociado al ID especificado o null si no habia ningun ShaderProgram registrado con ese ID
+	 * @param spClass Clase a la que pertenece el ShaderProgram que se quiere obtener
+	 * @return ShaderProgram asociado a la clase especificada o null si no habia ningun ShaderProgram registrado con esa clase
 	 */
-	public ShaderProgram getShaderProgram(String id) {
-		return shaderPrograms.get(id);
+	public ShaderProgram getShaderProgram(Class<? extends ShaderProgram> spClass) {
+		return shaderPrograms.get(spClass);
 	}
 	
 	/**
 	 * Agrega un ShaderProgram al ShaderProgramsManager
 	 * 
-	 * @param id ID con el que se registrara el ShaderProgram. Se utilizara despues para acceder a el
+	 * @param spClass Clase a la que pertenece el ShaderProgram que se quiere registrar
 	 * @param shaderProgram ShaderProgram a agregar
 	 */
-	public void addShaderProgram(String id, ShaderProgram shaderProgram) {
-		shaderPrograms.put(id, shaderProgram);
+	public void addShaderProgram(Class<? extends ShaderProgram> spClass, ShaderProgram shaderProgram) {
+		shaderPrograms.put(spClass, shaderProgram);
 	}
 	
 	/**
 	 * Elimina un ShaderProgram del ShaderProgramManager
 	 * 
-	 * @param id ID del ShaderProgram a eliminar
+	 * @param spClass Clase a la que pertenece el ShaderProgram que se quiere eliminar
 	 * @return Devuelve el ShaderProgram eliminado o null si no habia ninguno registrado con el ID especificado
 	 */
-	public ShaderProgram removeShaderProgram(String id) {
-		return shaderPrograms.remove(id);
+	public ShaderProgram removeShaderProgram(Class<? extends ShaderProgram> spClass) {
+		return shaderPrograms.remove(spClass);
 	}
 	
 	/**
