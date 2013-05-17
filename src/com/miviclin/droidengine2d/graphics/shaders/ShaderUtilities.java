@@ -1,9 +1,9 @@
 package com.miviclin.droidengine2d.graphics.shaders;
 
-import com.miviclin.droidengine2d.graphics.GLDebug;
-
 import android.opengl.GLES20;
 import android.util.Log;
+
+import com.miviclin.droidengine2d.graphics.GLDebugger;
 
 /**
  * Clase que se encarga de cargar y compilar los shaders.
@@ -34,9 +34,9 @@ public class ShaderUtilities {
 		program = GLES20.glCreateProgram();
 		if (program != 0) {
 			GLES20.glAttachShader(program, vertexShader);
-			GLDebug.checkGLError("glAttachShader vertexShader");
+			GLDebugger.getInstance().passiveCheckGLError();
 			GLES20.glAttachShader(program, fragmentShader);
-			GLDebug.checkGLError("glAttachShader fragmentShader");
+			GLDebugger.getInstance().passiveCheckGLError();
 			GLES20.glLinkProgram(program);
 			int[] linkStatus = new int[1];
 			GLES20.glGetProgramiv(program, GLES20.GL_LINK_STATUS, linkStatus, 0);

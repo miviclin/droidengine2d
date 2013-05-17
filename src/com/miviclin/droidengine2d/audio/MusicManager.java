@@ -228,7 +228,9 @@ public class MusicManager implements OnCompletionListener {
 	 * @param volume Volumen. Valor entre 0.0f y 1.0f
 	 */
 	public void setVolume(float volume) {
-		mediaPlayer.setVolume(volume, volume);
+		if (mediaPlayer != null) {
+			mediaPlayer.setVolume(volume, volume);			
+		}
 	}
 	
 	@Override

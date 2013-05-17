@@ -35,7 +35,7 @@ public class Texture implements Comparable<Texture> {
 	public Texture(Context context, String path) {
 		Dimensions2D bitmapBounds = AssetsLoader.getBitmapBounds(context, path);
 		this.path = path;
-		this.textureID = 0;
+		this.textureID = -1;
 		this.minFilter = GLES20.GL_LINEAR;
 		this.magFilter = GLES20.GL_LINEAR;
 		this.wrapS = GLES20.GL_REPEAT;
@@ -69,13 +69,11 @@ public class Texture implements Comparable<Texture> {
 	}
 	
 	/**
-	 * Hace que OpenGL asigne un ID a la textura.
+	 * Hace que OpenGL asigne un ID a la textura. Si ya tenia un ID asignado, es recomendable llamar a {@link #delete()} antes de asignar un
+	 * ID nuevo.
 	 */
 	protected void allocateTextureID() {
 		int[] textures = new int[1];
-		if (textureID != 0) {
-			delete();
-		}
 		GLES20.glGenTextures(1, textures, 0);
 		textureID = textures[0];
 	}

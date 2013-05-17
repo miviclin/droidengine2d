@@ -1,16 +1,16 @@
 package com.miviclin.droidengine2d.graphics.shaders;
 
-import com.miviclin.droidengine2d.graphics.GLDebug;
-
 import android.opengl.GLES20;
 
+import com.miviclin.droidengine2d.graphics.GLDebugger;
+
 /**
- * ShaderProgram configurado para renderizar DynamicSpriteBatch
+ * ShaderProgram configurado para renderizar batches de sprites
  * 
  * @author Miguel Vicente Linares
  * 
  */
-public class DynamicSpriteBatchShaderProgram extends ShaderProgram {
+public class PositionTextureBatchShaderProgram extends ShaderProgram {
 	
 	public final static String VERTEX_SHADER = "" +
 			"uniform mat4 uMVPMatrix[32];\n" +
@@ -37,9 +37,9 @@ public class DynamicSpriteBatchShaderProgram extends ShaderProgram {
 	private int aMVPMatrixIndexHandle;
 	
 	/**
-	 * Crea un DynamicSpriteBatchShaderProgram
+	 * Crea un PositionTextureBatchShaderProgram
 	 */
-	public DynamicSpriteBatchShaderProgram() {
+	public PositionTextureBatchShaderProgram() {
 		super();
 	}
 	
@@ -62,22 +62,22 @@ public class DynamicSpriteBatchShaderProgram extends ShaderProgram {
 	 */
 	private void link(int program) {
 		aPositionHandle = GLES20.glGetAttribLocation(program, "aPosition");
-		GLDebug.checkGLError("glGetAttribLocation aPosition");
+		GLDebugger.getInstance().passiveCheckGLError();
 		if (aPositionHandle == -1) {
 			throw new RuntimeException("Could not get attrib location for aPosition");
 		}
 		aTextureHandle = GLES20.glGetAttribLocation(program, "aTextureCoord");
-		GLDebug.checkGLError("glGetAttribLocation aTextureCoord");
+		GLDebugger.getInstance().passiveCheckGLError();
 		if (aTextureHandle == -1) {
 			throw new RuntimeException("Could not get attrib location for aTextureCoord");
 		}
 		aMVPMatrixIndexHandle = GLES20.glGetAttribLocation(program, "aMVPMatrixIndex");
-		GLDebug.checkGLError("glGetAttribLocation aMVPMatrixIndex");
+		GLDebugger.getInstance().passiveCheckGLError();
 		if (aMVPMatrixIndexHandle == -1) {
 			throw new RuntimeException("Could not get attrib location for aMVPMatrixIndex");
 		}
 		uMVPMatrixHandle = GLES20.glGetUniformLocation(program, "uMVPMatrix");
-		GLDebug.checkGLError("glGetUniformLocation uMVPMatrix");
+		GLDebugger.getInstance().passiveCheckGLError();
 		if (uMVPMatrixHandle == -1) {
 			throw new RuntimeException("Could not get attrib location for uMVPMatrix");
 		}

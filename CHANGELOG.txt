@@ -1,4 +1,39 @@
 ------------------------------------------------------------------------
+v0.5.0 (2013-05-17)
+------------------------------------------------------------------------
+
+Cambios:
+
+  - Agregada AndroidEngineActivity, que encapsula la inicializacion y
+    gestion del ciclo de vida del Engine.
+
+  - Agregada la clase Accelerometer, que permite leer valores del
+    acelerometro del dispositivo.
+
+  - Agregadas Scenes para representar las distintas pantallas del juego.
+
+  - Movido TouchController y KeyController a com.miviclin.droidengine2d.
+
+  - Agregada a GLDebugger una forma pasiva de comprobar errores que
+    mejora el rendimiento.
+
+  - Desactivado el depth test en DefaultRenderer.
+
+  - Agregados metodos estaticos de utilidad a Vector2 y Vector3.
+
+  - Renombrado DynamicSpriteBatchShaderProgram a
+    PositionTextureBatchShaderProgram.
+
+
+Bugs corregidos:
+
+  - Corregido un bug al obtener la frecuencia de refresco de la
+    pantalla.
+
+  - Corregido un bug que provocaba que no se cargaran bien las texturas.
+
+
+------------------------------------------------------------------------
 v0.4.0 (2013-04-01)
 ------------------------------------------------------------------------
 
