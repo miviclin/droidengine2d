@@ -10,14 +10,27 @@ import android.opengl.GLES20;
  */
 public abstract class ShaderProgram {
 	
+	private ShaderDefinitions shaderDefinitions;
 	private int program;
 	private boolean linked;
 	
 	/**
 	 * Crea un ShaderProgram
+	 * 
+	 * @param shaderDefinitions Objeto que define los shaders
 	 */
-	public ShaderProgram() {
+	public ShaderProgram(ShaderDefinitions shaderDefinitions) {
+		this.shaderDefinitions = shaderDefinitions;
 		this.linked = false;
+	}
+	
+	/**
+	 * Devuelve el objeto que define los shaders
+	 * 
+	 * @return {@link ShaderDefinitions}
+	 */
+	public ShaderDefinitions getShaderDefinitions() {
+		return shaderDefinitions;
 	}
 	
 	/**
@@ -72,4 +85,5 @@ public abstract class ShaderProgram {
 	 * 4) Llama a {@link #setLinked()} para indicar que el program ya ha sido enlazado.
 	 */
 	public abstract void link();
+	
 }

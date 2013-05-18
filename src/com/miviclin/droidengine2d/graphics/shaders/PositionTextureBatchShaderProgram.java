@@ -14,25 +14,6 @@ import com.miviclin.droidengine2d.graphics.GLDebugger;
  */
 public class PositionTextureBatchShaderProgram extends ShaderProgram {
 	
-	public final static String VERTEX_SHADER = "" +
-			"uniform mat4 uMVPMatrix[32];\n" +
-			"attribute float aMVPMatrixIndex;\n" +
-			"attribute vec4 aPosition;\n" +
-			"attribute vec2 aTextureCoord;\n" +
-			"varying vec2 vTextureCoord;\n" +
-			"void main() {\n" +
-			"    gl_Position = uMVPMatrix[int(aMVPMatrixIndex)] * aPosition;\n" +
-			"    vTextureCoord = aTextureCoord;\n" +
-			"}";
-	
-	public final static String FRAGMENT_SHADER = "" +
-			"precision mediump float;\n" +
-			"varying vec2 vTextureCoord;\n" +
-			"uniform sampler2D sTexture;\n" +
-			"void main() {\n" +
-			"    gl_FragColor = texture2D(sTexture, vTextureCoord);\n" +
-			"}";
-	
 	private int aPositionHandle;
 	private int aTextureHandle;
 	private int uMVPMatrixHandle;
@@ -42,12 +23,22 @@ public class PositionTextureBatchShaderProgram extends ShaderProgram {
 	 * Crea un PositionTextureBatchShaderProgram
 	 */
 	public PositionTextureBatchShaderProgram() {
-		super();
+		super(new PositionTextureBatchShaderDefinitions());
+	}
+	
+	/**
+	 * Crea un PositionTextureBatchShaderProgram
+	 * 
+	 * @param shaderDefinitions Objeto que define los shaders
+	 */
+	protected PositionTextureBatchShaderProgram(ShaderDefinitions shaderDefinitions) {
+		super(shaderDefinitions);
 	}
 	
 	@Override
 	public void link() {
-		int programID = ShaderUtilities.createProgram(VERTEX_SHADER, FRAGMENT_SHADER);
+		ShaderDefinitions shaders = getShaderDefinitions();
+		int programID = ShaderUtilities.createProgram(shaders.getVertexShaderDefinition(), shaders.getFragmentShaderDefinition());
 		if (programID == 0) {
 			return;
 		}
@@ -62,7 +53,7 @@ public class PositionTextureBatchShaderProgram extends ShaderProgram {
 	 * 
 	 * @param program ID del program (el ID asignado por OpenGL al compilar)
 	 */
-	private void link(int program) {
+	protected void link(int program) {
 		aPositionHandle = GLES20.glGetAttribLocation(program, "aPosition");
 		GLDebugger.getInstance().passiveCheckGLError();
 		if (aPositionHandle == -1) {
@@ -145,6 +136,45 @@ public class PositionTextureBatchShaderProgram extends ShaderProgram {
 	public void specifyMVPMatrices(float[] mvpMatrices, int offset, int batchSize) {
 		GLES20.glUniformMatrix4fv(uMVPMatrixHandle, batchSize, false, mvpMatrices, offset);
 		GLDebugger.getInstance().passiveCheckGLError();
+	}
+	
+	/**
+	 * Definiciones de los shaders
+	 * 
+	 * @author Miguel Vicente Linares
+	 * 
+	 */
+	private static class PositionTextureBatchShaderDefinitions extends ShaderDefinitions {
+		
+		private final static String VERTEX_SHADER = "" +
+				"uniform mat4 uMVPMatrix[32];\n" +
+				"attribute float aMVPMatrixIndex;\n" +
+				"attribute vec4 aPosition;\n" +
+				"attribute vec2 aTextureCoord;\n" +
+				"varying vec2 vTextureCoord;\n" +
+				"void main() {\n" +
+				"    gl_Position = uMVPMatrix[int(aMVPMatrixIndex)] * aPosition;\n" +
+				"    vTextureCoord = aTextureCoord;\n" +
+				"}";
+		
+		private final static String FRAGMENT_SHADER = "" +
+				"precision mediump float;\n" +
+				"varying vec2 vTextureCoord;\n" +
+				"uniform sampler2D sTexture;\n" +
+				"void main() {\n" +
+				"    gl_FragColor = texture2D(sTexture, vTextureCoord);\n" +
+				"}";
+		
+		@Override
+		public String getVertexShaderDefinition() {
+			return VERTEX_SHADER;
+		}
+		
+		@Override
+		public String getFragmentShaderDefinition() {
+			return FRAGMENT_SHADER;
+		}
+		
 	}
 	
 }
