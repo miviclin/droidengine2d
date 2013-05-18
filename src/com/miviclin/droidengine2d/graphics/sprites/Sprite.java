@@ -19,6 +19,7 @@ public class Sprite {
 	private Point2D rotationPoint = new Point2D(0.0f, 0.0f);
 	private float rotationAroundPoint;
 	private float rotationAroundCenter;
+	private float opacity;
 	
 	/**
 	 * Crea un Sprite
@@ -38,6 +39,7 @@ public class Sprite {
 		this.rotationAroundCenter = 0.0f;
 		this.textureRegion = textureRegion;
 		this.center.set(width / 2, height / 2);
+		this.opacity = 1.0f;
 	}
 	
 	/**
@@ -174,6 +176,27 @@ public class Sprite {
 	 */
 	public Point2D getCenter() {
 		return center;
+	}
+	
+	/**
+	 * Devuelve la opacidad del sprite. Valor entre 0 y 1.
+	 * 
+	 * @return Opacidad del sprite
+	 */
+	public float getOpacity() {
+		return opacity;
+	}
+	
+	/**
+	 * Asigna la opacidad del sprite
+	 * 
+	 * @param opacity Opacidad: debe ser un valor entre 0 y 1
+	 */
+	public void setOpacity(float opacity) {
+		if (opacity < 0 || opacity > 1) {
+			throw new IllegalArgumentException("Opacity must be a value between 0 and 1");
+		}
+		this.opacity = opacity;
 	}
 	
 	/**
