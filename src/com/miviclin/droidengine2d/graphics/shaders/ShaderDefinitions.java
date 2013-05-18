@@ -21,4 +21,9 @@ public abstract class ShaderDefinitions {
 	 * @return fragment shader
 	 */
 	public abstract String getFragmentShaderDefinition();
+	
+	@Override
+	public String toString() {
+		return getVertexShaderDefinition() + "\n\n" + getFragmentShaderDefinition();
+	}
 }

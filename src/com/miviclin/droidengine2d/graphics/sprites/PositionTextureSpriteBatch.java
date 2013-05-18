@@ -12,6 +12,7 @@ import android.opengl.Matrix;
 import com.miviclin.droidengine2d.graphics.GLDebugger;
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
 import com.miviclin.droidengine2d.graphics.shaders.PositionTextureBatchShaderProgram;
+import com.miviclin.droidengine2d.graphics.shaders.ShaderProgram;
 import com.miviclin.droidengine2d.graphics.textures.Texture;
 import com.miviclin.droidengine2d.util.TransformUtilities;
 import com.miviclin.droidengine2d.util.math.Matrix4;
@@ -60,8 +61,17 @@ public class PositionTextureSpriteBatch implements SpriteBatch {
 	 * @param context Context en el que se ejecuta el juego
 	 */
 	public PositionTextureSpriteBatch(Context context) {
+		this(context, new PositionTextureBatchShaderProgram());
+	}
+	
+	/**
+	 * Crea un PositionTextureSpriteBatch
+	 * 
+	 * @param context Context en el que se ejecuta el juego
+	 */
+	protected PositionTextureSpriteBatch(Context context, PositionTextureBatchShaderProgram shaderProgram) {
 		this.context = context;
-		this.shaderProgram = new PositionTextureBatchShaderProgram();
+		this.shaderProgram = shaderProgram;
 		this.batchSize = 0;
 		this.indices = new short[BATCH_CAPACITY * 6];
 		this.verticesData = new float[BATCH_CAPACITY * 4 * VERTICES_DATA_STRIDE];
@@ -169,6 +179,7 @@ public class PositionTextureSpriteBatch implements SpriteBatch {
 			throw new RuntimeException("begin() must be called once before calling draw(Sprite, Camera)");
 		}
 		drawSprite(sprite, camera);
+		batchSize++;
 	}
 	
 	@Override
@@ -183,17 +194,8 @@ public class PositionTextureSpriteBatch implements SpriteBatch {
 	}
 	
 	@Override
-	public PositionTextureBatchShaderProgram getShaderProgram() {
+	public ShaderProgram getShaderProgram() {
 		return shaderProgram;
-	}
-	
-	/**
-	 * Asigna el ShaderProgram que utiliza este SpriteBatch param shaderProgram ShaderProgram
-	 * 
-	 * @param shaderProgram nuevo ShaderProgram
-	 */
-	protected void setShaderProgram(PositionTextureBatchShaderProgram shaderProgram) {
-		this.shaderProgram = shaderProgram;
 	}
 	
 	/**
@@ -213,24 +215,11 @@ public class PositionTextureSpriteBatch implements SpriteBatch {
 	 * @param sprite Sprite a agregar
 	 * @param camera Camara
 	 */
-	private void drawSprite(Sprite sprite, Camera camera) {
+	protected void drawSprite(Sprite sprite, Camera camera) {
 		boolean textureChanged = checkTextureChanged(sprite);
 		if ((batchSize > 0) && ((batchSize == BATCH_CAPACITY) || textureChanged)) {
 			drawBatch();
 		}
-		prepareShaderData(sprite, camera, textureChanged);
-		batchSize++;
-	}
-	
-	/**
-	 * Prepara los datos necesarios para enviar al shader program.<br>
-	 * Este metodo se llama desde {@link #drawSprite(Sprite, Camera)}
-	 * 
-	 * @param sprite Sprite a agregar
-	 * @param camera Camara
-	 * @param textureChanged Indica si la textura ha cambiado con respecto al ultimo sprite que se agrego
-	 */
-	protected void prepareShaderData(Sprite sprite, Camera camera, boolean textureChanged) {
 		setupTexture(sprite, textureChanged);
 		setSpriteVerticesData(sprite);
 		updateSpriteMVPMatrix(sprite, camera);
@@ -261,7 +250,7 @@ public class PositionTextureSpriteBatch implements SpriteBatch {
 	 * @param sprite Sprite cuya textura se va a comprobar
 	 * @return true si la textura ha cambiado, false en caso contrario
 	 */
-	private boolean checkTextureChanged(Sprite sprite) {
+	protected boolean checkTextureChanged(Sprite sprite) {
 		boolean textureChanged = false;
 		if (texture == null) {
 			textureChanged = true;
@@ -277,7 +266,7 @@ public class PositionTextureSpriteBatch implements SpriteBatch {
 	 * @param sprite Proximo sprite que se pretende renderizar
 	 * @param textureChanged Indica si es necesario reenlazar la textura
 	 */
-	private void setupTexture(Sprite sprite, boolean textureChanged) {
+	protected void setupTexture(Sprite sprite, boolean textureChanged) {
 		if (textureChanged || requestTextureBind) {
 			if (textureChanged) {
 				texture = sprite.getTextureRegion().getTexture();
@@ -295,7 +284,7 @@ public class PositionTextureSpriteBatch implements SpriteBatch {
 	 * 
 	 * @param sprite Sprite que se va a renderizar
 	 */
-	private void setSpriteVerticesData(Sprite sprite) {
+	protected void setSpriteVerticesData(Sprite sprite) {
 		int i = batchSize * VERTICES_DATA_STRIDE * 4;
 		// Bottom-Left
 		verticesData[i + 3] = sprite.getTextureRegion().getU1();
@@ -317,7 +306,7 @@ public class PositionTextureSpriteBatch implements SpriteBatch {
 	 * @param sprite Sprite que contiene los datos necesarios para la transformacion
 	 * @param camera Camara
 	 */
-	private void updateSpriteMVPMatrix(Sprite sprite, Camera camera) {
+	protected void updateSpriteMVPMatrix(Sprite sprite, Camera camera) {
 		int mvpOffset;
 		float tx = sprite.getPosition().getX() + sprite.getCenter().getX();
 		float ty = sprite.getPosition().getY() + sprite.getCenter().getY();

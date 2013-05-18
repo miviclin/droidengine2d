@@ -20,13 +20,10 @@ public class PositionTextureOpacitySpriteBatch extends PositionTextureSpriteBatc
 	
 	private FloatBuffer opacityBuffer;
 	private float[] opacityData;
-	
-	private PositionTextureOpacityBatchShaderProgram shaderProgram;
+	private float lastOpacity;
 	
 	public PositionTextureOpacitySpriteBatch(Context context) {
-		super(context);
-		shaderProgram = new PositionTextureOpacityBatchShaderProgram();
-		setShaderProgram(shaderProgram);
+		super(context, new PositionTextureOpacityBatchShaderProgram());
 		
 		opacityData = new float[BATCH_CAPACITY * 6];
 		
@@ -34,34 +31,52 @@ public class PositionTextureOpacitySpriteBatch extends PositionTextureSpriteBatc
 				.order(ByteOrder.nativeOrder())
 				.asFloatBuffer();
 		opacityBuffer.put(opacityData).flip();
+		
+		lastOpacity = 1.0f;
 	}
 	
-	@Override
-	public PositionTextureOpacityBatchShaderProgram getShaderProgram() {
-		return shaderProgram;
+	protected PositionTextureOpacitySpriteBatch(Context context, PositionTextureOpacityBatchShaderProgram shaderProgram) {
+		super(context, shaderProgram);
 	}
 	
 	@Override
 	protected void setupVertexShaderVariables() {
 		super.setupVertexShaderVariables();
+		PositionTextureOpacityBatchShaderProgram shaderProgram = (PositionTextureOpacityBatchShaderProgram) getShaderProgram();
 		shaderProgram.specifyVerticesOpacity(opacityBuffer, 0, FLOAT_SIZE_BYTES);
 	}
 	
 	@Override
-	protected void prepareShaderData(Sprite sprite, Camera camera, boolean textureChanged) {
-		super.prepareShaderData(sprite, camera, textureChanged);
+	protected void drawSprite(Sprite sprite, Camera camera) {
+		boolean textureChanged = checkTextureChanged(sprite);
+		if ((getBatchSize() > 0) && ((getBatchSize() == BATCH_CAPACITY) || textureChanged || sprite.getOpacity() != lastOpacity)) {
+			drawBatch();
+		}
+		setupTexture(sprite, textureChanged);
+		setSpriteVerticesData(sprite);
+		updateSpriteMVPMatrix(sprite, camera);
 		setupOpacity(sprite);
 	}
 	
+	@Override
+	protected void drawBatch() {
+		opacityBuffer.clear();
+		opacityBuffer.put(opacityData).limit(getBatchSize() * 4).position(0);
+		super.drawBatch();
+	}
+	
 	/**
-	 * Define la opacidad del batch
+	 * Define la opacidad del siguiente sprite en el batch
+	 * 
+	 * @param opacity Opacidad. Valor entre 0 y 1
 	 */
-	private void setupOpacity(Sprite sprite) {
+	protected void setupOpacity(Sprite sprite) {
 		int spriteOffset = getBatchSize() * 6;
 		int limit = spriteOffset + 6;
 		for (int i = spriteOffset; i < limit; i++) {
 			opacityData[i] = sprite.getOpacity();
 		}
+		lastOpacity = sprite.getOpacity();
 	}
 	
 }

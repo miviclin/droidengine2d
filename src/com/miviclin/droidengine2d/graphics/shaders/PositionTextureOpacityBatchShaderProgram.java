@@ -93,7 +93,7 @@ public class PositionTextureOpacityBatchShaderProgram extends PositionTextureBat
 					"uniform sampler2D sTexture;\n" +
 					"void main() {\n" +
 					"    gl_FragColor = texture2D(sTexture, vTextureCoord);\n" +
-					"    gl_FragColor.a *= vOpacity;\n" +
+					"    gl_FragColor.w *= vOpacity;\n" +
 					"}";
 		}
 		
