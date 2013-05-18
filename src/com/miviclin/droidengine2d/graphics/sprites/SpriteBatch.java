@@ -1,7 +1,7 @@
 package com.miviclin.droidengine2d.graphics.sprites;
 
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
-import com.miviclin.droidengine2d.graphics.shaders.PositionTextureBatchShaderProgram;
+import com.miviclin.droidengine2d.graphics.shaders.ShaderProgram;
 
 /**
  * SpriteBatch permite pintar varios sprites en una sola llamada.
@@ -34,5 +34,12 @@ public interface SpriteBatch {
 	 * Este metodo debe llamarse siempre al terminar de agregar todos los elementos al batch. Es necesario llamar antes a {@link #begin()}
 	 */
 	public void end();
+	
+	/**
+	 * Devuelve el ShaderProgram que utiliza este SpriteBatch
+	 * 
+	 * @return ShaderProgram
+	 */
+	public ShaderProgram getShaderProgram();
 	
 }

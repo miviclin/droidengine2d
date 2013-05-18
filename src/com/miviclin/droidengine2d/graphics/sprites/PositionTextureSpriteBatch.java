@@ -57,11 +57,10 @@ public class PositionTextureSpriteBatch implements SpriteBatch {
 	 * Crea un PositionTextureSpriteBatch
 	 * 
 	 * @param context Context en el que se ejecuta el juego
-	 * @param shaderProgram programa de shaders que se utilizara para renderizar los batches
 	 */
-	public PositionTextureSpriteBatch(Context context, PositionTextureBatchShaderProgram shaderProgram) {
+	public PositionTextureSpriteBatch(Context context) {
 		this.context = context;
-		this.shaderProgram = shaderProgram;
+		this.shaderProgram = new PositionTextureBatchShaderProgram();
 		this.batchCapacity = 32;
 		this.batchSize = 0;
 		this.indices = new short[batchCapacity * 6];
@@ -181,6 +180,20 @@ public class PositionTextureSpriteBatch implements SpriteBatch {
 			drawBatch();
 		}
 		inBeginEndPair = false;
+	}
+	
+	@Override
+	public PositionTextureBatchShaderProgram getShaderProgram() {
+		return shaderProgram;
+	}
+	
+	/**
+	 * Asigna el ShaderProgram que utiliza este SpriteBatch param shaderProgram ShaderProgram
+	 * 
+	 * @param shaderProgram nuevo ShaderProgram
+	 */
+	protected void setShaderProgram(PositionTextureBatchShaderProgram shaderProgram) {
+		this.shaderProgram = shaderProgram;
 	}
 	
 	/**
@@ -345,5 +358,4 @@ public class PositionTextureSpriteBatch implements SpriteBatch {
 		Matrix.multiplyMM(temp, 0, camera.viewMatrix.getValues(), 0, modelMatrix.getValues(), 0);
 		Matrix.multiplyMM(mvpMatrices, mvpOffset, camera.projectionMatrix.getValues(), 0, temp, 0);
 	}
-	
 }
