@@ -24,15 +24,17 @@ import com.miviclin.droidengine2d.util.math.Matrix4;
  */
 public class PositionTextureSpriteBatch implements SpriteBatch {
 	
-	private static final int FLOAT_SIZE_BYTES = 4;
-	private static final int SHORT_SIZE_BYTES = 4;
+	protected static final int BATCH_CAPACITY = 32;
 	
-	private static final int VERTICES_DATA_STRIDE = 5;
-	private static final int VERTICES_DATA_STRIDE_BYTES = VERTICES_DATA_STRIDE * FLOAT_SIZE_BYTES;
-	private static final int VERTICES_DATA_POS_OFFSET = 0;
-	private static final int VERTICES_DATA_UV_OFFSET = 3;
+	protected static final int FLOAT_SIZE_BYTES = 4;
+	protected static final int SHORT_SIZE_BYTES = 4;
 	
-	private final float[] temp = new float[16];
+	protected static final int VERTICES_DATA_STRIDE = 5;
+	protected static final int VERTICES_DATA_STRIDE_BYTES = VERTICES_DATA_STRIDE * FLOAT_SIZE_BYTES;
+	protected static final int VERTICES_DATA_POS_OFFSET = 0;
+	protected static final int VERTICES_DATA_UV_OFFSET = 3;
+	
+	protected final float[] temp = new float[16];
 	
 	private float[] verticesData;
 	private float[] mvpIndices;
@@ -43,7 +45,6 @@ public class PositionTextureSpriteBatch implements SpriteBatch {
 	private FloatBuffer vertexBuffer;
 	private FloatBuffer mvpIndexBuffer;
 	
-	private int batchCapacity;
 	private int batchSize;
 	
 	private Matrix4 modelMatrix;
@@ -61,12 +62,11 @@ public class PositionTextureSpriteBatch implements SpriteBatch {
 	public PositionTextureSpriteBatch(Context context) {
 		this.context = context;
 		this.shaderProgram = new PositionTextureBatchShaderProgram();
-		this.batchCapacity = 32;
 		this.batchSize = 0;
-		this.indices = new short[batchCapacity * 6];
-		this.verticesData = new float[batchCapacity * 4 * VERTICES_DATA_STRIDE];
-		this.mvpIndices = new float[batchCapacity * 4];
-		this.mvpMatrices = new float[batchCapacity * 16];
+		this.indices = new short[BATCH_CAPACITY * 6];
+		this.verticesData = new float[BATCH_CAPACITY * 4 * VERTICES_DATA_STRIDE];
+		this.mvpIndices = new float[BATCH_CAPACITY * 4];
+		this.mvpMatrices = new float[BATCH_CAPACITY * 16];
 		this.modelMatrix = new Matrix4();
 		this.texture = null;
 		this.inBeginEndPair = false;
@@ -199,34 +199,11 @@ public class PositionTextureSpriteBatch implements SpriteBatch {
 	/**
 	 * Prepara los datos de la geometria para ser enviados a los shaders
 	 */
-	public void setupVertexShaderVariables() {
-		int aPositionHandle = shaderProgram.getPositionAttributeHandle();
-		int aTextureHandle = shaderProgram.getTextureCoordAttributeHandle();
-		int uMVPMatrixHandle = shaderProgram.getMVPMatrixUniformHandle();
-		int aMVPMatrixIndexHandle = shaderProgram.getMVPMatrixIndexAttributeHandle();
-		
-		GLES20.glUniformMatrix4fv(uMVPMatrixHandle, batchSize, false, mvpMatrices, 0);
-		
-		GLES20.glEnableVertexAttribArray(aPositionHandle);
-		GLDebugger.getInstance().passiveCheckGLError();
-		
-		vertexBuffer.position(VERTICES_DATA_POS_OFFSET);
-		GLES20.glVertexAttribPointer(aPositionHandle, 3, GLES20.GL_FLOAT, false, VERTICES_DATA_STRIDE_BYTES, vertexBuffer);
-		GLDebugger.getInstance().passiveCheckGLError();
-		
-		GLES20.glEnableVertexAttribArray(aTextureHandle);
-		GLDebugger.getInstance().passiveCheckGLError();
-		
-		vertexBuffer.position(VERTICES_DATA_UV_OFFSET);
-		GLES20.glVertexAttribPointer(aTextureHandle, 2, GLES20.GL_FLOAT, false, VERTICES_DATA_STRIDE_BYTES, vertexBuffer);
-		GLDebugger.getInstance().passiveCheckGLError();
-		
-		GLES20.glEnableVertexAttribArray(aMVPMatrixIndexHandle);
-		GLDebugger.getInstance().passiveCheckGLError();
-		
-		mvpIndexBuffer.position(0);
-		GLES20.glVertexAttribPointer(aMVPMatrixIndexHandle, 1, GLES20.GL_FLOAT, false, FLOAT_SIZE_BYTES, mvpIndexBuffer);
-		GLDebugger.getInstance().passiveCheckGLError();
+	protected void setupVertexShaderVariables() {
+		shaderProgram.specifyMVPMatrices(mvpMatrices, 0, batchSize);
+		shaderProgram.specifyVerticesPosition(vertexBuffer, VERTICES_DATA_POS_OFFSET, 3, VERTICES_DATA_STRIDE_BYTES);
+		shaderProgram.specifyVerticesTextureCoords(vertexBuffer, VERTICES_DATA_UV_OFFSET, 2, VERTICES_DATA_STRIDE_BYTES);
+		shaderProgram.specifyVerticesMVPIndices(mvpIndexBuffer, 0, FLOAT_SIZE_BYTES);
 	}
 	
 	/**
@@ -238,19 +215,31 @@ public class PositionTextureSpriteBatch implements SpriteBatch {
 	 */
 	private void drawSprite(Sprite sprite, Camera camera) {
 		boolean textureChanged = checkTextureChanged(sprite);
-		if ((batchSize > 0) && ((batchSize == batchCapacity) || textureChanged)) {
+		if ((batchSize > 0) && ((batchSize == BATCH_CAPACITY) || textureChanged)) {
 			drawBatch();
 		}
+		prepareShaderData(sprite, camera, textureChanged);
+		batchSize++;
+	}
+	
+	/**
+	 * Prepara los datos necesarios para enviar al shader program.<br>
+	 * Este metodo se llama desde {@link #drawSprite(Sprite, Camera)}
+	 * 
+	 * @param sprite Sprite a agregar
+	 * @param camera Camara
+	 * @param textureChanged Indica si la textura ha cambiado con respecto al ultimo sprite que se agrego
+	 */
+	protected void prepareShaderData(Sprite sprite, Camera camera, boolean textureChanged) {
 		setupTexture(sprite, textureChanged);
 		setSpriteVerticesData(sprite);
 		updateSpriteMVPMatrix(sprite, camera);
-		batchSize++;
 	}
 	
 	/**
 	 * Renderizatodos los sprites del batch en 1 sola llamada
 	 */
-	private void drawBatch() {
+	protected void drawBatch() {
 		vertexBuffer.clear();
 		vertexBuffer.put(verticesData).position(batchSize * VERTICES_DATA_STRIDE * 4).flip();
 		
@@ -357,5 +346,14 @@ public class PositionTextureSpriteBatch implements SpriteBatch {
 		mvpOffset = batchSize * 16;
 		Matrix.multiplyMM(temp, 0, camera.viewMatrix.getValues(), 0, modelMatrix.getValues(), 0);
 		Matrix.multiplyMM(mvpMatrices, mvpOffset, camera.projectionMatrix.getValues(), 0, temp, 0);
+	}
+	
+	/**
+	 * Devuelve el numero de sprites que hay en el batch
+	 * 
+	 * @return Numero de sprites en el batch
+	 */
+	public int getBatchSize() {
+		return batchSize;
 	}
 }
