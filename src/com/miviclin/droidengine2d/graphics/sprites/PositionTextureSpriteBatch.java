@@ -22,7 +22,7 @@ import com.miviclin.droidengine2d.util.math.Matrix4;
  * @author Miguel Vicente Linares
  * 
  */
-public class DynamicSpriteBatch implements SpriteBatch {
+public class PositionTextureSpriteBatch implements SpriteBatch {
 	
 	private static final int FLOAT_SIZE_BYTES = 4;
 	private static final int SHORT_SIZE_BYTES = 4;
@@ -54,12 +54,12 @@ public class DynamicSpriteBatch implements SpriteBatch {
 	private boolean requestTextureBind;
 	
 	/**
-	 * Crea un DynamicSpriteBatch
+	 * Crea un PositionTextureSpriteBatch
 	 * 
 	 * @param context Context en el que se ejecuta el juego
 	 * @param shaderProgram programa de shaders que se utilizara para renderizar los batches
 	 */
-	public DynamicSpriteBatch(Context context, PositionTextureBatchShaderProgram shaderProgram) {
+	public PositionTextureSpriteBatch(Context context, PositionTextureBatchShaderProgram shaderProgram) {
 		this.context = context;
 		this.shaderProgram = shaderProgram;
 		this.batchCapacity = 32;

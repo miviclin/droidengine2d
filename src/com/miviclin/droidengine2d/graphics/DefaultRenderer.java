@@ -9,7 +9,7 @@ import android.opengl.GLES20;
 import com.miviclin.droidengine2d.Game;
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
 import com.miviclin.droidengine2d.graphics.shaders.PositionTextureBatchShaderProgram;
-import com.miviclin.droidengine2d.graphics.sprites.DynamicSpriteBatch;
+import com.miviclin.droidengine2d.graphics.sprites.PositionTextureSpriteBatch;
 import com.miviclin.droidengine2d.graphics.sprites.SpriteBatch;
 
 /**
@@ -41,7 +41,7 @@ public class DefaultRenderer implements EngineRenderer {
 	public void onSurfaceCreated(GL10 glUnused, EGLConfig config) {
 		PositionTextureBatchShaderProgram shaderProgram = new PositionTextureBatchShaderProgram();
 		shaderProgram.link();
-		spriteBatch = new DynamicSpriteBatch(context, shaderProgram);
+		spriteBatch = new PositionTextureSpriteBatch(context, shaderProgram);
 		
 		GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		GLES20.glEnable(GLES20.GL_CULL_FACE);
