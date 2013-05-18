@@ -1,8 +1,7 @@
-package com.miviclin.droidengine2d.graphics.shaders;
+package com.miviclin.droidengine2d.graphics.sprites;
 
 import java.util.HashMap;
 
-import com.miviclin.droidengine2d.graphics.sprites.SpriteBatch;
 
 /**
  * Almacena SpriteBatches y se encarga de renderizar elementos en pantalla usando los SpriteBatches de los que dispone
