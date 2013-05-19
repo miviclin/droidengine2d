@@ -174,7 +174,7 @@ public class PositionTextureSpriteBatch implements SpriteBatch {
 	}
 	
 	@Override
-	public <T extends PositionTextureBatchShaderProgram> void draw(Sprite sprite, Camera camera, T shaderProgram) {
+	public void draw(Sprite sprite, Camera camera) {
 		if (!inBeginEndPair) {
 			throw new RuntimeException("begin() must be called once before calling draw(Sprite, Camera)");
 		}

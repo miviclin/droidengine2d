@@ -25,9 +25,8 @@ public interface SpriteBatch {
 	 * 
 	 * @param sprite Sprite a agregar
 	 * @param camera Camara
-	 * @param shaderProgram ShaderProgram que se utilizara para renderizar el sprite
 	 */
-	public <T extends PositionTextureBatchShaderProgram> void draw(Sprite sprite, Camera camera, T shaderProgram);
+	public void draw(Sprite sprite, Camera camera);
 	
 	/**
 	 * Renderiza todos los elementos que contenga el batch.<br>
