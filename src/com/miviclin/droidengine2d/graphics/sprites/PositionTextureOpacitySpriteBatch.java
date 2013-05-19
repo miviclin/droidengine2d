@@ -49,7 +49,7 @@ public class PositionTextureOpacitySpriteBatch extends PositionTextureSpriteBatc
 	@Override
 	protected void drawSprite(Sprite sprite, Camera camera) {
 		boolean textureChanged = checkTextureChanged(sprite);
-		if ((getBatchSize() > 0) && ((getBatchSize() == BATCH_CAPACITY) || textureChanged || sprite.getOpacity() != lastOpacity)) {
+		if ((getBatchSize() > 0) && ((getBatchSize() == BATCH_CAPACITY) || textureChanged || sprite.getColor().getA() != lastOpacity)) {
 			drawBatch();
 		}
 		setupTexture(sprite, textureChanged);
@@ -68,15 +68,15 @@ public class PositionTextureOpacitySpriteBatch extends PositionTextureSpriteBatc
 	/**
 	 * Define la opacidad del siguiente sprite en el batch
 	 * 
-	 * @param opacity Opacidad. Valor entre 0 y 1
+	 * @param sprite Aprite que se esta agregando al batch
 	 */
 	protected void setupOpacity(Sprite sprite) {
 		int spriteOffset = getBatchSize() * 6;
 		int limit = spriteOffset + 6;
 		for (int i = spriteOffset; i < limit; i++) {
-			opacityData[i] = sprite.getOpacity();
+			opacityData[i] = sprite.getColor().getA();
 		}
-		lastOpacity = sprite.getOpacity();
+		lastOpacity = sprite.getColor().getA();
 	}
 	
 }

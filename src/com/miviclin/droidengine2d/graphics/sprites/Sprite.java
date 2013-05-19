@@ -1,5 +1,6 @@
 package com.miviclin.droidengine2d.graphics.sprites;
 
+import com.miviclin.droidengine2d.graphics.Color;
 import com.miviclin.droidengine2d.graphics.textures.TextureRegion;
 import com.miviclin.droidengine2d.util.Dimensions2D;
 import com.miviclin.droidengine2d.util.Point2D;
@@ -19,7 +20,7 @@ public class Sprite {
 	private Point2D rotationPoint = new Point2D(0.0f, 0.0f);
 	private float rotationAroundPoint;
 	private float rotationAroundCenter;
-	private float opacity;
+	private Color color;
 	
 	/**
 	 * Crea un Sprite
@@ -39,7 +40,7 @@ public class Sprite {
 		this.rotationAroundCenter = 0.0f;
 		this.textureRegion = textureRegion;
 		this.center.set(width / 2, height / 2);
-		this.opacity = 1.0f;
+		this.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
 	}
 	
 	/**
@@ -179,24 +180,21 @@ public class Sprite {
 	}
 	
 	/**
-	 * Devuelve la opacidad del sprite. Valor entre 0 y 1.
+	 * Devuelve el color del sprite
 	 * 
-	 * @return Opacidad del sprite
+	 * @return Color del sprite
 	 */
-	public float getOpacity() {
-		return opacity;
+	public Color getColor() {
+		return color;
 	}
 	
 	/**
-	 * Asigna la opacidad del sprite
+	 * Asigna un color al sprite
 	 * 
-	 * @param opacity Opacidad: debe ser un valor entre 0 y 1
+	 * @param color Color
 	 */
-	public void setOpacity(float opacity) {
-		if (opacity < 0 || opacity > 1) {
-			throw new IllegalArgumentException("Opacity must be a value between 0 and 1");
-		}
-		this.opacity = opacity;
+	public void setColor(Color color) {
+		this.color = color;
 	}
 	
 	/**
