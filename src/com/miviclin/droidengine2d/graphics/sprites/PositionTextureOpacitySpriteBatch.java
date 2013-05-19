@@ -20,7 +20,6 @@ public class PositionTextureOpacitySpriteBatch extends PositionTextureSpriteBatc
 	
 	private FloatBuffer opacityBuffer;
 	private float[] opacityData;
-	private float lastOpacity;
 	
 	public PositionTextureOpacitySpriteBatch(Context context) {
 		super(context, new PositionTextureOpacityBatchShaderProgram());
@@ -31,8 +30,6 @@ public class PositionTextureOpacitySpriteBatch extends PositionTextureSpriteBatc
 				.order(ByteOrder.nativeOrder())
 				.asFloatBuffer();
 		opacityBuffer.put(opacityData).flip();
-		
-		lastOpacity = 1.0f;
 	}
 	
 	protected PositionTextureOpacitySpriteBatch(Context context, PositionTextureOpacityBatchShaderProgram shaderProgram) {
@@ -48,13 +45,7 @@ public class PositionTextureOpacitySpriteBatch extends PositionTextureSpriteBatc
 	
 	@Override
 	protected void drawSprite(Sprite sprite, Camera camera) {
-		boolean textureChanged = checkTextureChanged(sprite);
-		if ((getBatchSize() > 0) && ((getBatchSize() == BATCH_CAPACITY) || textureChanged || sprite.getColor().getA() != lastOpacity)) {
-			drawBatch();
-		}
-		setupTexture(sprite, textureChanged);
-		setSpriteVerticesData(sprite);
-		updateSpriteMVPMatrix(sprite, camera);
+		super.drawSprite(sprite, camera);
 		setupOpacity(sprite);
 	}
 	
@@ -71,12 +62,11 @@ public class PositionTextureOpacitySpriteBatch extends PositionTextureSpriteBatc
 	 * @param sprite Aprite que se esta agregando al batch
 	 */
 	protected void setupOpacity(Sprite sprite) {
-		int spriteOffset = getBatchSize() * 6;
-		int limit = spriteOffset + 6;
+		int spriteOffset = getBatchSize() * 4;
+		int limit = spriteOffset + 4;
 		for (int i = spriteOffset; i < limit; i++) {
 			opacityData[i] = sprite.getColor().getA();
 		}
-		lastOpacity = sprite.getColor().getA();
 	}
 	
 }
