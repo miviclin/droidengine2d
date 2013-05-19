@@ -25,7 +25,7 @@ public class PositionTextureOpacitySpriteBatch extends PositionTextureSpriteBatc
 	public PositionTextureOpacitySpriteBatch(Context context) {
 		super(context, new PositionTextureOpacityBatchShaderProgram());
 		
-		opacityData = new float[BATCH_CAPACITY * 6];
+		opacityData = new float[BATCH_CAPACITY * 4];
 		
 		opacityBuffer = ByteBuffer.allocateDirect(opacityData.length * FLOAT_SIZE_BYTES)
 				.order(ByteOrder.nativeOrder())
