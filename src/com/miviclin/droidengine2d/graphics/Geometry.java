@@ -22,15 +22,18 @@ public class Geometry {
 	private boolean updateFaces;
 	
 	/**
-	 * Crea un Geometry
+	 * Crea un objeto Geometry
 	 * 
-	 * @param builder Builder que se utilizara para crear el objeto
+	 * @param numVertices Numero de vertices de la geometria
+	 * @param numFaces Numero de faces de la geometria
+	 * @param usesColors Indica si la geometria contiene informacion del color de los vertices
+	 * @param usesTexturesUV Indica si la geometria contiene informacion de coordenadas de texturas de los vertices
 	 */
-	private Geometry(GeometryBuilder builder) {
-		this.vertices = builder.vertices;
-		this.faces = builder.faces;
-		this.colors = builder.colors;
-		this.texturesUV = builder.texturesUV;
+	public Geometry(int numVertices, int numFaces, boolean usesColors, boolean usesTexturesUV) {
+		this.vertices = new Array<Vector3>(numVertices);
+		this.faces = new Array<Vector3>(numFaces);
+		this.colors = (usesColors) ? new Array<Vector3>(numVertices) : null;
+		this.texturesUV = (usesTexturesUV) ? new Array<Vector2>(numVertices) : null;
 		this.updateVertices = false;
 		this.updateFaces = false;
 		this.updateColors = false;
@@ -217,71 +220,6 @@ public class Geometry {
 	 */
 	public void updateTexturesUV() {
 		updateTexturesUV = true;
-	}
-	
-	/**
-	 * Builder que se utiliza para construit objetos {@link Geometry}
-	 * 
-	 * @author Miguel Vicente Linares
-	 * 
-	 */
-	public static class GeometryBuilder {
-		
-		private Array<Vector3> vertices;
-		private Array<Vector3> faces;
-		private Array<Vector3> colors;
-		private Array<Vector2> texturesUV;
-		private int numVertices;
-		private int numFaces;
-		private boolean usesColors;
-		private boolean usesTexturesUV;
-		
-		/**
-		 * Crea un GeometryBuilder
-		 * 
-		 * @param numVertices Numero de vertices de la geometria
-		 * @param numFaces Numero de faces de la geometria
-		 */
-		public GeometryBuilder(int numVertices, int numFaces) {
-			this.numVertices = numVertices;
-			this.numFaces = numFaces;
-			this.usesColors = false;
-			this.usesTexturesUV = false;
-		}
-		
-		/**
-		 * Indica que la geometria contiene informacion del color de los vertices
-		 * 
-		 * @return Devuelve este GeometryBuilder
-		 */
-		public GeometryBuilder useColors() {
-			this.usesColors = true;
-			return this;
-		}
-		
-		/**
-		 * Indica que la geometria contiene informacion de coordenadas de texturas de los vertices
-		 * 
-		 * @return GeometryBuilder
-		 */
-		public GeometryBuilder useTexturesUV() {
-			this.usesTexturesUV = true;
-			return this;
-		}
-		
-		/**
-		 * Construye el objeto {@link Geometry} con los parametros especificados en el {@link GeometryBuilder}
-		 * 
-		 * @return {@link Geometry}
-		 */
-		public Geometry build() {
-			this.vertices = new Array<Vector3>(numVertices);
-			this.faces = new Array<Vector3>(numFaces);
-			this.colors = (usesColors) ? new Array<Vector3>(numVertices) : null;
-			this.texturesUV = (usesTexturesUV) ? new Array<Vector2>(numVertices) : null;
-			return new Geometry(this);
-		}
-		
 	}
 	
 }
