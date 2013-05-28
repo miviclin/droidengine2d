@@ -17,9 +17,9 @@ public class Geometry {
 	private Array<Vector3> colors;
 	private Array<Vector2> texturesUV;
 	private boolean updateVertices;
+	private boolean updateFaces;
 	private boolean updateColors;
 	private boolean updateTexturesUV;
-	private boolean updateFaces;
 	
 	/**
 	 * Crea un objeto Geometry
