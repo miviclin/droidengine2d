@@ -3,7 +3,7 @@ package com.miviclin.droidengine2d.graphics.sprites;
 import com.miviclin.droidengine2d.graphics.Color;
 import com.miviclin.droidengine2d.graphics.textures.TextureRegion;
 import com.miviclin.droidengine2d.util.Dimensions2D;
-import com.miviclin.droidengine2d.util.Point2D;
+import com.miviclin.droidengine2d.util.math.Vector2;
 
 /**
  * Sprite
@@ -14,10 +14,10 @@ import com.miviclin.droidengine2d.util.Point2D;
 public class Sprite {
 	
 	private TextureRegion textureRegion;
-	private Point2D position = new Point2D(0.0f, 0.0f);
-	private Point2D center = new Point2D(0.0f, 0.0f);
+	private Vector2 position = new Vector2(0.0f, 0.0f);
+	private Vector2 center = new Vector2(0.0f, 0.0f);
 	private Dimensions2D dimensions = new Dimensions2D(1.0f, 1.0f);
-	private Point2D rotationPoint = new Point2D(0.0f, 0.0f);
+	private Vector2 rotationPoint = new Vector2(0.0f, 0.0f);
 	private float rotationAroundPoint;
 	private float rotationAroundCenter;
 	private Color color;
@@ -48,7 +48,7 @@ public class Sprite {
 	 * 
 	 * @return punto en el que esta situada la esquina superior izquierda del sprite
 	 */
-	public Point2D getPosition() {
+	public Vector2 getPosition() {
 		return position;
 	}
 	
@@ -67,7 +67,7 @@ public class Sprite {
 	 * 
 	 * @param position posicion en la pantalla
 	 */
-	public void setPosition(Point2D position) {
+	public void setPosition(Vector2 position) {
 		this.position.set(position);
 	}
 	
@@ -123,7 +123,7 @@ public class Sprite {
 	 * 
 	 * @return Punto externo al sprite
 	 */
-	public Point2D getRotationPoint() {
+	public Vector2 getRotationPoint() {
 		return rotationPoint;
 	}
 	
@@ -145,7 +145,7 @@ public class Sprite {
 	 * @param angle angulo
 	 * @param point Punto externo de rotacion
 	 */
-	public void setRotationAroundExternalPoint(float angle, Point2D point) {
+	public void setRotationAroundExternalPoint(float angle, Vector2 point) {
 		rotationAroundPoint = angle;
 		rotationPoint.set(point);
 	}
@@ -173,9 +173,9 @@ public class Sprite {
 	/**
 	 * Devuelve el punto que esta en el centro del sprite
 	 * 
-	 * @return Point2D
+	 * @return Vector2
 	 */
-	public Point2D getCenter() {
+	public Vector2 getCenter() {
 		return center;
 	}
 	
