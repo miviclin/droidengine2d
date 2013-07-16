@@ -13,29 +13,29 @@ import com.miviclin.droidengine2d.util.math.Vector3;
 public class Geometry {
 	
 	private Array<Vector3> vertices;
-	private Array<Vector3> faces;
+	private Array<Short> indices;
 	private Array<Vector3> colors;
 	private Array<Vector2> texturesUV;
 	private boolean updateVertices;
-	private boolean updateFaces;
+	private boolean updateIndices;
 	private boolean updateColors;
 	private boolean updateTexturesUV;
 	
 	/**
 	 * Crea un objeto Geometry
 	 * 
-	 * @param numVertices Numero de vertices de la geometria
-	 * @param numFaces Numero de faces de la geometria
+	 * @param numVertices Numero de vertices para el que se reservara memoria
+	 * @param numIndices Numero de indices (representan el orden en que se pintaran los vertices) para el que se reservara memoria
 	 * @param usesColors Indica si la geometria contiene informacion del color de los vertices
 	 * @param usesTexturesUV Indica si la geometria contiene informacion de coordenadas de texturas de los vertices
 	 */
-	public Geometry(int numVertices, int numFaces, boolean usesColors, boolean usesTexturesUV) {
+	public Geometry(int numVertices, int numIndices, boolean usesColors, boolean usesTexturesUV) {
 		this.vertices = new Array<Vector3>(numVertices);
-		this.faces = new Array<Vector3>(numFaces);
+		this.indices = new Array<Short>(numIndices);
 		this.colors = (usesColors) ? new Array<Vector3>(numVertices) : null;
 		this.texturesUV = (usesTexturesUV) ? new Array<Vector2>(numVertices) : null;
 		this.updateVertices = false;
-		this.updateFaces = false;
+		this.updateIndices = false;
 		this.updateColors = false;
 		this.updateTexturesUV = false;
 	}
@@ -60,22 +60,40 @@ public class Geometry {
 	}
 	
 	/**
-	 * Agrega una face a la geometria (indices de los vertices que definen la face)
+	 * Devuelve el numero de vertices definidos en esta geometria
 	 * 
-	 * @param face Indices de los vertices que definen la face
+	 * @return Numero de vertices
 	 */
-	public void addFace(Vector3 face) {
-		faces.add(face);
+	public int getNumVertices() {
+		return vertices.size();
 	}
 	
 	/**
-	 * Devuelve la face situada en el indice especificado del Array de faces
+	 * Agrega un indice a la geometria
 	 * 
-	 * @param index Indice de la face
-	 * @return Indices que definen la face
+	 * @param index Indice a agregar
 	 */
-	public Vector3 getFace(int index) {
-		return faces.get(index);
+	public void addIndex(short index) {
+		indices.add(index);
+	}
+	
+	/**
+	 * Devuelve el indice situado en el indice especificado del Array de indices
+	 * 
+	 * @param index Indice (posicion en el array) del indice que se quiere obtener
+	 * @return Indice
+	 */
+	public short getIndex(int index) {
+		return indices.get(index);
+	}
+	
+	/**
+	 * Devuelve el numero de indices definidos en esta geometria
+	 * 
+	 * @return Numero de indices
+	 */
+	public int getNumIndices() {
+		return indices.size();
 	}
 	
 	/**
@@ -101,6 +119,18 @@ public class Geometry {
 	}
 	
 	/**
+	 * Devuelve el numero de colores definidos en esta geometria (si la geometria utiliza colores, deberia haber 1 color por cada vertice)
+	 * 
+	 * @return Numero de colores, o -1 si no usa colores
+	 */
+	public int getNumColors() {
+		if (colors == null) {
+			return -1;
+		}
+		return colors.size();
+	}
+	
+	/**
 	 * Agrega unas coordenadas de textura a la geometria. Las coordenadas UV iran asociadas al vertice que se encuentre en el mismo indice.
 	 * 
 	 * @param textureUV Coordenadas UV de la textura asociada al vertice
@@ -120,6 +150,19 @@ public class Geometry {
 			return null;
 		}
 		return texturesUV.get(index);
+	}
+	
+	/**
+	 * Devuelve el numero de coordenadas UV definidas en esta geometria (si la geometria utiliza texturas, deberia haber 1 coordenadas UV
+	 * por cada vertice)
+	 * 
+	 * @return Numero de coordenadas UV, o -1 si no usa texturas
+	 */
+	public int getNumTexturesUV() {
+		if (texturesUV == null) {
+			return -1;
+		}
+		return texturesUV.size();
 	}
 	
 	/**
@@ -148,28 +191,28 @@ public class Geometry {
 	}
 	
 	/**
-	 * Devuelve si se ha solicitado actualizar las faces
+	 * Devuelve si se ha solicitado actualizar los indices
 	 * 
 	 * @return true si se ha solicitado actualizar, false en caso contrario
 	 */
-	public boolean isUpdateFacesSet() {
-		return updateFaces;
+	public boolean isUpdateIndicesSet() {
+		return updateIndices;
 	}
 	
 	/**
-	 * Asigna si se necesita actualizar las faces o no
+	 * Asigna si se necesita actualizar los indices o no
 	 * 
-	 * @param updateFaces true para actualizar, false en caso contrario
+	 * @param updateIndices true para actualizar, false en caso contrario
 	 */
-	protected void setUpdateFaces(boolean updateFaces) {
-		this.updateFaces = updateFaces;
+	protected void setUpdateIndices(boolean updateIndices) {
+		this.updateIndices = updateIndices;
 	}
 	
 	/**
-	 * Solicita actualizar las faces
+	 * Solicita actualizar los indices
 	 */
-	public void updateFaces() {
-		updateFaces = true;
+	public void updateIndices() {
+		updateIndices = true;
 	}
 	
 	/**
