@@ -1,9 +1,6 @@
 package com.miviclin.droidengine2d.graphics.sprites;
 
-import com.miviclin.droidengine2d.graphics.Color;
 import com.miviclin.droidengine2d.graphics.textures.TextureRegion;
-import com.miviclin.droidengine2d.util.Dimensions2D;
-import com.miviclin.droidengine2d.util.math.Vector2;
 
 /**
  * Sprite
@@ -11,16 +8,9 @@ import com.miviclin.droidengine2d.util.math.Vector2;
  * @author Miguel Vicente Linares
  * 
  */
-public class Sprite {
+public class Sprite extends RectangularShape {
 	
 	private TextureRegion textureRegion;
-	private Vector2 position = new Vector2(0.0f, 0.0f);
-	private Vector2 center = new Vector2(0.0f, 0.0f);
-	private Dimensions2D dimensions = new Dimensions2D(1.0f, 1.0f);
-	private Vector2 rotationPoint = new Vector2(0.0f, 0.0f);
-	private float rotationAroundPoint;
-	private float rotationAroundCenter;
-	private Color color;
 	
 	/**
 	 * Crea un Sprite
@@ -32,122 +22,9 @@ public class Sprite {
 	 * @param textureRegion TextureRegion (region de una textura que se toma como imagen del sprite)
 	 */
 	public Sprite(float x, float y, float width, float height, TextureRegion textureRegion) {
-		checkDimensions(width, height);
+		super(x, y, width, height);
 		checkTextureRegion(textureRegion);
-		this.position.set(x, y);
-		this.dimensions.set(width, height);
-		this.rotationAroundPoint = 0.0f;
-		this.rotationAroundCenter = 0.0f;
 		this.textureRegion = textureRegion;
-		this.center.set(width / 2, height / 2);
-		this.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
-	}
-	
-	/**
-	 * Devuelve la posicion del sprite en la pantalla
-	 * 
-	 * @return punto en el que esta situada la esquina superior izquierda del sprite
-	 */
-	public Vector2 getPosition() {
-		return position;
-	}
-	
-	/**
-	 * Asigna la posicion del sprite
-	 * 
-	 * @param x coordenada X, en pixeles
-	 * @param y coordenada Y, en pixeles
-	 */
-	public void setPosition(float x, float y) {
-		position.set(x, y);
-	}
-	
-	/**
-	 * Asigna la posicion del sprite
-	 * 
-	 * @param position posicion en la pantalla
-	 */
-	public void setPosition(Vector2 position) {
-		this.position.set(position);
-	}
-	
-	/**
-	 * Devuelve las dimensiones del sprite
-	 * 
-	 * @return dimensiones del sprite
-	 */
-	public Dimensions2D getDimensions() {
-		return dimensions;
-	}
-	
-	/**
-	 * Asigna las dimensiones del sprite
-	 * 
-	 * @param width Ancho
-	 * @param height Alto
-	 */
-	public void setDimensions(float width, float height) {
-		dimensions.set(width, height);
-		center.set(width / 2, height / 2);
-	}
-	
-	/**
-	 * Devuelve el angulo de rotacion del sprite sobre su centro
-	 * 
-	 * @return angulo
-	 */
-	public float getRotation() {
-		return rotationAroundCenter;
-	}
-	
-	/**
-	 * Asigna el angulo de rotacion del sprite sobre su centro
-	 * 
-	 * @param angle angulo
-	 */
-	public void setRotation(float angle) {
-		rotationAroundCenter = angle;
-	}
-	
-	/**
-	 * Devuelve el angulo de rotacion del sprite sobre un punto externo
-	 * 
-	 * @return angulo
-	 */
-	public float getRotationAroundPoint() {
-		return rotationAroundPoint;
-	}
-	
-	/**
-	 * Devuelve el punto externo de rotacion del sprite
-	 * 
-	 * @return Punto externo al sprite
-	 */
-	public Vector2 getRotationPoint() {
-		return rotationPoint;
-	}
-	
-	/**
-	 * Asigna un punto externo de rotacion y el angulo de rotacion alrededor de dicho punto
-	 * 
-	 * @param angle angulo
-	 * @param pointX Coordenada X del punto externo de rotacion
-	 * @param pointY Coordenada Y del punto externo de rotacion
-	 */
-	public void setRotationAroundExternalPoint(float angle, float pointX, float pointY) {
-		rotationAroundPoint = angle;
-		rotationPoint.set(pointX, pointY);
-	}
-	
-	/**
-	 * Asigna un punto externo de rotacion y el angulo de rotacion alrededor de dicho punto
-	 * 
-	 * @param angle angulo
-	 * @param point Punto externo de rotacion
-	 */
-	public void setRotationAroundExternalPoint(float angle, Vector2 point) {
-		rotationAroundPoint = angle;
-		rotationPoint.set(point);
 	}
 	
 	/**
@@ -168,48 +45,6 @@ public class Sprite {
 	public void setTextureRegion(TextureRegion textureRegion) {
 		checkTextureRegion(textureRegion);
 		this.textureRegion = textureRegion;
-	}
-	
-	/**
-	 * Devuelve el punto que esta en el centro del sprite
-	 * 
-	 * @return Vector2
-	 */
-	public Vector2 getCenter() {
-		return center;
-	}
-	
-	/**
-	 * Devuelve el color del sprite
-	 * 
-	 * @return Color del sprite
-	 */
-	public Color getColor() {
-		return color;
-	}
-	
-	/**
-	 * Asigna un color al sprite
-	 * 
-	 * @param color Color
-	 */
-	public void setColor(Color color) {
-		this.color = color;
-	}
-	
-	/**
-	 * Comprueba que las dimensiones especificadas sean validas y lanza una excepcion en caso contrario
-	 * 
-	 * @param width Ancho
-	 * @param height Alto
-	 */
-	private void checkDimensions(float width, float height) {
-		if (width <= 0) {
-			throw new IllegalArgumentException("width must be greater than 0");
-		}
-		if (height <= 0) {
-			throw new IllegalArgumentException("height must be greater than 0");
-		}
 	}
 	
 	/**
