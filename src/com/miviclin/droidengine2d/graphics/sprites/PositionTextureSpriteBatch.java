@@ -10,12 +10,15 @@ import android.opengl.GLES20;
 import android.opengl.Matrix;
 
 import com.miviclin.droidengine2d.graphics.GLDebugger;
+import com.miviclin.droidengine2d.graphics.Geometry;
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
 import com.miviclin.droidengine2d.graphics.shaders.PositionTextureBatchShaderProgram;
 import com.miviclin.droidengine2d.graphics.shaders.ShaderProgram;
 import com.miviclin.droidengine2d.graphics.textures.Texture;
 import com.miviclin.droidengine2d.util.TransformUtilities;
 import com.miviclin.droidengine2d.util.math.Matrix4;
+import com.miviclin.droidengine2d.util.math.Vector2;
+import com.miviclin.droidengine2d.util.math.Vector3;
 
 /**
  * SpriteBatch que permite renderizar en una llamada hasta 32 sprites con transformaciones (traslacion, rotacion y escala) distintas.
@@ -37,10 +40,8 @@ public class PositionTextureSpriteBatch implements SpriteBatch {
 	
 	protected final float[] temp = new float[16];
 	
-	private float[] verticesData;
 	private float[] mvpIndices;
 	private float[] mvpMatrices;
-	private short[] indices;
 	
 	private ShortBuffer indexBuffer;
 	private FloatBuffer vertexBuffer;
@@ -54,6 +55,8 @@ public class PositionTextureSpriteBatch implements SpriteBatch {
 	private PositionTextureBatchShaderProgram shaderProgram;
 	private boolean inBeginEndPair;
 	private boolean requestTextureBind;
+	
+	private Geometry geometry;
 	
 	/**
 	 * Crea un PositionTextureSpriteBatch
@@ -73,27 +76,30 @@ public class PositionTextureSpriteBatch implements SpriteBatch {
 		this.context = context;
 		this.shaderProgram = shaderProgram;
 		this.batchSize = 0;
-		this.indices = new short[BATCH_CAPACITY * 6];
-		this.verticesData = new float[BATCH_CAPACITY * 4 * VERTICES_DATA_STRIDE];
 		this.mvpIndices = new float[BATCH_CAPACITY * 4];
 		this.mvpMatrices = new float[BATCH_CAPACITY * 16];
 		this.modelMatrix = new Matrix4();
 		this.texture = null;
 		this.inBeginEndPair = false;
+		this.geometry = new Geometry(BATCH_CAPACITY * 4, BATCH_CAPACITY * 6, false, true);
 		
 		setupIndices();
 		setupMVPIndices();
 		setupVerticesData();
 		
-		indexBuffer = ByteBuffer.allocateDirect(indices.length * SHORT_SIZE_BYTES)
+		indexBuffer = ByteBuffer.allocateDirect(BATCH_CAPACITY * 6 * SHORT_SIZE_BYTES)
 				.order(ByteOrder.nativeOrder())
 				.asShortBuffer();
-		indexBuffer.put(indices).flip();
+		int numIndices = BATCH_CAPACITY * 6;
+		for (int i = 0; i < numIndices; i++) {
+			indexBuffer.put(geometry.getIndex(i));
+		}
+		indexBuffer.flip();
 		
-		vertexBuffer = ByteBuffer.allocateDirect(verticesData.length * FLOAT_SIZE_BYTES)
+		vertexBuffer = ByteBuffer.allocateDirect(BATCH_CAPACITY * 4 * VERTICES_DATA_STRIDE * FLOAT_SIZE_BYTES)
 				.order(ByteOrder.nativeOrder())
 				.asFloatBuffer();
-		vertexBuffer.put(verticesData).flip();
+		copyGeometryToVertexBuffer();
 		
 		mvpIndexBuffer = ByteBuffer.allocateDirect(mvpIndices.length * FLOAT_SIZE_BYTES)
 				.order(ByteOrder.nativeOrder())
@@ -102,16 +108,38 @@ public class PositionTextureSpriteBatch implements SpriteBatch {
 	}
 	
 	/**
+	 * Copia los datos de la geometria al buffer
+	 */
+	private void copyGeometryToVertexBuffer() {
+		vertexBuffer.clear();
+		int nVertices = BATCH_CAPACITY * 4;
+		Vector3 position;
+		Vector2 textureUV;
+		for (int i = 0; i < nVertices; i++) {
+			position = geometry.getVertex(i);
+			vertexBuffer.put(position.getX());
+			vertexBuffer.put(position.getY());
+			vertexBuffer.put(position.getZ());
+			
+			textureUV = geometry.getTextureUV(i);
+			vertexBuffer.put(textureUV.getX());
+			vertexBuffer.put(textureUV.getY());
+		}
+		vertexBuffer.position(batchSize * VERTICES_DATA_STRIDE * 4).flip();
+	}
+	
+	/**
 	 * Inicializa el array de indices de los vertices que definen la geometria de la malla de sprites
 	 */
 	private void setupIndices() {
-		for (int i = 0, j = 0; i < indices.length; i += 6, j += 4) {
-			indices[i + 0] = (short) (j + 0);
-			indices[i + 1] = (short) (j + 1);
-			indices[i + 2] = (short) (j + 2);
-			indices[i + 3] = (short) (j + 2);
-			indices[i + 4] = (short) (j + 3);
-			indices[i + 5] = (short) (j + 0);
+		int numIndices = BATCH_CAPACITY * 6;
+		for (int i = 0, j = 0; i < numIndices; i += 6, j += 4) {
+			geometry.addIndex((short) (j + 0));
+			geometry.addIndex((short) (j + 1));
+			geometry.addIndex((short) (j + 2));
+			geometry.addIndex((short) (j + 2));
+			geometry.addIndex((short) (j + 3));
+			geometry.addIndex((short) (j + 0));
 		}
 	}
 	
@@ -132,31 +160,20 @@ public class PositionTextureSpriteBatch implements SpriteBatch {
 	 * Inicializa el array de vertices que definen la geometria de la malla del batch
 	 */
 	private void setupVerticesData() {
-		for (int i = 0; i < verticesData.length; i += 20) {
+		int nVertices = BATCH_CAPACITY * 4;
+		for (int i = 0; i < nVertices; i++) {
 			// Bottom-Left
-			verticesData[i + 0] = -0.5f;
-			verticesData[i + 1] = -0.5f;
-			verticesData[i + 2] = 0.0f;
-			verticesData[i + 3] = 0.0f;
-			verticesData[i + 4] = 1.0f;
+			geometry.addVertex(new Vector3(-0.5f, -0.5f, 0.0f));
+			geometry.addTextureUV(new Vector2(0.0f, 1.0f));
 			// Bottom-Right
-			verticesData[i + 5] = 0.5f;
-			verticesData[i + 6] = -0.5f;
-			verticesData[i + 7] = 0.0f;
-			verticesData[i + 8] = 1.0f;
-			verticesData[i + 9] = 1.0f;
+			geometry.addVertex(new Vector3(0.5f, -0.5f, 0.0f));
+			geometry.addTextureUV(new Vector2(1.0f, 1.0f));
 			// Top-Right
-			verticesData[i + 10] = 0.5f;
-			verticesData[i + 11] = 0.5f;
-			verticesData[i + 12] = 0.0f;
-			verticesData[i + 13] = 1.0f;
-			verticesData[i + 14] = 0.0f;
+			geometry.addVertex(new Vector3(0.5f, 0.5f, 0.0f));
+			geometry.addTextureUV(new Vector2(1.0f, 0.0f));
 			// Top-Left
-			verticesData[i + 15] = -0.5f;
-			verticesData[i + 16] = 0.5f;
-			verticesData[i + 17] = 0.0f;
-			verticesData[i + 18] = 0.0f;
-			verticesData[i + 19] = 0.0f;
+			geometry.addVertex(new Vector3(-0.5f, 0.5f, 0.0f));
+			geometry.addTextureUV(new Vector2(0.0f, 0.0f));
 		}
 	}
 	
@@ -229,8 +246,7 @@ public class PositionTextureSpriteBatch implements SpriteBatch {
 	 * Renderizatodos los sprites del batch en 1 sola llamada
 	 */
 	protected void drawBatch() {
-		vertexBuffer.clear();
-		vertexBuffer.put(verticesData).position(batchSize * VERTICES_DATA_STRIDE * 4).flip();
+		copyGeometryToVertexBuffer();
 		
 		mvpIndexBuffer.limit(batchSize * 4).position(0);
 		
@@ -285,19 +301,15 @@ public class PositionTextureSpriteBatch implements SpriteBatch {
 	 * @param sprite Sprite que se va a renderizar
 	 */
 	protected void setSpriteVerticesData(Sprite sprite) {
-		int i = batchSize * VERTICES_DATA_STRIDE * 4;
+		int i = batchSize * 4;
 		// Bottom-Left
-		verticesData[i + 3] = sprite.getTextureRegion().getU1();
-		verticesData[i + 4] = sprite.getTextureRegion().getV2();
+		geometry.getTextureUV(i + 0).set(sprite.getTextureRegion().getU1(), sprite.getTextureRegion().getV2());
 		// Bottom-Right
-		verticesData[i + 8] = sprite.getTextureRegion().getU2();
-		verticesData[i + 9] = sprite.getTextureRegion().getV2();
+		geometry.getTextureUV(i + 1).set(sprite.getTextureRegion().getU2(), sprite.getTextureRegion().getV2());
 		// Top-Right
-		verticesData[i + 13] = sprite.getTextureRegion().getU2();
-		verticesData[i + 14] = sprite.getTextureRegion().getV1();
+		geometry.getTextureUV(i + 2).set(sprite.getTextureRegion().getU2(), sprite.getTextureRegion().getV1());
 		// Top-Left
-		verticesData[i + 18] = sprite.getTextureRegion().getU1();
-		verticesData[i + 19] = sprite.getTextureRegion().getV1();
+		geometry.getTextureUV(i + 3).set(sprite.getTextureRegion().getU1(), sprite.getTextureRegion().getV1());
 	}
 	
 	/**
