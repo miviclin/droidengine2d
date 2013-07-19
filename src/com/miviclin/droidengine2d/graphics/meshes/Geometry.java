@@ -1,5 +1,6 @@
-package com.miviclin.droidengine2d.graphics;
+package com.miviclin.droidengine2d.graphics.meshes;
 
+import com.miviclin.droidengine2d.graphics.Color;
 import com.miviclin.droidengine2d.util.Array;
 import com.miviclin.droidengine2d.util.math.Vector2;
 import com.miviclin.droidengine2d.util.math.Vector3;

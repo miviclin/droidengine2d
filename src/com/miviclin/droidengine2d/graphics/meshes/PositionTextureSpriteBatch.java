@@ -1,4 +1,4 @@
-package com.miviclin.droidengine2d.graphics.sprites;
+package com.miviclin.droidengine2d.graphics.meshes;
 
 import static com.miviclin.droidengine2d.util.PrimitiveTypeSize.SIZE_OF_FLOAT;
 
@@ -6,7 +6,6 @@ import java.nio.FloatBuffer;
 
 import android.content.Context;
 
-import com.miviclin.droidengine2d.graphics.RectangleBatchGeometry;
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
 import com.miviclin.droidengine2d.graphics.shaders.PositionTextureBatchShaderProgram;
 import com.miviclin.droidengine2d.graphics.shaders.ShaderProgram;

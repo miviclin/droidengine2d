@@ -10,7 +10,7 @@ import android.view.View.OnTouchListener;
 import com.miviclin.droidengine2d.graphics.GLView;
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
 import com.miviclin.droidengine2d.graphics.cameras.OrthographicCamera;
-import com.miviclin.droidengine2d.graphics.sprites.SpriteBatch;
+import com.miviclin.droidengine2d.graphics.meshes.SpriteBatch;
 import com.miviclin.droidengine2d.graphics.textures.TextureManager;
 import com.miviclin.droidengine2d.scenes.Scene;
 import com.miviclin.droidengine2d.scenes.SceneManager;
