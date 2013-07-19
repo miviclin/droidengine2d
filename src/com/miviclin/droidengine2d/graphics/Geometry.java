@@ -14,7 +14,7 @@ public class Geometry {
 	
 	private Array<Vector3> vertices;
 	private Array<Short> indices;
-	private Array<Vector3> colors;
+	private Array<Color> colors;
 	private Array<Vector2> texturesUV;
 	private boolean updateVertices;
 	private boolean updateIndices;
@@ -32,7 +32,7 @@ public class Geometry {
 	public Geometry(int numVertices, int numIndices, boolean usesColors, boolean usesTexturesUV) {
 		this.vertices = new Array<Vector3>(numVertices);
 		this.indices = new Array<Short>(numIndices);
-		this.colors = (usesColors) ? new Array<Vector3>(numVertices) : null;
+		this.colors = (usesColors) ? new Array<Color>(numVertices) : null;
 		this.texturesUV = (usesTexturesUV) ? new Array<Vector2>(numVertices) : null;
 		this.updateVertices = false;
 		this.updateIndices = false;
@@ -99,9 +99,9 @@ public class Geometry {
 	/**
 	 * Agrega un color a la geometria. El color ira asociado al vertice que se encuentre en el mismo indice.
 	 * 
-	 * @param color Color RGB
+	 * @param color Color
 	 */
-	public void addColor(Vector3 color) {
+	public void addColor(Color color) {
 		colors.add(color);
 	}
 	
@@ -109,9 +109,9 @@ public class Geometry {
 	 * Devuelve el color situado en el indice especificado del Array de colores
 	 * 
 	 * @param index Indice del vertice al que va asociado el color
-	 * @return Color RGB o null si esta {@link Geometry} no contiene informacion de color
+	 * @return Coloro null si esta {@link Geometry} no contiene informacion de color
 	 */
-	public Vector3 getColor(int index) {
+	public Color getColor(int index) {
 		if (colors == null) {
 			return null;
 		}
