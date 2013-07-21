@@ -6,6 +6,7 @@ import java.nio.FloatBuffer;
 
 import android.content.Context;
 
+import com.miviclin.droidengine2d.graphics.SpriteBatch;
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
 import com.miviclin.droidengine2d.graphics.shader.PositionTextureBatchShaderProgram;
 import com.miviclin.droidengine2d.graphics.shader.ShaderProgram;

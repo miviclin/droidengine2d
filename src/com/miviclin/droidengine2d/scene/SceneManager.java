@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.miviclin.droidengine2d.Game;
-import com.miviclin.droidengine2d.graphics.mesh.SpriteBatch;
+import com.miviclin.droidengine2d.graphics.SpriteBatch;
 
 /**
  * Gestor de Scenes

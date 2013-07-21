@@ -1,4 +1,4 @@
-package com.miviclin.droidengine2d.graphics.mesh;
+package com.miviclin.droidengine2d.graphics;
 
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
 import com.miviclin.droidengine2d.graphics.shader.ShaderProgram;

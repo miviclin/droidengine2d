@@ -9,7 +9,6 @@ import android.opengl.GLES20;
 import com.miviclin.droidengine2d.Game;
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
 import com.miviclin.droidengine2d.graphics.mesh.PositionTextureSpriteBatch;
-import com.miviclin.droidengine2d.graphics.mesh.SpriteBatch;
 
 /**
  * DefaultRenderer

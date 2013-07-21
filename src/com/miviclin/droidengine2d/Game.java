@@ -8,9 +8,9 @@ import android.view.View.OnKeyListener;
 import android.view.View.OnTouchListener;
 
 import com.miviclin.droidengine2d.graphics.GLView;
+import com.miviclin.droidengine2d.graphics.SpriteBatch;
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
 import com.miviclin.droidengine2d.graphics.cameras.OrthographicCamera;
-import com.miviclin.droidengine2d.graphics.mesh.SpriteBatch;
 import com.miviclin.droidengine2d.graphics.texture.TextureManager;
 import com.miviclin.droidengine2d.scene.Scene;
 import com.miviclin.droidengine2d.scene.SceneManager;

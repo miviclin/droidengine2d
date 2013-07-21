@@ -1,4 +1,4 @@
-package com.miviclin.droidengine2d.graphics.mesh;
+package com.miviclin.droidengine2d.graphics;
 
 import java.util.HashMap;
 
