@@ -13,6 +13,7 @@ import android.opengl.GLES20;
 import com.miviclin.droidengine2d.graphics.GLDebugger;
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
 import com.miviclin.droidengine2d.graphics.shader.ShaderProgram;
+import com.miviclin.droidengine2d.graphics.shape.RectangularShape;
 import com.miviclin.droidengine2d.util.Dimensions2D;
 import com.miviclin.droidengine2d.util.math.Vector2;
 

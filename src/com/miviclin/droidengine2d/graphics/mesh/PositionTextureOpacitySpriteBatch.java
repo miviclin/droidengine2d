@@ -7,6 +7,7 @@ import android.content.Context;
 import com.miviclin.droidengine2d.graphics.Color;
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
 import com.miviclin.droidengine2d.graphics.shader.PositionTextureOpacityBatchShaderProgram;
+import com.miviclin.droidengine2d.graphics.shape.Sprite;
 import com.miviclin.droidengine2d.util.math.Vector2;
 import com.miviclin.droidengine2d.util.math.Vector3;
 
