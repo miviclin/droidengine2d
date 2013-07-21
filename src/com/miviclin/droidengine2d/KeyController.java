@@ -3,7 +3,7 @@ package com.miviclin.droidengine2d;
 import android.view.KeyEvent;
 
 import com.miviclin.droidengine2d.input.KeyListener;
-import com.miviclin.droidengine2d.scenes.Scene;
+import com.miviclin.droidengine2d.scene.Scene;
 
 /**
  * Controlador de eventos Key

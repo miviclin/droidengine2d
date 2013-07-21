@@ -1,9 +1,9 @@
-package com.miviclin.droidengine2d.scenes;
+package com.miviclin.droidengine2d.scene;
 
 import com.miviclin.droidengine2d.Game;
 import com.miviclin.droidengine2d.KeyController;
 import com.miviclin.droidengine2d.TouchController;
-import com.miviclin.droidengine2d.graphics.meshes.SpriteBatch;
+import com.miviclin.droidengine2d.graphics.mesh.SpriteBatch;
 
 /**
  * Representa una pantalla del juego (menu principal, nivel 1, nivel 2, pantalla de creditos, etc).

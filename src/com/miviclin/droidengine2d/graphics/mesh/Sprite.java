@@ -1,6 +1,6 @@
-package com.miviclin.droidengine2d.graphics.meshes;
+package com.miviclin.droidengine2d.graphics.mesh;
 
-import com.miviclin.droidengine2d.graphics.textures.TextureRegion;
+import com.miviclin.droidengine2d.graphics.texture.TextureRegion;
 
 /**
  * Sprite

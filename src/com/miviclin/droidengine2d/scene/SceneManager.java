@@ -1,10 +1,10 @@
-package com.miviclin.droidengine2d.scenes;
+package com.miviclin.droidengine2d.scene;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import com.miviclin.droidengine2d.Game;
-import com.miviclin.droidengine2d.graphics.meshes.SpriteBatch;
+import com.miviclin.droidengine2d.graphics.mesh.SpriteBatch;
 
 /**
  * Gestor de Scenes

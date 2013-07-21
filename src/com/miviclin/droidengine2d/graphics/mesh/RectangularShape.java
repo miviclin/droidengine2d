@@ -1,4 +1,4 @@
-package com.miviclin.droidengine2d.graphics.meshes;
+package com.miviclin.droidengine2d.graphics.mesh;
 
 import com.miviclin.droidengine2d.graphics.Color;
 import com.miviclin.droidengine2d.util.Dimensions2D;

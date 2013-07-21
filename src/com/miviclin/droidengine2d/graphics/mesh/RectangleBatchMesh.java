@@ -1,4 +1,4 @@
-package com.miviclin.droidengine2d.graphics.meshes;
+package com.miviclin.droidengine2d.graphics.mesh;
 
 import static com.miviclin.droidengine2d.util.PrimitiveTypeSize.SIZE_OF_FLOAT;
 import static com.miviclin.droidengine2d.util.PrimitiveTypeSize.SIZE_OF_SHORT;
@@ -12,7 +12,7 @@ import android.opengl.GLES20;
 
 import com.miviclin.droidengine2d.graphics.GLDebugger;
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
-import com.miviclin.droidengine2d.graphics.shaders.ShaderProgram;
+import com.miviclin.droidengine2d.graphics.shader.ShaderProgram;
 import com.miviclin.droidengine2d.util.Dimensions2D;
 import com.miviclin.droidengine2d.util.math.Vector2;
 

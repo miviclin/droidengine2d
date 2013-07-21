@@ -1,4 +1,4 @@
-package com.miviclin.droidengine2d.graphics.meshes;
+package com.miviclin.droidengine2d.graphics.mesh;
 
 import java.nio.FloatBuffer;
 
@@ -6,29 +6,22 @@ import android.content.Context;
 
 import com.miviclin.droidengine2d.graphics.Color;
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
-import com.miviclin.droidengine2d.graphics.shaders.PositionTextureOpacityBatchShaderProgram;
+import com.miviclin.droidengine2d.graphics.shader.PositionTextureColorBatchShaderProgram;
 import com.miviclin.droidengine2d.util.math.Vector2;
 import com.miviclin.droidengine2d.util.math.Vector3;
 
-/**
- * PositionTextureSpriteBatch que tiene en cuenta la opacidad de los sprites
- * 
- * @see PositionTextureSpriteBatch
- * @author Miguel Vicente Linares
- * 
- */
-public class PositionTextureOpacitySpriteBatch extends PositionTextureSpriteBatch {
+public class PositionTextureColorSpriteBatch extends PositionTextureSpriteBatch {
 	
-	private int vertexOpacityOffset;
+	private int vertexColorOffset;
 	
-	public PositionTextureOpacitySpriteBatch(Context context) {
-		this(context, new PositionTextureOpacityBatchShaderProgram());
+	public PositionTextureColorSpriteBatch(Context context) {
+		this(context, new PositionTextureColorBatchShaderProgram());
 	}
 	
-	protected PositionTextureOpacitySpriteBatch(Context context, PositionTextureOpacityBatchShaderProgram shaderProgram) {
+	protected PositionTextureColorSpriteBatch(Context context, PositionTextureColorBatchShaderProgram shaderProgram) {
 		super(context, shaderProgram);
-		setVerticesDataStride(6);
-		this.vertexOpacityOffset = 5;
+		setVerticesDataStride(9);
+		this.vertexColorOffset = 5;
 		setGeometry(new RectangleBatchGeometry(BATCH_CAPACITY, true, true));
 	}
 	
@@ -75,6 +68,9 @@ public class PositionTextureOpacitySpriteBatch extends PositionTextureSpriteBatc
 			vertexBuffer.put(textureUV.getY());
 			
 			color = getGeometry().getColor(i);
+			vertexBuffer.put(color.getR());
+			vertexBuffer.put(color.getG());
+			vertexBuffer.put(color.getB());
 			vertexBuffer.put(color.getA());
 		}
 	}
@@ -82,30 +78,33 @@ public class PositionTextureOpacitySpriteBatch extends PositionTextureSpriteBatc
 	@Override
 	protected void setupVertexShaderVariables(int batchSize) {
 		super.setupVertexShaderVariables(batchSize);
-		PositionTextureOpacityBatchShaderProgram shaderProgram = getShaderProgram();
-		shaderProgram.specifyVerticesOpacity(getVertexBuffer(), vertexOpacityOffset, getVerticesDataStrideBytes());
+		PositionTextureColorBatchShaderProgram shaderProgram = getShaderProgram();
+		shaderProgram.specifyVerticesColors(getVertexBuffer(), vertexColorOffset, 4, getVerticesDataStrideBytes());
 	}
 	
 	@Override
-	public PositionTextureOpacityBatchShaderProgram getShaderProgram() {
-		return (PositionTextureOpacityBatchShaderProgram) super.getShaderProgram();
+	public PositionTextureColorBatchShaderProgram getShaderProgram() {
+		return (PositionTextureColorBatchShaderProgram) super.getShaderProgram();
 	}
 	
 	@Override
 	protected void drawSprite(Sprite sprite, Camera camera) {
 		super.drawSprite(sprite, camera);
-		setupOpacity(sprite);
+		setupColor(sprite);
 	}
 	
 	/**
-	 * Define la opacidad del siguiente sprite en el batch
+	 * Define el color del siguiente sprite en el batch
 	 * 
 	 * @param sprite Aprite que se esta agregando al batch
 	 */
-	private void setupOpacity(Sprite sprite) {
+	private void setupColor(Sprite sprite) {
 		int spriteOffset = getBatchSize() * 4;
 		int limit = spriteOffset + 4;
 		for (int i = spriteOffset; i < limit; i++) {
+			getGeometry().getColor(i).setR(sprite.getColor().getR());
+			getGeometry().getColor(i).setG(sprite.getColor().getG());
+			getGeometry().getColor(i).setB(sprite.getColor().getB());
 			getGeometry().getColor(i).setA(sprite.getColor().getA());
 		}
 	}
