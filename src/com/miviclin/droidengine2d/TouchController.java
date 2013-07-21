@@ -3,7 +3,7 @@ package com.miviclin.droidengine2d;
 import android.view.MotionEvent;
 
 import com.miviclin.droidengine2d.input.TouchListener;
-import com.miviclin.droidengine2d.scenes.Scene;
+import com.miviclin.droidengine2d.scene.Scene;
 
 /**
  * Controlador de eventos Touch

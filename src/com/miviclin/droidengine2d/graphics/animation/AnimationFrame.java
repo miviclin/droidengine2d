@@ -1,6 +1,6 @@
 package com.miviclin.droidengine2d.graphics.animation;
 
-import com.miviclin.droidengine2d.graphics.textures.TextureRegion;
+import com.miviclin.droidengine2d.graphics.texture.TextureRegion;
 
 /**
  * Representa un frame de animacion

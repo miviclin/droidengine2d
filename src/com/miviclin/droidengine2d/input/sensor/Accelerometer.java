@@ -1,4 +1,4 @@
-package com.miviclin.droidengine2d.input.sensors;
+package com.miviclin.droidengine2d.input.sensor;
 
 import android.app.Activity;
 import android.content.Context;

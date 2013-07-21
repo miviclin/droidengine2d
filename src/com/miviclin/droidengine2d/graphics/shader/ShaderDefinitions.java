@@ -1,4 +1,4 @@
-package com.miviclin.droidengine2d.graphics.shaders;
+package com.miviclin.droidengine2d.graphics.shader;
 
 /**
  * Definiciones en GLSL de los shaders

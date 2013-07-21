@@ -1,4 +1,4 @@
-package com.miviclin.droidengine2d.graphics.shaders;
+package com.miviclin.droidengine2d.graphics.shader;
 
 import java.nio.FloatBuffer;
 
@@ -7,20 +7,20 @@ import android.opengl.GLES20;
 import com.miviclin.droidengine2d.graphics.GLDebugger;
 
 /**
- * ShaderProgram configurado para renderizar batches de poligonos con posicion, textura y opacidad
+ * ShaderProgram configurado para renderizar batches de poligonos con posicion, textura y color
  * 
  * @author Miguel Vicente Linares
  * 
  */
-public class PositionTextureOpacityBatchShaderProgram extends PositionTextureBatchShaderProgram {
+public class PositionTextureColorBatchShaderProgram extends PositionTextureBatchShaderProgram {
 	
-	private int aOpacityHandle;
+	private int aColorHandle;
 	
 	/**
 	 * Crea un PositionTextureOpacityBatchShaderProgram
 	 */
-	public PositionTextureOpacityBatchShaderProgram() {
-		super(new PositionTextureOpacityBatchShaderDefinitions());
+	public PositionTextureColorBatchShaderProgram() {
+		super(new PositionTextureColorBatchShaderDefinitions());
 	}
 	
 	/**
@@ -28,7 +28,7 @@ public class PositionTextureOpacityBatchShaderProgram extends PositionTextureBat
 	 * 
 	 * @param shaderDefinitions Objeto que define los shaders
 	 */
-	protected PositionTextureOpacityBatchShaderProgram(ShaderDefinitions shaderDefinitions) {
+	protected PositionTextureColorBatchShaderProgram(ShaderDefinitions shaderDefinitions) {
 		super(shaderDefinitions);
 	}
 	
@@ -36,26 +36,27 @@ public class PositionTextureOpacityBatchShaderProgram extends PositionTextureBat
 	protected void link(int programID) {
 		super.link(programID);
 		
-		aOpacityHandle = GLES20.glGetAttribLocation(programID, "aOpacity");
+		aColorHandle = GLES20.glGetAttribLocation(programID, "aColor");
 		GLDebugger.getInstance().passiveCheckGLError();
-		if (aOpacityHandle == -1) {
-			throw new RuntimeException("Could not get attrib location for aOpacity");
+		if (aColorHandle == -1) {
+			throw new RuntimeException("Could not get attrib location for aColor");
 		}
 	}
 	
 	/**
-	 * Especifica los valores de la opacidad de la textura que se van a enviar al vertex shader
+	 * Especifica los valores de color asociados a cada vertice que se van a enviar al vertex shader
 	 * 
 	 * @param buffer Buffer que contiene los valores asociados a cada vertice
 	 * @param offset Posicion del buffer en la que se encuentra el primer valor
-	 * @param stride Numero de bytes que hay en el buffer entre un valor y el siguiente
+	 * @param size Numero de coordenadas que se especifican por vertice (RGB=3; RGBA=4)
+	 * @param stride Numero de bytes que hay en el buffer entre la primera componente de un color y la primera del siguiente
 	 */
-	public void specifyVerticesOpacity(FloatBuffer buffer, int offset, int stride) {
-		GLES20.glEnableVertexAttribArray(aOpacityHandle);
+	public void specifyVerticesColors(FloatBuffer buffer, int offset, int size, int stride) {
+		GLES20.glEnableVertexAttribArray(aColorHandle);
 		GLDebugger.getInstance().passiveCheckGLError();
 		
 		buffer.position(offset);
-		GLES20.glVertexAttribPointer(aOpacityHandle, 1, GLES20.GL_FLOAT, false, stride, buffer);
+		GLES20.glVertexAttribPointer(aColorHandle, size, GLES20.GL_FLOAT, false, stride, buffer);
 		GLDebugger.getInstance().passiveCheckGLError();
 	}
 	
@@ -65,7 +66,7 @@ public class PositionTextureOpacityBatchShaderProgram extends PositionTextureBat
 	 * @author Miguel Vicente Linares
 	 * 
 	 */
-	protected static class PositionTextureOpacityBatchShaderDefinitions extends ShaderDefinitions {
+	protected static class PositionTextureColorBatchShaderDefinitions extends ShaderDefinitions {
 		
 		@Override
 		public String getVertexShaderDefinition() {
@@ -74,13 +75,13 @@ public class PositionTextureOpacityBatchShaderProgram extends PositionTextureBat
 					"attribute float aMVPMatrixIndex;\n" +
 					"attribute vec4 aPosition;\n" +
 					"attribute vec2 aTextureCoord;\n" +
-					"attribute float aOpacity;\n" +
+					"attribute vec4 aColor;\n" +
 					"varying vec2 vTextureCoord;\n" +
-					"varying float vOpacity;\n" +
+					"varying vec4 vColor;\n" +
 					"void main() {\n" +
 					"    gl_Position = uMVPMatrix[int(aMVPMatrixIndex)] * aPosition;\n" +
 					"    vTextureCoord = aTextureCoord;\n" +
-					"    vOpacity = aOpacity;\n" +
+					"    vColor = aColor;\n" +
 					"}";
 		}
 		
@@ -89,11 +90,10 @@ public class PositionTextureOpacityBatchShaderProgram extends PositionTextureBat
 			return "" +
 					"precision mediump float;\n" +
 					"varying vec2 vTextureCoord;\n" +
-					"varying float vOpacity;\n" +
+					"varying vec4 vColor;\n" +
 					"uniform sampler2D sTexture;\n" +
 					"void main() {\n" +
-					"    gl_FragColor = texture2D(sTexture, vTextureCoord);\n" +
-					"    gl_FragColor.w *= vOpacity;\n" +
+					"    gl_FragColor = texture2D(sTexture, vTextureCoord) * vColor;\n" +
 					"}";
 		}
 		

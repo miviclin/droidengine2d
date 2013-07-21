@@ -1,59 +1,54 @@
-package com.miviclin.droidengine2d.graphics.sprites;
+package com.miviclin.droidengine2d.graphics.shape;
 
 import com.miviclin.droidengine2d.graphics.Color;
-import com.miviclin.droidengine2d.graphics.textures.TextureRegion;
 import com.miviclin.droidengine2d.util.Dimensions2D;
-import com.miviclin.droidengine2d.util.Point2D;
+import com.miviclin.droidengine2d.util.math.Vector2;
 
 /**
- * Sprite
+ * Define una forma rectangular que almacena informacion sobre su posicion, rotacion, etc.
  * 
  * @author Miguel Vicente Linares
  * 
  */
-public class Sprite {
+public abstract class RectangularShape {
 	
-	private TextureRegion textureRegion;
-	private Point2D position = new Point2D(0.0f, 0.0f);
-	private Point2D center = new Point2D(0.0f, 0.0f);
+	private Vector2 position = new Vector2(0.0f, 0.0f);
+	private Vector2 center = new Vector2(0.0f, 0.0f);
 	private Dimensions2D dimensions = new Dimensions2D(1.0f, 1.0f);
-	private Point2D rotationPoint = new Point2D(0.0f, 0.0f);
+	private Vector2 rotationPoint = new Vector2(0.0f, 0.0f);
 	private float rotationAroundPoint;
 	private float rotationAroundCenter;
 	private Color color;
 	
 	/**
-	 * Crea un Sprite
+	 * Crea un RectangularShape
 	 * 
-	 * @param x Coordenada X en pixeles de la esquina superior izquierda del sprite
-	 * @param y Coordenada Y en pixeles de la esquina superior izquierda del sprite
-	 * @param width Ancho del sprite
-	 * @param height Alto del sprite
-	 * @param textureRegion TextureRegion (region de una textura que se toma como imagen del sprite)
+	 * @param x Coordenada X en pixeles de la esquina superior izquierda
+	 * @param y Coordenada Y en pixeles de la esquina superior izquierda
+	 * @param width Ancho
+	 * @param height Alto
 	 */
-	public Sprite(float x, float y, float width, float height, TextureRegion textureRegion) {
+	public RectangularShape(float x, float y, float width, float height) {
 		checkDimensions(width, height);
-		checkTextureRegion(textureRegion);
 		this.position.set(x, y);
 		this.dimensions.set(width, height);
 		this.rotationAroundPoint = 0.0f;
 		this.rotationAroundCenter = 0.0f;
-		this.textureRegion = textureRegion;
 		this.center.set(width / 2, height / 2);
 		this.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
 	}
 	
 	/**
-	 * Devuelve la posicion del sprite en la pantalla
+	 * Devuelve la posicion del RectangularShape en la pantalla
 	 * 
-	 * @return punto en el que esta situada la esquina superior izquierda del sprite
+	 * @return punto en el que esta situada la esquina superior izquierda
 	 */
-	public Point2D getPosition() {
+	public Vector2 getPosition() {
 		return position;
 	}
 	
 	/**
-	 * Asigna la posicion del sprite
+	 * Asigna la posicion del RectangularShape
 	 * 
 	 * @param x coordenada X, en pixeles
 	 * @param y coordenada Y, en pixeles
@@ -63,25 +58,25 @@ public class Sprite {
 	}
 	
 	/**
-	 * Asigna la posicion del sprite
+	 * Asigna la posicion del RectangularShape
 	 * 
 	 * @param position posicion en la pantalla
 	 */
-	public void setPosition(Point2D position) {
+	public void setPosition(Vector2 position) {
 		this.position.set(position);
 	}
 	
 	/**
-	 * Devuelve las dimensiones del sprite
+	 * Devuelve las dimensiones del RectangularShape
 	 * 
-	 * @return dimensiones del sprite
+	 * @return dimensiones del RectangularShape
 	 */
 	public Dimensions2D getDimensions() {
 		return dimensions;
 	}
 	
 	/**
-	 * Asigna las dimensiones del sprite
+	 * Asigna las dimensiones del RectangularShape
 	 * 
 	 * @param width Ancho
 	 * @param height Alto
@@ -92,7 +87,7 @@ public class Sprite {
 	}
 	
 	/**
-	 * Devuelve el angulo de rotacion del sprite sobre su centro
+	 * Devuelve el angulo de rotacion del RectangularShape sobre su centro
 	 * 
 	 * @return angulo
 	 */
@@ -101,7 +96,7 @@ public class Sprite {
 	}
 	
 	/**
-	 * Asigna el angulo de rotacion del sprite sobre su centro
+	 * Asigna el angulo de rotacion del RectangularShape sobre su centro
 	 * 
 	 * @param angle angulo
 	 */
@@ -110,7 +105,7 @@ public class Sprite {
 	}
 	
 	/**
-	 * Devuelve el angulo de rotacion del sprite sobre un punto externo
+	 * Devuelve el angulo de rotacion del RectangularShape sobre un punto externo
 	 * 
 	 * @return angulo
 	 */
@@ -119,11 +114,11 @@ public class Sprite {
 	}
 	
 	/**
-	 * Devuelve el punto externo de rotacion del sprite
+	 * Devuelve el punto externo de rotacion del RectangularShape
 	 * 
-	 * @return Punto externo al sprite
+	 * @return Punto externo al RectangularShape
 	 */
-	public Point2D getRotationPoint() {
+	public Vector2 getRotationPoint() {
 		return rotationPoint;
 	}
 	
@@ -145,51 +140,31 @@ public class Sprite {
 	 * @param angle angulo
 	 * @param point Punto externo de rotacion
 	 */
-	public void setRotationAroundExternalPoint(float angle, Point2D point) {
+	public void setRotationAroundExternalPoint(float angle, Vector2 point) {
 		rotationAroundPoint = angle;
 		rotationPoint.set(point);
 	}
 	
 	/**
-	 * Devuelve la region de la textura correspondiente al sprite
+	 * Devuelve el punto que esta en el centro del RectangularShape
 	 * 
-	 * @return TextureRegion
+	 * @return Vector2
 	 */
-	public TextureRegion getTextureRegion() {
-		return textureRegion;
-	}
-	
-	/**
-	 * Asigna un TextureRegion al sprite
-	 * 
-	 * @param textureRegion Nuevo TextureRegion
-	 * @throws IllegalArgumentException Si el TextureRegion especificado es null
-	 */
-	public void setTextureRegion(TextureRegion textureRegion) {
-		checkTextureRegion(textureRegion);
-		this.textureRegion = textureRegion;
-	}
-	
-	/**
-	 * Devuelve el punto que esta en el centro del sprite
-	 * 
-	 * @return Point2D
-	 */
-	public Point2D getCenter() {
+	public Vector2 getCenter() {
 		return center;
 	}
 	
 	/**
-	 * Devuelve el color del sprite
+	 * Devuelve el color del RectangularShape
 	 * 
-	 * @return Color del sprite
+	 * @return Color del RectangularShape
 	 */
 	public Color getColor() {
 		return color;
 	}
 	
 	/**
-	 * Asigna un color al sprite
+	 * Asigna un color al RectangularShape
 	 * 
 	 * @param color Color
 	 */
@@ -209,17 +184,6 @@ public class Sprite {
 		}
 		if (height <= 0) {
 			throw new IllegalArgumentException("height must be greater than 0");
-		}
-	}
-	
-	/**
-	 * Comprueba que el TextureRegion especificado no sea null y lanza una excepcion en caso contrario
-	 * 
-	 * @param textureRegion TextureRegion
-	 */
-	private void checkTextureRegion(TextureRegion textureRegion) {
-		if (textureRegion == null) {
-			throw new IllegalArgumentException("The TextureRegion can not be null");
 		}
 	}
 	

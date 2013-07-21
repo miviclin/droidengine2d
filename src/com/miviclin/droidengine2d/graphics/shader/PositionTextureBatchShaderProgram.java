@@ -1,4 +1,4 @@
-package com.miviclin.droidengine2d.graphics.shaders;
+package com.miviclin.droidengine2d.graphics.shader;
 
 import java.nio.FloatBuffer;
 
