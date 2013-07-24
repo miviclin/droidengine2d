@@ -15,6 +15,7 @@ import android.hardware.SensorManager;
  */
 public class Accelerometer implements SensorEventListener {
 	
+	private volatile float lowPassFilterAttenuation;
 	private volatile float[] accelerometerValues;
 	private SensorManager sensorManager;
 	
@@ -24,6 +25,17 @@ public class Accelerometer implements SensorEventListener {
 	 * @param activity Activity
 	 */
 	public Accelerometer(Activity activity) {
+		this(0.2f, activity);
+	}
+	
+	/**
+	 * Crea el objeto y empieza a registrar valores.
+	 * 
+	 * @param lowPassFilterAttenuation Coeficiente de atenuacion del filtro a paso bajo
+	 * @param activity Activity
+	 */
+	public Accelerometer(float lowPassFilterAttenuation, Activity activity) {
+		this.lowPassFilterAttenuation = lowPassFilterAttenuation;
 		accelerometerValues = new float[3];
 		sensorManager = (SensorManager) activity.getSystemService(Context.SENSOR_SERVICE);
 		sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
@@ -32,7 +44,7 @@ public class Accelerometer implements SensorEventListener {
 	@Override
 	public void onSensorChanged(SensorEvent event) {
 		if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-			SensorUtilities.lowPassFilter(event.values, accelerometerValues, 3, 0.2f);
+			SensorUtilities.lowPassFilter(event.values, accelerometerValues, 3, lowPassFilterAttenuation);
 		}
 	}
 	
@@ -52,6 +64,24 @@ public class Accelerometer implements SensorEventListener {
 	 */
 	public void stopListening() {
 		sensorManager.unregisterListener(this);
+	}
+	
+	/**
+	 * Devuelve el coeficiente de atenuacion del filtro a paso bajo
+	 * 
+	 * @return Coeficiente de atenuacion del filtro a paso bajo
+	 */
+	public float getLowPassFilterAttenuation() {
+		return lowPassFilterAttenuation;
+	}
+	
+	/**
+	 * Asigna el coeficiente de atenuacion del filtro a paso bajo
+	 * 
+	 * @param lowPassFilterAttenuation Nuevo valor
+	 */
+	public void setLowPassFilterAttenuation(float lowPassFilterAttenuation) {
+		this.lowPassFilterAttenuation = lowPassFilterAttenuation;
 	}
 	
 	/**
