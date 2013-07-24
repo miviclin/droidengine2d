@@ -1,7 +1,7 @@
 package com.miviclin.droidengine2d.graphics;
 
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
-import com.miviclin.droidengine2d.graphics.shape.Sprite;
+import com.miviclin.droidengine2d.graphics.shape.RectangularShape;
 
 /**
  * SpriteBatch permite pintar varios sprites en una sola llamada.
@@ -9,17 +9,17 @@ import com.miviclin.droidengine2d.graphics.shape.Sprite;
  * @author Miguel Vicente Linares
  * 
  */
-public interface SpriteBatch extends ShapeBatch {
+public interface RectangularShapeBatch extends ShapeBatch {
 	
 	/**
-	 * Agrega un sprite al batch.<br>
+	 * Agrega un RectangularShape al batch.<br>
 	 * Si el batch esta lleno, se renderiza el batch y se vacia, posteriormente se agrega el elemento.<br>
 	 * Este metodo se puede llamar varias veces seguidas, entre una llamada a {@link #begin()} y una llamada a {@link #end()} con distintos
-	 * sprites.
+	 * RectangularShape.
 	 * 
-	 * @param sprite Sprite a agregar
+	 * @param shape RectangularShape a agregar
 	 * @param camera Camara
 	 */
-	public void draw(Sprite sprite, Camera camera);
+	public void draw(RectangularShape shape, Camera camera);
 	
 }
