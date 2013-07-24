@@ -8,7 +8,7 @@ import android.view.View.OnKeyListener;
 import android.view.View.OnTouchListener;
 
 import com.miviclin.droidengine2d.graphics.GLView;
-import com.miviclin.droidengine2d.graphics.SpriteBatch;
+import com.miviclin.droidengine2d.graphics.Graphics;
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
 import com.miviclin.droidengine2d.graphics.cameras.OrthographicCamera;
 import com.miviclin.droidengine2d.graphics.texture.TextureManager;
@@ -320,10 +320,12 @@ public abstract class Game implements OnTouchListener, OnKeyListener {
 	/**
 	 * Renderiza los elementos del juego de forma que puedan verse en pantalla.<br>
 	 * Este metodo se ejecuta en el hilo del GLRenderer tras ejecutar {@link #update(float)} en el GameThread
+	 * 
+	 * @param graphics Graphics
 	 */
-	public void draw(SpriteBatch spriteBatch) {
+	public void draw(Graphics graphics) {
 		if (initialized) {
-			sceneManager.draw(spriteBatch);
+			sceneManager.draw(graphics);
 		}
 	}
 	

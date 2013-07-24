@@ -32,6 +32,18 @@ public class Color {
 	}
 	
 	/**
+	 * Copia los valores RGBA del color especificado en este Color
+	 * 
+	 * @param color Color a copiar
+	 */
+	public void set(Color color) {
+		this.r = color.r;
+		this.g = color.g;
+		this.b = color.b;
+		this.a = color.a;
+	}
+	
+	/**
 	 * Devuelve la componente R del color
 	 * 
 	 * @return Valor entre 0.0f y 1.0f

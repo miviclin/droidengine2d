@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.miviclin.droidengine2d.Game;
-import com.miviclin.droidengine2d.graphics.SpriteBatch;
+import com.miviclin.droidengine2d.graphics.Graphics;
 
 /**
  * Gestor de Scenes
@@ -154,12 +154,12 @@ public class SceneManager {
 	
 	/**
 	 * Renderiza los elementos de la Scene activa de forma que puedan verse en pantalla.<br>
-	 * Este metodo se llama desde {@link Game#draw(SpriteBatch)}<br>
+	 * Este metodo se llama desde {@link Game#draw(Graphics)}<br>
 	 * Este metodo se ejecuta en el hilo del GLRenderer tras ejecutar {@link SceneManager#update(float)} en el GameThread
 	 */
-	public void draw(SpriteBatch spriteBatch) {
+	public void draw(Graphics graphics) {
 		if (activeScene != null) {
-			activeScene.draw(spriteBatch);
+			activeScene.draw(graphics);
 		}
 	}
 	

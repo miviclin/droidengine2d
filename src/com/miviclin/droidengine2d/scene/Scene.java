@@ -3,7 +3,7 @@ package com.miviclin.droidengine2d.scene;
 import com.miviclin.droidengine2d.Game;
 import com.miviclin.droidengine2d.KeyController;
 import com.miviclin.droidengine2d.TouchController;
-import com.miviclin.droidengine2d.graphics.SpriteBatch;
+import com.miviclin.droidengine2d.graphics.Graphics;
 
 /**
  * Representa una pantalla del juego (menu principal, nivel 1, nivel 2, pantalla de creditos, etc).
@@ -65,10 +65,10 @@ public abstract class Scene {
 	
 	/**
 	 * Renderiza los elementos de la Scene de forma que puedan verse en pantalla.<br>
-	 * Este metodo se llama desde {@link SceneManager#draw(SpriteBatch)} Este metodo se ejecuta en el hilo del GLRenderer tras ejecutar
+	 * Este metodo se llama desde {@link SceneManager#draw(Graphics)} Este metodo se ejecuta en el hilo del GLRenderer tras ejecutar
 	 * {@link Scene#update(float)} en el GameThread
 	 */
-	public abstract void draw(SpriteBatch spriteBatch);
+	public abstract void draw(Graphics g);
 	
 	/**
 	 * Llamado cuando esta Scene se registra en el {@link SceneManager}

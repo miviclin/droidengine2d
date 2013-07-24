@@ -10,7 +10,7 @@ import com.miviclin.droidengine2d.util.math.Vector2;
  * @author Miguel Vicente Linares
  * 
  */
-public abstract class RectangularShape {
+public class RectangularShape {
 	
 	private Vector2 position = new Vector2(0.0f, 0.0f);
 	private Vector2 center = new Vector2(0.0f, 0.0f);
