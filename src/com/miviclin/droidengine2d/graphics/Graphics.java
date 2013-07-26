@@ -67,30 +67,30 @@ public class Graphics {
 	}
 	
 	/**
-	 * Renderiza una forma rectangular en pantalla
+	 * Renderiza un rectangulo en pantalla
 	 * 
 	 * @param color Color del rectangulo
 	 * @param position Posicion en la que se renderizara
 	 * @param dimensions Dimensiones del sprite
 	 */
-	public void drawRectangularShape(Color color, Vector2 position, Dimensions2D dimensions) {
-		drawRectangularShape(color, position, dimensions, 0.0f, null, 0.0f);
+	public void drawRect(Color color, Vector2 position, Dimensions2D dimensions) {
+		drawRect(color, position, dimensions, 0.0f, null, 0.0f);
 	}
 	
 	/**
-	 * Renderiza una forma rectangular en pantalla
+	 * Renderiza un rectangulo en pantalla
 	 * 
 	 * @param color Color del rectangulo
 	 * @param position Posicion en la que se renderizara
 	 * @param dimensions Dimensiones del sprite
 	 * @param rotation Angulo de rotacion del sprite con respecto a su centro
 	 */
-	public void drawRectangularShape(Color color, Vector2 position, Dimensions2D dimensions, float rotation) {
-		drawRectangularShape(color, position, dimensions, rotation, null, 0.0f);
+	public void drawRect(Color color, Vector2 position, Dimensions2D dimensions, float rotation) {
+		drawRect(color, position, dimensions, rotation, null, 0.0f);
 	}
 	
 	/**
-	 * Renderiza una forma rectangular en pantalla
+	 * Renderiza un rectangulo en pantalla
 	 * 
 	 * @param color Color del rectangulo
 	 * @param position Posicion en la que se renderizara
@@ -99,12 +99,12 @@ public class Graphics {
 	 * @param externalCenter Centro externo de rotacion
 	 * @param externalRotation Angulo de rotacion sobre el centro externo de rotacion
 	 */
-	public void drawRectangularShape(Color color, Vector2 position, Dimensions2D dimensions, float rotation, Vector2 externalCenter, float externalRotation) {
+	public void drawRect(Color color, Vector2 position, Dimensions2D dimensions, float rotation, Vector2 externalCenter, float externalRotation) {
 		selectCurrentShapeBatch(positionColorRB);
 		setupTempRectangularShape(color, position, dimensions, rotation, externalCenter, externalRotation);
 		positionColorRB.draw(tempRectangularShape, camera);
 	}
-
+	
 	/**
 	 * Renderiza un sprite en pantalla
 	 * 
