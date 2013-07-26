@@ -83,7 +83,6 @@ public class RectangularShape {
 	 */
 	public void setDimensions(float width, float height) {
 		dimensions.set(width, height);
-		center.set(width / 2, height / 2);
 	}
 	
 	/**
