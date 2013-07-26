@@ -271,10 +271,11 @@ public class Graphics {
 	private void setupTempSprite(TextureRegion textureRegion, Color color, Vector2 position, Dimensions2D dimensions, float rotation, Vector2 externalCenter, float externalRotation) {
 		if (tempSprite == null) {
 			tempSprite = new Sprite(position.getX(), position.getY(), dimensions.getWidth(), dimensions.getHeight(), textureRegion);
-		} else {
-			tempSprite.getPosition().set(position);
-			tempSprite.getDimensions().set(dimensions);
 		}
+		tempSprite.setTextureRegion(textureRegion);
+		tempSprite.getPosition().set(position);
+		tempSprite.getDimensions().set(dimensions);
+		tempSprite.getCenter().set(dimensions.getWidth() / 2, dimensions.getHeight() / 2);
 		tempSprite.setRotation(rotation);
 		if (externalCenter == null) {
 			tempSprite.setRotationAroundExternalPoint(0.0f, 0.0f, 0.0f);
@@ -283,6 +284,8 @@ public class Graphics {
 		}
 		if (color != null) {
 			tempSprite.getColor().set(color);
+		} else {
+			tempSprite.getColor().set(Color.WHITE);
 		}
 	}
 	
@@ -299,10 +302,10 @@ public class Graphics {
 	private void setupTempRectangularShape(Color color, Vector2 position, Dimensions2D dimensions, float rotation, Vector2 externalCenter, float externalRotation) {
 		if (tempRectangularShape == null) {
 			tempRectangularShape = new RectangularShape(position.getX(), position.getY(), dimensions.getWidth(), dimensions.getHeight());
-		} else {
-			tempRectangularShape.getPosition().set(position);
-			tempRectangularShape.getDimensions().set(dimensions);
 		}
+		tempRectangularShape.getPosition().set(position);
+		tempRectangularShape.getDimensions().set(dimensions);
+		tempRectangularShape.getCenter().set(dimensions.getWidth() / 2, dimensions.getHeight() / 2);
 		tempRectangularShape.setRotation(rotation);
 		if (externalCenter == null) {
 			tempRectangularShape.setRotationAroundExternalPoint(0.0f, 0.0f, 0.0f);
@@ -311,6 +314,8 @@ public class Graphics {
 		}
 		if (color != null) {
 			tempRectangularShape.getColor().set(color);
+		} else {
+			tempRectangularShape.getColor().set(Color.WHITE);
 		}
 	}
 	
