@@ -29,6 +29,7 @@ public class Graphics {
 	private PositionTextureColorSpriteBatch positionTextureColorSB;
 	private Sprite tempSprite;
 	private RectangularShape tempRectangularShape;
+	private Color tempColor;
 	private boolean inBeginEndPair;
 	
 	/**
@@ -46,6 +47,7 @@ public class Graphics {
 		this.positionTextureColorSB = new PositionTextureColorSpriteBatch(context);
 		this.tempSprite = null;
 		this.tempRectangularShape = null;
+		this.tempColor = new Color(1.0f, 1.0f, 1.0f, 1.0f);
 		this.inBeginEndPair = false;
 	}
 	
@@ -285,7 +287,7 @@ public class Graphics {
 		if (color != null) {
 			tempSprite.getColor().set(color);
 		} else {
-			tempSprite.getColor().set(Color.WHITE);
+			tempSprite.getColor().set(tempColor);
 		}
 	}
 	
@@ -315,7 +317,7 @@ public class Graphics {
 		if (color != null) {
 			tempRectangularShape.getColor().set(color);
 		} else {
-			tempRectangularShape.getColor().set(Color.WHITE);
+			tempRectangularShape.getColor().set(tempColor);
 		}
 	}
 	
