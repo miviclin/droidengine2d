@@ -103,10 +103,7 @@ public class PositionTextureColorSpriteBatch extends PositionTextureSpriteBatch 
 		int spriteOffset = getBatchSize() * 4;
 		int limit = spriteOffset + 4;
 		for (int i = spriteOffset; i < limit; i++) {
-			getGeometry().getColor(i).setR(sprite.getColor().getR());
-			getGeometry().getColor(i).setG(sprite.getColor().getG());
-			getGeometry().getColor(i).setB(sprite.getColor().getB());
-			getGeometry().getColor(i).setA(sprite.getColor().getA());
+			getGeometry().getColor(i).set(sprite.getColor());
 		}
 	}
 	
