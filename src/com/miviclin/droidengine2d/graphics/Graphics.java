@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
 import com.miviclin.droidengine2d.graphics.mesh.PositionColorRectangularShapeBatch;
-import com.miviclin.droidengine2d.graphics.mesh.PositionTextureColorSpriteBatch;
+import com.miviclin.droidengine2d.graphics.mesh.PositionTextureHSVColorSpriteBatch;
 import com.miviclin.droidengine2d.graphics.mesh.PositionTextureOpacitySpriteBatch;
 import com.miviclin.droidengine2d.graphics.mesh.PositionTextureSpriteBatch;
 import com.miviclin.droidengine2d.graphics.shape.RectangularShape;
@@ -26,7 +26,7 @@ public class Graphics {
 	private PositionColorRectangularShapeBatch positionColorRB;
 	private PositionTextureSpriteBatch positionTextureSB;
 	private PositionTextureOpacitySpriteBatch positionTextureOpacitySB;
-	private PositionTextureColorSpriteBatch positionTextureColorSB;
+	private PositionTextureHSVColorSpriteBatch positionTextureColorSB;
 	private Sprite tempSprite;
 	private RectangularShape tempRectangularShape;
 	private Color tempColor;
@@ -44,7 +44,7 @@ public class Graphics {
 		this.positionColorRB = new PositionColorRectangularShapeBatch();
 		this.positionTextureSB = new PositionTextureSpriteBatch(context);
 		this.positionTextureOpacitySB = new PositionTextureOpacitySpriteBatch(context);
-		this.positionTextureColorSB = new PositionTextureColorSpriteBatch(context);
+		this.positionTextureColorSB = new PositionTextureHSVColorSpriteBatch(context);
 		this.tempSprite = null;
 		this.tempRectangularShape = null;
 		this.tempColor = new Color(1.0f, 1.0f, 1.0f, 1.0f);

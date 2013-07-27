@@ -50,7 +50,7 @@ public class PositionTextureHSVColorBatchShaderProgram extends PositionTextureCo
 			return "" +
 					"precision mediump float;\n" +
 					"varying vec2 vTextureCoord;\n" + 
-					"varying vec3 vColor;\n" +
+					"varying vec4 vColor;\n" +
 					"uniform sampler2D sTexture;\n" +
 					"vec3 convertRGBtoHSV(vec3 rgbColor) {\n" +
 					"    float r = rgbColor[0];\n" +
@@ -58,7 +58,7 @@ public class PositionTextureHSVColorBatchShaderProgram extends PositionTextureCo
 					"    float b = rgbColor[2];\n" +
 					"    float colorMax = max(max(r,g), b);\n" +
 					"    float colorMin = min(min(r,g), b);\n" +
-					"    float delta = max - min;\n" +
+					"    float delta = colorMax - colorMin;\n" +
 					"    float h = 0.0;\n" +
 					"    float s = 0.0;\n" +
 					"    float v = colorMax;\n" +
@@ -116,14 +116,15 @@ public class PositionTextureHSVColorBatchShaderProgram extends PositionTextureCo
 					"    return rgb;\n" +
 					"}\n" +
 					"void main() {\n" +
-					"    vec3 fragRGB = texture2D(sTexture, vTextureCoord).rgb;\n" +
+					"    vec4 textureColor = texture2D(sTexture, vTextureCoord);\n" +
+					"    vec3 fragRGB = textureColor.rgb;\n" +
 					"    vec3 fragHSV = convertRGBtoHSV(fragRGB);\n" +
-					"    fragHSV += vHSV;\n" +
+					"    fragHSV += vColor.xyz;\n" +
 					"    fragHSV.x = mod(fragHSV.x, 360.0);\n" +
 					"    fragHSV.y = mod(fragHSV.y, 1.0);\n" +
 					"    fragHSV.z = mod(fragHSV.z, 1.0);\n" +
 					"    fragRGB = convertHSVtoRGB(fragHSV);\n" +
-					"    gl_FragColor = vec4(convertHSVtoRGB(fragHSV), 1.0);\n" +
+					"    gl_FragColor = vec4(convertHSVtoRGB(fragHSV), textureColor.w);\n" +
 					"}";
 		}
 		
