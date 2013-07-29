@@ -52,79 +52,62 @@ public class PositionTextureHSVColorBatchShaderProgram extends PositionTextureCo
 					"varying vec2 vTextureCoord;\n" + 
 					"varying vec4 vColor;\n" +
 					"uniform sampler2D sTexture;\n" +
-					"vec3 convertRGBtoHSV(vec3 rgbColor) {\n" +
-					"    float r = rgbColor[0];\n" +
-					"    float g = rgbColor[1];\n" +
-					"    float b = rgbColor[2];\n" +
-					"    float colorMax = max(max(r,g), b);\n" +
-					"    float colorMin = min(min(r,g), b);\n" +
-					"    float delta = colorMax - colorMin;\n" +
-					"    float h = 0.0;\n" +
-					"    float s = 0.0;\n" +
-					"    float v = colorMax;\n" +
-					"    vec3 hsv = vec3(0.0);\n" +
-					"    if (colorMax != 0.0) {\n" +
-					"        s = (colorMax - colorMin ) / colorMax;\n" +
-					"    }\n" +
-					"    if (delta != 0.0) {\n" +
-					"        if (r == colorMax) {\n" +
-					"            h = (g - b) / delta;\n" +
-					"        } else if (g == colorMax) {\n" +
-					"            h = 2.0 + (b - r) / delta;\n" +
-					"        } else {\n" +
-					"            h = 4.0 + (r - g) / delta;\n" +
-					"        }\n" +
-					"        h *= 60.0;\n" +
-					"        if (h < 0.0) {\n" +
-					"            h += 360.0;\n" +
-					"        }\n" +
-					"    }\n" +
-					"    hsv[0] = h;\n" +
-					"    hsv[1] = s;\n" +
-					"    hsv[2] = v;\n" +
-					"    return hsv;\n" +
+					/*"vec3 Hue(float H) {\n" + 
+					"    float R = abs(H * 6.0 - 3.0) - 1.0;\n" + 
+					"    float G = 2.0 - abs(H * 6.0 - 2.0);\n" + 
+					"    float B = 2.0 - abs(H * 6.0 - 4.0);\n" + 
+					"    return clamp(vec3(R,G,B), 0.0, 1.0);\n" + 
+					"}\n" + 
+					"\n" + 
+					"vec3 HSVtoRGB(vec3 HSV) {\n" + 
+					"    return vec3(((Hue(HSV.x) - 1.0) * HSV.y + 1.0) * HSV.z);\n" + 
+					"}\n" + 
+					"\n" + 
+					"vec3 RGBtoHSV(vec3 RGB) {\n" + 
+					"    vec3 HSV = vec3(0.0, 0.0, 0.0);\n" + 
+					"    HSV.z = max(RGB.r, max(RGB.g, RGB.b));\n" + 
+					"    float M = min(RGB.r, min(RGB.g, RGB.b));\n" + 
+					"    float C = HSV.z - M;\n" + 
+					"    if (C != 0.0) {\n" + 
+					"        HSV.y = C / HSV.z;\n" + 
+					"        vec3 Delta = (HSV.z - RGB) / C;\n" + 
+					"        Delta.rgb -= Delta.brg;\n" + 
+					"        Delta.rg += vec2(2.0, 4.0);\n" + 
+					"        if (RGB.r >= HSV.z) {\n" + 
+					"            HSV.x = Delta.b;\n" + 
+					"		}\n" + 
+					"        else if (RGB.g >= HSV.z) {\n" + 
+					"            HSV.x = Delta.r;\n" + 
+					"		}\n" + 
+					"        else {\n" + 
+					"            HSV.x = Delta.g;\n" + 
+					"        }\n" + 
+					"		HSV.x = fract(HSV.x / 6.0);\n" + 
+					"    }\n" + 
+					"    return HSV;\n" + 
+					"}\n" +*/
+					"vec3 RGBtoHSV(vec3 c) {\n" +
+					"    vec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);\n" +
+					"    vec4 p = mix(vec4(c.bg, K.wz), vec4(c.gb, K.xy), step(c.b, c.g));\n" +
+					"    vec4 q = mix(vec4(p.xyw, c.r), vec4(c.r, p.yzx), step(p.x, c.r));\n" +
+					"    float d = q.x - min(q.w, q.y);\n" +
+					"    float e = 1.0e-10;\n" +
+					"    return vec3(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);\n" +
 					"}\n" +
-					"vec3 convertHSVtoRGB(vec3 hsvColor) {\n" +
-					"    float h = hsvColor.x;\n" +
-					"    float s = hsvColor.y;\n" +
-					"    float v = hsvColor.z;\n" +
-					"    if (s == 0.0) {\n" +
-					"        return vec3(v, v, v);\n" +
-					"    }\n" +
-					"    if (h == 360.0) {\n" +
-					"        h = 0.0;\n" +
-					"    }\n" +
-					"    int hi = int(h);\n" +
-					"    float f = h - float(hi);\n" +
-					"    float p = v * (1.0 - s);\n" +
-					"    float q = v * (1.0 - (s * f));\n" +
-					"    float t = v * (1.0 - (s * (1.0 - f)));\n" +
-					"    vec3 rgb;\n" +
-					"    if (hi == 0) {\n" +
-					"        rgb = vec3(v, t, p);\n" +
-					"    } else if (hi == 1) {\n" +
-					"        rgb = vec3(q, v, p);\n" +
-					"    } else if (hi == 2) {\n" +
-					"        rgb = vec3(p, v, t);\n" +
-					"    } if(hi == 3) {\n" +
-					"        rgb = vec3(p, q, v);\n" +
-					"    } else if (hi == 4) {\n" +
-					"        rgb = vec3(t, p, v);\n" +
-					"    } else {\n" +
-					"        rgb = vec3(v, p, q);\n" +
-					"    }\n" +
-					"    return rgb;\n" +
+					"vec3 HSVtoRGB(vec3 c) {\n" +
+					"    vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);\n" +
+					"    vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);\n" +
+					"    return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);\n" +
 					"}\n" +
 					"void main() {\n" +
 					"    vec4 textureColor = texture2D(sTexture, vTextureCoord);\n" +
 					"    vec3 fragRGB = textureColor.rgb;\n" +
-					"    vec3 fragHSV = convertRGBtoHSV(fragRGB);\n" +
-					"    fragHSV += vColor.xyz;\n" +
-					"    fragHSV.x = mod(fragHSV.x, 360.0);\n" +
-					"    fragHSV.y = mod(fragHSV.y, 1.0);\n" +
-					"    fragHSV.z = mod(fragHSV.z, 1.0);\n" +
-					"    fragRGB = convertHSVtoRGB(fragHSV);\n" +
-					"    gl_FragColor = vec4(convertHSVtoRGB(fragHSV), textureColor.w);\n" +
+					"    vec3 fragHSV = RGBtoHSV(fragRGB);\n" +
+					"    fragHSV.x += vColor.x / 360.0;\n" +
+					"    fragHSV.yz *= vColor.yz;\n" +
+					"    fragHSV.xyz = mod(fragHSV.xyz, 1.0);\n" +
+					"    fragRGB = HSVtoRGB(fragHSV);\n" +
+					"    gl_FragColor = vec4(fragRGB, textureColor.w);\n" +
 					"}";
 		}
 		
