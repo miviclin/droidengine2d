@@ -5,6 +5,7 @@ import android.content.Context;
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
 import com.miviclin.droidengine2d.graphics.mesh.PositionColorRectangularShapeBatch;
 import com.miviclin.droidengine2d.graphics.mesh.PositionTextureColorSpriteBatch;
+import com.miviclin.droidengine2d.graphics.mesh.PositionTextureHSVColorSpriteBatch;
 import com.miviclin.droidengine2d.graphics.mesh.PositionTextureOpacitySpriteBatch;
 import com.miviclin.droidengine2d.graphics.mesh.PositionTextureSpriteBatch;
 import com.miviclin.droidengine2d.graphics.shape.RectangularShape;
@@ -27,6 +28,7 @@ public class Graphics {
 	private PositionTextureSpriteBatch positionTextureSB;
 	private PositionTextureOpacitySpriteBatch positionTextureOpacitySB;
 	private PositionTextureColorSpriteBatch positionTextureColorSB;
+	private PositionTextureHSVColorSpriteBatch positionTextureHSVColorSB;
 	private Sprite tempSprite;
 	private RectangularShape tempRectangularShape;
 	private Color tempColor;
@@ -45,6 +47,7 @@ public class Graphics {
 		this.positionTextureSB = new PositionTextureSpriteBatch(context);
 		this.positionTextureOpacitySB = new PositionTextureOpacitySpriteBatch(context);
 		this.positionTextureColorSB = new PositionTextureColorSpriteBatch(context);
+		this.positionTextureHSVColorSB = new PositionTextureHSVColorSpriteBatch(context);
 		this.tempSprite = null;
 		this.tempRectangularShape = null;
 		this.tempColor = new Color(1.0f, 1.0f, 1.0f, 1.0f);
@@ -66,6 +69,9 @@ public class Graphics {
 		
 		positionTextureColorSB.getShaderProgram().link();
 		positionTextureColorSB.initialize();
+		
+		positionTextureHSVColorSB.getShaderProgram().link();
+		positionTextureHSVColorSB.initialize();
 	}
 	
 	/**
@@ -194,11 +200,12 @@ public class Graphics {
 	 * 
 	 * @param textureRegion TextureRegion a renderizar
 	 * @param color Color del sprite
+	 * @param hsv Indica si se utilizan las componentes RGB o HSV del color
 	 * @param position Posicion en la que se renderizara
 	 * @param dimensions Dimensiones del sprite
 	 */
-	public void drawSprite(TextureRegion textureRegion, Color color, Vector2 position, Dimensions2D dimensions) {
-		drawSprite(textureRegion, color, position, dimensions, 0.0f, null, 0.0f);
+	public void drawSprite(TextureRegion textureRegion, Color color, boolean hsv, Vector2 position, Dimensions2D dimensions) {
+		drawSprite(textureRegion, color, hsv, position, dimensions, 0.0f, null, 0.0f);
 	}
 	
 	/**
@@ -206,12 +213,13 @@ public class Graphics {
 	 * 
 	 * @param textureRegion TextureRegion a renderizar
 	 * @param color Color del sprite
+	 * @param hsv Indica si se utilizan las componentes RGB o HSV del color
 	 * @param position Posicion en la que se renderizara
 	 * @param dimensions Dimensiones del sprite
 	 * @param rotation Angulo de rotacion del sprite con respecto a su centro
 	 */
-	public void drawSprite(TextureRegion textureRegion, Color color, Vector2 position, Dimensions2D dimensions, float rotation) {
-		drawSprite(textureRegion, color, position, dimensions, rotation, null, 0.0f);
+	public void drawSprite(TextureRegion textureRegion, Color color, boolean hsv, Vector2 position, Dimensions2D dimensions, float rotation) {
+		drawSprite(textureRegion, color, hsv, position, dimensions, rotation, null, 0.0f);
 	}
 	
 	/**
@@ -219,16 +227,18 @@ public class Graphics {
 	 * 
 	 * @param textureRegion TextureRegion a renderizar
 	 * @param color Color del sprite
+	 * @param hsv Indica si se utilizan las componentes RGB o HSV del color
 	 * @param position Posicion en la que se renderizara
 	 * @param dimensions Dimensiones del sprite
 	 * @param rotation Angulo de rotacion del sprite con respecto a su centro
 	 * @param externalCenter Centro externo de rotacion
 	 * @param externalRotation Angulo de rotacion sobre el centro externo de rotacion
 	 */
-	public void drawSprite(TextureRegion textureRegion, Color color, Vector2 position, Dimensions2D dimensions, float rotation, Vector2 externalCenter, float externalRotation) {
-		selectCurrentShapeBatch(positionTextureColorSB);
+	public void drawSprite(TextureRegion textureRegion, Color color, boolean hsv, Vector2 position, Dimensions2D dimensions, float rotation, Vector2 externalCenter, float externalRotation) {
+		SpriteBatch spriteBatch = (hsv) ? positionTextureHSVColorSB : positionTextureColorSB;
+		selectCurrentShapeBatch(spriteBatch);
 		setupTempSprite(textureRegion, color, position, dimensions, rotation, externalCenter, externalRotation);
-		positionTextureColorSB.draw(tempSprite, camera);
+		spriteBatch.draw(tempSprite, camera);
 	}
 	
 	/**
