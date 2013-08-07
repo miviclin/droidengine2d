@@ -1,4 +1,4 @@
-package com.miviclin.droidengine2d.graphics.textures;
+package com.miviclin.droidengine2d.graphics.texture;
 
 import java.util.Map;
 

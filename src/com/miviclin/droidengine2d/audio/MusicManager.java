@@ -21,6 +21,7 @@ public class MusicManager implements OnCompletionListener {
 	private MediaPlayer mediaPlayer;
 	private boolean prepared;
 	private boolean loaded;
+	private float volume;
 	
 	/**
 	 * Constructor
@@ -29,6 +30,7 @@ public class MusicManager implements OnCompletionListener {
 		this.mediaPlayer = null;
 		this.prepared = false;
 		this.loaded = false;
+		this.volume = -1.0f;
 	}
 	
 	/**
@@ -84,6 +86,7 @@ public class MusicManager implements OnCompletionListener {
 			prepared = true;
 			mediaPlayer.setLooping(true);
 			loaded = true;
+			setVolume(1.0f);
 		} catch (Exception e) {
 			mediaPlayer = null;
 			prepared = false;
@@ -121,6 +124,7 @@ public class MusicManager implements OnCompletionListener {
 			prepared = true;
 			mediaPlayer.setLooping(true);
 			loaded = true;
+			setVolume(1.0f);
 		} catch (Exception e) {
 			mediaPlayer = null;
 			prepared = false;
@@ -223,12 +227,25 @@ public class MusicManager implements OnCompletionListener {
 	}
 	
 	/**
+	 * Devuelve el volumen de reproduccion
+	 * 
+	 * @return volume Volumen. Valor entre 0.0f y 1.0f
+	 */
+	public float getVolume() {
+		if (mediaPlayer != null) {
+			return volume;			
+		}
+		return -1;
+	}
+	
+	/**
 	 * Asigna el volumen de reproduccion
 	 * 
 	 * @param volume Volumen. Valor entre 0.0f y 1.0f
 	 */
 	public void setVolume(float volume) {
 		if (mediaPlayer != null) {
+			this.volume = volume;
 			mediaPlayer.setVolume(volume, volume);			
 		}
 	}
