@@ -1,4 +1,33 @@
 ------------------------------------------------------------------------
+v0.6.0 (2013-08-07)
+------------------------------------------------------------------------
+
+Cambios:
+
+  - Refactorizados los ShaderPrograms.
+  
+  - Refactorizados los SpriteBatches.
+
+  - Agregado shader y spritebatch para renderizar batches de sprites con
+    textura y opacidad.
+
+  - Agregado shader y spritebatch para renderizar batches de sprites con
+    textura y color RGBA.
+
+  - Agregado shader y spritebatch para renderizar batches de rectangulos
+    con color.
+
+  - Agregado shader y spritebatch para renderizar batches de sprites con
+    textura a la que se le puede modificar el tono, reducir la
+    saturacion y reducir el brillo.
+
+  - Agregada la clase Graphics que simplifica la forma de renderizar
+    elementos en pantalla.
+
+  - Se permite cambiar el valor del filtro a paso bajo de Accelerometer.
+
+
+------------------------------------------------------------------------
 v0.5.0 (2013-05-17)
 ------------------------------------------------------------------------
 
