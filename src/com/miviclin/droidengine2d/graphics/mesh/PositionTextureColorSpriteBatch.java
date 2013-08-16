@@ -6,24 +6,30 @@ import android.content.Context;
 
 import com.miviclin.droidengine2d.graphics.Color;
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
+import com.miviclin.droidengine2d.graphics.material.TextureColorMaterial;
 import com.miviclin.droidengine2d.graphics.shader.PositionTextureColorBatchShaderProgram;
-import com.miviclin.droidengine2d.graphics.shape.Sprite;
+import com.miviclin.droidengine2d.util.Dimensions2D;
 import com.miviclin.droidengine2d.util.math.Vector2;
 import com.miviclin.droidengine2d.util.math.Vector3;
 
-public class PositionTextureColorSpriteBatch extends PositionTextureSpriteBatch {
+public class PositionTextureColorSpriteBatch<M extends TextureColorMaterial> extends PositionTextureSpriteBatchBase<M> {
 	
 	private int vertexColorOffset;
 	
+	/**
+	 * Constructor
+	 * 
+	 * @param context Context en el que se ejecuta el juego
+	 */
 	public PositionTextureColorSpriteBatch(Context context) {
-		this(context, new PositionTextureColorBatchShaderProgram());
-	}
-	
-	protected PositionTextureColorSpriteBatch(Context context, PositionTextureColorBatchShaderProgram shaderProgram) {
-		super(context, shaderProgram);
-		setVerticesDataStride(9);
+		super(9, context, new PositionTextureColorBatchShaderProgram());
 		this.vertexColorOffset = 5;
 		setGeometry(new RectangleBatchGeometry(BATCH_CAPACITY, true, true));
+	}
+	
+	@Override
+	public PositionTextureColorBatchShaderProgram getShaderProgram() {
+		return (PositionTextureColorBatchShaderProgram) super.getShaderProgram();
 	}
 	
 	@Override
@@ -84,26 +90,24 @@ public class PositionTextureColorSpriteBatch extends PositionTextureSpriteBatch 
 	}
 	
 	@Override
-	public PositionTextureColorBatchShaderProgram getShaderProgram() {
-		return (PositionTextureColorBatchShaderProgram) super.getShaderProgram();
-	}
-	
-	@Override
-	protected void drawSprite(Sprite sprite, Camera camera) {
-		super.drawSprite(sprite, camera);
-		setupColor(sprite);
+	public void draw(Vector2 position, Dimensions2D dimensions, Vector2 center, float rotation, Vector2 rotationPoint, float rotationAroundPoint, Camera camera) {
+		checkInBeginEndPair();
+		TextureColorMaterial material = getCurrentMaterial();
+		setupSprite(material.getTextureRegion(), position, dimensions, center, rotation, rotationPoint, rotationAroundPoint, camera);
+		setupColor(material.getColor());
+		incrementBatchSize();
 	}
 	
 	/**
 	 * Define el color del siguiente sprite en el batch
 	 * 
-	 * @param sprite Aprite que se esta agregando al batch
+	 * @param color Color
 	 */
-	private void setupColor(Sprite sprite) {
+	private void setupColor(Color color) {
 		int spriteOffset = getBatchSize() * 4;
 		int limit = spriteOffset + 4;
 		for (int i = spriteOffset; i < limit; i++) {
-			getGeometry().getColor(i).set(sprite.getColor());
+			getGeometry().getColor(i).set(color);
 		}
 	}
 	

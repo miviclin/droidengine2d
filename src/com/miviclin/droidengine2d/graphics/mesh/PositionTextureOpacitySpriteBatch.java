@@ -6,8 +6,9 @@ import android.content.Context;
 
 import com.miviclin.droidengine2d.graphics.Color;
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
+import com.miviclin.droidengine2d.graphics.material.TransparentTextureMaterial;
 import com.miviclin.droidengine2d.graphics.shader.PositionTextureOpacityBatchShaderProgram;
-import com.miviclin.droidengine2d.graphics.shape.Sprite;
+import com.miviclin.droidengine2d.util.Dimensions2D;
 import com.miviclin.droidengine2d.util.math.Vector2;
 import com.miviclin.droidengine2d.util.math.Vector3;
 
@@ -18,19 +19,24 @@ import com.miviclin.droidengine2d.util.math.Vector3;
  * @author Miguel Vicente Linares
  * 
  */
-public class PositionTextureOpacitySpriteBatch extends PositionTextureSpriteBatch {
+public class PositionTextureOpacitySpriteBatch<M extends TransparentTextureMaterial> extends PositionTextureSpriteBatchBase<M> {
 	
 	private int vertexOpacityOffset;
 	
+	/**
+	 * Constructor
+	 * 
+	 * @param context Context en el que se ejecuta el juego
+	 */
 	public PositionTextureOpacitySpriteBatch(Context context) {
-		this(context, new PositionTextureOpacityBatchShaderProgram());
-	}
-	
-	protected PositionTextureOpacitySpriteBatch(Context context, PositionTextureOpacityBatchShaderProgram shaderProgram) {
-		super(context, shaderProgram);
-		setVerticesDataStride(6);
+		super(6, context, new PositionTextureOpacityBatchShaderProgram());
 		this.vertexOpacityOffset = 5;
 		setGeometry(new RectangleBatchGeometry(BATCH_CAPACITY, true, true));
+	}
+	
+	@Override
+	public PositionTextureOpacityBatchShaderProgram getShaderProgram() {
+		return (PositionTextureOpacityBatchShaderProgram) super.getShaderProgram();
 	}
 	
 	@Override
@@ -88,26 +94,24 @@ public class PositionTextureOpacitySpriteBatch extends PositionTextureSpriteBatc
 	}
 	
 	@Override
-	public PositionTextureOpacityBatchShaderProgram getShaderProgram() {
-		return (PositionTextureOpacityBatchShaderProgram) super.getShaderProgram();
-	}
-	
-	@Override
-	protected void drawSprite(Sprite sprite, Camera camera) {
-		super.drawSprite(sprite, camera);
-		setupOpacity(sprite);
+	public void draw(Vector2 position, Dimensions2D dimensions, Vector2 center, float rotation, Vector2 rotationPoint, float rotationAroundPoint, Camera camera) {
+		checkInBeginEndPair();
+		TransparentTextureMaterial material = getCurrentMaterial();
+		setupSprite(material.getTextureRegion(), position, dimensions, center, rotation, rotationPoint, rotationAroundPoint, camera);
+		setupOpacity(material.getOpacity());
+		incrementBatchSize();
 	}
 	
 	/**
 	 * Define la opacidad del siguiente sprite en el batch
 	 * 
-	 * @param sprite Aprite que se esta agregando al batch
+	 * @param opacity Opacidad
 	 */
-	private void setupOpacity(Sprite sprite) {
+	private void setupOpacity(float opacity) {
 		int spriteOffset = getBatchSize() * 4;
 		int limit = spriteOffset + 4;
 		for (int i = spriteOffset; i < limit; i++) {
-			getGeometry().getColor(i).setA(sprite.getColor().getA());
+			getGeometry().getColor(i).setA(opacity);
 		}
 	}
 	

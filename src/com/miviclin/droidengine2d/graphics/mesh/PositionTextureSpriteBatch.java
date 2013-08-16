@@ -1,16 +1,13 @@
 package com.miviclin.droidengine2d.graphics.mesh;
 
-import static com.miviclin.droidengine2d.util.PrimitiveTypeSize.SIZE_OF_FLOAT;
-
 import java.nio.FloatBuffer;
 
 import android.content.Context;
 
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
+import com.miviclin.droidengine2d.graphics.material.TextureMaterial;
 import com.miviclin.droidengine2d.graphics.shader.PositionTextureBatchShaderProgram;
-import com.miviclin.droidengine2d.graphics.shader.ShaderProgram;
-import com.miviclin.droidengine2d.graphics.shape.Sprite;
-import com.miviclin.droidengine2d.graphics.texture.Texture;
+import com.miviclin.droidengine2d.util.Dimensions2D;
 import com.miviclin.droidengine2d.util.math.Vector2;
 import com.miviclin.droidengine2d.util.math.Vector3;
 
@@ -20,66 +17,15 @@ import com.miviclin.droidengine2d.util.math.Vector3;
  * @author Miguel Vicente Linares
  * 
  */
-public class PositionTextureSpriteBatch extends RectangleBatchMesh {
-	
-	protected static final int BATCH_CAPACITY = 32;
-	
-	private int vertexPositionOffset;
-	private int vertexUVOffset;
-	private int batchSize;
-	private Texture texture;
-	private Context context;
-	private boolean requestTextureBind;
+public class PositionTextureSpriteBatch<M extends TextureMaterial> extends PositionTextureSpriteBatchBase<M> {
 	
 	/**
-	 * Crea un PositionTextureSpriteBatch
+	 * Constructor
 	 * 
 	 * @param context Context en el que se ejecuta el juego
 	 */
 	public PositionTextureSpriteBatch(Context context) {
-		this(context, new PositionTextureBatchShaderProgram());
-	}
-	
-	/**
-	 * Crea un PositionTextureSpriteBatch
-	 * 
-	 * @param context Context en el que se ejecuta el juego
-	 */
-	protected PositionTextureSpriteBatch(Context context, PositionTextureBatchShaderProgram shaderProgram) {
-		super(5, shaderProgram);
-		setVerticesDataStride(5);
-		this.vertexPositionOffset = 0;
-		this.vertexUVOffset = 3;
-		this.context = context;
-		this.batchSize = 0;
-		this.texture = null;
-	}
-	
-	@Override
-	protected void beginDraw() {
-		ShaderProgram shaderProgram = getShaderProgram();
-		if (!shaderProgram.isLinked()) {
-			shaderProgram.link();
-		}
-		shaderProgram.use();
-		requestTextureBind = true;
-	}
-	
-	public void draw(Sprite sprite, Camera camera) {
-		if (!isInBeginEndPair()) {
-			throw new RuntimeException("begin() must be called once before calling draw(Sprite, Camera)");
-		}
-		drawSprite(sprite, camera);
-		batchSize++;
-	}
-	
-	@Override
-	protected void endDraw() {
-		if (batchSize > 0) {
-			prepareDrawBatch(batchSize);
-			drawBatch();
-			batchSize = 0;
-		}
+		super(5, context, new PositionTextureBatchShaderProgram());
 	}
 	
 	@Override
@@ -127,111 +73,11 @@ public class PositionTextureSpriteBatch extends RectangleBatchMesh {
 	}
 	
 	@Override
-	protected void setupVertexShaderVariables(int batchSize) {
-		PositionTextureBatchShaderProgram shaderProgram = getShaderProgram();
-		shaderProgram.specifyMVPMatrices(getGeometry().getMvpMatrices(), 0, batchSize);
-		shaderProgram.specifyVerticesPosition(getVertexBuffer(), vertexPositionOffset, 3, getVerticesDataStrideBytes());
-		shaderProgram.specifyVerticesTextureCoords(getVertexBuffer(), vertexUVOffset, 2, getVerticesDataStrideBytes());
-		shaderProgram.specifyVerticesMVPIndices(getMvpIndexBuffer(), 0, SIZE_OF_FLOAT);
-	}
-	
-	/**
-	 * Agrega el Sprite al batch.<br>
-	 * En caso de que el batch estuviera lleno, se renderiza en 1 sola llamada y se vacia para agregar el nuevo sprite.
-	 * 
-	 * @param sprite Sprite a agregar
-	 * @param camera Camara
-	 */
-	protected void drawSprite(Sprite sprite, Camera camera) {
-		boolean textureChanged = checkTextureChanged(sprite);
-		if ((batchSize > 0) && ((batchSize == BATCH_CAPACITY) || textureChanged)) {
-			prepareDrawBatch(batchSize);
-			drawBatch();
-			batchSize = 0;
-		}
-		setupTexture(sprite, textureChanged);
-		setSpriteVerticesData(sprite);
-		updateMVPMatrix(batchSize, sprite, camera);
-	}
-	
-	/**
-	 * Comprueba si la textura es distinta a la textura utilizada en el anterior sprite que se agrego
-	 * 
-	 * @param sprite Sprite cuya textura se va a comprobar
-	 * @return true si la textura ha cambiado, false en caso contrario
-	 */
-	protected boolean checkTextureChanged(Sprite sprite) {
-		boolean textureChanged = false;
-		if (texture == null) {
-			textureChanged = true;
-		} else if (!texture.equals(sprite.getTextureRegion().getTexture())) {
-			textureChanged = true;
-		}
-		return textureChanged;
-	}
-	
-	/**
-	 * Prepara la textura. La recarga y enlaza si es necesario.
-	 * 
-	 * @param sprite Proximo sprite que se pretende renderizar
-	 * @param textureChanged Indica si es necesario reenlazar la textura
-	 */
-	protected void setupTexture(Sprite sprite, boolean textureChanged) {
-		if (textureChanged || requestTextureBind) {
-			if (textureChanged) {
-				texture = sprite.getTextureRegion().getTexture();
-			}
-			if (!texture.isLoaded()) {
-				texture.loadTexture(context);
-			}
-			texture.bind();
-			requestTextureBind = false;
-		}
-	}
-	
-	/**
-	 * Actualiza las coordenadas UV del sprite en la geometria de la malla del batch.
-	 * 
-	 * @param sprite Sprite que se va a renderizar
-	 */
-	protected void setSpriteVerticesData(Sprite sprite) {
-		int i = batchSize * 4;
-		RectangleBatchGeometry geometry = getGeometry();
-		// Bottom-Left
-		geometry.getTextureUV(i + 0).set(sprite.getTextureRegion().getU1(), sprite.getTextureRegion().getV2());
-		// Bottom-Right
-		geometry.getTextureUV(i + 1).set(sprite.getTextureRegion().getU2(), sprite.getTextureRegion().getV2());
-		// Top-Right
-		geometry.getTextureUV(i + 2).set(sprite.getTextureRegion().getU2(), sprite.getTextureRegion().getV1());
-		// Top-Left
-		geometry.getTextureUV(i + 3).set(sprite.getTextureRegion().getU1(), sprite.getTextureRegion().getV1());
-	}
-	
-	/**
-	 * Devuelve el numero de sprites que hay en el batch
-	 * 
-	 * @return Numero de sprites en el batch
-	 */
-	public int getBatchSize() {
-		return batchSize;
-	}
-	
-	/**
-	 * Offset de la posicion en los datos de un vertice
-	 * 
-	 * @return Offset
-	 */
-	public int getVertexPositionOffset() {
-		return vertexPositionOffset;
-	}
-	
-	/**
-	 * Offset de las coordenadas UV en los datos de un vertice
-	 * 
-	 * @return Offset
-	 */
-	public int getVertexUVOffset() {
-		return vertexUVOffset;
+	public void draw(Vector2 position, Dimensions2D dimensions, Vector2 center, float rotation, Vector2 rotationPoint, float rotationAroundPoint, Camera camera) {
+		checkInBeginEndPair();
+		TextureMaterial material = getCurrentMaterial();
+		setupSprite(material.getTextureRegion(), position, dimensions, center, rotation, rotationPoint, rotationAroundPoint, camera);
+		incrementBatchSize();
 	}
 	
 }

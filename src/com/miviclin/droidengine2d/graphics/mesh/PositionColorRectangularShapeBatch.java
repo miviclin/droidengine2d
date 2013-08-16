@@ -6,9 +6,11 @@ import java.nio.FloatBuffer;
 
 import com.miviclin.droidengine2d.graphics.Color;
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
+import com.miviclin.droidengine2d.graphics.material.ColorMaterial;
 import com.miviclin.droidengine2d.graphics.shader.PositionColorBatchShaderProgram;
 import com.miviclin.droidengine2d.graphics.shader.ShaderProgram;
-import com.miviclin.droidengine2d.graphics.shape.RectangularShape;
+import com.miviclin.droidengine2d.util.Dimensions2D;
+import com.miviclin.droidengine2d.util.math.Vector2;
 import com.miviclin.droidengine2d.util.math.Vector3;
 
 /**
@@ -18,7 +20,7 @@ import com.miviclin.droidengine2d.util.math.Vector3;
  * @author Miguel Vicente Linares
  * 
  */
-public class PositionColorRectangularShapeBatch extends RectangleBatchMesh {
+public class PositionColorRectangularShapeBatch<M extends ColorMaterial> extends RectangleBatchMesh<M> {
 	
 	protected static final int BATCH_CAPACITY = 32;
 	
@@ -56,12 +58,9 @@ public class PositionColorRectangularShapeBatch extends RectangleBatchMesh {
 		}
 	}
 	
-	public void draw(RectangularShape shape, Camera camera) {
-		if (!isInBeginEndPair()) {
-			throw new RuntimeException("begin() must be called once before calling draw(Sprite, Camera)");
-		}
-		drawRectangularShape(shape, camera);
-		batchSize++;
+	@Override
+	public PositionColorBatchShaderProgram getShaderProgram() {
+		return (PositionColorBatchShaderProgram) super.getShaderProgram();
 	}
 	
 	@Override
@@ -114,44 +113,54 @@ public class PositionColorRectangularShapeBatch extends RectangleBatchMesh {
 		shaderProgram.specifyVerticesMVPIndices(getMvpIndexBuffer(), 0, SIZE_OF_FLOAT);
 	}
 	
+	
 	@Override
-	public PositionColorBatchShaderProgram getShaderProgram() {
-		return (PositionColorBatchShaderProgram) super.getShaderProgram();
+	public void draw(Vector2 position, Dimensions2D dimensions, Vector2 center, float rotation, Vector2 rotationPoint, float rotationAroundPoint, Camera camera) {
+		checkInBeginEndPair();
+		ColorMaterial material = getCurrentMaterial();
+		setupRectangularShape(material, position, dimensions, center, rotation, rotationPoint, rotationAroundPoint, camera);
+		batchSize++;
 	}
 	
 	/**
-	 * Agrega el RectangularShape al batch.<br>
-	 * En caso de que el batch estuviera lleno, se renderiza en 1 sola llamada y se vacia para agregar el nuevo RectangularShape.
+	 * Agrega la figura rectangular especificada al batch.<br>
+	 * En caso de que el batch estuviera lleno, se renderiza en 1 sola llamada y se vacia para agregar la nueva figura.
 	 * 
-	 * @param shape RectangularShape a agregar
+	 * @param material ColorMaterial
+	 * @param position Posicion
+	 * @param dimensions Dimensiones
+	 * @param center Centro de rotacion (debe ser un valor entre 0.0 y 1.0)
+	 * @param rotation Angulo de rotacion sobre el centro
+	 * @param rotationPoint Punto externo de rotacion
+	 * @param rotationAroundPoint Angulo de rotacion sobre el punto externo
 	 * @param camera Camara
 	 */
-	protected void drawRectangularShape(RectangularShape shape, Camera camera) {
+	protected void setupRectangularShape(ColorMaterial material, Vector2 position, Dimensions2D dimensions, Vector2 center, float rotation, Vector2 rotationPoint, float rotationAroundPoint, Camera camera) {
 		if (batchSize == BATCH_CAPACITY) {
 			prepareDrawBatch(batchSize);
 			drawBatch();
 			batchSize = 0;
 		}
-		setSpriteVerticesColorData(shape);
-		updateMVPMatrix(batchSize, shape, camera);
+		setSpriteVerticesColorData(material.getColor());
+		updateMVPMatrix(batchSize, position, dimensions, center, rotation, rotationPoint, rotationAroundPoint, camera);
 	}
 	
 	/**
-	 * Actualiza los colores del RectangularShape en la geometria de la malla del batch.
+	 * Actualiza los colores del rectangulo actual en la geometria de la malla del batch.
 	 * 
-	 * @param shape RectangularShape que se va a renderizar
+	 * @param color Color que se asignara a los vertices del rectangulo actual
 	 */
-	protected void setSpriteVerticesColorData(RectangularShape shape) {
+	protected void setSpriteVerticesColorData(Color color) {
 		int i = batchSize * 4;
 		RectangleBatchGeometry geometry = getGeometry();
 		// Bottom-Left
-		geometry.getColor(i + 0).set(shape.getColor());
+		geometry.getColor(i + 0).set(color);
 		// Bottom-Right
-		geometry.getColor(i + 1).set(shape.getColor());
+		geometry.getColor(i + 1).set(color);
 		// Top-Right
-		geometry.getColor(i + 2).set(shape.getColor());
+		geometry.getColor(i + 2).set(color);
 		// Top-Left
-		geometry.getColor(i + 3).set(shape.getColor());
+		geometry.getColor(i + 3).set(color);
 	}
 	
 	/**

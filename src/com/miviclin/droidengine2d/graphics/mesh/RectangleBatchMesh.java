@@ -12,12 +12,12 @@ import android.opengl.GLES20;
 
 import com.miviclin.droidengine2d.graphics.GLDebugger;
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
+import com.miviclin.droidengine2d.graphics.material.Material;
 import com.miviclin.droidengine2d.graphics.shader.ShaderProgram;
-import com.miviclin.droidengine2d.graphics.shape.RectangularShape;
 import com.miviclin.droidengine2d.util.Dimensions2D;
 import com.miviclin.droidengine2d.util.math.Vector2;
 
-public abstract class RectangleBatchMesh extends GraphicsBatch {
+public abstract class RectangleBatchMesh<M extends Material> extends GraphicsBatch<M> {
 	
 	protected static final int BATCH_CAPACITY = 32;
 	
@@ -27,18 +27,17 @@ public abstract class RectangleBatchMesh extends GraphicsBatch {
 	private FloatBuffer vertexBuffer;
 	private FloatBuffer mvpIndexBuffer;
 	
-	private ShaderProgram shaderProgram;
 	private RectangleBatchGeometry geometry;
 	
 	/**
 	 * Crea un PositionTextureSpriteBatch
 	 * 
+	 * @param verticesDataStride Stride de los datos de los vertices
 	 * @param shaderProgram ShaderProgram
 	 */
 	public RectangleBatchMesh(int verticesDataStride, ShaderProgram shaderProgram) {
-		super();
+		super(shaderProgram);
 		this.verticesDataStride = verticesDataStride;
-		this.shaderProgram = shaderProgram;
 		this.geometry = new RectangleBatchGeometry(BATCH_CAPACITY, false, true);
 	}
 	
@@ -114,19 +113,18 @@ public abstract class RectangleBatchMesh extends GraphicsBatch {
 	protected abstract void setupVerticesData();
 	
 	/**
-	 * Transforma la matriz situada en el indice especificado con los datos del RectangularShape especificado
+	 * Transforma la matriz situada en el indice especificado con los datos especificados
 	 * 
 	 * @param mvpIndex Indice de la matrix MVP a actualizar
-	 * @param shape RectangularShape que contiene los datos necesarios para la transformacion
+	 * @param position Posicion
+	 * @param dimensions Dimensiones
+	 * @param center Centro de rotacion (debe ser un valor entre 0.0 y 1.0)
+	 * @param rotation Angulo de rotacion sobre el centro
+	 * @param rotationPoint Punto externo de rotacion
+	 * @param rotationAroundPoint Angulo de rotacion sobre el punto externo
 	 * @param camera Camara
 	 */
-	protected void updateMVPMatrix(int mvpIndex, RectangularShape shape, Camera camera) {
-		Vector2 position = shape.getPosition();
-		Dimensions2D dimensions = shape.getDimensions();
-		Vector2 center = shape.getCenter();
-		float rotation = shape.getRotation();
-		Vector2 rotationPoint = shape.getRotationPoint();
-		float rotationAroundPoint = shape.getRotationAroundPoint();
+	protected void updateMVPMatrix(int mvpIndex, Vector2 position, Dimensions2D dimensions, Vector2 center, float rotation, Vector2 rotationPoint, float rotationAroundPoint, Camera camera) {
 		geometry.updateMVPMatrix(mvpIndex, position, dimensions, center, rotation, rotationPoint, rotationAroundPoint, camera);
 	}
 	
@@ -160,13 +158,18 @@ public abstract class RectangleBatchMesh extends GraphicsBatch {
 	}
 	
 	/**
-	 * Devuelve el ShaderProgram
+	 * Agrega el Sprite al batch.<br>
+	 * En caso de que el batch estuviera lleno, se renderiza en 1 sola llamada y se vacia para agregar el nuevo sprite.
 	 * 
-	 * @return ShaderProgram
+	 * @param position Posicion
+	 * @param dimensions Dimensiones
+	 * @param center Centro de rotacion (debe ser un valor entre 0.0 y 1.0)
+	 * @param rotation Angulo de rotacion sobre el centro
+	 * @param rotationPoint Punto externo de rotacion
+	 * @param rotationAroundPoint Angulo de rotacion sobre el punto externo
+	 * @param camera Camara
 	 */
-	public ShaderProgram getShaderProgram() {
-		return shaderProgram;
-	}
+	public abstract void draw(Vector2 position, Dimensions2D dimensions, Vector2 center, float rotation, Vector2 rotationPoint, float rotationAroundPoint, Camera camera);
 	
 	/**
 	 * Devuelve el stride
