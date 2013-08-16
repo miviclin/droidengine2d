@@ -5,7 +5,6 @@ import static com.miviclin.droidengine2d.util.PrimitiveTypeSize.SIZE_OF_FLOAT;
 import java.nio.FloatBuffer;
 
 import com.miviclin.droidengine2d.graphics.Color;
-import com.miviclin.droidengine2d.graphics.RectangularShapeBatch;
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
 import com.miviclin.droidengine2d.graphics.shader.PositionColorBatchShaderProgram;
 import com.miviclin.droidengine2d.graphics.shader.ShaderProgram;
@@ -19,14 +18,13 @@ import com.miviclin.droidengine2d.util.math.Vector3;
  * @author Miguel Vicente Linares
  * 
  */
-public class PositionColorRectangularShapeBatch extends RectangleBatchMesh implements RectangularShapeBatch {
+public class PositionColorRectangularShapeBatch extends RectangleBatchMesh {
 	
 	protected static final int BATCH_CAPACITY = 32;
 	
 	private int vertexPositionOffset;
 	private int vertexColorOffset;
 	private int batchSize;
-	private boolean inBeginEndPair;
 	
 	/**
 	 * Crea un PositionColorRectangularShapeBatch
@@ -37,39 +35,29 @@ public class PositionColorRectangularShapeBatch extends RectangleBatchMesh imple
 		this.vertexPositionOffset = 0;
 		this.vertexColorOffset = 3;
 		this.batchSize = 0;
-		this.inBeginEndPair = false;
 		setGeometry(new RectangleBatchGeometry(BATCH_CAPACITY, true, false));
 	}
 	
 	@Override
-	public void begin() {
+	public void beginDraw() {
 		ShaderProgram shaderProgram = getShaderProgram();
-		if (inBeginEndPair) {
-			throw new RuntimeException("begin() can not be called more than once before calling end()");
-		}
 		if (!shaderProgram.isLinked()) {
 			shaderProgram.link();
 		}
 		shaderProgram.use();
-		inBeginEndPair = true;
 	}
 	
 	@Override
-	public void end() {
-		if (!inBeginEndPair) {
-			throw new RuntimeException("begin() must be called once before calling end()");
-		}
+	public void endDraw() {
 		if (batchSize > 0) {
 			prepareDrawBatch(batchSize);
 			drawBatch();
 			batchSize = 0;
 		}
-		inBeginEndPair = false;
 	}
 	
-	@Override
 	public void draw(RectangularShape shape, Camera camera) {
-		if (!inBeginEndPair) {
+		if (!isInBeginEndPair()) {
 			throw new RuntimeException("begin() must be called once before calling draw(Sprite, Camera)");
 		}
 		drawRectangularShape(shape, camera);

@@ -6,7 +6,6 @@ import java.nio.FloatBuffer;
 
 import android.content.Context;
 
-import com.miviclin.droidengine2d.graphics.SpriteBatch;
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
 import com.miviclin.droidengine2d.graphics.shader.PositionTextureBatchShaderProgram;
 import com.miviclin.droidengine2d.graphics.shader.ShaderProgram;
@@ -21,7 +20,7 @@ import com.miviclin.droidengine2d.util.math.Vector3;
  * @author Miguel Vicente Linares
  * 
  */
-public class PositionTextureSpriteBatch extends RectangleBatchMesh implements SpriteBatch {
+public class PositionTextureSpriteBatch extends RectangleBatchMesh {
 	
 	protected static final int BATCH_CAPACITY = 32;
 	
@@ -30,7 +29,6 @@ public class PositionTextureSpriteBatch extends RectangleBatchMesh implements Sp
 	private int batchSize;
 	private Texture texture;
 	private Context context;
-	private boolean inBeginEndPair;
 	private boolean requestTextureBind;
 	
 	/**
@@ -55,26 +53,20 @@ public class PositionTextureSpriteBatch extends RectangleBatchMesh implements Sp
 		this.context = context;
 		this.batchSize = 0;
 		this.texture = null;
-		this.inBeginEndPair = false;
 	}
 	
 	@Override
-	public void begin() {
+	protected void beginDraw() {
 		ShaderProgram shaderProgram = getShaderProgram();
-		if (inBeginEndPair) {
-			throw new RuntimeException("begin() can not be called more than once before calling end()");
-		}
 		if (!shaderProgram.isLinked()) {
 			shaderProgram.link();
 		}
 		shaderProgram.use();
-		inBeginEndPair = true;
 		requestTextureBind = true;
 	}
 	
-	@Override
 	public void draw(Sprite sprite, Camera camera) {
-		if (!inBeginEndPair) {
+		if (!isInBeginEndPair()) {
 			throw new RuntimeException("begin() must be called once before calling draw(Sprite, Camera)");
 		}
 		drawSprite(sprite, camera);
@@ -82,16 +74,12 @@ public class PositionTextureSpriteBatch extends RectangleBatchMesh implements Sp
 	}
 	
 	@Override
-	public void end() {
-		if (!inBeginEndPair) {
-			throw new RuntimeException("begin() must be called once before calling end()");
-		}
+	protected void endDraw() {
 		if (batchSize > 0) {
 			prepareDrawBatch(batchSize);
 			drawBatch();
 			batchSize = 0;
 		}
-		inBeginEndPair = false;
 	}
 	
 	@Override

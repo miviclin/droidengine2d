@@ -17,7 +17,7 @@ import com.miviclin.droidengine2d.graphics.shape.RectangularShape;
 import com.miviclin.droidengine2d.util.Dimensions2D;
 import com.miviclin.droidengine2d.util.math.Vector2;
 
-public abstract class RectangleBatchMesh {
+public abstract class RectangleBatchMesh extends GraphicsBatch {
 	
 	protected static final int BATCH_CAPACITY = 32;
 	
@@ -36,6 +36,7 @@ public abstract class RectangleBatchMesh {
 	 * @param shaderProgram ShaderProgram
 	 */
 	public RectangleBatchMesh(int verticesDataStride, ShaderProgram shaderProgram) {
+		super();
 		this.verticesDataStride = verticesDataStride;
 		this.shaderProgram = shaderProgram;
 		this.geometry = new RectangleBatchGeometry(BATCH_CAPACITY, false, true);
