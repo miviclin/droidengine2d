@@ -137,7 +137,7 @@ public class Engine {
 	 * @author Miguel Vicente Linares
 	 * 
 	 */
-	public final static class EngineBuilder {
+	public static final class EngineBuilder {
 		
 		private final Game game;
 		private final GLView glView;

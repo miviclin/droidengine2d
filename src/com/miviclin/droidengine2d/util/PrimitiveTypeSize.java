@@ -11,36 +11,36 @@ public final class PrimitiveTypeSize {
 	/**
 	 * Numero de bytes que ocupa un byte
 	 */
-	public final static int SIZE_OF_BYTE = 1;
+	public static final int SIZE_OF_BYTE = 1;
 	
 	/**
 	 * Numero de bytes que ocupa un char
 	 */
-	public final static int SIZE_OF_CHAR = 2;
+	public static final int SIZE_OF_CHAR = 2;
 	
 	/**
 	 * Numero de bytes que ocupa un short
 	 */
-	public final static int SIZE_OF_SHORT = 2;
+	public static final int SIZE_OF_SHORT = 2;
 	
 	/**
 	 * Numero de bytes que ocupa un int
 	 */
-	public final static int SIZE_OF_INT = 4;
+	public static final int SIZE_OF_INT = 4;
 	
 	/**
 	 * Numero de bytes que ocupa un long
 	 */
-	public final static int SIZE_OF_LONG = 8;
+	public static final int SIZE_OF_LONG = 8;
 	
 	/**
 	 * Numero de bytes que ocupa un float
 	 */
-	public final static int SIZE_OF_FLOAT = 4;
+	public static final int SIZE_OF_FLOAT = 4;
 	
 	/**
 	 * Numero de bytes que ocupa un double
 	 */
-	public final static int SIZE_OF_DOUBLE = 8;
+	public static final int SIZE_OF_DOUBLE = 8;
 	
 }

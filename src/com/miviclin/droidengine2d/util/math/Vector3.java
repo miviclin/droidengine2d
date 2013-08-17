@@ -59,7 +59,7 @@ public class Vector3 {
 	 * @param output Resultado de la operacion
 	 * @param vector Vector cuyas coordenadas se quieren copiar en output
 	 */
-	public final static void copy(Vector3 output, Vector3 vector) {
+	public static final void copy(Vector3 output, Vector3 vector) {
 		output.x = vector.x;
 		output.y = vector.y;
 		output.z = vector.z;
@@ -85,7 +85,7 @@ public class Vector3 {
 	 * @param vector Vector original
 	 * @param escalar Valor que se sumara a ambas coordenadas
 	 */
-	public final static void add(Vector3 output, Vector3 vector, float scalar) {
+	public static final void add(Vector3 output, Vector3 vector, float scalar) {
 		output.x = vector.x + scalar;
 		output.y = vector.y + scalar;
 		output.z = vector.z + scalar;
@@ -126,7 +126,7 @@ public class Vector3 {
 	 * @param v1 Operando 1
 	 * @param v2 Operando 2
 	 */
-	public final static void add(Vector3 output, Vector3 v1, Vector3 v2) {
+	public static final void add(Vector3 output, Vector3 v1, Vector3 v2) {
 		output.x = v1.x + v2.x;
 		output.y = v1.y + v2.y;
 		output.z = v1.z + v2.z;
@@ -152,7 +152,7 @@ public class Vector3 {
 	 * @param vector Vector original
 	 * @param escalar Valor que se restara a ambas coordenadas
 	 */
-	public final static void subtract(Vector3 output, Vector3 vector, float scalar) {
+	public static final void subtract(Vector3 output, Vector3 vector, float scalar) {
 		output.x = vector.x - scalar;
 		output.y = vector.y - scalar;
 		output.z = vector.z - scalar;
@@ -193,7 +193,7 @@ public class Vector3 {
 	 * @param v1 Operando 1
 	 * @param v2 Operando 2
 	 */
-	public final static void subtract(Vector3 output, Vector3 v1, Vector3 v2) {
+	public static final void subtract(Vector3 output, Vector3 v1, Vector3 v2) {
 		output.x = v1.x - v2.x;
 		output.y = v1.y - v2.y;
 		output.z = v1.z - v2.z;
@@ -219,7 +219,7 @@ public class Vector3 {
 	 * @param vector Vector original
 	 * @param escalar Valor por el que se multiplicaran ambas coordenadas
 	 */
-	public final static void multiply(Vector3 output, Vector3 vector, float scalar) {
+	public static final void multiply(Vector3 output, Vector3 vector, float scalar) {
 		output.x = vector.x * scalar;
 		output.y = vector.y * scalar;
 		output.z = vector.z * scalar;
@@ -260,7 +260,7 @@ public class Vector3 {
 	 * @param v1 Operando 1
 	 * @param v2 Operando 2
 	 */
-	public final static void multiply(Vector3 output, Vector3 v1, Vector3 v2) {
+	public static final void multiply(Vector3 output, Vector3 v1, Vector3 v2) {
 		output.x = v1.x * v2.x;
 		output.y = v1.y * v2.y;
 		output.z = v1.z * v2.z;
@@ -286,7 +286,7 @@ public class Vector3 {
 	 * @param vector Vector original
 	 * @param escalar Valor por el que se dividiran ambas coordenadas
 	 */
-	public final static void divide(Vector3 output, Vector3 vector, float scalar) {
+	public static final void divide(Vector3 output, Vector3 vector, float scalar) {
 		output.x = vector.x / scalar;
 		output.y = vector.y / scalar;
 		output.z = vector.z / scalar;
@@ -327,7 +327,7 @@ public class Vector3 {
 	 * @param v1 Operando 1
 	 * @param v2 Operando 2
 	 */
-	public final static void divide(Vector3 output, Vector3 v1, Vector3 v2) {
+	public static final void divide(Vector3 output, Vector3 v1, Vector3 v2) {
 		output.x = v1.x / v2.x;
 		output.y = v1.y / v2.y;
 		output.z = v1.z / v2.z;
@@ -368,7 +368,7 @@ public class Vector3 {
 	 * @param v2 Operando 1
 	 * @param v2 Operando 2
 	 */
-	public final static void crossProduct(Vector3 output, Vector3 v1, Vector3 v2) {
+	public static final void crossProduct(Vector3 output, Vector3 v1, Vector3 v2) {
 		output.x = v1.y * v2.z - v1.z * v2.y;
 		output.y = v1.z * v2.x - v1.x * v2.z;
 		output.z = v1.x * v2.y - v1.y * v2.x;
@@ -403,7 +403,7 @@ public class Vector3 {
 	 * @param v2 Operando 2
 	 * @return Producto escalar de v1 y v2
 	 */
-	public final static float dotProduct(Vector3 v1, Vector3 v2) {
+	public static final float dotProduct(Vector3 v1, Vector3 v2) {
 		return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
 	}
 	
@@ -422,7 +422,7 @@ public class Vector3 {
 	 * @param vector
 	 * @return Modulo del vector
 	 */
-	public final static float length(Vector3 vector) {
+	public static final float length(Vector3 vector) {
 		return (float) Math.sqrt(vector.x * vector.x + vector.y * vector.y + vector.z * vector.z);
 	}
 	
@@ -445,7 +445,7 @@ public class Vector3 {
 	 * @param output Vector normalizado
 	 * @param vector Vector sin normalizar
 	 */
-	public final static void normalize(Vector3 output, Vector3 vector) {
+	public static final void normalize(Vector3 output, Vector3 vector) {
 		float length = Vector3.length(vector);
 		if (length == 0) {
 			Vector3.copy(output, vector);
@@ -472,7 +472,7 @@ public class Vector3 {
 	 * @param output Vector con las coordenadas de vector en valor absoluto
 	 * @param vector Vector especificado
 	 */
-	public final static void abs(Vector3 output, Vector3 vector) {
+	public static final void abs(Vector3 output, Vector3 vector) {
 		output.x = Math.abs(vector.x);
 		output.y = Math.abs(vector.y);
 		output.z = Math.abs(vector.z);
