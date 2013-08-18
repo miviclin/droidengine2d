@@ -74,6 +74,7 @@ public class Graphics {
 	 * 
 	 * 
 	 * 
+	 * 
 	 * protected void loadBatches() {
 	 * 	super.loadBatches();
 	 * 	getBatches().put(TextureColorMaterial.class, new PositionTextureColorSpriteBatch&lt;TextureColorMaterial&gt;(getContext()));
@@ -97,17 +98,6 @@ public class Graphics {
 	 */
 	public <M extends Material> void draw(M material, Vector2 position, Dimensions2D dimensions) {
 		draw(material, position, dimensions, null, 0.0f);
-	}
-	
-	/**
-	 * Renderiza una figura rectangular
-	 * 
-	 * @param material Material
-	 * @param position Posicion en la que se renderizara
-	 * @param dimensions Dimensiones del sprite
-	 */
-	public <M extends Material> void draw(M material, Vector2 position, Dimensions2D dimensions, float rotation) {
-		draw(material, position, dimensions, null, rotation);
 	}
 	
 	/**
