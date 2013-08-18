@@ -44,14 +44,13 @@ public class RectangleBatchGeometry extends Geometry {
 	 * @param batchIndex Indice de la matriz sobre la que se aplicaran las transformaciones
 	 * @param position Posicion
 	 * @param dimensions Dimensiones
-	 * @param center Centro de rotacion (debe ser un valor entre 0.0 y 1.0)
 	 * @param rotation Angulo de rotacion sobre el centro
 	 * @param camera Camara
 	 */
-	public void updateMVPMatrix(int batchIndex, Vector2 position, Dimensions2D dimensions, Vector2 center, float rotation, Camera camera) {
+	public void updateMVPMatrix(int batchIndex, Vector2 position, Dimensions2D dimensions, float rotation, Camera camera) {
 		int mvpOffset;
-		float tx = position.getX() + center.getX();
-		float ty = position.getY() + center.getY();
+		float tx = position.getX();
+		float ty = position.getY();
 		
 		if (rotation != 0) {
 			TransformUtilities.transform2D(modelMatrix, tx, ty, rotation,

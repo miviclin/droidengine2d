@@ -30,11 +30,11 @@ import com.miviclin.droidengine2d.util.math.Vector2;
  */
 public class Graphics {
 	
+	private final Vector2 defaultOrigin;
 	private Camera camera;
 	private Context context;
 	private RectangleBatchMesh<? extends Material> currentBatch;
 	private HashMap<Class<? extends Material>, RectangleBatchMesh<? extends Material>> batches;
-	private Vector2 tempCenter;
 	private boolean inBeginEndPair;
 	
 	/**
@@ -44,11 +44,11 @@ public class Graphics {
 	 * @param context Context
 	 */
 	public Graphics(Camera camera, Context context) {
+		this.defaultOrigin = new Vector2(0, 0);
 		this.camera = camera;
 		this.context = context;
 		this.currentBatch = null;
 		this.batches = new HashMap<Class<? extends Material>, RectangleBatchMesh<? extends Material>>();
-		this.tempCenter = new Vector2(0, 0);
 		this.inBeginEndPair = false;
 	}
 	
@@ -69,6 +69,7 @@ public class Graphics {
 	 * Se pueden agregar mas batches soportados sobreescribiendo este metodo de la siguiente forma:
 	 * 
 	 * <pre>
+	 * 
 	 * 
 	 * 
 	 * 
@@ -115,19 +116,18 @@ public class Graphics {
 	 * @param material Material
 	 * @param position Posicion en la que se renderizara
 	 * @param dimensions Dimensiones del sprite
-	 * @param center Centro de rotacion
+	 * @param origin Origen de la figura (debe ser un valor entre 0.0 y 1.0)
 	 * @param rotation Angulo de rotacion del sprite con respecto a su centro
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public <M extends Material> void draw(M material, Vector2 position, Dimensions2D dimensions, Vector2 center, float rotation) {
+	public <M extends Material> void draw(M material, Vector2 position, Dimensions2D dimensions, Vector2 origin, float rotation) {
 		RectangleBatchMesh batch = batches.get(material.getClass());
 		if (batch == null) {
 			throw new UnsupportedMaterialException();
 		}
-		tempCenter.set(dimensions.getWidth() / 2, dimensions.getHeight() / 2);
 		selectCurrentBatch(batch);
 		batch.setCurrentMaterial(material);
-		batch.draw(position, dimensions, (center == null) ? tempCenter : center, rotation, camera);
+		batch.draw(position, dimensions, (origin == null) ? defaultOrigin : origin, rotation, camera);
 	}
 	
 	/**

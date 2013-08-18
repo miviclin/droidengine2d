@@ -73,10 +73,10 @@ public class PositionTextureSpriteBatch<M extends TextureMaterial> extends Posit
 	}
 	
 	@Override
-	public void draw(Vector2 position, Dimensions2D dimensions, Vector2 center, float rotation, Camera camera) {
+	public void draw(Vector2 position, Dimensions2D dimensions, Vector2 origin, float rotation, Camera camera) {
 		checkInBeginEndPair();
 		TextureMaterial material = getCurrentMaterial();
-		setupSprite(material.getTextureRegion(), position, dimensions, center, rotation, camera);
+		setupSprite(material.getTextureRegion(), position, dimensions, origin, rotation, camera);
 		incrementBatchSize();
 	}
 	

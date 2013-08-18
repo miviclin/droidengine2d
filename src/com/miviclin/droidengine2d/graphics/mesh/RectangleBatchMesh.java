@@ -108,22 +108,51 @@ public abstract class RectangleBatchMesh<M extends Material> extends GraphicsBat
 	}
 	
 	/**
-	 * Inicializa el array de vertices que definen la geometria de la malla del batch
+	 * Inicializa el array de vertices que definen la geometria de la malla del batch.<br>
+	 * El orden de inicializacion de los vertices debe ser:<br>
+	 * 1. Bottom-left<br>
+	 * 2. Bottom-right<br>
+	 * 3. Top-right<br>
+	 * 4. Top-left
 	 */
 	protected abstract void setupVerticesData();
 	
 	/**
-	 * Transforma la matriz situada en el indice especificado con los datos especificados
+	 * Transforma la figura situada en el indice (mvpIndex) especificado con los datos especificados.<br>
+	 * Para que este metodo funcione como se espera, el orden de inicializacion de los vertices debe ser:<br>
+	 * 1. Bottom-left<br>
+	 * 2. Bottom-right<br>
+	 * 3. Top-right<br>
+	 * 4. Top-left
 	 * 
-	 * @param mvpIndex Indice de la matrix MVP a actualizar
+	 * @param index Indice de la figura a actualizar
 	 * @param position Posicion
 	 * @param dimensions Dimensiones
-	 * @param center Centro de rotacion (debe ser un valor entre 0.0 y 1.0)
+	 * @param origin Origen de la figura (debe ser un valor entre 0.0 y 1.0)
 	 * @param rotation Angulo de rotacion sobre el centro
 	 * @param camera Camara
+	 * 
+	 * @see RectangleBatchMesh#setupVerticesData()
 	 */
-	protected void updateMVPMatrix(int mvpIndex, Vector2 position, Dimensions2D dimensions, Vector2 center, float rotation, Camera camera) {
-		geometry.updateMVPMatrix(mvpIndex, position, dimensions, center, rotation, camera);
+	protected void updateTransform(int index, Vector2 position, Dimensions2D dimensions, Vector2 origin, float rotation, Camera camera) {
+		
+		if (origin.getX() < 0 || origin.getX() > 1 || origin.getY() < 0 || origin.getY() > 1) {
+			throw new IllegalArgumentException("The origin coordinates must be in the [0..1] interval.");
+		}
+		
+		int i = index * 4;
+		float modelOriginX = 0.0f - (origin.getX() - 0.5f);
+		float modelOriginY = 0.0f - (origin.getY() - 0.5f);
+		// Bottom-Left
+		geometry.getVertex(i + 0).set(modelOriginX - 0.5f, modelOriginY - 0.5f, 0.0f);
+		// Bottom-Right
+		geometry.getVertex(i + 1).set(modelOriginX + 0.5f, modelOriginY - 0.5f, 0.0f);
+		// Top-Right
+		geometry.getVertex(i + 2).set(modelOriginX + 0.5f, modelOriginY + 0.5f, 0.0f);
+		// Top-Left
+		geometry.getVertex(i + 3).set(modelOriginX - 0.5f, modelOriginY + 0.5f, 0.0f);
+		// Update MVP matrix
+		geometry.updateMVPMatrix(index, position, dimensions, rotation, camera);
 	}
 	
 	/**
@@ -161,11 +190,11 @@ public abstract class RectangleBatchMesh<M extends Material> extends GraphicsBat
 	 * 
 	 * @param position Posicion
 	 * @param dimensions Dimensiones
-	 * @param center Centro de rotacion (debe ser un valor entre 0.0 y 1.0)
+	 * @param origin Origen de la figura (debe ser un valor entre 0.0 y 1.0)
 	 * @param rotation Angulo de rotacion sobre el centro
 	 * @param camera Camara
 	 */
-	public abstract void draw(Vector2 position, Dimensions2D dimensions, Vector2 center, float rotation, Camera camera);
+	public abstract void draw(Vector2 position, Dimensions2D dimensions, Vector2 origin, float rotation, Camera camera);
 	
 	/**
 	 * Devuelve el stride
