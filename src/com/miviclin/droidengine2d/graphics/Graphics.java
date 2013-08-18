@@ -35,7 +35,6 @@ public class Graphics {
 	private RectangleBatchMesh<? extends Material> currentBatch;
 	private HashMap<Class<? extends Material>, RectangleBatchMesh<? extends Material>> batches;
 	private Vector2 tempCenter;
-	private Vector2 tempRotationPoint;
 	private boolean inBeginEndPair;
 	
 	/**
@@ -50,7 +49,6 @@ public class Graphics {
 		this.currentBatch = null;
 		this.batches = new HashMap<Class<? extends Material>, RectangleBatchMesh<? extends Material>>();
 		this.tempCenter = new Vector2(0, 0);
-		this.tempRotationPoint = new Vector2(0, 0);
 		this.inBeginEndPair = false;
 	}
 	
@@ -71,6 +69,9 @@ public class Graphics {
 	 * Se pueden agregar mas batches soportados sobreescribiendo este metodo de la siguiente forma:
 	 * 
 	 * <pre>
+	 * 
+	 * 
+	 * 
 	 * 
 	 * protected void loadBatches() {
 	 * 	super.loadBatches();
@@ -94,7 +95,7 @@ public class Graphics {
 	 * @param dimensions Dimensiones del sprite
 	 */
 	public <M extends Material> void draw(M material, Vector2 position, Dimensions2D dimensions) {
-		draw(material, position, dimensions, null, 0.0f, null, 0.0f);
+		draw(material, position, dimensions, null, 0.0f);
 	}
 	
 	/**
@@ -103,10 +104,9 @@ public class Graphics {
 	 * @param material Material
 	 * @param position Posicion en la que se renderizara
 	 * @param dimensions Dimensiones del sprite
-	 * @param rotation Angulo de rotacion del sprite con respecto a su centro
 	 */
 	public <M extends Material> void draw(M material, Vector2 position, Dimensions2D dimensions, float rotation) {
-		draw(material, position, dimensions, null, rotation, null, 0.0f);
+		draw(material, position, dimensions, null, rotation);
 	}
 	
 	/**
@@ -114,22 +114,20 @@ public class Graphics {
 	 * 
 	 * @param material Material
 	 * @param position Posicion en la que se renderizara
-	 * @param dimensions Dimensiones
+	 * @param dimensions Dimensiones del sprite
 	 * @param center Centro de rotacion
 	 * @param rotation Angulo de rotacion del sprite con respecto a su centro
-	 * @param externalCenter Centro externo de rotacion
-	 * @param externalRotation Angulo de rotacion sobre el centro externo de rotacion
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public <M extends Material> void draw(M material, Vector2 position, Dimensions2D dimensions, Vector2 center, float rotation, Vector2 externalCenter, float externalRotation) {
+	public <M extends Material> void draw(M material, Vector2 position, Dimensions2D dimensions, Vector2 center, float rotation) {
 		RectangleBatchMesh batch = batches.get(material.getClass());
 		if (batch == null) {
 			throw new UnsupportedMaterialException();
 		}
-		setupTempData(dimensions, externalCenter);
+		tempCenter.set(dimensions.getWidth() / 2, dimensions.getHeight() / 2);
 		selectCurrentBatch(batch);
 		batch.setCurrentMaterial(material);
-		batch.draw(position, dimensions, (center == null) ? tempCenter : center, rotation, tempRotationPoint, externalRotation, camera);
+		batch.draw(position, dimensions, (center == null) ? tempCenter : center, rotation, camera);
 	}
 	
 	/**
@@ -158,21 +156,6 @@ public class Graphics {
 			currentBatch = batch;
 			currentBatch.begin();
 			inBeginEndPair = true;
-		}
-	}
-	
-	/**
-	 * Configura los datos temporales
-	 * 
-	 * @param dimensions Dimensiones
-	 * @param externalCenter Centro externo de rotacion
-	 */
-	private void setupTempData(Dimensions2D dimensions, Vector2 externalCenter) {
-		tempCenter.set(dimensions.getWidth() / 2, dimensions.getHeight() / 2);
-		if (externalCenter == null) {
-			tempRotationPoint.set(0.0f, 0.0f);
-		} else {
-			tempRotationPoint.set(externalCenter);
 		}
 	}
 	

@@ -91,10 +91,10 @@ public class PositionTextureHSVColorSpriteBatch<M extends TextureHSVMaterial> ex
 	}
 	
 	@Override
-	public void draw(Vector2 position, Dimensions2D dimensions, Vector2 center, float rotation, Vector2 rotationPoint, float rotationAroundPoint, Camera camera) {
+	public void draw(Vector2 position, Dimensions2D dimensions, Vector2 center, float rotation, Camera camera) {
 		checkInBeginEndPair();
 		TextureHSVMaterial material = getCurrentMaterial();
-		setupSprite(material.getTextureRegion(), position, dimensions, center, rotation, rotationPoint, rotationAroundPoint, camera);
+		setupSprite(material.getTextureRegion(), position, dimensions, center, rotation, camera);
 		setupHSV(material.getHOffset(), material.getSMulti(), material.getVMulti());
 		incrementBatchSize();
 	}

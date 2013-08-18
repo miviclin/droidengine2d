@@ -84,18 +84,16 @@ public abstract class PositionTextureSpriteBatchBase<M extends Material> extends
 	 * @param dimensions Dimensiones
 	 * @param center Centro de rotacion (debe ser un valor entre 0.0 y 1.0)
 	 * @param rotation Angulo de rotacion sobre el centro
-	 * @param rotationPoint Punto externo de rotacion
-	 * @param rotationAroundPoint Angulo de rotacion sobre el punto externo
 	 * @param camera Camara
 	 */
-	protected void setupSprite(TextureRegion textureRegion, Vector2 position, Dimensions2D dimensions, Vector2 center, float rotation, Vector2 rotationPoint, float rotationAroundPoint, Camera camera) {
+	protected void setupSprite(TextureRegion textureRegion, Vector2 position, Dimensions2D dimensions, Vector2 center, float rotation, Camera camera) {
 		boolean textureChanged = checkTextureChanged(textureRegion);
 		if ((batchSize > 0) && ((batchSize == BATCH_CAPACITY) || textureChanged)) {
 			prepareDrawBatch(batchSize);
 			drawBatch();
 			batchSize = 0;
 		}
-		updateMVPMatrix(batchSize, position, dimensions, center, rotation, rotationPoint, rotationAroundPoint, camera);
+		updateMVPMatrix(batchSize, position, dimensions, center, rotation, camera);
 		setupTexture(textureRegion.getTexture(), textureChanged);
 		setupUVCoords(textureRegion);
 	}

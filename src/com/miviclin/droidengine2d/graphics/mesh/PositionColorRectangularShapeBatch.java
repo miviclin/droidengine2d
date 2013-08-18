@@ -115,10 +115,10 @@ public class PositionColorRectangularShapeBatch<M extends ColorMaterial> extends
 	
 	
 	@Override
-	public void draw(Vector2 position, Dimensions2D dimensions, Vector2 center, float rotation, Vector2 rotationPoint, float rotationAroundPoint, Camera camera) {
+	public void draw(Vector2 position, Dimensions2D dimensions, Vector2 center, float rotation, Camera camera) {
 		checkInBeginEndPair();
 		ColorMaterial material = getCurrentMaterial();
-		setupRectangularShape(material, position, dimensions, center, rotation, rotationPoint, rotationAroundPoint, camera);
+		setupRectangularShape(material, position, dimensions, center, rotation, camera);
 		batchSize++;
 	}
 	
@@ -131,18 +131,16 @@ public class PositionColorRectangularShapeBatch<M extends ColorMaterial> extends
 	 * @param dimensions Dimensiones
 	 * @param center Centro de rotacion (debe ser un valor entre 0.0 y 1.0)
 	 * @param rotation Angulo de rotacion sobre el centro
-	 * @param rotationPoint Punto externo de rotacion
-	 * @param rotationAroundPoint Angulo de rotacion sobre el punto externo
 	 * @param camera Camara
 	 */
-	protected void setupRectangularShape(ColorMaterial material, Vector2 position, Dimensions2D dimensions, Vector2 center, float rotation, Vector2 rotationPoint, float rotationAroundPoint, Camera camera) {
+	protected void setupRectangularShape(ColorMaterial material, Vector2 position, Dimensions2D dimensions, Vector2 center, float rotation, Camera camera) {
 		if (batchSize == BATCH_CAPACITY) {
 			prepareDrawBatch(batchSize);
 			drawBatch();
 			batchSize = 0;
 		}
 		setSpriteVerticesColorData(material.getColor());
-		updateMVPMatrix(batchSize, position, dimensions, center, rotation, rotationPoint, rotationAroundPoint, camera);
+		updateMVPMatrix(batchSize, position, dimensions, center, rotation, camera);
 	}
 	
 	/**
