@@ -94,7 +94,7 @@ public class Graphics {
 	 * @param dimensions Dimensiones del sprite
 	 */
 	public <M extends Material> void draw(M material, Vector2 position, Dimensions2D dimensions) {
-		draw(material, position, dimensions, 0.0f, null, 0.0f);
+		draw(material, position, dimensions, null, 0.0f, null, 0.0f);
 	}
 	
 	/**
@@ -106,7 +106,7 @@ public class Graphics {
 	 * @param rotation Angulo de rotacion del sprite con respecto a su centro
 	 */
 	public <M extends Material> void draw(M material, Vector2 position, Dimensions2D dimensions, float rotation) {
-		draw(material, position, dimensions, rotation, null, 0.0f);
+		draw(material, position, dimensions, null, rotation, null, 0.0f);
 	}
 	
 	/**
@@ -114,13 +114,14 @@ public class Graphics {
 	 * 
 	 * @param material Material
 	 * @param position Posicion en la que se renderizara
-	 * @param dimensions Dimensiones del
+	 * @param dimensions Dimensiones
+	 * @param center Centro de rotacion
 	 * @param rotation Angulo de rotacion del sprite con respecto a su centro
 	 * @param externalCenter Centro externo de rotacion
 	 * @param externalRotation Angulo de rotacion sobre el centro externo de rotacion
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public <M extends Material> void draw(M material, Vector2 position, Dimensions2D dimensions, float rotation, Vector2 externalCenter, float externalRotation) {
+	public <M extends Material> void draw(M material, Vector2 position, Dimensions2D dimensions, Vector2 center, float rotation, Vector2 externalCenter, float externalRotation) {
 		RectangleBatchMesh batch = batches.get(material.getClass());
 		if (batch == null) {
 			throw new UnsupportedMaterialException();
@@ -128,7 +129,7 @@ public class Graphics {
 		setupTempData(dimensions, externalCenter);
 		selectCurrentBatch(batch);
 		batch.setCurrentMaterial(material);
-		batch.draw(position, dimensions, tempCenter, externalRotation, tempRotationPoint, externalRotation, camera);
+		batch.draw(position, dimensions, (center == null) ? tempCenter : center, rotation, tempRotationPoint, externalRotation, camera);
 	}
 	
 	/**
