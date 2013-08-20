@@ -6,13 +6,22 @@ import android.content.Context;
 
 import com.miviclin.droidengine2d.graphics.Color;
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
-import com.miviclin.droidengine2d.graphics.material.TextureColorMaterial;
+import com.miviclin.droidengine2d.graphics.material.TextureHSVMaterial;
 import com.miviclin.droidengine2d.graphics.shader.PositionTextureColorBatchShaderProgram;
+import com.miviclin.droidengine2d.graphics.shader.PositionTextureHSVColorBatchShaderProgram;
 import com.miviclin.droidengine2d.util.Dimensions2D;
 import com.miviclin.droidengine2d.util.math.Vector2;
 import com.miviclin.droidengine2d.util.math.Vector3;
 
-public class PositionTextureColorSpriteBatch<M extends TextureColorMaterial> extends PositionTextureSpriteBatchBase<M> {
+/**
+ * Clase base de la que deben heredar los renderers de mallas que representen batches de figuras rectangulares cuyo material sea
+ * TextureHSVMaterial
+ * 
+ * @author Miguel Vicente Linares
+ * 
+ * @param <M> TextureHSVMaterial
+ */
+public class TextureHSVMaterialBatchRenderer<M extends TextureHSVMaterial> extends TextureMaterialBatchRendererBase<M> {
 	
 	private int vertexColorOffset;
 	
@@ -21,15 +30,15 @@ public class PositionTextureColorSpriteBatch<M extends TextureColorMaterial> ext
 	 * 
 	 * @param context Context en el que se ejecuta el juego
 	 */
-	public PositionTextureColorSpriteBatch(Context context) {
-		super(9, context, new PositionTextureColorBatchShaderProgram());
+	public TextureHSVMaterialBatchRenderer(Context context) {
+		super(9, context, new PositionTextureHSVColorBatchShaderProgram());
 		this.vertexColorOffset = 5;
 		setGeometry(new RectangleBatchGeometry(BATCH_CAPACITY, true, true));
 	}
 	
 	@Override
-	public PositionTextureColorBatchShaderProgram getShaderProgram() {
-		return (PositionTextureColorBatchShaderProgram) super.getShaderProgram();
+	public PositionTextureHSVColorBatchShaderProgram getShaderProgram() {
+		return (PositionTextureHSVColorBatchShaderProgram) super.getShaderProgram();
 	}
 	
 	@Override
@@ -75,9 +84,9 @@ public class PositionTextureColorSpriteBatch<M extends TextureColorMaterial> ext
 			vertexBuffer.put(textureUV.getY());
 			
 			color = getGeometry().getColor(i);
-			vertexBuffer.put(color.getR());
-			vertexBuffer.put(color.getG());
-			vertexBuffer.put(color.getB());
+			vertexBuffer.put(color.getH());
+			vertexBuffer.put(color.getS());
+			vertexBuffer.put(color.getV());
 			vertexBuffer.put(color.getA());
 		}
 	}
@@ -92,9 +101,9 @@ public class PositionTextureColorSpriteBatch<M extends TextureColorMaterial> ext
 	@Override
 	public void draw(Vector2 position, Dimensions2D dimensions, Vector2 origin, float rotation, Camera camera) {
 		checkInBeginEndPair();
-		TextureColorMaterial material = getCurrentMaterial();
+		TextureHSVMaterial material = getCurrentMaterial();
 		setupSprite(material.getTextureRegion(), position, dimensions, origin, rotation, camera);
-		setupColor(material.getColor());
+		setupHSV(material.getHOffset(), material.getSMulti(), material.getVMulti());
 		incrementBatchSize();
 	}
 	
@@ -103,11 +112,11 @@ public class PositionTextureColorSpriteBatch<M extends TextureColorMaterial> ext
 	 * 
 	 * @param color Color
 	 */
-	private void setupColor(Color color) {
+	private void setupHSV(float hOffset, float sMulti, float vMulti) {
 		int spriteOffset = getBatchSize() * 4;
 		int limit = spriteOffset + 4;
 		for (int i = spriteOffset; i < limit; i++) {
-			getGeometry().getColor(i).set(color);
+			getGeometry().getColor(i).setHSV(hOffset, sMulti, vMulti);
 		}
 	}
 	

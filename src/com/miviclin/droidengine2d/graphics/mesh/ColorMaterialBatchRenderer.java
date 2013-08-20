@@ -14,13 +14,13 @@ import com.miviclin.droidengine2d.util.math.Vector2;
 import com.miviclin.droidengine2d.util.math.Vector3;
 
 /**
- * RectangularShapeBatch que permite renderizar en una llamada hasta 32 RectangularShape con transformaciones (traslacion, rotacion y
+ * RectangleBatchRenderer que permite renderizar en una llamada hasta 32 RectangularShape con transformaciones (traslacion, rotacion y
  * escala) distintas.
  * 
  * @author Miguel Vicente Linares
  * 
  */
-public class PositionColorRectangularShapeBatch<M extends ColorMaterial> extends RectangleBatchMesh<M> {
+public class ColorMaterialBatchRenderer<M extends ColorMaterial> extends RectangleBatchRenderer<M> {
 	
 	protected static final int BATCH_CAPACITY = 32;
 	
@@ -31,7 +31,7 @@ public class PositionColorRectangularShapeBatch<M extends ColorMaterial> extends
 	/**
 	 * Crea un PositionColorRectangularShapeBatch
 	 */
-	public PositionColorRectangularShapeBatch() {
+	public ColorMaterialBatchRenderer() {
 		super(7, new PositionColorBatchShaderProgram());
 		setVerticesDataStride(7);
 		this.vertexPositionOffset = 0;
@@ -112,7 +112,6 @@ public class PositionColorRectangularShapeBatch<M extends ColorMaterial> extends
 		shaderProgram.specifyVerticesColors(getVertexBuffer(), vertexColorOffset, 4, getVerticesDataStrideBytes());
 		shaderProgram.specifyVerticesMVPIndices(getMvpIndexBuffer(), 0, SIZE_OF_FLOAT);
 	}
-	
 	
 	@Override
 	public void draw(Vector2 position, Dimensions2D dimensions, Vector2 origin, float rotation, Camera camera) {

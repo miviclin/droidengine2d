@@ -8,6 +8,12 @@ import com.miviclin.droidengine2d.util.TransformUtilities;
 import com.miviclin.droidengine2d.util.math.Matrix4;
 import com.miviclin.droidengine2d.util.math.Vector2;
 
+/**
+ * Define la geometria basica de una malla que representa un batch de figuras rectangulares
+ * 
+ * @author Miguel Vicente Linares
+ * 
+ */
 public class RectangleBatchGeometry extends Geometry {
 	
 	protected final float[] temp = new float[16];

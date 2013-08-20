@@ -17,7 +17,15 @@ import com.miviclin.droidengine2d.graphics.shader.ShaderProgram;
 import com.miviclin.droidengine2d.util.Dimensions2D;
 import com.miviclin.droidengine2d.util.math.Vector2;
 
-public abstract class RectangleBatchMesh<M extends Material> extends GraphicsBatch<M> {
+/**
+ * Clase base de la que deben heredar los renderers de mallas que representen batches de figuras rectangulares.<br>
+ * Permite renderizar en una llamada hasta 32 sprites con transformaciones (traslacion, rotacion y escala) distintas.
+ * 
+ * @author Miguel Vicente Linares
+ * 
+ * @param <M> Material
+ */
+public abstract class RectangleBatchRenderer<M extends Material> extends GraphicsBatch<M> {
 	
 	protected static final int BATCH_CAPACITY = 32;
 	
@@ -35,7 +43,7 @@ public abstract class RectangleBatchMesh<M extends Material> extends GraphicsBat
 	 * @param verticesDataStride Stride de los datos de los vertices
 	 * @param shaderProgram ShaderProgram
 	 */
-	public RectangleBatchMesh(int verticesDataStride, ShaderProgram shaderProgram) {
+	public RectangleBatchRenderer(int verticesDataStride, ShaderProgram shaderProgram) {
 		super(shaderProgram);
 		this.verticesDataStride = verticesDataStride;
 		this.geometry = new RectangleBatchGeometry(BATCH_CAPACITY, false, true);
@@ -132,7 +140,7 @@ public abstract class RectangleBatchMesh<M extends Material> extends GraphicsBat
 	 * @param rotation Angulo de rotacion sobre el centro
 	 * @param camera Camara
 	 * 
-	 * @see RectangleBatchMesh#setupVerticesData()
+	 * @see RectangleBatchRenderer#setupVerticesData()
 	 */
 	protected void updateTransform(int index, Vector2 position, Dimensions2D dimensions, Vector2 origin, float rotation, Camera camera) {
 		

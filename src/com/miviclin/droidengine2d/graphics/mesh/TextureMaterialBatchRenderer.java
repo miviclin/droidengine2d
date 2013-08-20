@@ -12,19 +12,21 @@ import com.miviclin.droidengine2d.util.math.Vector2;
 import com.miviclin.droidengine2d.util.math.Vector3;
 
 /**
- * SpriteBatch que permite renderizar en una llamada hasta 32 sprites con transformaciones (traslacion, rotacion y escala) distintas.
+ * Clase base de la que deben heredar los renderers de mallas que representen batches de figuras rectangulares cuyo material sea
+ * TextureMaterial
  * 
  * @author Miguel Vicente Linares
  * 
+ * @param <M> TextureMaterial
  */
-public class PositionTextureSpriteBatch<M extends TextureMaterial> extends PositionTextureSpriteBatchBase<M> {
+public class TextureMaterialBatchRenderer<M extends TextureMaterial> extends TextureMaterialBatchRendererBase<M> {
 	
 	/**
 	 * Constructor
 	 * 
 	 * @param context Context en el que se ejecuta el juego
 	 */
-	public PositionTextureSpriteBatch(Context context) {
+	public TextureMaterialBatchRenderer(Context context) {
 		super(5, context, new PositionTextureBatchShaderProgram());
 	}
 	

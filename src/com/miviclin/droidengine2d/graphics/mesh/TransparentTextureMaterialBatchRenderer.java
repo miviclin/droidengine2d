@@ -13,13 +13,14 @@ import com.miviclin.droidengine2d.util.math.Vector2;
 import com.miviclin.droidengine2d.util.math.Vector3;
 
 /**
- * PositionTextureSpriteBatch que tiene en cuenta la opacidad de los sprites
+ * Clase base de la que deben heredar los renderers de mallas que representen batches de figuras rectangulares cuyo material sea
+ * TransparentTextureMaterial
  * 
- * @see PositionTextureSpriteBatch
  * @author Miguel Vicente Linares
  * 
+ * @param <M> TransparentTextureMaterial
  */
-public class PositionTextureOpacitySpriteBatch<M extends TransparentTextureMaterial> extends PositionTextureSpriteBatchBase<M> {
+public class TransparentTextureMaterialBatchRenderer<M extends TransparentTextureMaterial> extends TextureMaterialBatchRendererBase<M> {
 	
 	private int vertexOpacityOffset;
 	
@@ -28,7 +29,7 @@ public class PositionTextureOpacitySpriteBatch<M extends TransparentTextureMater
 	 * 
 	 * @param context Context en el que se ejecuta el juego
 	 */
-	public PositionTextureOpacitySpriteBatch(Context context) {
+	public TransparentTextureMaterialBatchRenderer(Context context) {
 		super(6, context, new PositionTextureOpacityBatchShaderProgram());
 		this.vertexOpacityOffset = 5;
 		setGeometry(new RectangleBatchGeometry(BATCH_CAPACITY, true, true));

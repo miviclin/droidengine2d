@@ -13,14 +13,14 @@ import com.miviclin.droidengine2d.util.Dimensions2D;
 import com.miviclin.droidengine2d.util.math.Vector2;
 
 /**
- * Clase base para los batches de sprites.<br>
- * Un batch de sprites debe permitir renderizar en una llamada hasta 32 sprites con transformaciones (traslacion, rotacion y escala)
- * distintas.
+ * Clase base de la que deben heredar los renderers de mallas que representen batches de figuras rectangulares cuyo material sea
+ * TextureMaterial
  * 
  * @author Miguel Vicente Linares
  * 
+ * @param <M> Material
  */
-public abstract class PositionTextureSpriteBatchBase<M extends Material> extends RectangleBatchMesh<M> {
+public abstract class TextureMaterialBatchRendererBase<M extends Material> extends RectangleBatchRenderer<M> {
 	
 	protected static final int BATCH_CAPACITY = 32;
 	
@@ -38,7 +38,7 @@ public abstract class PositionTextureSpriteBatchBase<M extends Material> extends
 	 * @param context Context en el que se ejecuta el juego
 	 * @param shaderProgram Shader Program
 	 */
-	public PositionTextureSpriteBatchBase(int verticesDataStride, Context context, PositionTextureBatchShaderProgram shaderProgram) {
+	public TextureMaterialBatchRendererBase(int verticesDataStride, Context context, PositionTextureBatchShaderProgram shaderProgram) {
 		super(verticesDataStride, shaderProgram);
 		this.vertexPositionOffset = 0;
 		this.vertexUVOffset = 3;
