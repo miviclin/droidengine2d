@@ -1,7 +1,7 @@
 package com.miviclin.droidengine2d.graphics.cameras;
 
-import com.miviclin.droidengine2d.util.Dimensions2D;
 import com.miviclin.droidengine2d.util.math.Matrix4;
+import com.miviclin.droidengine2d.util.math.Vector2;
 import com.miviclin.droidengine2d.util.math.Vector3;
 
 /**
@@ -12,14 +12,12 @@ import com.miviclin.droidengine2d.util.math.Vector3;
  */
 public abstract class Camera {
 	
-	public final Matrix4 viewMatrix = new Matrix4();
-	public final Matrix4 projectionMatrix = new Matrix4();
-	
-	protected final Vector3 eye = new Vector3(0.0f, 0.0f, 5.0f);
-	protected final Vector3 center = new Vector3(0.0f, 0.0f, 0.0f);
-	protected final Vector3 up = new Vector3(0.0f, 1.0f, 0.0f);
-	
-	private final Dimensions2D viewportDimensions = new Dimensions2D(1.0f, 1.0f);
+	private final Vector2 viewportDimensions = new Vector2(1.0f, 1.0f);
+	private final Matrix4 viewMatrix = new Matrix4();
+	private final Matrix4 projectionMatrix = new Matrix4();
+	private final Vector3 eye = new Vector3(0.0f, 0.0f, 5.0f);
+	private final Vector3 center = new Vector3(0.0f, 0.0f, 0.0f);
+	private final Vector3 up = new Vector3(0.0f, 1.0f, 0.0f);
 	
 	private float near = 1.0f;
 	private float far = 10.0f;
@@ -49,7 +47,7 @@ public abstract class Camera {
 	 * @return ancho del viewport
 	 */
 	public final float getViewportWidth() {
-		return viewportDimensions.getWidth();
+		return viewportDimensions.getX();
 	}
 	
 	/**
@@ -62,7 +60,7 @@ public abstract class Camera {
 		if (viewportWidth <= 0) {
 			throw new IllegalArgumentException("The viewport width must be greater than 0");
 		}
-		this.viewportDimensions.setWidth(viewportWidth);
+		this.viewportDimensions.setX(viewportWidth);
 	}
 	
 	/**
@@ -71,7 +69,7 @@ public abstract class Camera {
 	 * @return alto del viewport
 	 */
 	public final float getViewportHeight() {
-		return viewportDimensions.getHeight();
+		return viewportDimensions.getY();
 	}
 	
 	/**
@@ -84,7 +82,7 @@ public abstract class Camera {
 		if (viewportHeight <= 0) {
 			throw new IllegalArgumentException("The viewport height must be greater than 0");
 		}
-		this.viewportDimensions.setHeight(viewportHeight);
+		this.viewportDimensions.setY(viewportHeight);
 	}
 	
 	/**
@@ -101,8 +99,53 @@ public abstract class Camera {
 		if (viewportHeight <= 0) {
 			throw new IllegalArgumentException("The viewport height must be greater than 0");
 		}
-		this.viewportDimensions.setWidth(viewportWidth);
-		this.viewportDimensions.setHeight(viewportHeight);
+		this.viewportDimensions.setX(viewportWidth);
+		this.viewportDimensions.setY(viewportHeight);
+	}
+	
+	/**
+	 * Devuelve la matriz de la vista de la camara
+	 * 
+	 * @return Matrix4
+	 */
+	public Matrix4 getViewMatrix() {
+		return viewMatrix;
+	}
+	
+	/**
+	 * Devuelve la matriz de proyeccion de la camara
+	 * 
+	 * @return Matrix4
+	 */
+	public Matrix4 getProjectionMatrix() {
+		return projectionMatrix;
+	}
+	
+	/**
+	 * Devuelve el vector eye (posicion de la camara)
+	 * 
+	 * @return Vector3
+	 */
+	public Vector3 getEye() {
+		return eye;
+	}
+	
+	/**
+	 * Devuelve el vector center (punto al que mira la camara)
+	 * 
+	 * @return Vector3
+	 */
+	public Vector3 getCenter() {
+		return center;
+	}
+	
+	/**
+	 * Devuelve el vector up (direccion de la camara)
+	 * 
+	 * @return Vector3
+	 */
+	public Vector3 getUp() {
+		return up;
 	}
 	
 	/**

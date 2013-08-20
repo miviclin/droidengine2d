@@ -68,8 +68,8 @@ public class RectangleBatchGeometry extends Geometry {
 			
 		}
 		mvpOffset = batchIndex * 16;
-		Matrix.multiplyMM(temp, 0, camera.viewMatrix.getValues(), 0, modelMatrix.getValues(), 0);
-		Matrix.multiplyMM(mvpMatrices, mvpOffset, camera.projectionMatrix.getValues(), 0, temp, 0);
+		Matrix.multiplyMM(temp, 0, camera.getViewMatrix().getValues(), 0, modelMatrix.getValues(), 0);
+		Matrix.multiplyMM(mvpMatrices, mvpOffset, camera.getProjectionMatrix().getValues(), 0, temp, 0);
 	}
 	
 	/**
