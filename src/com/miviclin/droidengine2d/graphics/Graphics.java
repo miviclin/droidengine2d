@@ -104,7 +104,7 @@ public class Graphics {
 	 * @param material Material
 	 * @param position Posicion en la que se renderizara
 	 * @param dimensions Dimensiones del sprite
-	 * @param origin Origen de la figura (debe ser un valor entre 0.0 y 1.0)
+	 * @param origin Origen de la figura (debe ser un punto entre (0, 0) y (ancho, alto))
 	 * @param rotation Angulo de rotacion del sprite con respecto a su centro
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -113,9 +113,20 @@ public class Graphics {
 		if (batchRenderer == null) {
 			throw new UnsupportedMaterialException();
 		}
+		
+		if (origin == null) {
+			defaultOrigin.set(0, 0);
+			
+		} else if (origin.getX() < 0 || origin.getX() > dimensions.getWidth() || 
+				origin.getY() < 0 || origin.getY() > dimensions.getHeight()) {
+			
+			throw new IllegalArgumentException("The origin must be between (0, 0) and (dimensions.getWidth(), dimensions.getHeight()");
+		} else {
+			defaultOrigin.set(origin.getX() / dimensions.getWidth(), origin.getY() / dimensions.getHeight());
+		}
 		selectCurrentRenderer(batchRenderer);
 		batchRenderer.setCurrentMaterial(material);
-		batchRenderer.draw(position, dimensions, (origin == null) ? defaultOrigin : origin, rotation, camera);
+		batchRenderer.draw(position, dimensions, defaultOrigin, rotation, camera);
 	}
 	
 	/**
