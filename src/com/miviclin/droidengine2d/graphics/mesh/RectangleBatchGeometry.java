@@ -3,7 +3,6 @@ package com.miviclin.droidengine2d.graphics.mesh;
 import android.opengl.Matrix;
 
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
-import com.miviclin.droidengine2d.util.Dimensions2D;
 import com.miviclin.droidengine2d.util.TransformUtilities;
 import com.miviclin.droidengine2d.util.math.Matrix4;
 import com.miviclin.droidengine2d.util.math.Vector2;
@@ -49,23 +48,19 @@ public class RectangleBatchGeometry extends Geometry {
 	 * 
 	 * @param batchIndex Indice de la matriz sobre la que se aplicaran las transformaciones
 	 * @param position Posicion
-	 * @param dimensions Dimensiones
+	 * @param scale Escala
 	 * @param rotation Angulo de rotacion sobre el centro
 	 * @param camera Camara
 	 */
-	public void updateMVPMatrix(int batchIndex, Vector2 position, Dimensions2D dimensions, float rotation, Camera camera) {
+	public void updateMVPMatrix(int batchIndex, Vector2 position, Vector2 scale, float rotation, Camera camera) {
 		int mvpOffset;
 		float tx = position.getX();
 		float ty = position.getY();
 		
 		if (rotation != 0) {
-			TransformUtilities.transform2D(modelMatrix, tx, ty, rotation,
-					dimensions.getWidth(), dimensions.getHeight());
-			
+			TransformUtilities.transform2D(modelMatrix, tx, ty, rotation, scale.getX(), scale.getY());
 		} else {
-			TransformUtilities.transform2D(modelMatrix, tx, ty,
-					dimensions.getWidth(), dimensions.getHeight());
-			
+			TransformUtilities.transform2D(modelMatrix, tx, ty, scale.getX(), scale.getY());
 		}
 		mvpOffset = batchIndex * 16;
 		Matrix.multiplyMM(temp, 0, camera.getViewMatrix().getValues(), 0, modelMatrix.getValues(), 0);

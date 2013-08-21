@@ -19,7 +19,7 @@ import com.miviclin.droidengine2d.graphics.mesh.TextureColorMaterialBatchRendere
 import com.miviclin.droidengine2d.graphics.mesh.TextureHSVMaterialBatchRenderer;
 import com.miviclin.droidengine2d.graphics.mesh.TextureMaterialBatchRenderer;
 import com.miviclin.droidengine2d.graphics.mesh.TransparentTextureMaterialBatchRenderer;
-import com.miviclin.droidengine2d.util.Dimensions2D;
+import com.miviclin.droidengine2d.util.Transform;
 import com.miviclin.droidengine2d.util.math.Vector2;
 
 /**
@@ -30,7 +30,7 @@ import com.miviclin.droidengine2d.util.math.Vector2;
  */
 public class Graphics {
 	
-	private final Vector2 defaultOrigin;
+	private final Vector2 tmpOrigin;
 	private Camera camera;
 	private Context context;
 	private RectangleBatchRenderer<? extends Material> currentRenderer;
@@ -44,7 +44,7 @@ public class Graphics {
 	 * @param context Context
 	 */
 	public Graphics(Camera camera, Context context) {
-		this.defaultOrigin = new Vector2(0, 0);
+		this.tmpOrigin = new Vector2(0, 0);
 		this.camera = camera;
 		this.context = context;
 		this.currentRenderer = null;
@@ -91,42 +91,24 @@ public class Graphics {
 	 * Renderiza una figura rectangular
 	 * 
 	 * @param material Material
-	 * @param position Posicion en la que se renderizara
-	 * @param dimensions Dimensiones del sprite
-	 */
-	public <M extends Material> void draw(M material, Vector2 position, Dimensions2D dimensions) {
-		draw(material, position, dimensions, null, 0.0f);
-	}
-	
-	/**
-	 * Renderiza una figura rectangular
-	 * 
-	 * @param material Material
-	 * @param position Posicion en la que se renderizara
-	 * @param dimensions Dimensiones del sprite
-	 * @param origin Origen de la figura (debe ser un punto entre (0, 0) y (ancho, alto))
-	 * @param rotation Angulo de rotacion del sprite con respecto a su centro
+	 * @param transform Transform de la figura a representar
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public <M extends Material> void draw(M material, Vector2 position, Dimensions2D dimensions, Vector2 origin, float rotation) {
+	public <M extends Material> void draw(M material, Transform transform) {
 		RectangleBatchRenderer batchRenderer = renderers.get(material.getClass());
 		if (batchRenderer == null) {
 			throw new UnsupportedMaterialException();
 		}
 		
-		if (origin == null) {
-			defaultOrigin.set(0, 0);
-			
-		} else if (origin.getX() < 0 || origin.getX() > dimensions.getWidth() || 
-				origin.getY() < 0 || origin.getY() > dimensions.getHeight()) {
-			
-			throw new IllegalArgumentException("The origin must be between (0, 0) and (dimensions.getWidth(), dimensions.getHeight()");
-		} else {
-			defaultOrigin.set(origin.getX() / dimensions.getWidth(), origin.getY() / dimensions.getHeight());
+		Vector2 scale = transform.getScale();
+		Vector2 origin = transform.getOrigin();
+		if (origin.getX() < 0 || origin.getX() > scale.getX() || origin.getY() < 0 || origin.getY() > scale.getY()) {
+			throw new IllegalArgumentException("The origin of the transform must be between (0, 0) and (scale.getX(), scale.getY()");
 		}
+		Vector2.divide(tmpOrigin, origin, scale);
 		selectCurrentRenderer(batchRenderer);
 		batchRenderer.setCurrentMaterial(material);
-		batchRenderer.draw(position, dimensions, defaultOrigin, rotation, camera);
+		batchRenderer.draw(transform.getPosition(), scale, tmpOrigin, transform.getRotation(), camera);
 	}
 	
 	/**

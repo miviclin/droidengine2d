@@ -14,7 +14,6 @@ import com.miviclin.droidengine2d.graphics.GLDebugger;
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
 import com.miviclin.droidengine2d.graphics.material.Material;
 import com.miviclin.droidengine2d.graphics.shader.ShaderProgram;
-import com.miviclin.droidengine2d.util.Dimensions2D;
 import com.miviclin.droidengine2d.util.math.Vector2;
 
 /**
@@ -135,14 +134,14 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 	 * 
 	 * @param index Indice de la figura a actualizar
 	 * @param position Posicion
-	 * @param dimensions Dimensiones
+	 * @param scale Escala
 	 * @param origin Origen de la figura (debe ser un valor entre 0.0 y 1.0)
 	 * @param rotation Angulo de rotacion sobre el centro
 	 * @param camera Camara
 	 * 
 	 * @see RectangleBatchRenderer#setupVerticesData()
 	 */
-	protected void updateTransform(int index, Vector2 position, Dimensions2D dimensions, Vector2 origin, float rotation, Camera camera) {
+	protected void updateTransform(int index, Vector2 position, Vector2 scale, Vector2 origin, float rotation, Camera camera) {
 		
 		if (origin.getX() < 0 || origin.getX() > 1 || origin.getY() < 0 || origin.getY() > 1) {
 			throw new IllegalArgumentException("The origin coordinates must be in the [0..1] interval.");
@@ -160,7 +159,7 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 		// Top-Left
 		geometry.getVertex(i + 3).set(modelOriginX - 0.5f, modelOriginY + 0.5f, 0.0f);
 		// Update MVP matrix
-		geometry.updateMVPMatrix(index, position, dimensions, rotation, camera);
+		geometry.updateMVPMatrix(index, position, scale, rotation, camera);
 	}
 	
 	/**
@@ -197,12 +196,12 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 	 * En caso de que el batch estuviera lleno, se renderiza en 1 sola llamada y se vacia para agregar el nuevo sprite.
 	 * 
 	 * @param position Posicion
-	 * @param dimensions Dimensiones
+	 * @param scale Escala
 	 * @param origin Origen de la figura (debe ser un valor entre 0.0 y 1.0)
 	 * @param rotation Angulo de rotacion sobre el centro
 	 * @param camera Camara
 	 */
-	public abstract void draw(Vector2 position, Dimensions2D dimensions, Vector2 origin, float rotation, Camera camera);
+	public abstract void draw(Vector2 position, Vector2 scale, Vector2 origin, float rotation, Camera camera);
 	
 	/**
 	 * Devuelve el stride

@@ -6,7 +6,7 @@ import android.opengl.GLES20;
 import android.opengl.GLUtils;
 
 import com.miviclin.droidengine2d.resources.AssetsLoader;
-import com.miviclin.droidengine2d.util.Dimensions2D;
+import com.miviclin.droidengine2d.util.math.Vector2;
 
 /**
  * Texture representa una textura
@@ -33,15 +33,15 @@ public class Texture implements Comparable<Texture> {
 	 * @param path Ruta Ruta de la textura (ruta relativa a la carpeta de assets)
 	 */
 	public Texture(Context context, String path) {
-		Dimensions2D bitmapBounds = AssetsLoader.getBitmapBounds(context, path);
+		Vector2 bitmapBounds = AssetsLoader.getBitmapBounds(context, path);
 		this.path = path;
 		this.textureID = -1;
 		this.minFilter = GLES20.GL_LINEAR;
 		this.magFilter = GLES20.GL_LINEAR;
 		this.wrapS = GLES20.GL_REPEAT;
 		this.wrapT = GLES20.GL_REPEAT;
-		this.width = (int) bitmapBounds.getWidth();
-		this.height = (int) bitmapBounds.getHeight();
+		this.width = (int) bitmapBounds.getX();
+		this.height = (int) bitmapBounds.getY();
 		if (width <= 0 || height <= 0) {
 			throw new IllegalArgumentException("An error occurred while loading the texture");
 		}

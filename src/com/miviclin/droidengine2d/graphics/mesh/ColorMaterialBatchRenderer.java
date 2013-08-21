@@ -9,7 +9,6 @@ import com.miviclin.droidengine2d.graphics.cameras.Camera;
 import com.miviclin.droidengine2d.graphics.material.ColorMaterial;
 import com.miviclin.droidengine2d.graphics.shader.PositionColorBatchShaderProgram;
 import com.miviclin.droidengine2d.graphics.shader.ShaderProgram;
-import com.miviclin.droidengine2d.util.Dimensions2D;
 import com.miviclin.droidengine2d.util.math.Vector2;
 import com.miviclin.droidengine2d.util.math.Vector3;
 
@@ -114,10 +113,10 @@ public class ColorMaterialBatchRenderer<M extends ColorMaterial> extends Rectang
 	}
 	
 	@Override
-	public void draw(Vector2 position, Dimensions2D dimensions, Vector2 origin, float rotation, Camera camera) {
+	public void draw(Vector2 position, Vector2 scale, Vector2 origin, float rotation, Camera camera) {
 		checkInBeginEndPair();
 		ColorMaterial material = getCurrentMaterial();
-		setupRectangularShape(material, position, dimensions, origin, rotation, camera);
+		setupRectangularShape(material, position, scale, origin, rotation, camera);
 		batchSize++;
 	}
 	
@@ -127,19 +126,19 @@ public class ColorMaterialBatchRenderer<M extends ColorMaterial> extends Rectang
 	 * 
 	 * @param material ColorMaterial
 	 * @param position Posicion
-	 * @param dimensions Dimensiones
+	 * @param scale Escala
 	 * @param origin Origen de la figura (debe ser un valor entre 0.0 y 1.0)
 	 * @param rotation Angulo de rotacion sobre el centro
 	 * @param camera Camara
 	 */
-	protected void setupRectangularShape(ColorMaterial material, Vector2 position, Dimensions2D dimensions, Vector2 origin, float rotation, Camera camera) {
+	protected void setupRectangularShape(ColorMaterial material, Vector2 position, Vector2 scale, Vector2 origin, float rotation, Camera camera) {
 		if (batchSize == BATCH_CAPACITY) {
 			prepareDrawBatch(batchSize);
 			drawBatch();
 			batchSize = 0;
 		}
 		setSpriteVerticesColorData(material.getColor());
-		updateTransform(batchSize, position, dimensions, origin, rotation, camera);
+		updateTransform(batchSize, position, scale, origin, rotation, camera);
 	}
 	
 	/**

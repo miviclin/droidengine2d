@@ -9,7 +9,7 @@ import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-import com.miviclin.droidengine2d.util.Dimensions2D;
+import com.miviclin.droidengine2d.util.math.Vector2;
 
 /**
  * Cargador de recursos. Clase de utilidad, no instanciable
@@ -113,7 +113,7 @@ public class AssetsLoader {
 	 * @param path Ruta del bitmap, relativa a la carpeta de assets
 	 * @return Dimensiones del bitmap
 	 */
-	public static Dimensions2D getBitmapBounds(Context context, String path) {
+	public static Vector2 getBitmapBounds(Context context, String path) {
 		InputStream in = null;
 		int width;
 		int height;
@@ -133,7 +133,7 @@ public class AssetsLoader {
 				} catch (IOException e) {
 				}
 		}
-		return new Dimensions2D(width, height);
+		return new Vector2(width, height);
 	}
 	
 	/**

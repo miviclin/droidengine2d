@@ -9,7 +9,6 @@ import com.miviclin.droidengine2d.graphics.shader.PositionTextureBatchShaderProg
 import com.miviclin.droidengine2d.graphics.shader.ShaderProgram;
 import com.miviclin.droidengine2d.graphics.texture.Texture;
 import com.miviclin.droidengine2d.graphics.texture.TextureRegion;
-import com.miviclin.droidengine2d.util.Dimensions2D;
 import com.miviclin.droidengine2d.util.math.Vector2;
 
 /**
@@ -81,19 +80,19 @@ public abstract class TextureMaterialBatchRendererBase<M extends Material> exten
 	 * 
 	 * @param textureRegion TextureRegion
 	 * @param position Posicion
-	 * @param dimensions Dimensiones
+	 * @param scale Escala
 	 * @param origin Origen de la figura (debe ser un valor entre 0.0 y 1.0)
 	 * @param rotation Angulo de rotacion sobre el centro
 	 * @param camera Camara
 	 */
-	protected void setupSprite(TextureRegion textureRegion, Vector2 position, Dimensions2D dimensions, Vector2 origin, float rotation, Camera camera) {
+	protected void setupSprite(TextureRegion textureRegion, Vector2 position, Vector2 scale, Vector2 origin, float rotation, Camera camera) {
 		boolean textureChanged = checkTextureChanged(textureRegion);
 		if ((batchSize > 0) && ((batchSize == BATCH_CAPACITY) || textureChanged)) {
 			prepareDrawBatch(batchSize);
 			drawBatch();
 			batchSize = 0;
 		}
-		updateTransform(batchSize, position, dimensions, origin, rotation, camera);
+		updateTransform(batchSize, position, scale, origin, rotation, camera);
 		setupTexture(textureRegion.getTexture(), textureChanged);
 		setupUVCoords(textureRegion);
 	}

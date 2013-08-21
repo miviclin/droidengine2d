@@ -8,7 +8,6 @@ import com.miviclin.droidengine2d.graphics.Color;
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
 import com.miviclin.droidengine2d.graphics.material.TransparentTextureMaterial;
 import com.miviclin.droidengine2d.graphics.shader.PositionTextureOpacityBatchShaderProgram;
-import com.miviclin.droidengine2d.util.Dimensions2D;
 import com.miviclin.droidengine2d.util.math.Vector2;
 import com.miviclin.droidengine2d.util.math.Vector3;
 
@@ -95,10 +94,10 @@ public class TransparentTextureMaterialBatchRenderer<M extends TransparentTextur
 	}
 	
 	@Override
-	public void draw(Vector2 position, Dimensions2D dimensions, Vector2 origin, float rotation, Camera camera) {
+	public void draw(Vector2 position, Vector2 scale, Vector2 origin, float rotation, Camera camera) {
 		checkInBeginEndPair();
 		TransparentTextureMaterial material = getCurrentMaterial();
-		setupSprite(material.getTextureRegion(), position, dimensions, origin, rotation, camera);
+		setupSprite(material.getTextureRegion(), position, scale, origin, rotation, camera);
 		setupOpacity(material.getOpacity());
 		incrementBatchSize();
 	}
