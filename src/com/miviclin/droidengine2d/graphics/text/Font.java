@@ -18,7 +18,7 @@ public interface Font {
 	 * @param id ID de la letra
 	 * @return Letter o null en caso de que no exista una letra con el ID especificado
 	 */
-	public Letter getLetter(int id);
+	public FontChar getLetter(int id);
 	
 	/**
 	 * Elimina todas las referencias y libera recursos.<br>

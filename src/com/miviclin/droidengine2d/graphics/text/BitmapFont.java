@@ -53,11 +53,11 @@ public class BitmapFont implements Font {
 	private int blueChannel;
 	
 	// letters
-	private SparseArray<Letter> letters;
+	private SparseArray<FontChar> letters;
 	
 	public BitmapFont() {
 		
-		this.letters = new SparseArray<Letter>();
+		this.letters = new SparseArray<FontChar>();
 	}
 	
 	@Override
@@ -91,7 +91,7 @@ public class BitmapFont implements Font {
 						charPage = Integer.parseInt(xpp.getAttributeValue(null, "page"));
 						charChannel = Integer.parseInt(xpp.getAttributeValue(null, "chnl"));
 						textureRegion = new TextureRegion(pages.get(charPage), charX, charY, charWidth, charHeight);
-						this.letters.append(charId, new Letter(charId, textureRegion, charXOffset, charYOffset, charXAdvance, charChannel));
+						this.letters.append(charId, new FontChar(charId, textureRegion, charXOffset, charYOffset, charXAdvance, charChannel));
 						
 					} else if (xpp.getName().equals("kerning")) {
 						kerningFirst = Integer.parseInt(xpp.getAttributeValue(null, "first"));
@@ -111,7 +111,7 @@ public class BitmapFont implements Font {
 						
 					} else if (xpp.getName().equals("chars")) {
 						int charCount = Integer.parseInt(xpp.getAttributeValue(null, "count"));
-						this.letters = new SparseArray<Letter>(charCount);
+						this.letters = new SparseArray<FontChar>(charCount);
 						
 					} else if (xpp.getName().equals("info")) {
 						this.face = xpp.getAttributeValue(null, "face");
@@ -159,7 +159,7 @@ public class BitmapFont implements Font {
 	}
 	
 	@Override
-	public Letter getLetter(int id) {
+	public FontChar getLetter(int id) {
 		return letters.get(id);
 	}
 	
@@ -268,7 +268,7 @@ public class BitmapFont implements Font {
 		return blueChannel;
 	}
 	
-	public SparseArray<Letter> getLetters() {
+	public SparseArray<FontChar> getLetters() {
 		return letters;
 	}
 	
