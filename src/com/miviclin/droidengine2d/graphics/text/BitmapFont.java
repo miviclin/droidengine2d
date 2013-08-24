@@ -23,6 +23,12 @@ import com.miviclin.droidengine2d.resources.AssetsLoader;
  */
 public class BitmapFont implements Font {
 	
+	public static final int CHANNEL_HOLDS_GLYPH_DATA = 0;
+	public static final int CHANNEL_HOLDS_OUTLINE = 1;
+	public static final int CHANNEL_HOLDS_GLYPH_AND_OUTLINE = 2;
+	public static final int CHANNEL_VALUE_SET_TO_ZERO = 3;
+	public static final int CHANNEL_VALUE_SET_TO_ONE = 4;
+	
 	// info
 	private String face;
 	private int size;
@@ -52,12 +58,15 @@ public class BitmapFont implements Font {
 	private int greenChannel;
 	private int blueChannel;
 	
-	// letters
-	private SparseArray<FontChar> letters;
+	// font characters
+	private SparseArray<FontChar> characters;
 	
+	/**
+	 * Crea un {@link BitmapFont}.<br>
+	 * Es necesario inicializarlo manualmente mediante el metodo {@link #loadFromXML(String, Context)}
+	 */
 	public BitmapFont() {
-		
-		this.letters = new SparseArray<FontChar>();
+		super();
 	}
 	
 	@Override
@@ -68,6 +77,7 @@ public class BitmapFont implements Font {
 		int charId, charX, charY, charWidth, charHeight, charXOffset, charYOffset, charXAdvance, charPage, charChannel;
 		TextureRegion textureRegion;
 		String texturePath;
+		FontChar fontChar;
 		SparseArray<Texture> pages = new SparseArray<Texture>();
 		
 		try {
@@ -91,13 +101,14 @@ public class BitmapFont implements Font {
 						charPage = Integer.parseInt(xpp.getAttributeValue(null, "page"));
 						charChannel = Integer.parseInt(xpp.getAttributeValue(null, "chnl"));
 						textureRegion = new TextureRegion(pages.get(charPage), charX, charY, charWidth, charHeight);
-						this.letters.append(charId, new FontChar(charId, textureRegion, charXOffset, charYOffset, charXAdvance, charChannel));
+						fontChar = new FontChar(charId, textureRegion, charXOffset, charYOffset, charXAdvance, charChannel);
+						this.characters.append(charId, fontChar);
 						
 					} else if (xpp.getName().equals("kerning")) {
 						kerningFirst = Integer.parseInt(xpp.getAttributeValue(null, "first"));
 						kerningSecond = Integer.parseInt(xpp.getAttributeValue(null, "second"));
 						kerningAmount = Integer.parseInt(xpp.getAttributeValue(null, "amount"));
-						this.letters.get(kerningFirst).getKernings().append(kerningSecond, kerningAmount);
+						this.characters.get(kerningFirst).getKernings().append(kerningSecond, kerningAmount);
 						
 					} else if (xpp.getName().equals("page")) {
 						pageId = Integer.parseInt(xpp.getAttributeValue(null, "id"));
@@ -111,7 +122,7 @@ public class BitmapFont implements Font {
 						
 					} else if (xpp.getName().equals("chars")) {
 						int charCount = Integer.parseInt(xpp.getAttributeValue(null, "count"));
-						this.letters = new SparseArray<FontChar>(charCount);
+						this.characters = new SparseArray<FontChar>(charCount);
 						
 					} else if (xpp.getName().equals("info")) {
 						this.face = xpp.getAttributeValue(null, "face");
@@ -159,117 +170,257 @@ public class BitmapFont implements Font {
 	}
 	
 	@Override
-	public FontChar getLetter(int id) {
-		return letters.get(id);
+	public FontChar getCharacter(int id) {
+		return characters.get(id);
 	}
 	
 	@Override
 	public void clear() {
-		letters.clear();
+		characters.clear();
 	}
 	
+	/**
+	 * Devuelve el nombre de la fuente
+	 * 
+	 * @return Nombre de la fuente
+	 */
 	public String getFace() {
 		return face;
 	}
 	
+	/**
+	 * Devuelve el size de la fuente
+	 * 
+	 * @return size
+	 */
 	public int getSize() {
 		return size;
 	}
 	
+	/**
+	 * Devuelve true si la fuente es negrita, false en caso contrario
+	 * 
+	 * @return true si la fuente es negrita, false en caso contrario
+	 */
 	public boolean isBold() {
 		return bold;
 	}
 	
+	/**
+	 * Devuelve true si la fuente es cursiva, false en caso contrario
+	 * 
+	 * @return true si la fuente es cursiva, false en caso contrario
+	 */
 	public boolean isItalic() {
 		return italic;
 	}
 	
+	/**
+	 * Devuelve el charset de la fuente
+	 * 
+	 * @return Charset
+	 */
 	public String getCharset() {
 		return charset;
 	}
 	
+	/**
+	 * Devuelve true si la fuente es unicode, false en caso contrario
+	 * 
+	 * @return true si la fuente es unicode, false en caso contrario
+	 */
 	public boolean isUnicode() {
 		return unicode;
 	}
 	
+	/**
+	 * El stretch aplicado a la altura de la fuente, en porcentaje. 100 significa que no hay stretch.
+	 * 
+	 * @return Porcentaje de stretch en el eje Y
+	 */
 	public int getStretchH() {
 		return stretchH;
 	}
 	
+	/**
+	 * Devuelve true si la fuente esta suavizada, false en caso contrario
+	 * 
+	 * @return true si la fuente esta suavizada, false en caso contrario
+	 */
 	public boolean isSmooth() {
 		return smooth;
 	}
 	
+	/**
+	 * Devuelve el antialiasing de la fuente (valor de supersampling). 1 significa que no se ha usado supersampling.
+	 * 
+	 * @return Nivel de supersampling
+	 */
 	public int getAntialiasing() {
 		return antialiasing;
 	}
 	
+	/**
+	 * Devuelve el padding izquierdo de los caracteres de la fuente
+	 * 
+	 * @return Padding izquierdo
+	 */
 	public int getPaddingLeft() {
 		return paddingLeft;
 	}
 	
+	/**
+	 * Devuelve el padding derecho de los caracteres de la fuente
+	 * 
+	 * @return Padding derecho
+	 */
 	public int getPaddingRight() {
 		return paddingRight;
 	}
 	
+	/**
+	 * Devuelve el padding por arriba de los caracteres de la fuente
+	 * 
+	 * @return Padding por arriba
+	 */
 	public int getPaddingTop() {
 		return paddingTop;
 	}
 	
+	/**
+	 * Devuelve el padding por abajo de los caracteres de la fuente
+	 * 
+	 * @return Padding por abajo
+	 */
 	public int getPaddingBottom() {
 		return paddingBottom;
 	}
 	
+	/**
+	 * Devuelve el espaciado horizontal de los caracteres de la fuente
+	 * 
+	 * @return Espaciado horizontal
+	 */
 	public int getSpacingHorizontal() {
 		return spacingHorizontal;
 	}
 	
+	/**
+	 * Devuelve el espaciado vertical de los caracteres de la fuente
+	 * 
+	 * @return Espaciado vertical
+	 */
 	public int getSpacingVertical() {
 		return spacingVertical;
 	}
 	
+	/**
+	 * Devuelve el grosor del contorno de los caracteres de la fuente
+	 * 
+	 * @return Grosor del contorno de los caracteres de la fuente
+	 */
 	public int getOutline() {
 		return outline;
 	}
 	
+	/**
+	 * Devuelve la distancia en pixels entre cada linea de texto
+	 * 
+	 * @return Alto de linea
+	 */
 	public int getLineHeight() {
 		return lineHeight;
 	}
 	
+	/**
+	 * Devuelve el numero de pixels desde el alto absoluto de la linea a la base de los caracteres
+	 * 
+	 * @return Distancia de la base de los caracteres al alto de linea
+	 */
 	public int getBaseFromTop() {
 		return baseFromTop;
 	}
 	
+	/**
+	 * Devuelve el ancho de las texturas (atlas) de la fuente. Utilizado normalmente para escalar los caracteres
+	 * 
+	 * @return Ancho de las texturas
+	 */
 	public int getScaleW() {
 		return scaleW;
 	}
 	
+	/**
+	 * Devuelve el alto de las texturas (atlas) de la fuente. Utilizado normalmente para escalar los caracteres
+	 * 
+	 * @return Alto de las texturas
+	 */
 	public int getScaleH() {
 		return scaleH;
 	}
 	
+	/**
+	 * Devuelve true si los caracteres monocromaticos han sido definidos en cada uno de los canales de color, en ese caso
+	 * {@link #getAlphaChannel()} describe lo que se almacena en cada canal, false en caso contrario
+	 * 
+	 * @return true si los caracteres monocromaticos han sido definidos en cada uno de los canales de color, en ese caso
+	 *         {@link #getAlphaChannel()} describe lo que se almacena en cada canal, false en caso contrario
+	 */
 	public boolean isPacked() {
 		return packed;
 	}
 	
+	/**
+	 * Devuelve el valor del canal alpha.
+	 * 
+	 * @return Posibles valores: {@link BitmapFont#CHANNEL_HOLDS_GLYPH_DATA}, {@link BitmapFont#CHANNEL_HOLDS_OUTLINE},
+	 *         {@link BitmapFont#CHANNEL_HOLDS_GLYPH_AND_OUTLINE}, {@link BitmapFont#CHANNEL_VALUE_SET_TO_ZERO},
+	 *         {@link BitmapFont#CHANNEL_VALUE_SET_TO_ONE}
+	 */
 	public int getAlphaChannel() {
 		return alphaChannel;
 	}
 	
+	/**
+	 * Devuelve el valor del canal R.
+	 * 
+	 * @return Posibles valores: {@link BitmapFont#CHANNEL_HOLDS_GLYPH_DATA}, {@link BitmapFont#CHANNEL_HOLDS_OUTLINE},
+	 *         {@link BitmapFont#CHANNEL_HOLDS_GLYPH_AND_OUTLINE}, {@link BitmapFont#CHANNEL_VALUE_SET_TO_ZERO},
+	 *         {@link BitmapFont#CHANNEL_VALUE_SET_TO_ONE}
+	 */
 	public int getRedChannel() {
 		return redChannel;
 	}
 	
+	/**
+	 * Devuelve el valor del canal G.
+	 * 
+	 * @return Posibles valores: {@link BitmapFont#CHANNEL_HOLDS_GLYPH_DATA}, {@link BitmapFont#CHANNEL_HOLDS_OUTLINE},
+	 *         {@link BitmapFont#CHANNEL_HOLDS_GLYPH_AND_OUTLINE}, {@link BitmapFont#CHANNEL_VALUE_SET_TO_ZERO},
+	 *         {@link BitmapFont#CHANNEL_VALUE_SET_TO_ONE}
+	 */
 	public int getGreenChannel() {
 		return greenChannel;
 	}
 	
+	/**
+	 * Devuelve el valor del canal B.
+	 * 
+	 * @return Posibles valores: {@link BitmapFont#CHANNEL_HOLDS_GLYPH_DATA}, {@link BitmapFont#CHANNEL_HOLDS_OUTLINE},
+	 *         {@link BitmapFont#CHANNEL_HOLDS_GLYPH_AND_OUTLINE}, {@link BitmapFont#CHANNEL_VALUE_SET_TO_ZERO},
+	 *         {@link BitmapFont#CHANNEL_VALUE_SET_TO_ONE}
+	 */
 	public int getBlueChannel() {
 		return blueChannel;
 	}
 	
-	public SparseArray<FontChar> getLetters() {
-		return letters;
+	/**
+	 * Devuelve el mapa de caracteres de esta fuente, indexados por ID
+	 * 
+	 * @return Mapa de caracteres
+	 */
+	public SparseArray<FontChar> getCharacters() {
+		return characters;
 	}
 	
 }

@@ -2,6 +2,12 @@ package com.miviclin.droidengine2d.graphics.text;
 
 import android.content.Context;
 
+/**
+ * Interfaz que define una fuente
+ * 
+ * @author Miguel Vicente Linares
+ * 
+ */
 public interface Font {
 	
 	/**
@@ -13,12 +19,12 @@ public interface Font {
 	public void loadFromXML(String path, Context context);
 	
 	/**
-	 * Devuelve la letra especificada
+	 * Devuelve el caracter especificado
 	 * 
 	 * @param id ID de la letra
-	 * @return Letter o null en caso de que no exista una letra con el ID especificado
+	 * @return FontChar o null en caso de que no exista un caracter con el ID especificado
 	 */
-	public FontChar getLetter(int id);
+	public FontChar getCharacter(int id);
 	
 	/**
 	 * Elimina todas las referencias y libera recursos.<br>
