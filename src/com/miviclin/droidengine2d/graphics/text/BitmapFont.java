@@ -23,7 +23,7 @@ import com.miviclin.droidengine2d.resources.AssetsLoader;
  */
 public class BitmapFont implements Font {
 	
-	public static final int CHANNEL_HOLDS_GLYPH_DATA = 0;
+	public static final int CHANNEL_HOLDS_GLYPH = 0;
 	public static final int CHANNEL_HOLDS_OUTLINE = 1;
 	public static final int CHANNEL_HOLDS_GLYPH_AND_OUTLINE = 2;
 	public static final int CHANNEL_VALUE_SET_TO_ZERO = 3;
@@ -61,6 +61,9 @@ public class BitmapFont implements Font {
 	// font characters
 	private SparseArray<FontChar> characters;
 	
+	// font texture atlases
+	private SparseArray<Texture> texturePages;
+	
 	/**
 	 * Crea un {@link BitmapFont}.<br>
 	 * Es necesario inicializarlo manualmente mediante el metodo {@link #loadFromXML(String, Context)}
@@ -76,9 +79,10 @@ public class BitmapFont implements Font {
 		int eventType, index, pageId, kerningFirst, kerningSecond, kerningAmount;
 		int charId, charX, charY, charWidth, charHeight, charXOffset, charYOffset, charXAdvance, charPage, charChannel;
 		TextureRegion textureRegion;
+		Texture texture;
 		String texturePath;
 		FontChar fontChar;
-		SparseArray<Texture> pages = new SparseArray<Texture>();
+		this.texturePages = new SparseArray<Texture>();
 		
 		try {
 			factory = XmlPullParserFactory.newInstance();
@@ -100,7 +104,7 @@ public class BitmapFont implements Font {
 						charXAdvance = Integer.parseInt(xpp.getAttributeValue(null, "xadvance"));
 						charPage = Integer.parseInt(xpp.getAttributeValue(null, "page"));
 						charChannel = Integer.parseInt(xpp.getAttributeValue(null, "chnl"));
-						textureRegion = new TextureRegion(pages.get(charPage), charX, charY, charWidth, charHeight);
+						textureRegion = new TextureRegion(this.texturePages.get(charPage), charX, charY, charWidth, charHeight);
 						fontChar = new FontChar(charId, textureRegion, charXOffset, charYOffset, charXAdvance, charChannel);
 						this.characters.append(charId, fontChar);
 						
@@ -118,7 +122,8 @@ public class BitmapFont implements Font {
 						} else {
 							texturePath = xpp.getAttributeValue(null, "file");
 						}
-						pages.put(pageId, new Texture(context, texturePath));
+						texture = new Texture(context, texturePath);
+						this.texturePages.put(pageId, texture);
 						
 					} else if (xpp.getName().equals("chars")) {
 						int charCount = Integer.parseInt(xpp.getAttributeValue(null, "count"));
@@ -126,12 +131,12 @@ public class BitmapFont implements Font {
 						
 					} else if (xpp.getName().equals("info")) {
 						this.face = xpp.getAttributeValue(null, "face");
-						this.size = Math.abs(Integer.parseInt(xpp.getAttributeValue(null, "chnl")));
+						this.size = Math.abs(Integer.parseInt(xpp.getAttributeValue(null, "size")));
 						this.bold = Integer.parseInt(xpp.getAttributeValue(null, "bold")) == 1;
 						this.italic = Integer.parseInt(xpp.getAttributeValue(null, "italic")) == 1;
 						this.charset = xpp.getAttributeValue(null, "charset");
 						this.unicode = Integer.parseInt(xpp.getAttributeValue(null, "unicode")) == 1;
-						this.stretchH = Integer.parseInt(xpp.getAttributeValue(null, "unicode"));
+						this.stretchH = Integer.parseInt(xpp.getAttributeValue(null, "stretchH"));
 						this.smooth = Integer.parseInt(xpp.getAttributeValue(null, "smooth")) == 1;
 						this.antialiasing = Integer.parseInt(xpp.getAttributeValue(null, "aa"));
 						
@@ -148,7 +153,7 @@ public class BitmapFont implements Font {
 						this.outline = Integer.parseInt(xpp.getAttributeValue(null, "outline"));
 						
 					} else if (xpp.getName().equals("common")) {
-						this.lineHeight = Integer.parseInt(xpp.getAttributeValue(null, "lineheight"));
+						this.lineHeight = Integer.parseInt(xpp.getAttributeValue(null, "lineHeight"));
 						this.baseFromTop = Integer.parseInt(xpp.getAttributeValue(null, "base"));
 						this.scaleW = Integer.parseInt(xpp.getAttributeValue(null, "scaleW"));
 						this.scaleH = Integer.parseInt(xpp.getAttributeValue(null, "scaleH"));
@@ -158,6 +163,11 @@ public class BitmapFont implements Font {
 						this.greenChannel = Integer.parseInt(xpp.getAttributeValue(null, "greenChnl"));
 						this.blueChannel = Integer.parseInt(xpp.getAttributeValue(null, "blueChnl"));
 						
+						if (this.alphaChannel != BitmapFont.CHANNEL_HOLDS_GLYPH || this.redChannel != BitmapFont.CHANNEL_HOLDS_GLYPH ||
+								this.greenChannel != BitmapFont.CHANNEL_HOLDS_GLYPH || this.blueChannel != BitmapFont.CHANNEL_HOLDS_GLYPH) {
+							
+							throw new IllegalArgumentException("All channels must be set to glyph in BMFont in order to be compatible");
+						}
 					}
 				}
 				eventType = xpp.next();
@@ -171,12 +181,21 @@ public class BitmapFont implements Font {
 	
 	@Override
 	public FontChar getCharacter(int id) {
-		return characters.get(id);
+		FontChar character = characters.get(id);
+		if (character == null) {
+			throw new UndefinedCharacterException();
+		}
+		return character;
 	}
 	
 	@Override
 	public void clear() {
 		characters.clear();
+	}
+	
+	@Override
+	public SparseArray<Texture> getTexturePages() {
+		return texturePages;
 	}
 	
 	/**
@@ -373,7 +392,7 @@ public class BitmapFont implements Font {
 	/**
 	 * Devuelve el valor del canal alpha.
 	 * 
-	 * @return Posibles valores: {@link BitmapFont#CHANNEL_HOLDS_GLYPH_DATA}, {@link BitmapFont#CHANNEL_HOLDS_OUTLINE},
+	 * @return Posibles valores: {@link BitmapFont#CHANNEL_HOLDS_GLYPH}, {@link BitmapFont#CHANNEL_HOLDS_OUTLINE},
 	 *         {@link BitmapFont#CHANNEL_HOLDS_GLYPH_AND_OUTLINE}, {@link BitmapFont#CHANNEL_VALUE_SET_TO_ZERO},
 	 *         {@link BitmapFont#CHANNEL_VALUE_SET_TO_ONE}
 	 */
@@ -384,7 +403,7 @@ public class BitmapFont implements Font {
 	/**
 	 * Devuelve el valor del canal R.
 	 * 
-	 * @return Posibles valores: {@link BitmapFont#CHANNEL_HOLDS_GLYPH_DATA}, {@link BitmapFont#CHANNEL_HOLDS_OUTLINE},
+	 * @return Posibles valores: {@link BitmapFont#CHANNEL_HOLDS_GLYPH}, {@link BitmapFont#CHANNEL_HOLDS_OUTLINE},
 	 *         {@link BitmapFont#CHANNEL_HOLDS_GLYPH_AND_OUTLINE}, {@link BitmapFont#CHANNEL_VALUE_SET_TO_ZERO},
 	 *         {@link BitmapFont#CHANNEL_VALUE_SET_TO_ONE}
 	 */
@@ -395,7 +414,7 @@ public class BitmapFont implements Font {
 	/**
 	 * Devuelve el valor del canal G.
 	 * 
-	 * @return Posibles valores: {@link BitmapFont#CHANNEL_HOLDS_GLYPH_DATA}, {@link BitmapFont#CHANNEL_HOLDS_OUTLINE},
+	 * @return Posibles valores: {@link BitmapFont#CHANNEL_HOLDS_GLYPH}, {@link BitmapFont#CHANNEL_HOLDS_OUTLINE},
 	 *         {@link BitmapFont#CHANNEL_HOLDS_GLYPH_AND_OUTLINE}, {@link BitmapFont#CHANNEL_VALUE_SET_TO_ZERO},
 	 *         {@link BitmapFont#CHANNEL_VALUE_SET_TO_ONE}
 	 */
@@ -406,7 +425,7 @@ public class BitmapFont implements Font {
 	/**
 	 * Devuelve el valor del canal B.
 	 * 
-	 * @return Posibles valores: {@link BitmapFont#CHANNEL_HOLDS_GLYPH_DATA}, {@link BitmapFont#CHANNEL_HOLDS_OUTLINE},
+	 * @return Posibles valores: {@link BitmapFont#CHANNEL_HOLDS_GLYPH}, {@link BitmapFont#CHANNEL_HOLDS_OUTLINE},
 	 *         {@link BitmapFont#CHANNEL_HOLDS_GLYPH_AND_OUTLINE}, {@link BitmapFont#CHANNEL_VALUE_SET_TO_ZERO},
 	 *         {@link BitmapFont#CHANNEL_VALUE_SET_TO_ONE}
 	 */

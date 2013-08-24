@@ -19,6 +19,8 @@ import com.miviclin.droidengine2d.graphics.mesh.TextureColorMaterialBatchRendere
 import com.miviclin.droidengine2d.graphics.mesh.TextureHSVMaterialBatchRenderer;
 import com.miviclin.droidengine2d.graphics.mesh.TextureMaterialBatchRenderer;
 import com.miviclin.droidengine2d.graphics.mesh.TransparentTextureMaterialBatchRenderer;
+import com.miviclin.droidengine2d.graphics.text.BitmapFont;
+import com.miviclin.droidengine2d.graphics.text.FontChar;
 import com.miviclin.droidengine2d.util.Transform;
 import com.miviclin.droidengine2d.util.math.Vector2;
 
@@ -31,6 +33,10 @@ import com.miviclin.droidengine2d.util.math.Vector2;
 public class Graphics {
 	
 	private final Vector2 tmpOrigin;
+	private final Vector2 tmpScale;
+	private final Vector2 tmpPosition;
+	private TextureColorMaterial tmpTextureColorMaterial;
+	
 	private Camera camera;
 	private Context context;
 	private RectangleBatchRenderer<? extends Material> currentRenderer;
@@ -45,6 +51,8 @@ public class Graphics {
 	 */
 	public Graphics(Camera camera, Context context) {
 		this.tmpOrigin = new Vector2(0, 0);
+		this.tmpScale = new Vector2(1, 1);
+		this.tmpPosition = new Vector2(0, 0);
 		this.camera = camera;
 		this.context = context;
 		this.currentRenderer = null;
@@ -113,6 +121,46 @@ public class Graphics {
 		selectCurrentRenderer(batchRenderer);
 		batchRenderer.setCurrentMaterial(material);
 		batchRenderer.draw(transform.getPosition(), scale, tmpOrigin, transform.getRotation(), camera);
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public void drawText(String text, BitmapFont font, Vector2 position, float fontSizePx, Color color) {
+		RectangleBatchRenderer batchRenderer = renderers.get(TextureColorMaterial.class);
+		if (batchRenderer == null) {
+			throw new UnsupportedMaterialException();
+		}
+		if (fontSizePx < 1 || fontSizePx < 1) {
+			throw new IllegalArgumentException("fontSizePx has to be at least 1");
+		}
+		selectCurrentRenderer(batchRenderer);
+		
+		FontChar lastChar = null;
+		FontChar currentChar = null;
+		int textLength = text.length();
+		float scaleRatio = fontSizePx / font.getSize();
+		tmpOrigin.set(0, 1);
+		tmpPosition.set(position);
+		for (int i = 0; i < textLength; i++) {
+			currentChar = font.getCharacter((int) text.charAt(i));
+			if (lastChar != null) {
+				tmpPosition.setX(tmpPosition.getX() + lastChar.getKernings().get(currentChar.getID()) * scaleRatio);
+			}
+			tmpPosition.setX(tmpPosition.getX() + currentChar.getxOffset() * scaleRatio);
+			tmpPosition.setY(position.getY() - currentChar.getyOffset() * scaleRatio);
+			tmpScale.setX(currentChar.getTextureRegion().getWidth() * scaleRatio);
+			tmpScale.setY(currentChar.getTextureRegion().getHeight() * scaleRatio);
+			
+			if (tmpTextureColorMaterial != null) {
+				tmpTextureColorMaterial.setTextureRegion(currentChar.getTextureRegion());
+				tmpTextureColorMaterial.getColor().set(color);
+			} else {
+				tmpTextureColorMaterial = new TextureColorMaterial(currentChar.getTextureRegion(), color);
+				batchRenderer.setCurrentMaterial(tmpTextureColorMaterial);
+			}
+			batchRenderer.draw(tmpPosition, tmpScale, tmpOrigin, 0.0f, camera);
+			tmpPosition.setX(tmpPosition.getX() + currentChar.getxAdvance() * scaleRatio);
+			lastChar = currentChar;
+		}
 	}
 	
 	/**

@@ -1,6 +1,9 @@
 package com.miviclin.droidengine2d.graphics.text;
 
 import android.content.Context;
+import android.util.SparseArray;
+
+import com.miviclin.droidengine2d.graphics.texture.Texture;
 
 /**
  * Interfaz que define una fuente
@@ -23,6 +26,7 @@ public interface Font {
 	 * 
 	 * @param id ID de la letra
 	 * @return FontChar o null en caso de que no exista un caracter con el ID especificado
+	 * @throws UndefinedCharacterException Si el caracter especificado no esta definido para esta fuente
 	 */
 	public FontChar getCharacter(int id);
 	
@@ -31,4 +35,11 @@ public interface Font {
 	 * Este metodo se puede llamar cuando esta Font deje de ser necesario, para liberar recursos.
 	 */
 	public void clear();
+	
+	/**
+	 * Devuelve las texturas que contienen los caracteres de la fuente indexadas por id de pagina
+	 * 
+	 * @return Texturas
+	 */
+	public SparseArray<Texture> getTexturePages();
 }

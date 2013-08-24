@@ -5,7 +5,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import android.content.Context;
+import android.util.SparseArray;
 
+import com.miviclin.droidengine2d.graphics.text.Font;
 import com.miviclin.droidengine2d.util.Pool;
 
 /**
@@ -140,6 +142,18 @@ public final class TextureManager {
 			texturesToLoad++;
 		}
 		return true;
+	}
+	
+	/**
+	 * Agrega todas las texturas de una fuente al TextureManager
+	 * 
+	 * @param font Font cuyas texturas se van a registrar en el TextureManager
+	 */
+	public void addFontTextures(Font font) {
+		SparseArray<Texture> texturePages = font.getTexturePages();
+		for (int i = 0; i < texturePages.size(); i++) {
+			addTexture(texturePages.valueAt(i));
+		}
 	}
 	
 	/**
