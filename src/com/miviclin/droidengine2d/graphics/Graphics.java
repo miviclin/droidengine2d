@@ -101,6 +101,10 @@ public class Graphics {
 		}
 		
 		Vector2 scale = transform.getScale();
+		if (scale.getX() < 1 || scale.getY() < 1) {
+			throw new IllegalArgumentException("The scale of the transform has to be at least (1, 1)");
+		}
+		
 		Vector2 origin = transform.getOrigin();
 		if (origin.getX() < 0 || origin.getX() > scale.getX() || origin.getY() < 0 || origin.getY() > scale.getY()) {
 			throw new IllegalArgumentException("The origin of the transform must be between (0, 0) and (scale.getX(), scale.getY()");
