@@ -123,6 +123,15 @@ public class Graphics {
 		batchRenderer.draw(transform.getPosition(), scale, tmpOrigin, transform.getRotation(), camera);
 	}
 	
+	/**
+	 * Renderiza texto en pantalla
+	 * 
+	 * @param text Texto a mostrar
+	 * @param font Fuente
+	 * @param position Posicion de la esquina superior izquierda de la primera letra
+	 * @param fontSizePx Escala del texto en pixeles
+	 * @param color Color del texto
+	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void drawText(String text, BitmapFont font, Vector2 position, float fontSizePx, Color color) {
 		RectangleBatchRenderer batchRenderer = renderers.get(TextureColorMaterial.class);
