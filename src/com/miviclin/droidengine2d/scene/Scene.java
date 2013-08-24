@@ -96,7 +96,7 @@ public abstract class Scene {
 	public abstract void onResume();
 	
 	/**
-	 * Libera los recursos de la Scene. Este metodo no se llama automaticamente
+	 * Libera los recursos de la Scene.
 	 */
 	public abstract void dispose();
 }
