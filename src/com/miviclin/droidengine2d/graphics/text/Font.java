@@ -51,4 +51,12 @@ public interface Font {
 	 * @return Ancho de la linea de texto en pixels
 	 */
 	public float measureLineWidth(String line, float fontSizePx);
+	
+	/**
+	 * Calcula el alto de una linea de texto en pixels
+	 * 
+	 * @param fontSizePx Tamano de la fuente en pixels
+	 * @return Alto de la linea de texto en pixels
+	 */
+	public float measureLineHeight(float fontSizePx);
 }

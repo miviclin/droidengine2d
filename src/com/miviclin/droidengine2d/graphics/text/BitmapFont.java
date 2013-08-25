@@ -217,6 +217,12 @@ public class BitmapFont implements Font {
 		return textWidth;
 	}
 	
+	@Override
+	public float measureLineHeight(float fontSizePx) {
+		float scaleRatio = fontSizePx / getSize();
+		return getLineHeight() * scaleRatio;
+	}
+	
 	/**
 	 * Devuelve el nombre de la fuente
 	 * 
