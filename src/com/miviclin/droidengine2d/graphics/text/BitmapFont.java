@@ -198,6 +198,25 @@ public class BitmapFont implements Font {
 		return texturePages;
 	}
 	
+	@Override
+	public float measureLineWidth(String line, float fontSizePx) {
+		FontChar lastChar = null;
+		FontChar currentChar = null;
+		int textLength = line.length();
+		float scaleRatio = fontSizePx / getSize();
+		float textWidth = 0.0f;
+		
+		for (int i = 0; i < textLength; i++) {
+			currentChar = getCharacter((int) line.charAt(i));
+			if (lastChar != null) {
+				textWidth += lastChar.getKernings().get(currentChar.getID()) * scaleRatio;
+			}
+			textWidth += (currentChar.getxOffset() + currentChar.getxAdvance()) * scaleRatio;
+			lastChar = currentChar;
+		}
+		return textWidth;
+	}
+	
 	/**
 	 * Devuelve el nombre de la fuente
 	 * 

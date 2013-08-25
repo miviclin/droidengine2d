@@ -42,4 +42,13 @@ public interface Font {
 	 * @return Texturas
 	 */
 	public SparseArray<Texture> getTexturePages();
+	
+	/**
+	 * Calcula el ancho de una linea de texto en pixels
+	 * 
+	 * @param line Linea de texto
+	 * @param fontSizePx Tamano de la fuente en pixels
+	 * @return Ancho de la linea de texto en pixels
+	 */
+	public float measureLineWidth(String line, float fontSizePx);
 }
