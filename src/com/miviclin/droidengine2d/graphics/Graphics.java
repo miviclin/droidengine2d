@@ -133,7 +133,7 @@ public class Graphics {
 	 * @param fontSizePx Escala del texto en pixeles
 	 * @param color Color del texto
 	 */
-	public void drawText(String text, BitmapFont font, Vector2 position, float fontSizePx, Color color) {
+	public void drawText(CharSequence text, BitmapFont font, Vector2 position, float fontSizePx, Color color) {
 		drawText(text, font, position, fontSizePx, null, 0.0f, color);
 	}
 	
@@ -149,7 +149,7 @@ public class Graphics {
 	 * @param color Color del texto
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void drawText(String text, BitmapFont font, Vector2 position, float fontSizePx, Vector2 rotationPoint, float rotation, Color color) {
+	public void drawText(CharSequence text, BitmapFont font, Vector2 position, float fontSizePx, Vector2 rotationPoint, float rotation, Color color) {
 		RectangleBatchRenderer batchRenderer = renderers.get(TextureColorMaterial.class);
 		if (batchRenderer == null) {
 			throw new UnsupportedMaterialException();
