@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
 import com.miviclin.droidengine2d.graphics.material.ColorMaterial;
@@ -132,8 +133,23 @@ public class Graphics {
 	 * @param fontSizePx Escala del texto en pixeles
 	 * @param color Color del texto
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void drawText(String text, BitmapFont font, Vector2 position, float fontSizePx, Color color) {
+		drawText(text, font, position, fontSizePx, null, 0.0f, color);
+	}
+	
+	/**
+	 * Renderiza texto en pantalla
+	 * 
+	 * @param text Texto a mostrar
+	 * @param font Fuente
+	 * @param position Posicion de la esquina superior izquierda de la primera letra
+	 * @param fontSizePx Escala del texto en pixeles
+	 * @param rotationPoint Punto de rotacion (puede ser un punto externo al texto)
+	 * @param rotation Angulo de rotacion
+	 * @param color Color del texto
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public void drawText(String text, BitmapFont font, Vector2 position, float fontSizePx, Vector2 rotationPoint, float rotation, Color color) {
 		RectangleBatchRenderer batchRenderer = renderers.get(TextureColorMaterial.class);
 		if (batchRenderer == null) {
 			throw new UnsupportedMaterialException();
@@ -142,32 +158,44 @@ public class Graphics {
 			throw new IllegalArgumentException("fontSizePx has to be at least 1");
 		}
 		selectCurrentRenderer(batchRenderer);
+		tmpOrigin.set(0, 1);
 		
-		FontChar lastChar = null;
-		FontChar currentChar = null;
 		int textLength = text.length();
 		float scaleRatio = fontSizePx / font.getSize();
-		tmpOrigin.set(0, 1);
-		tmpPosition.set(position);
+		float posX = position.getX();
+		float posY = position.getY();
+		
+		float cosR, sinR;
+		FontChar currentChar;
+		FontChar lastChar = null;
 		for (int i = 0; i < textLength; i++) {
 			currentChar = font.getCharacter((int) text.charAt(i));
 			if (lastChar != null) {
-				tmpPosition.setX(tmpPosition.getX() + lastChar.getKernings().get(currentChar.getID()) * scaleRatio);
+				posX += lastChar.getKernings().get(currentChar.getID()) * scaleRatio;
 			}
-			tmpPosition.setX(tmpPosition.getX() + currentChar.getxOffset() * scaleRatio);
-			tmpPosition.setY(position.getY() - currentChar.getyOffset() * scaleRatio);
+			posX += currentChar.getxOffset() * scaleRatio;
+			posY = position.getY() - currentChar.getyOffset() * scaleRatio;
 			tmpScale.setX(currentChar.getTextureRegion().getWidth() * scaleRatio);
 			tmpScale.setY(currentChar.getTextureRegion().getHeight() * scaleRatio);
 			
 			if (tmpTextureColorMaterial != null) {
 				tmpTextureColorMaterial.setTextureRegion(currentChar.getTextureRegion());
-				tmpTextureColorMaterial.getColor().set(color);
 			} else {
-				tmpTextureColorMaterial = new TextureColorMaterial(currentChar.getTextureRegion(), color);
-				batchRenderer.setCurrentMaterial(tmpTextureColorMaterial);
+				tmpTextureColorMaterial = new TextureColorMaterial(currentChar.getTextureRegion(), new Color(0, 0, 0));
 			}
-			batchRenderer.draw(tmpPosition, tmpScale, tmpOrigin, 0.0f, camera);
-			tmpPosition.setX(tmpPosition.getX() + currentChar.getxAdvance() * scaleRatio);
+			tmpTextureColorMaterial.getColor().set(color);
+			if (rotation != 0 && rotationPoint != null) {
+				cosR = (float) Math.cos(Math.toRadians(rotation));
+				sinR = (float) Math.sin(Math.toRadians(rotation));
+				tmpPosition.setX(((posX - rotationPoint.getX()) * cosR - (posY - rotationPoint.getY()) * sinR) + rotationPoint.getX());
+				tmpPosition.setY(((posY - rotationPoint.getY()) * cosR + (posX - rotationPoint.getX()) * sinR) + rotationPoint.getY());
+			} else {
+				tmpPosition.set(posX, posY);
+			}
+			batchRenderer.setCurrentMaterial(tmpTextureColorMaterial);
+			Log.d("color", tmpTextureColorMaterial.getColor().getR() + "");
+			batchRenderer.draw(tmpPosition, tmpScale, tmpOrigin, (rotationPoint != null) ? rotation : 0.0f, camera);
+			posX += currentChar.getxAdvance() * scaleRatio;
 			lastChar = currentChar;
 		}
 	}
