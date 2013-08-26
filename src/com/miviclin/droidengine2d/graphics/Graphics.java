@@ -35,7 +35,7 @@ public class Graphics {
 	private final Vector2 tmpOrigin;
 	private final Vector2 tmpScale;
 	private final Vector2 tmpPosition;
-	private TextureColorMaterial tmpTextureColorMaterial;
+	private final TextureColorMaterial tmpTextureColorMaterial;
 	
 	private Camera camera;
 	private Context context;
@@ -53,6 +53,7 @@ public class Graphics {
 		this.tmpOrigin = new Vector2(0, 0);
 		this.tmpScale = new Vector2(1, 1);
 		this.tmpPosition = new Vector2(0, 0);
+		this.tmpTextureColorMaterial = new TextureColorMaterial(null, new Color(0, 0, 0));
 		this.camera = camera;
 		this.context = context;
 		this.currentRenderer = null;
@@ -157,6 +158,8 @@ public class Graphics {
 			throw new IllegalArgumentException("fontSizePx has to be at least 1");
 		}
 		selectCurrentRenderer(batchRenderer);
+		batchRenderer.setCurrentMaterial(tmpTextureColorMaterial);
+		tmpTextureColorMaterial.getColor().set(color);
 		tmpOrigin.set(0, 1);
 		
 		int textLength = text.length();
@@ -164,9 +167,9 @@ public class Graphics {
 		float posX = position.getX();
 		float posY = position.getY();
 		
-		float cosR, sinR;
 		FontChar currentChar;
 		FontChar lastChar = null;
+		float cosR, sinR;
 		for (int i = 0; i < textLength; i++) {
 			currentChar = font.getCharacter((int) text.charAt(i));
 			if (lastChar != null) {
@@ -177,12 +180,6 @@ public class Graphics {
 			tmpScale.setX(currentChar.getTextureRegion().getWidth() * scaleRatio);
 			tmpScale.setY(currentChar.getTextureRegion().getHeight() * scaleRatio);
 			
-			if (tmpTextureColorMaterial != null) {
-				tmpTextureColorMaterial.setTextureRegion(currentChar.getTextureRegion());
-			} else {
-				tmpTextureColorMaterial = new TextureColorMaterial(currentChar.getTextureRegion(), new Color(0, 0, 0));
-			}
-			tmpTextureColorMaterial.getColor().set(color);
 			if (rotation != 0 && rotationPoint != null) {
 				cosR = (float) Math.cos(Math.toRadians(rotation));
 				sinR = (float) Math.sin(Math.toRadians(rotation));
@@ -191,7 +188,8 @@ public class Graphics {
 			} else {
 				tmpPosition.set(posX, posY);
 			}
-			batchRenderer.setCurrentMaterial(tmpTextureColorMaterial);
+			
+			tmpTextureColorMaterial.setTextureRegion(currentChar.getTextureRegion());
 			batchRenderer.draw(tmpPosition, tmpScale, tmpOrigin, (rotationPoint != null) ? rotation : 0.0f, camera);
 			posX += currentChar.getxAdvance() * scaleRatio;
 			lastChar = currentChar;
