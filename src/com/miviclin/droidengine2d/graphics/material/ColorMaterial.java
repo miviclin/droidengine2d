@@ -13,6 +13,13 @@ public class ColorMaterial extends Material {
 	private Color color;
 	
 	/**
+	 * Constructor por defecto. Crea un ColorMaterial de color blanco.
+	 */
+	public ColorMaterial() {
+		this(new Color(1, 1, 1));
+	}
+	
+	/**
 	 * Constructor
 	 * 
 	 * @param color Color (no puede ser null)
@@ -20,7 +27,7 @@ public class ColorMaterial extends Material {
 	public ColorMaterial(Color color) {
 		super();
 		if (color == null) {
-			throw new IllegalArgumentException("The TextureRegion can not be null");
+			throw new IllegalArgumentException("The Color can not be null");
 		}
 		this.color = color;
 	}

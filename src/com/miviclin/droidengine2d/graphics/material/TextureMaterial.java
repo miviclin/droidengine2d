@@ -19,7 +19,6 @@ public class TextureMaterial extends Material {
 	 */
 	public TextureMaterial(TextureRegion textureRegion) {
 		super();
-		checkTextureRegion(textureRegion);
 		this.textureRegion = textureRegion;
 	}
 	
@@ -38,19 +37,7 @@ public class TextureMaterial extends Material {
 	 * @param textureRegion Nuevo TextureRegion
 	 */
 	public void setTextureRegion(TextureRegion textureRegion) {
-		checkTextureRegion(textureRegion);
 		this.textureRegion = textureRegion;
-	}
-	
-	/**
-	 * Comprueba que el TextureRegion especificado no sea null y lanza una excepcion en caso contrario
-	 * 
-	 * @param textureRegion TextureRegion
-	 */
-	private void checkTextureRegion(TextureRegion textureRegion) {
-		if (textureRegion == null) {
-			throw new IllegalArgumentException("The TextureRegion can not be null");
-		}
 	}
 	
 }

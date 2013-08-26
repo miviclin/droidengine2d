@@ -21,7 +21,7 @@ public class TextureColorMaterial extends TextureMaterial {
 	public TextureColorMaterial(TextureRegion textureRegion, Color color) {
 		super(textureRegion);
 		if (color == null) {
-			throw new IllegalArgumentException("The TextureRegion can not be null");
+			throw new IllegalArgumentException("The Color can not be null");
 		}
 		this.color = color;
 	}
