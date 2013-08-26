@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
 import com.miviclin.droidengine2d.graphics.material.ColorMaterial;
@@ -19,6 +20,8 @@ import com.miviclin.droidengine2d.graphics.mesh.TextureColorMaterialBatchRendere
 import com.miviclin.droidengine2d.graphics.mesh.TextureHSVMaterialBatchRenderer;
 import com.miviclin.droidengine2d.graphics.mesh.TextureMaterialBatchRenderer;
 import com.miviclin.droidengine2d.graphics.mesh.TransparentTextureMaterialBatchRenderer;
+import com.miviclin.droidengine2d.graphics.text.BitmapFont;
+import com.miviclin.droidengine2d.graphics.text.FontChar;
 import com.miviclin.droidengine2d.util.Transform;
 import com.miviclin.droidengine2d.util.math.Vector2;
 
@@ -31,6 +34,10 @@ import com.miviclin.droidengine2d.util.math.Vector2;
 public class Graphics {
 	
 	private final Vector2 tmpOrigin;
+	private final Vector2 tmpScale;
+	private final Vector2 tmpPosition;
+	private TextureColorMaterial tmpTextureColorMaterial;
+	
 	private Camera camera;
 	private Context context;
 	private RectangleBatchRenderer<? extends Material> currentRenderer;
@@ -45,6 +52,8 @@ public class Graphics {
 	 */
 	public Graphics(Camera camera, Context context) {
 		this.tmpOrigin = new Vector2(0, 0);
+		this.tmpScale = new Vector2(1, 1);
+		this.tmpPosition = new Vector2(0, 0);
 		this.camera = camera;
 		this.context = context;
 		this.currentRenderer = null;
@@ -113,6 +122,82 @@ public class Graphics {
 		selectCurrentRenderer(batchRenderer);
 		batchRenderer.setCurrentMaterial(material);
 		batchRenderer.draw(transform.getPosition(), scale, tmpOrigin, transform.getRotation(), camera);
+	}
+	
+	/**
+	 * Renderiza texto en pantalla
+	 * 
+	 * @param text Texto a mostrar
+	 * @param font Fuente
+	 * @param position Posicion de la esquina superior izquierda de la primera letra
+	 * @param fontSizePx Escala del texto en pixeles
+	 * @param color Color del texto
+	 */
+	public void drawText(CharSequence text, BitmapFont font, Vector2 position, float fontSizePx, Color color) {
+		drawText(text, font, position, fontSizePx, null, 0.0f, color);
+	}
+	
+	/**
+	 * Renderiza texto en pantalla
+	 * 
+	 * @param text Texto a mostrar
+	 * @param font Fuente
+	 * @param position Posicion de la esquina superior izquierda de la primera letra
+	 * @param fontSizePx Escala del texto en pixeles
+	 * @param rotationPoint Punto de rotacion (puede ser un punto externo al texto)
+	 * @param rotation Angulo de rotacion
+	 * @param color Color del texto
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public void drawText(CharSequence text, BitmapFont font, Vector2 position, float fontSizePx, Vector2 rotationPoint, float rotation, Color color) {
+		RectangleBatchRenderer batchRenderer = renderers.get(TextureColorMaterial.class);
+		if (batchRenderer == null) {
+			throw new UnsupportedMaterialException();
+		}
+		if (fontSizePx < 1 || fontSizePx < 1) {
+			throw new IllegalArgumentException("fontSizePx has to be at least 1");
+		}
+		selectCurrentRenderer(batchRenderer);
+		tmpOrigin.set(0, 1);
+		
+		int textLength = text.length();
+		float scaleRatio = fontSizePx / font.getSize();
+		float posX = position.getX();
+		float posY = position.getY();
+		
+		float cosR, sinR;
+		FontChar currentChar;
+		FontChar lastChar = null;
+		for (int i = 0; i < textLength; i++) {
+			currentChar = font.getCharacter((int) text.charAt(i));
+			if (lastChar != null) {
+				posX += lastChar.getKernings().get(currentChar.getID()) * scaleRatio;
+			}
+			posX += currentChar.getxOffset() * scaleRatio;
+			posY = position.getY() - currentChar.getyOffset() * scaleRatio;
+			tmpScale.setX(currentChar.getTextureRegion().getWidth() * scaleRatio);
+			tmpScale.setY(currentChar.getTextureRegion().getHeight() * scaleRatio);
+			
+			if (tmpTextureColorMaterial != null) {
+				tmpTextureColorMaterial.setTextureRegion(currentChar.getTextureRegion());
+			} else {
+				tmpTextureColorMaterial = new TextureColorMaterial(currentChar.getTextureRegion(), new Color(0, 0, 0));
+			}
+			tmpTextureColorMaterial.getColor().set(color);
+			if (rotation != 0 && rotationPoint != null) {
+				cosR = (float) Math.cos(Math.toRadians(rotation));
+				sinR = (float) Math.sin(Math.toRadians(rotation));
+				tmpPosition.setX(((posX - rotationPoint.getX()) * cosR - (posY - rotationPoint.getY()) * sinR) + rotationPoint.getX());
+				tmpPosition.setY(((posY - rotationPoint.getY()) * cosR + (posX - rotationPoint.getX()) * sinR) + rotationPoint.getY());
+			} else {
+				tmpPosition.set(posX, posY);
+			}
+			batchRenderer.setCurrentMaterial(tmpTextureColorMaterial);
+			Log.d("color", tmpTextureColorMaterial.getColor().getR() + "");
+			batchRenderer.draw(tmpPosition, tmpScale, tmpOrigin, (rotationPoint != null) ? rotation : 0.0f, camera);
+			posX += currentChar.getxAdvance() * scaleRatio;
+			lastChar = currentChar;
+		}
 	}
 	
 	/**
