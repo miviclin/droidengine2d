@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
 import com.miviclin.droidengine2d.graphics.material.ColorMaterial;
@@ -193,7 +192,6 @@ public class Graphics {
 				tmpPosition.set(posX, posY);
 			}
 			batchRenderer.setCurrentMaterial(tmpTextureColorMaterial);
-			Log.d("color", tmpTextureColorMaterial.getColor().getR() + "");
 			batchRenderer.draw(tmpPosition, tmpScale, tmpOrigin, (rotationPoint != null) ? rotation : 0.0f, camera);
 			posX += currentChar.getxAdvance() * scaleRatio;
 			lastChar = currentChar;
