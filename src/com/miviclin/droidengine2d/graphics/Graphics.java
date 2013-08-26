@@ -103,7 +103,7 @@ public class Graphics {
 	 * @param transform Transform de la figura a representar
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public <M extends Material> void draw(M material, Transform transform) {
+	public <M extends Material> void drawRect(M material, Transform transform) {
 		RectangleBatchRenderer batchRenderer = renderers.get(material.getClass());
 		if (batchRenderer == null) {
 			throw new UnsupportedMaterialException();
