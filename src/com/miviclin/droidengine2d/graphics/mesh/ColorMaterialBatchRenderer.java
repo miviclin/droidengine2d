@@ -8,7 +8,6 @@ import com.miviclin.droidengine2d.graphics.Color;
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
 import com.miviclin.droidengine2d.graphics.material.ColorMaterial;
 import com.miviclin.droidengine2d.graphics.shader.PositionColorBatchShaderProgram;
-import com.miviclin.droidengine2d.graphics.shader.ShaderProgram;
 import com.miviclin.droidengine2d.util.math.Vector2;
 import com.miviclin.droidengine2d.util.math.Vector3;
 
@@ -33,24 +32,6 @@ public class ColorMaterialBatchRenderer<M extends ColorMaterial> extends Rectang
 		this.vertexPositionOffset = 0;
 		this.vertexColorOffset = 3;
 		setGeometry(new RectangleBatchGeometry(32, true, false));
-	}
-	
-	@Override
-	public void beginDraw() {
-		ShaderProgram shaderProgram = getShaderProgram();
-		if (!shaderProgram.isLinked()) {
-			shaderProgram.link();
-		}
-		shaderProgram.use();
-	}
-	
-	@Override
-	public void endDraw() {
-		if (getBatchSize() > 0) {
-			prepareDrawBatch(getBatchSize());
-			drawBatch();
-			resetBatchSize();
-		}
 	}
 	
 	@Override
@@ -128,10 +109,8 @@ public class ColorMaterialBatchRenderer<M extends ColorMaterial> extends Rectang
 	 * @param camera Camara
 	 */
 	protected void setupRectangularShape(ColorMaterial material, Vector2 position, Vector2 scale, Vector2 origin, float rotation, Camera camera) {
-		if (getBatchSize() == getBatchCapacity()) {
-			prepareDrawBatch(getBatchSize());
+		if (getBatchSize() == getBatchCapacity() || isForceDraw()) {
 			drawBatch();
-			resetBatchSize();
 		}
 		setSpriteVerticesColorData(material.getColor());
 		updateTransform(getBatchSize(), position, scale, origin, rotation, camera);

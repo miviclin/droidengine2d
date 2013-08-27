@@ -6,7 +6,6 @@ import android.content.Context;
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
 import com.miviclin.droidengine2d.graphics.material.Material;
 import com.miviclin.droidengine2d.graphics.shader.PositionTextureBatchShaderProgram;
-import com.miviclin.droidengine2d.graphics.shader.ShaderProgram;
 import com.miviclin.droidengine2d.graphics.texture.Texture;
 import com.miviclin.droidengine2d.graphics.texture.TextureRegion;
 import com.miviclin.droidengine2d.util.math.Vector2;
@@ -44,21 +43,8 @@ public abstract class TextureMaterialBatchRendererBase<M extends Material> exten
 	
 	@Override
 	protected void beginDraw() {
-		ShaderProgram shaderProgram = getShaderProgram();
-		if (!shaderProgram.isLinked()) {
-			shaderProgram.link();
-		}
-		shaderProgram.use();
+		super.beginDraw();
 		requestTextureBind = true;
-	}
-	
-	@Override
-	protected void endDraw() {
-		if (getBatchSize() > 0) {
-			prepareDrawBatch(getBatchSize());
-			drawBatch();
-			resetBatchSize();
-		}
 	}
 	
 	@Override
@@ -84,9 +70,7 @@ public abstract class TextureMaterialBatchRendererBase<M extends Material> exten
 	protected void setupSprite(TextureRegion textureRegion, Vector2 position, Vector2 scale, Vector2 origin, float rotation, Camera camera) {
 		boolean textureChanged = checkTextureChanged(textureRegion);
 		if ((getBatchSize() > 0) && ((getBatchSize() == getBatchCapacity()) || textureChanged)) {
-			prepareDrawBatch(getBatchSize());
 			drawBatch();
-			resetBatchSize();
 		}
 		updateTransform(getBatchSize(), position, scale, origin, rotation, camera);
 		setupTexture(textureRegion.getTexture(), textureChanged);

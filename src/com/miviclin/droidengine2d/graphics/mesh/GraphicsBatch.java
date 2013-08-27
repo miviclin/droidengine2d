@@ -1,5 +1,6 @@
 package com.miviclin.droidengine2d.graphics.mesh;
 
+import com.miviclin.droidengine2d.graphics.material.BlendingOptions;
 import com.miviclin.droidengine2d.graphics.material.Material;
 import com.miviclin.droidengine2d.graphics.shader.ShaderProgram;
 
@@ -10,6 +11,8 @@ import com.miviclin.droidengine2d.graphics.shader.ShaderProgram;
  * 
  */
 public abstract class GraphicsBatch<M extends Material> {
+	
+	private final BlendingOptions blendingOptions;
 	
 	private boolean inBeginEndPair;
 	private ShaderProgram shaderProgram;
@@ -24,6 +27,7 @@ public abstract class GraphicsBatch<M extends Material> {
 	 * @param shaderProgram ShaderProgram
 	 */
 	public GraphicsBatch(ShaderProgram shaderProgram, int maxBatchSize) {
+		this.blendingOptions = new BlendingOptions();
 		this.inBeginEndPair = false;
 		this.shaderProgram = shaderProgram;
 		this.forceDraw = false;
@@ -85,6 +89,15 @@ public abstract class GraphicsBatch<M extends Material> {
 	}
 	
 	/**
+	 * Devuelve las opciones de blending
+	 * 
+	 * @return BlendingOptions
+	 */
+	public BlendingOptions getBlendingOptions() {
+		return blendingOptions;
+	}
+	
+	/**
 	 * Devuelve el ShaderProgram
 	 * 
 	 * @return ShaderProgram
@@ -108,6 +121,9 @@ public abstract class GraphicsBatch<M extends Material> {
 	 * @param currentMaterial Material
 	 */
 	public void setCurrentMaterial(M currentMaterial) {
+		if (!this.currentMaterial.getBlendingOptions().equals(currentMaterial.getBlendingOptions())) {
+			forceDraw = true;
+		}
 		this.currentMaterial = currentMaterial;
 	}
 	
@@ -125,7 +141,7 @@ public abstract class GraphicsBatch<M extends Material> {
 	 * 
 	 * @param forceDraw true para forzar renderizado, false en caso contrario
 	 */
-	public void setForceDraw(boolean forceDraw) {
+	protected void setForceDraw(boolean forceDraw) {
 		this.forceDraw = forceDraw;
 	}
 	

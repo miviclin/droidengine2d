@@ -46,6 +46,22 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 		this.geometry = new RectangleBatchGeometry(32, false, true);
 	}
 	
+	@Override
+	protected void beginDraw() {
+		ShaderProgram shaderProgram = getShaderProgram();
+		if (!shaderProgram.isLinked()) {
+			shaderProgram.link();
+		}
+		shaderProgram.use();
+	}
+	
+	@Override
+	protected void endDraw() {
+		if (getBatchSize() > 0) {
+			drawBatch();
+		}
+	}
+	
 	/**
 	 * Inicializa. Llamar tras crear el objeto.
 	 */
@@ -170,7 +186,8 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 	/**
 	 * Prepara el batch para ser renderizado
 	 */
-	protected void prepareDrawBatch(int batchSize) {
+	protected void prepareDrawBatch() {
+		int batchSize = getBatchSize();
 		copyGeometryToVertexBuffer(batchSize);
 		setVertexBufferLimit(batchSize);
 		
@@ -185,8 +202,11 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 	 * Renderiza todos los sprites del batch en 1 sola llamada
 	 */
 	protected void drawBatch() {
+		prepareDrawBatch();
 		GLES20.glDrawElements(GLES20.GL_TRIANGLES, indexBuffer.limit(), GLES20.GL_UNSIGNED_SHORT, indexBuffer);
 		GLDebugger.getInstance().passiveCheckGLError();
+		setForceDraw(false);
+		resetBatchSize();
 	}
 	
 	/**
