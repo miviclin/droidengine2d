@@ -21,11 +21,8 @@ import com.miviclin.droidengine2d.util.math.Vector2;
  */
 public abstract class TextureMaterialBatchRendererBase<M extends Material> extends RectangleBatchRenderer<M> {
 	
-	protected static final int BATCH_CAPACITY = 32;
-	
 	private int vertexPositionOffset;
 	private int vertexUVOffset;
-	private int batchSize;
 	private Texture texture;
 	private Context context;
 	private boolean requestTextureBind;
@@ -38,11 +35,10 @@ public abstract class TextureMaterialBatchRendererBase<M extends Material> exten
 	 * @param shaderProgram Shader Program
 	 */
 	public TextureMaterialBatchRendererBase(int verticesDataStride, Context context, PositionTextureBatchShaderProgram shaderProgram) {
-		super(verticesDataStride, shaderProgram);
+		super(verticesDataStride, shaderProgram, 32);
 		this.vertexPositionOffset = 0;
 		this.vertexUVOffset = 3;
 		this.context = context;
-		this.batchSize = 0;
 		this.texture = null;
 	}
 	
@@ -58,10 +54,10 @@ public abstract class TextureMaterialBatchRendererBase<M extends Material> exten
 	
 	@Override
 	protected void endDraw() {
-		if (batchSize > 0) {
-			prepareDrawBatch(batchSize);
+		if (getBatchSize() > 0) {
+			prepareDrawBatch(getBatchSize());
 			drawBatch();
-			batchSize = 0;
+			resetBatchSize();
 		}
 	}
 	
@@ -87,12 +83,12 @@ public abstract class TextureMaterialBatchRendererBase<M extends Material> exten
 	 */
 	protected void setupSprite(TextureRegion textureRegion, Vector2 position, Vector2 scale, Vector2 origin, float rotation, Camera camera) {
 		boolean textureChanged = checkTextureChanged(textureRegion);
-		if ((batchSize > 0) && ((batchSize == BATCH_CAPACITY) || textureChanged)) {
-			prepareDrawBatch(batchSize);
+		if ((getBatchSize() > 0) && ((getBatchSize() == getBatchCapacity()) || textureChanged)) {
+			prepareDrawBatch(getBatchSize());
 			drawBatch();
-			batchSize = 0;
+			resetBatchSize();
 		}
-		updateTransform(batchSize, position, scale, origin, rotation, camera);
+		updateTransform(getBatchSize(), position, scale, origin, rotation, camera);
 		setupTexture(textureRegion.getTexture(), textureChanged);
 		setupUVCoords(textureRegion);
 	}
@@ -148,29 +144,6 @@ public abstract class TextureMaterialBatchRendererBase<M extends Material> exten
 		geometry.getTextureUV(i + 2).set(textureRegion.getU2(), textureRegion.getV1());
 		// Top-Left
 		geometry.getTextureUV(i + 3).set(textureRegion.getU1(), textureRegion.getV1());
-	}
-	
-	/**
-	 * Devuelve el numero de sprites que hay en el batch
-	 * 
-	 * @return Numero de sprites en el batch
-	 */
-	public int getBatchSize() {
-		return batchSize;
-	}
-	
-	/**
-	 * Incrementa en 1 el numero de sprites que hay en el batch
-	 */
-	protected void incrementBatchSize() {
-		batchSize++;
-	}
-	
-	/**
-	 * Reinicia a 0 el numero de sprites que hay en el batch
-	 */
-	protected void resetBatchSize() {
-		batchSize = 0;
 	}
 	
 	/**

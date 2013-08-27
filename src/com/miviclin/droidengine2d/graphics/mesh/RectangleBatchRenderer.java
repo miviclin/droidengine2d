@@ -26,8 +26,6 @@ import com.miviclin.droidengine2d.util.math.Vector2;
  */
 public abstract class RectangleBatchRenderer<M extends Material> extends GraphicsBatch<M> {
 	
-	protected static final int BATCH_CAPACITY = 32;
-	
 	private int verticesDataStride;
 	
 	private ShortBuffer indexBuffer;
@@ -42,10 +40,10 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 	 * @param verticesDataStride Stride de los datos de los vertices
 	 * @param shaderProgram ShaderProgram
 	 */
-	public RectangleBatchRenderer(int verticesDataStride, ShaderProgram shaderProgram) {
-		super(shaderProgram);
+	public RectangleBatchRenderer(int verticesDataStride, ShaderProgram shaderProgram, int batchCapacity) {
+		super(shaderProgram, batchCapacity);
 		this.verticesDataStride = verticesDataStride;
-		this.geometry = new RectangleBatchGeometry(BATCH_CAPACITY, false, true);
+		this.geometry = new RectangleBatchGeometry(32, false, true);
 	}
 	
 	/**
@@ -55,16 +53,16 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 		setupIndices();
 		setupVerticesData();
 		
-		indexBuffer = ByteBuffer.allocateDirect(BATCH_CAPACITY * 6 * SIZE_OF_SHORT)
+		indexBuffer = ByteBuffer.allocateDirect(getBatchCapacity() * 6 * SIZE_OF_SHORT)
 				.order(ByteOrder.nativeOrder())
 				.asShortBuffer();
 		copyIndicesToIndexBuffer();
 		
-		vertexBuffer = ByteBuffer.allocateDirect(BATCH_CAPACITY * 4 * verticesDataStride * SIZE_OF_FLOAT)
+		vertexBuffer = ByteBuffer.allocateDirect(getBatchCapacity() * 4 * verticesDataStride * SIZE_OF_FLOAT)
 				.order(ByteOrder.nativeOrder())
 				.asFloatBuffer();
-		copyGeometryToVertexBuffer(BATCH_CAPACITY);
-		setVertexBufferLimit(BATCH_CAPACITY);
+		copyGeometryToVertexBuffer(getBatchCapacity());
+		setVertexBufferLimit(getBatchCapacity());
 		
 		mvpIndexBuffer = ByteBuffer.allocateDirect(geometry.getMvpIndices().length * SIZE_OF_FLOAT)
 				.order(ByteOrder.nativeOrder())
@@ -92,7 +90,7 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 	 * Copia los datos de la geometria al buffer
 	 */
 	protected void copyIndicesToIndexBuffer() {
-		int numIndices = BATCH_CAPACITY * 6;
+		int numIndices = getBatchCapacity() * 6;
 		for (int i = 0; i < numIndices; i++) {
 			indexBuffer.put(geometry.getIndex(i));
 		}
@@ -103,7 +101,7 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 	 * Inicializa el array de indices de los vertices que definen la geometria de la malla de sprites
 	 */
 	protected void setupIndices() {
-		int numIndices = BATCH_CAPACITY * 6;
+		int numIndices = getBatchCapacity() * 6;
 		for (int i = 0, j = 0; i < numIndices; i += 6, j += 4) {
 			geometry.addIndex((short) (j + 0));
 			geometry.addIndex((short) (j + 1));

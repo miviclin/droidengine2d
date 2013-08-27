@@ -21,22 +21,18 @@ import com.miviclin.droidengine2d.util.math.Vector3;
  */
 public class ColorMaterialBatchRenderer<M extends ColorMaterial> extends RectangleBatchRenderer<M> {
 	
-	protected static final int BATCH_CAPACITY = 32;
-	
 	private int vertexPositionOffset;
 	private int vertexColorOffset;
-	private int batchSize;
 	
 	/**
 	 * Crea un PositionColorRectangularShapeBatch
 	 */
 	public ColorMaterialBatchRenderer() {
-		super(7, new PositionColorBatchShaderProgram());
+		super(7, new PositionColorBatchShaderProgram(), 32);
 		setVerticesDataStride(7);
 		this.vertexPositionOffset = 0;
 		this.vertexColorOffset = 3;
-		this.batchSize = 0;
-		setGeometry(new RectangleBatchGeometry(BATCH_CAPACITY, true, false));
+		setGeometry(new RectangleBatchGeometry(32, true, false));
 	}
 	
 	@Override
@@ -50,10 +46,10 @@ public class ColorMaterialBatchRenderer<M extends ColorMaterial> extends Rectang
 	
 	@Override
 	public void endDraw() {
-		if (batchSize > 0) {
-			prepareDrawBatch(batchSize);
+		if (getBatchSize() > 0) {
+			prepareDrawBatch(getBatchSize());
 			drawBatch();
-			batchSize = 0;
+			resetBatchSize();
 		}
 	}
 	
@@ -66,7 +62,7 @@ public class ColorMaterialBatchRenderer<M extends ColorMaterial> extends Rectang
 	protected void copyGeometryToVertexBuffer(int batchSize) {
 		FloatBuffer vertexBuffer = getVertexBuffer();
 		vertexBuffer.clear();
-		int nVertices = BATCH_CAPACITY * 4;
+		int nVertices = getBatchCapacity() * 4;
 		Vector3 position;
 		Color color;
 		for (int i = 0; i < nVertices; i++) {
@@ -86,7 +82,7 @@ public class ColorMaterialBatchRenderer<M extends ColorMaterial> extends Rectang
 	@Override
 	protected void setupVerticesData() {
 		RectangleBatchGeometry geometry = getGeometry();
-		int nVertices = BATCH_CAPACITY * 4;
+		int nVertices = getBatchCapacity() * 4;
 		for (int i = 0; i < nVertices; i++) {
 			// Bottom-Left
 			geometry.addVertex(new Vector3(-0.5f, -0.5f, 0.0f));
@@ -117,7 +113,7 @@ public class ColorMaterialBatchRenderer<M extends ColorMaterial> extends Rectang
 		checkInBeginEndPair();
 		ColorMaterial material = getCurrentMaterial();
 		setupRectangularShape(material, position, scale, origin, rotation, camera);
-		batchSize++;
+		incrementBatchSize();
 	}
 	
 	/**
@@ -132,13 +128,13 @@ public class ColorMaterialBatchRenderer<M extends ColorMaterial> extends Rectang
 	 * @param camera Camara
 	 */
 	protected void setupRectangularShape(ColorMaterial material, Vector2 position, Vector2 scale, Vector2 origin, float rotation, Camera camera) {
-		if (batchSize == BATCH_CAPACITY) {
-			prepareDrawBatch(batchSize);
+		if (getBatchSize() == getBatchCapacity()) {
+			prepareDrawBatch(getBatchSize());
 			drawBatch();
-			batchSize = 0;
+			resetBatchSize();
 		}
 		setSpriteVerticesColorData(material.getColor());
-		updateTransform(batchSize, position, scale, origin, rotation, camera);
+		updateTransform(getBatchSize(), position, scale, origin, rotation, camera);
 	}
 	
 	/**
@@ -147,7 +143,7 @@ public class ColorMaterialBatchRenderer<M extends ColorMaterial> extends Rectang
 	 * @param color Color que se asignara a los vertices del rectangulo actual
 	 */
 	protected void setSpriteVerticesColorData(Color color) {
-		int i = batchSize * 4;
+		int i = getBatchSize() * 4;
 		RectangleBatchGeometry geometry = getGeometry();
 		// Bottom-Left
 		geometry.getColor(i + 0).set(color);
@@ -157,15 +153,6 @@ public class ColorMaterialBatchRenderer<M extends ColorMaterial> extends Rectang
 		geometry.getColor(i + 2).set(color);
 		// Top-Left
 		geometry.getColor(i + 3).set(color);
-	}
-	
-	/**
-	 * Devuelve el numero de sprites que hay en el batch
-	 * 
-	 * @return Numero de sprites en el batch
-	 */
-	public int getBatchSize() {
-		return batchSize;
 	}
 	
 	/**

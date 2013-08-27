@@ -14,15 +14,21 @@ public abstract class GraphicsBatch<M extends Material> {
 	private boolean inBeginEndPair;
 	private ShaderProgram shaderProgram;
 	private M currentMaterial;
+	private boolean forceDraw;
+	private int batchSize;
+	private int batchCapacity;
 	
 	/**
 	 * Constructor
 	 * 
 	 * @param shaderProgram ShaderProgram
 	 */
-	public GraphicsBatch(ShaderProgram shaderProgram) {
+	public GraphicsBatch(ShaderProgram shaderProgram, int maxBatchSize) {
 		this.inBeginEndPair = false;
 		this.shaderProgram = shaderProgram;
+		this.forceDraw = false;
+		this.batchSize = 0;
+		this.batchCapacity = maxBatchSize;
 	}
 	
 	/**
@@ -103,5 +109,55 @@ public abstract class GraphicsBatch<M extends Material> {
 	 */
 	public void setCurrentMaterial(M currentMaterial) {
 		this.currentMaterial = currentMaterial;
+	}
+	
+	/**
+	 * Devuelve true si hay que forzar el renderizado de los elementos del batch
+	 * 
+	 * @return true si hay que renderizar, false en caso contrario
+	 */
+	public boolean isForceDraw() {
+		return forceDraw;
+	}
+	
+	/**
+	 * Asigna si hay que forzar el renderizado de los elementos del batch
+	 * 
+	 * @param forceDraw true para forzar renderizado, false en caso contrario
+	 */
+	public void setForceDraw(boolean forceDraw) {
+		this.forceDraw = forceDraw;
+	}
+	
+	/**
+	 * Devuelve el numero de sprites que hay en el batch
+	 * 
+	 * @return Numero de sprites en el batch
+	 */
+	public int getBatchSize() {
+		return batchSize;
+	}
+	
+	/**
+	 * Incrementa en 1 el numero de sprites que hay en el batch
+	 */
+	protected void incrementBatchSize() {
+		batchSize++;
+	}
+	
+	/**
+	 * Reinicia a 0 el numero de sprites que hay en el batch
+	 */
+	protected void resetBatchSize() {
+		batchSize = 0;
+	}
+	
+	/**
+	 * Devuelve el maximo numero de elementos que puede almacenar el batch antes de renderizar
+	 * 
+	 * @return Maximo numero de elementos que puede almacenar el batch antes de renderizar
+	 */
+	public int getBatchCapacity() {
+		return batchCapacity;
 	}
 }
