@@ -69,7 +69,7 @@ public abstract class TextureMaterialBatchRendererBase<M extends Material> exten
 	 */
 	protected void setupSprite(TextureRegion textureRegion, Vector2 position, Vector2 scale, Vector2 origin, float rotation, Camera camera) {
 		boolean textureChanged = checkTextureChanged(textureRegion);
-		if ((getBatchSize() > 0) && ((getBatchSize() == getBatchCapacity()) || textureChanged)) {
+		if ((getBatchSize() > 0) && ((getBatchSize() == getBatchCapacity()) || textureChanged || isForceDraw())) {
 			drawBatch();
 		}
 		updateTransform(getBatchSize(), position, scale, origin, rotation, camera);

@@ -109,7 +109,7 @@ public class ColorMaterialBatchRenderer<M extends ColorMaterial> extends Rectang
 	 * @param camera Camara
 	 */
 	protected void setupRectangularShape(ColorMaterial material, Vector2 position, Vector2 scale, Vector2 origin, float rotation, Camera camera) {
-		if (getBatchSize() == getBatchCapacity() || isForceDraw()) {
+		if ((getBatchSize() > 0) && (getBatchSize() == getBatchCapacity() || isForceDraw())) {
 			drawBatch();
 		}
 		setSpriteVerticesColorData(material.getColor());

@@ -121,9 +121,19 @@ public abstract class GraphicsBatch<M extends Material> {
 	 * @param currentMaterial Material
 	 */
 	public void setCurrentMaterial(M currentMaterial) {
-		if (!this.currentMaterial.getBlendingOptions().equals(currentMaterial.getBlendingOptions())) {
-			forceDraw = true;
+		BlendingOptions currentBlendingOptions;
+		
+		if (this.currentMaterial != null) {
+			if (!this.currentMaterial.getBlendingOptions().equals(currentMaterial.getBlendingOptions())) {
+				forceDraw = true;
+			}
+			currentBlendingOptions = this.currentMaterial.getBlendingOptions();
+		} else {
+			currentBlendingOptions = currentMaterial.getBlendingOptions();
 		}
+		blendingOptions.setSourceFactor(currentBlendingOptions.getSourceFactor());
+		blendingOptions.setDestinationFactor(currentBlendingOptions.getDestinationFactor());
+		blendingOptions.setBlendEquationMode(currentBlendingOptions.getBlendEquationMode());
 		this.currentMaterial = currentMaterial;
 	}
 	

@@ -12,6 +12,7 @@ import android.opengl.GLES20;
 
 import com.miviclin.droidengine2d.graphics.GLDebugger;
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
+import com.miviclin.droidengine2d.graphics.material.BlendingOptions;
 import com.miviclin.droidengine2d.graphics.material.Material;
 import com.miviclin.droidengine2d.graphics.shader.ShaderProgram;
 import com.miviclin.droidengine2d.util.math.Vector2;
@@ -190,12 +191,13 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 		int batchSize = getBatchSize();
 		copyGeometryToVertexBuffer(batchSize);
 		setVertexBufferLimit(batchSize);
-		
 		mvpIndexBuffer.limit(batchSize * 4).position(0);
-		
 		indexBuffer.limit(batchSize * 6).position(0);
-		
 		setupVertexShaderVariables(batchSize);
+		
+		BlendingOptions blendingOptions = getBlendingOptions();
+		GLES20.glBlendFunc(blendingOptions.getSourceFactor(), blendingOptions.getDestinationFactor());
+		GLES20.glBlendEquation(blendingOptions.getBlendEquationMode());
 	}
 	
 	/**
