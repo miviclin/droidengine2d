@@ -31,7 +31,7 @@ public class TextureColorMaterialBatchRenderer<M extends TextureColorMaterial> e
 	public TextureColorMaterialBatchRenderer(Context context) {
 		super(9, context, new PositionTextureColorBatchShaderProgram());
 		this.vertexColorOffset = 5;
-		setGeometry(new RectangleBatchGeometry(BATCH_CAPACITY, true, true));
+		setGeometry(new RectangleBatchGeometry(getBatchCapacity(), true, true));
 	}
 	
 	@Override
@@ -42,7 +42,7 @@ public class TextureColorMaterialBatchRenderer<M extends TextureColorMaterial> e
 	@Override
 	protected void setupVerticesData() {
 		RectangleBatchGeometry geometry = getGeometry();
-		int nVertices = BATCH_CAPACITY * 4;
+		int nVertices = getBatchCapacity() * 4;
 		for (int i = 0; i < nVertices; i++) {
 			// Bottom-Left
 			geometry.addVertex(new Vector3(-0.5f, -0.5f, 0.0f));
@@ -67,7 +67,7 @@ public class TextureColorMaterialBatchRenderer<M extends TextureColorMaterial> e
 	protected void copyGeometryToVertexBuffer(int batchSize) {
 		FloatBuffer vertexBuffer = getVertexBuffer();
 		vertexBuffer.clear();
-		int nVertices = BATCH_CAPACITY * 4;
+		int nVertices = getBatchCapacity() * 4;
 		Vector3 position;
 		Vector2 textureUV;
 		Color color;

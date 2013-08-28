@@ -6,6 +6,7 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
 import android.opengl.GLES20;
 
+import com.miviclin.droidengine2d.BuildConfig;
 import com.miviclin.droidengine2d.Game;
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
 
@@ -58,6 +59,11 @@ public class DefaultRenderer implements EngineRenderer {
 		GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
 		game.draw(graphics);
 		graphics.flush();
+		
+		if (BuildConfig.DEBUG) {
+			GLDebugger.getInstance().logNumDrawCallsFrame();
+			GLDebugger.getInstance().resetNumDrawCallsFrame();
+		}
 	}
 	
 }

@@ -3,6 +3,7 @@ package com.miviclin.droidengine2d.graphics;
 import android.opengl.GLES20;
 import android.opengl.GLException;
 import android.opengl.GLU;
+import android.util.Log;
 
 /**
  * Clase que proporciona una forma de obtener mensajes de error de OpenGL en caso de que se produzca un error.
@@ -12,15 +13,24 @@ import android.opengl.GLU;
  */
 public final class GLDebugger {
 	
+	public enum LogLevel {
+		DISABLE_LOGGING,
+		LOG_NUM_DRAW_CALLS_FRAME;
+	}
+	
 	private static GLDebugger instance = null;
 	
 	private boolean debugModeEnabled;
+	private int numDrawCallsFrame;
+	private LogLevel logLevel;
 	
 	/**
 	 * Constructor
 	 */
 	private GLDebugger() {
 		this.debugModeEnabled = false;
+		this.numDrawCallsFrame = 0;
+		this.logLevel = LogLevel.DISABLE_LOGGING;
 	}
 	
 	/**
@@ -33,6 +43,24 @@ public final class GLDebugger {
 			GLDebugger.instance = new GLDebugger();
 		}
 		return GLDebugger.instance;
+	}
+	
+	/**
+	 * Devuelve el nivel de logging activo actualmente
+	 * 
+	 * @return LogLevel
+	 */
+	public LogLevel getLogLevel() {
+		return logLevel;
+	}
+	
+	/**
+	 * Asigna el nivel de logging especificado
+	 * 
+	 * @param logLevel LogLevel
+	 */
+	public void setLogLevel(LogLevel logLevel) {
+		this.logLevel = logLevel;
 	}
 	
 	/**
@@ -97,6 +125,43 @@ public final class GLDebugger {
 			errorString = "Unknown error 0x" + Integer.toHexString(error);
 		}
 		return errorString;
+	}
+	
+	/**
+	 * Devuelve el numero de llamadas a draw realizadas.<br>
+	 * Para que el numero devuelto sea correcto, es necesario haber llamado a {@link #incrementNumDrawCallsFrame()} tras cada llamada
+	 * realizada y {@link #resetNumDrawCallsFrame()} al final de cada frame
+	 * 
+	 * @return Numero de llamadas a draw
+	 */
+	public int getNumDrawCallsFrame() {
+		return numDrawCallsFrame;
+	}
+	
+	/**
+	 * Incrementa el contador de llamadas a draw
+	 */
+	public void incrementNumDrawCallsFrame() {
+		numDrawCallsFrame++;
+	}
+	
+	/**
+	 * Reinicia el contador de llamadas a draw
+	 */
+	public void resetNumDrawCallsFrame() {
+		numDrawCallsFrame = 0;
+	}
+	
+	/**
+	 * Muestra un mensaje en el log con el numero de llamadas a draw realizadas hasta el momento. Solo se mostrara si el log level
+	 * seleccionado es {@link LogLevel#LOG_NUM_DRAW_CALLS_FRAME}
+	 * 
+	 * @see #getNumDrawCallsFrame()
+	 */
+	public void logNumDrawCallsFrame() {
+		if (logLevel == LogLevel.LOG_NUM_DRAW_CALLS_FRAME) {
+			Log.d(DefaultRenderer.class.getSimpleName(), "draw calls: " + GLDebugger.getInstance().getNumDrawCallsFrame());
+		}
 	}
 	
 }

@@ -1,5 +1,6 @@
 package com.miviclin.droidengine2d.graphics.mesh;
 
+import com.miviclin.droidengine2d.graphics.material.BlendingOptions;
 import com.miviclin.droidengine2d.graphics.material.Material;
 import com.miviclin.droidengine2d.graphics.shader.ShaderProgram;
 
@@ -11,18 +12,29 @@ import com.miviclin.droidengine2d.graphics.shader.ShaderProgram;
  */
 public abstract class GraphicsBatch<M extends Material> {
 	
+	private final BlendingOptions currentBatchBlendingOptions;
+	private final BlendingOptions nextBatchBlendingOptions;
+	
 	private boolean inBeginEndPair;
 	private ShaderProgram shaderProgram;
 	private M currentMaterial;
+	private boolean forceDraw;
+	private int batchSize;
+	private int batchCapacity;
 	
 	/**
 	 * Constructor
 	 * 
 	 * @param shaderProgram ShaderProgram
 	 */
-	public GraphicsBatch(ShaderProgram shaderProgram) {
+	public GraphicsBatch(ShaderProgram shaderProgram, int maxBatchSize) {
+		this.currentBatchBlendingOptions = new BlendingOptions();
+		this.nextBatchBlendingOptions = new BlendingOptions();
 		this.inBeginEndPair = false;
 		this.shaderProgram = shaderProgram;
+		this.forceDraw = false;
+		this.batchSize = 0;
+		this.batchCapacity = maxBatchSize;
 	}
 	
 	/**
@@ -79,6 +91,24 @@ public abstract class GraphicsBatch<M extends Material> {
 	}
 	
 	/**
+	 * Devuelve las opciones de blending que se deben usar para renderizar el batch actual
+	 * 
+	 * @return BlendingOptions
+	 */
+	public BlendingOptions getCurrentBatchBlendingOptions() {
+		return currentBatchBlendingOptions;
+	}
+	
+	/**
+	 * Devuelve las opciones de blending que se deben usar para renderizar el siguiente batch
+	 * 
+	 * @return BlendingOptions
+	 */
+	public BlendingOptions getNextBatchBlendingOptions() {
+		return nextBatchBlendingOptions;
+	}
+	
+	/**
 	 * Devuelve el ShaderProgram
 	 * 
 	 * @return ShaderProgram
@@ -99,9 +129,69 @@ public abstract class GraphicsBatch<M extends Material> {
 	/**
 	 * Asigna el Material enlazado actualmente al GraphicsBatch
 	 * 
-	 * @param currentMaterial Material
+	 * @param material Material
 	 */
-	public void setCurrentMaterial(M currentMaterial) {
-		this.currentMaterial = currentMaterial;
+	public void setCurrentMaterial(M material) {
+		BlendingOptions nextBatchBlendingOptions = material.getBlendingOptions();
+		if (!this.currentBatchBlendingOptions.equals(nextBatchBlendingOptions)) {
+			if (batchSize != 0) {
+				forceDraw = true;
+			}
+		}
+		if (batchSize == 0) {
+			this.currentBatchBlendingOptions.copy(nextBatchBlendingOptions);
+		}
+		this.nextBatchBlendingOptions.copy(nextBatchBlendingOptions);
+		this.currentMaterial = material;
+	}
+	
+	/**
+	 * Devuelve true si hay que forzar el renderizado de los elementos del batch
+	 * 
+	 * @return true si hay que renderizar, false en caso contrario
+	 */
+	public boolean isForceDraw() {
+		return forceDraw;
+	}
+	
+	/**
+	 * Asigna si hay que forzar el renderizado de los elementos del batch
+	 * 
+	 * @param forceDraw true para forzar renderizado, false en caso contrario
+	 */
+	protected void setForceDraw(boolean forceDraw) {
+		this.forceDraw = forceDraw;
+	}
+	
+	/**
+	 * Devuelve el numero de sprites que hay en el batch
+	 * 
+	 * @return Numero de sprites en el batch
+	 */
+	public int getBatchSize() {
+		return batchSize;
+	}
+	
+	/**
+	 * Incrementa en 1 el numero de sprites que hay en el batch
+	 */
+	protected void incrementBatchSize() {
+		batchSize++;
+	}
+	
+	/**
+	 * Reinicia a 0 el numero de sprites que hay en el batch
+	 */
+	protected void resetBatchSize() {
+		batchSize = 0;
+	}
+	
+	/**
+	 * Devuelve el maximo numero de elementos que puede almacenar el batch antes de renderizar
+	 * 
+	 * @return Maximo numero de elementos que puede almacenar el batch antes de renderizar
+	 */
+	public int getBatchCapacity() {
+		return batchCapacity;
 	}
 }

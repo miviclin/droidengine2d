@@ -10,8 +10,10 @@ import java.nio.ShortBuffer;
 
 import android.opengl.GLES20;
 
+import com.miviclin.droidengine2d.BuildConfig;
 import com.miviclin.droidengine2d.graphics.GLDebugger;
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
+import com.miviclin.droidengine2d.graphics.material.BlendingOptions;
 import com.miviclin.droidengine2d.graphics.material.Material;
 import com.miviclin.droidengine2d.graphics.shader.ShaderProgram;
 import com.miviclin.droidengine2d.util.math.Vector2;
@@ -25,8 +27,6 @@ import com.miviclin.droidengine2d.util.math.Vector2;
  * @param <M> Material
  */
 public abstract class RectangleBatchRenderer<M extends Material> extends GraphicsBatch<M> {
-	
-	protected static final int BATCH_CAPACITY = 32;
 	
 	private int verticesDataStride;
 	
@@ -42,10 +42,26 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 	 * @param verticesDataStride Stride de los datos de los vertices
 	 * @param shaderProgram ShaderProgram
 	 */
-	public RectangleBatchRenderer(int verticesDataStride, ShaderProgram shaderProgram) {
-		super(shaderProgram);
+	public RectangleBatchRenderer(int verticesDataStride, ShaderProgram shaderProgram, int batchCapacity) {
+		super(shaderProgram, batchCapacity);
 		this.verticesDataStride = verticesDataStride;
-		this.geometry = new RectangleBatchGeometry(BATCH_CAPACITY, false, true);
+		this.geometry = new RectangleBatchGeometry(32, false, true);
+	}
+	
+	@Override
+	protected void beginDraw() {
+		ShaderProgram shaderProgram = getShaderProgram();
+		if (!shaderProgram.isLinked()) {
+			shaderProgram.link();
+		}
+		shaderProgram.use();
+	}
+	
+	@Override
+	protected void endDraw() {
+		if (getBatchSize() > 0) {
+			drawBatch();
+		}
 	}
 	
 	/**
@@ -55,16 +71,16 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 		setupIndices();
 		setupVerticesData();
 		
-		indexBuffer = ByteBuffer.allocateDirect(BATCH_CAPACITY * 6 * SIZE_OF_SHORT)
+		indexBuffer = ByteBuffer.allocateDirect(getBatchCapacity() * 6 * SIZE_OF_SHORT)
 				.order(ByteOrder.nativeOrder())
 				.asShortBuffer();
 		copyIndicesToIndexBuffer();
 		
-		vertexBuffer = ByteBuffer.allocateDirect(BATCH_CAPACITY * 4 * verticesDataStride * SIZE_OF_FLOAT)
+		vertexBuffer = ByteBuffer.allocateDirect(getBatchCapacity() * 4 * verticesDataStride * SIZE_OF_FLOAT)
 				.order(ByteOrder.nativeOrder())
 				.asFloatBuffer();
-		copyGeometryToVertexBuffer(BATCH_CAPACITY);
-		setVertexBufferLimit(BATCH_CAPACITY);
+		copyGeometryToVertexBuffer(getBatchCapacity());
+		setVertexBufferLimit(getBatchCapacity());
 		
 		mvpIndexBuffer = ByteBuffer.allocateDirect(geometry.getMvpIndices().length * SIZE_OF_FLOAT)
 				.order(ByteOrder.nativeOrder())
@@ -92,7 +108,7 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 	 * Copia los datos de la geometria al buffer
 	 */
 	protected void copyIndicesToIndexBuffer() {
-		int numIndices = BATCH_CAPACITY * 6;
+		int numIndices = getBatchCapacity() * 6;
 		for (int i = 0; i < numIndices; i++) {
 			indexBuffer.put(geometry.getIndex(i));
 		}
@@ -103,7 +119,7 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 	 * Inicializa el array de indices de los vertices que definen la geometria de la malla de sprites
 	 */
 	protected void setupIndices() {
-		int numIndices = BATCH_CAPACITY * 6;
+		int numIndices = getBatchCapacity() * 6;
 		for (int i = 0, j = 0; i < numIndices; i += 6, j += 4) {
 			geometry.addIndex((short) (j + 0));
 			geometry.addIndex((short) (j + 1));
@@ -172,14 +188,12 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 	/**
 	 * Prepara el batch para ser renderizado
 	 */
-	protected void prepareDrawBatch(int batchSize) {
+	protected void prepareDrawBatch() {
+		int batchSize = getBatchSize();
 		copyGeometryToVertexBuffer(batchSize);
 		setVertexBufferLimit(batchSize);
-		
 		mvpIndexBuffer.limit(batchSize * 4).position(0);
-		
 		indexBuffer.limit(batchSize * 6).position(0);
-		
 		setupVertexShaderVariables(batchSize);
 	}
 	
@@ -187,8 +201,22 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 	 * Renderiza todos los sprites del batch en 1 sola llamada
 	 */
 	protected void drawBatch() {
+		prepareDrawBatch();
+		
+		BlendingOptions blendingOptions = getCurrentBatchBlendingOptions();
+		GLES20.glBlendFunc(blendingOptions.getSourceFactor(), blendingOptions.getDestinationFactor());
+		GLES20.glBlendEquation(blendingOptions.getBlendEquationMode());
+		
 		GLES20.glDrawElements(GLES20.GL_TRIANGLES, indexBuffer.limit(), GLES20.GL_UNSIGNED_SHORT, indexBuffer);
 		GLDebugger.getInstance().passiveCheckGLError();
+		
+		if (BuildConfig.DEBUG) {
+			GLDebugger.getInstance().incrementNumDrawCallsFrame();			
+		}
+		
+		getCurrentBatchBlendingOptions().copy(getNextBatchBlendingOptions());
+		setForceDraw(false);
+		resetBatchSize();
 	}
 	
 	/**
