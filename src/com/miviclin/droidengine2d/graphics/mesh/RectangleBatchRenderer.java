@@ -10,6 +10,7 @@ import java.nio.ShortBuffer;
 
 import android.opengl.GLES20;
 
+import com.miviclin.droidengine2d.BuildConfig;
 import com.miviclin.droidengine2d.graphics.GLDebugger;
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
 import com.miviclin.droidengine2d.graphics.material.BlendingOptions;
@@ -194,10 +195,6 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 		mvpIndexBuffer.limit(batchSize * 4).position(0);
 		indexBuffer.limit(batchSize * 6).position(0);
 		setupVertexShaderVariables(batchSize);
-		
-		BlendingOptions blendingOptions = getBlendingOptions();
-		GLES20.glBlendFunc(blendingOptions.getSourceFactor(), blendingOptions.getDestinationFactor());
-		GLES20.glBlendEquation(blendingOptions.getBlendEquationMode());
 	}
 	
 	/**
@@ -205,8 +202,19 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 	 */
 	protected void drawBatch() {
 		prepareDrawBatch();
+		
+		BlendingOptions blendingOptions = getCurrentBatchBlendingOptions();
+		GLES20.glBlendFunc(blendingOptions.getSourceFactor(), blendingOptions.getDestinationFactor());
+		GLES20.glBlendEquation(blendingOptions.getBlendEquationMode());
+		
 		GLES20.glDrawElements(GLES20.GL_TRIANGLES, indexBuffer.limit(), GLES20.GL_UNSIGNED_SHORT, indexBuffer);
 		GLDebugger.getInstance().passiveCheckGLError();
+		
+		if (BuildConfig.DEBUG) {
+			GLDebugger.getInstance().incrementNumDrawCallsFrame();			
+		}
+		
+		getCurrentBatchBlendingOptions().copy(getNextBatchBlendingOptions());
 		setForceDraw(false);
 		resetBatchSize();
 	}

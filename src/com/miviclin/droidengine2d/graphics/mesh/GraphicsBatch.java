@@ -12,7 +12,8 @@ import com.miviclin.droidengine2d.graphics.shader.ShaderProgram;
  */
 public abstract class GraphicsBatch<M extends Material> {
 	
-	private final BlendingOptions blendingOptions;
+	private final BlendingOptions currentBatchBlendingOptions;
+	private final BlendingOptions nextBatchBlendingOptions;
 	
 	private boolean inBeginEndPair;
 	private ShaderProgram shaderProgram;
@@ -27,7 +28,8 @@ public abstract class GraphicsBatch<M extends Material> {
 	 * @param shaderProgram ShaderProgram
 	 */
 	public GraphicsBatch(ShaderProgram shaderProgram, int maxBatchSize) {
-		this.blendingOptions = new BlendingOptions();
+		this.currentBatchBlendingOptions = new BlendingOptions();
+		this.nextBatchBlendingOptions = new BlendingOptions();
 		this.inBeginEndPair = false;
 		this.shaderProgram = shaderProgram;
 		this.forceDraw = false;
@@ -89,12 +91,21 @@ public abstract class GraphicsBatch<M extends Material> {
 	}
 	
 	/**
-	 * Devuelve las opciones de blending
+	 * Devuelve las opciones de blending que se deben usar para renderizar el batch actual
 	 * 
 	 * @return BlendingOptions
 	 */
-	public BlendingOptions getBlendingOptions() {
-		return blendingOptions;
+	public BlendingOptions getCurrentBatchBlendingOptions() {
+		return currentBatchBlendingOptions;
+	}
+	
+	/**
+	 * Devuelve las opciones de blending que se deben usar para renderizar el siguiente batch
+	 * 
+	 * @return BlendingOptions
+	 */
+	public BlendingOptions getNextBatchBlendingOptions() {
+		return nextBatchBlendingOptions;
 	}
 	
 	/**
@@ -118,23 +129,20 @@ public abstract class GraphicsBatch<M extends Material> {
 	/**
 	 * Asigna el Material enlazado actualmente al GraphicsBatch
 	 * 
-	 * @param currentMaterial Material
+	 * @param material Material
 	 */
-	public void setCurrentMaterial(M currentMaterial) {
-		BlendingOptions currentBlendingOptions;
-		
-		if (this.currentMaterial != null) {
-			if (!this.currentMaterial.getBlendingOptions().equals(currentMaterial.getBlendingOptions())) {
+	public void setCurrentMaterial(M material) {
+		BlendingOptions nextBatchBlendingOptions = material.getBlendingOptions();
+		if (!this.currentBatchBlendingOptions.equals(nextBatchBlendingOptions)) {
+			if (batchSize != 0) {
 				forceDraw = true;
 			}
-			currentBlendingOptions = this.currentMaterial.getBlendingOptions();
-		} else {
-			currentBlendingOptions = currentMaterial.getBlendingOptions();
 		}
-		blendingOptions.setSourceFactor(currentBlendingOptions.getSourceFactor());
-		blendingOptions.setDestinationFactor(currentBlendingOptions.getDestinationFactor());
-		blendingOptions.setBlendEquationMode(currentBlendingOptions.getBlendEquationMode());
-		this.currentMaterial = currentMaterial;
+		if (batchSize == 0) {
+			this.currentBatchBlendingOptions.copy(nextBatchBlendingOptions);
+		}
+		this.nextBatchBlendingOptions.copy(nextBatchBlendingOptions);
+		this.currentMaterial = material;
 	}
 	
 	/**

@@ -160,6 +160,17 @@ public class BlendingOptions {
 	}
 	
 	/**
+	 * Copia el BlendingOptions especificado en este BlendingOptions
+	 * 
+	 * @param other BlendingOptions
+	 */
+	public void copy(BlendingOptions other) {
+		this.sourceFactor = other.sourceFactor;
+		this.destinationFactor = other.destinationFactor;
+		this.blendEquationMode = other.blendEquationMode;
+	}
+	
+	/**
 	 * Comprueba si el factor especificado es un parametro valido para {@link GLES20#glBlendFunc(int, int)}
 	 * 
 	 * @param factor Valores aceptados: {@link GLES20#GL_ZERO}, {@link GLES20#GL_ONE}, {@link GLES20#GL_SRC_COLOR},
