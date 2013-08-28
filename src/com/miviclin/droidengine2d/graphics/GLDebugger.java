@@ -13,16 +13,14 @@ import android.util.Log;
  */
 public final class GLDebugger {
 	
-	public enum LogLevel {
-		DISABLE_LOGGING,
-		LOG_NUM_DRAW_CALLS_FRAME;
-	}
+	public static final int FLAG_NO_LOGGING = 0;
+	public static final int FLAG_LOG_NUM_DRAW_CALLS_FRAME = 1;
 	
 	private static GLDebugger instance = null;
 	
 	private boolean debugModeEnabled;
 	private int numDrawCallsFrame;
-	private LogLevel logLevel;
+	private int logFlags;
 	
 	/**
 	 * Constructor
@@ -30,7 +28,7 @@ public final class GLDebugger {
 	private GLDebugger() {
 		this.debugModeEnabled = false;
 		this.numDrawCallsFrame = 0;
-		this.logLevel = LogLevel.DISABLE_LOGGING;
+		this.logFlags = GLDebugger.FLAG_NO_LOGGING;
 	}
 	
 	/**
@@ -46,21 +44,12 @@ public final class GLDebugger {
 	}
 	
 	/**
-	 * Devuelve el nivel de logging activo actualmente
+	 * Asigna los flags de logging. Utilizar {@link GLDebugger#FLAG_NO_LOGGING} para desactivar el logging
 	 * 
-	 * @return LogLevel
+	 * @param flags Flags
 	 */
-	public LogLevel getLogLevel() {
-		return logLevel;
-	}
-	
-	/**
-	 * Asigna el nivel de logging especificado
-	 * 
-	 * @param logLevel LogLevel
-	 */
-	public void setLogLevel(LogLevel logLevel) {
-		this.logLevel = logLevel;
+	public void setLoggingFlags(int flags) {
+		this.logFlags = flags;
 	}
 	
 	/**
@@ -153,13 +142,13 @@ public final class GLDebugger {
 	}
 	
 	/**
-	 * Muestra un mensaje en el log con el numero de llamadas a draw realizadas hasta el momento. Solo se mostrara si el log level
-	 * seleccionado es {@link LogLevel#LOG_NUM_DRAW_CALLS_FRAME}
+	 * Muestra un mensaje en el log con el numero de llamadas a draw realizadas hasta el momento. Solo se mostrara si el flag
+	 * {@link GLDebugger#FLAG_LOG_NUM_DRAW_CALLS_FRAME} esta activo
 	 * 
 	 * @see #getNumDrawCallsFrame()
 	 */
 	public void logNumDrawCallsFrame() {
-		if (logLevel == LogLevel.LOG_NUM_DRAW_CALLS_FRAME) {
+		if ((logFlags & GLDebugger.FLAG_LOG_NUM_DRAW_CALLS_FRAME) == GLDebugger.FLAG_LOG_NUM_DRAW_CALLS_FRAME) {
 			Log.d(DefaultRenderer.class.getSimpleName(), "draw calls: " + GLDebugger.getInstance().getNumDrawCallsFrame());
 		}
 	}
