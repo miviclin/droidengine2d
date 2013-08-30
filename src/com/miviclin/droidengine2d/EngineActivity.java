@@ -11,7 +11,13 @@ import android.view.WindowManager;
 
 import com.miviclin.droidengine2d.graphics.GLView;
 
-public abstract class AndroidEngineActivity extends FragmentActivity {
+/**
+ * Activity que gestiona el engine.
+ * 
+ * @author Miguel Vicente Linares
+ * 
+ */
+public abstract class EngineActivity extends FragmentActivity {
 	
 	private Engine engine;
 	private Game game;
@@ -105,7 +111,7 @@ public abstract class AndroidEngineActivity extends FragmentActivity {
 	
 	/**
 	 * Asigna los flags al objeto Window.<br>
-	 * Este metodo se llama en {@link AndroidEngineActivity#onCreate(Bundle)}
+	 * Este metodo se llama en {@link EngineActivity#onCreate(Bundle)}
 	 */
 	public void setWindowFlags() {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -133,7 +139,7 @@ public abstract class AndroidEngineActivity extends FragmentActivity {
 	
 	/**
 	 * Crea un Engine con el Game que se vaya a representar en esta Activity y lo devuelve.<br>
-	 * Este metodo se llama en {@link AndroidEngineActivity#onCreate(Bundle)}
+	 * Este metodo se llama en {@link EngineActivity#onCreate(Bundle)}
 	 * 
 	 * @param glView GLView en la que se renderiza el juego
 	 * @return Engine que se va a utilizar en esta Activity
