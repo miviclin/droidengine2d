@@ -2,7 +2,6 @@ package com.miviclin.droidengine2d.input;
 
 import android.view.MotionEvent;
 
-import com.miviclin.droidengine2d.TouchController;
 
 /**
  * Interfaz que se utiliza para los eventos Touch

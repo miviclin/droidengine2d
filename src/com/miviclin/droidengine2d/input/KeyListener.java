@@ -2,8 +2,6 @@ package com.miviclin.droidengine2d.input;
 
 import android.view.KeyEvent;
 
-import com.miviclin.droidengine2d.KeyController;
-import com.miviclin.droidengine2d.TouchController;
 
 /**
  * Interfaz que se utiliza para los eventos Key

@@ -1,8 +1,7 @@
-package com.miviclin.droidengine2d;
+package com.miviclin.droidengine2d.input;
 
 import android.view.KeyEvent;
 
-import com.miviclin.droidengine2d.input.KeyListener;
 import com.miviclin.droidengine2d.scene.Scene;
 
 /**
@@ -34,7 +33,7 @@ public class KeyController {
 	 * @param keyCode Codigo de tecla
 	 * @param keyEvent KeyEvent
 	 */
-	void setKeyEvent(int keyCode, KeyEvent keyEvent) {
+	public void setKeyEvent(int keyCode, KeyEvent keyEvent) {
 		this.keyCode = keyCode;
 		this.keyEvent = keyEvent;
 		if (keyEvent != null) {
