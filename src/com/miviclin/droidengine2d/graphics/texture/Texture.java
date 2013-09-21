@@ -17,7 +17,7 @@ import com.miviclin.droidengine2d.util.math.Vector2;
 public class Texture implements Comparable<Texture> {
 	
 	private String path;
-	private int textureID;
+	private int textureId;
 	private int minFilter;
 	private int magFilter;
 	private int wrapS;
@@ -35,7 +35,7 @@ public class Texture implements Comparable<Texture> {
 	public Texture(Context context, String path) {
 		Vector2 bitmapBounds = AssetsLoader.getBitmapBounds(context, path);
 		this.path = path;
-		this.textureID = -1;
+		this.textureId = -1;
 		this.minFilter = GLES20.GL_LINEAR;
 		this.magFilter = GLES20.GL_LINEAR;
 		this.wrapS = GLES20.GL_REPEAT;
@@ -55,7 +55,7 @@ public class Texture implements Comparable<Texture> {
 	 */
 	public void loadTexture(Context context) {
 		Bitmap bitmap;
-		allocateTextureID();
+		allocateTextureId();
 		bind();
 		setFilters(minFilter, magFilter);
 		setWrapMode(wrapS, wrapT);
@@ -72,17 +72,17 @@ public class Texture implements Comparable<Texture> {
 	 * Hace que OpenGL asigne un ID a la textura. Si ya tenia un ID asignado, es recomendable llamar a {@link #delete()} antes de asignar un
 	 * ID nuevo.
 	 */
-	protected void allocateTextureID() {
+	protected void allocateTextureId() {
 		int[] textures = new int[1];
 		GLES20.glGenTextures(1, textures, 0);
-		textureID = textures[0];
+		textureId = textures[0];
 	}
 	
 	/**
 	 * Enlaza la textura al contexto de OpenGL
 	 */
 	public void bind() {
-		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureID);
+		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
 	}
 	
 	/**
@@ -123,9 +123,9 @@ public class Texture implements Comparable<Texture> {
 	 * Es recomendable llamar a este metodo para liberar recursos cuando la textura no se vaya a utilizar mas.
 	 */
 	public void delete() {
-		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureID);
+		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
 		int[] textures = new int[1];
-		textures[0] = textureID;
+		textures[0] = textureId;
 		GLES20.glDeleteTextures(1, textures, 0);
 	}
 	
@@ -170,7 +170,7 @@ public class Texture implements Comparable<Texture> {
 		result = prime * result + magFilter;
 		result = prime * result + minFilter;
 		result = prime * result + ((path == null) ? 0 : path.hashCode());
-		result = prime * result + textureID;
+		result = prime * result + textureId;
 		result = prime * result + width;
 		result = prime * result + wrapS;
 		result = prime * result + wrapT;
@@ -199,7 +199,7 @@ public class Texture implements Comparable<Texture> {
 				return false;
 		} else if (!path.equals(other.path))
 			return false;
-		if (textureID != other.textureID)
+		if (textureId != other.textureId)
 			return false;
 		if (width != other.width)
 			return false;

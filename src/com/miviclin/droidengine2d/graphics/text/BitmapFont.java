@@ -209,7 +209,7 @@ public class BitmapFont implements Font {
 		for (int i = 0; i < textLength; i++) {
 			currentChar = getCharacter((int) line.charAt(i));
 			if (lastChar != null) {
-				textWidth += lastChar.getKernings().get(currentChar.getID()) * scaleRatio;
+				textWidth += lastChar.getKernings().get(currentChar.getId()) * scaleRatio;
 			}
 			textWidth += (currentChar.getxOffset() + currentChar.getxAdvance()) * scaleRatio;
 			lastChar = currentChar;

@@ -173,7 +173,7 @@ public class Graphics {
 		for (int i = 0; i < textLength; i++) {
 			currentChar = font.getCharacter((int) text.charAt(i));
 			if (lastChar != null) {
-				posX += lastChar.getKernings().get(currentChar.getID()) * scaleRatio;
+				posX += lastChar.getKernings().get(currentChar.getId()) * scaleRatio;
 			}
 			posX += currentChar.getxOffset() * scaleRatio;
 			posY = position.getY() - currentChar.getyOffset() * scaleRatio;

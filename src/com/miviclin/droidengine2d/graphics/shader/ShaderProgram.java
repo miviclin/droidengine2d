@@ -86,12 +86,12 @@ public abstract class ShaderProgram {
 	 */
 	public void link() {
 		ShaderDefinitions shaders = getShaderDefinitions();
-		int programID = ShaderUtilities.createProgram(shaders.getVertexShaderDefinition(), shaders.getFragmentShaderDefinition());
-		if (programID == 0) {
+		int programId = ShaderUtilities.createProgram(shaders.getVertexShaderDefinition(), shaders.getFragmentShaderDefinition());
+		if (programId == 0) {
 			return;
 		}
-		setProgram(programID);
-		link(programID);
+		setProgram(programId);
+		link(programId);
 		setLinked();
 	}
 	
@@ -99,8 +99,8 @@ public abstract class ShaderProgram {
 	 * Enlaza los atributos de los shaders con el program.<br>
 	 * Este metodo se llama desde {@link #link()}. No deberia llamarse manualmente
 	 * 
-	 * @param programID ID que asigna OpenGL al program compilado
+	 * @param programId ID que asigna OpenGL al program compilado
 	 */
-	protected abstract void link(int programID);
+	protected abstract void link(int programId);
 	
 }

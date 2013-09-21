@@ -36,23 +36,23 @@ public class PositionColorBatchShaderProgram extends ShaderProgram {
 	}
 	
 	@Override
-	protected void link(int programID) {
-		aPositionHandle = GLES20.glGetAttribLocation(programID, "aPosition");
+	protected void link(int programId) {
+		aPositionHandle = GLES20.glGetAttribLocation(programId, "aPosition");
 		GLDebugger.getInstance().passiveCheckGLError();
 		if (aPositionHandle == -1) {
 			throw new RuntimeException("Could not get attrib location for aPosition");
 		}
-		aColorHandle = GLES20.glGetAttribLocation(programID, "aColor");
+		aColorHandle = GLES20.glGetAttribLocation(programId, "aColor");
 		GLDebugger.getInstance().passiveCheckGLError();
 		if (aColorHandle == -1) {
 			throw new RuntimeException("Could not get attrib location for aColor");
 		}
-		aMVPMatrixIndexHandle = GLES20.glGetAttribLocation(programID, "aMVPMatrixIndex");
+		aMVPMatrixIndexHandle = GLES20.glGetAttribLocation(programId, "aMVPMatrixIndex");
 		GLDebugger.getInstance().passiveCheckGLError();
 		if (aMVPMatrixIndexHandle == -1) {
 			throw new RuntimeException("Could not get attrib location for aMVPMatrixIndex");
 		}
-		uMVPMatrixHandle = GLES20.glGetUniformLocation(programID, "uMVPMatrix");
+		uMVPMatrixHandle = GLES20.glGetUniformLocation(programId, "uMVPMatrix");
 		GLDebugger.getInstance().passiveCheckGLError();
 		if (uMVPMatrixHandle == -1) {
 			throw new RuntimeException("Could not get attrib location for uMVPMatrix");

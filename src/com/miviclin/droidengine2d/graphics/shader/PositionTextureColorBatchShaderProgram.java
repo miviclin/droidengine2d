@@ -33,10 +33,10 @@ public class PositionTextureColorBatchShaderProgram extends PositionTextureBatch
 	}
 	
 	@Override
-	protected void link(int programID) {
-		super.link(programID);
+	protected void link(int programId) {
+		super.link(programId);
 		
-		aColorHandle = GLES20.glGetAttribLocation(programID, "aColor");
+		aColorHandle = GLES20.glGetAttribLocation(programId, "aColor");
 		GLDebugger.getInstance().passiveCheckGLError();
 		if (aColorHandle == -1) {
 			throw new RuntimeException("Could not get attrib location for aColor");

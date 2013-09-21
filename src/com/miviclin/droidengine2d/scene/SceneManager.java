@@ -38,50 +38,50 @@ public class SceneManager {
 	 * Registra una Scene en el SceneManager identificada por el sceneID especificado.<br>
 	 * Si ya habia una Scene registrada con el mismo sceneID, se sustituira la que habia antes por la nueva.
 	 * 
-	 * @param sceneID Identificador que permite obtener la Scene
+	 * @param sceneId Identificador que permite obtener la Scene
 	 * @param scene Scene a agregar. No puede ser null
 	 */
-	public void registerScene(String sceneID, Scene scene) {
-		registerScene(sceneID, scene, false);
+	public void registerScene(String sceneId, Scene scene) {
+		registerScene(sceneId, scene, false);
 	}
 	
 	/**
 	 * Registra una Scene en el SceneManager identificada por el sceneID especificado.<br>
 	 * Si ya habia una Scene registrada con el mismo sceneID, se sustituira la que habia antes por la nueva.
 	 * 
-	 * @param sceneID Identificador que permite obtener la Scene
+	 * @param sceneId Identificador que permite obtener la Scene
 	 * @param scene Scene a agregar. No puede ser null
 	 * @param activate Indica si esta Scene pasara a ser la Scene activa
 	 */
-	public void registerScene(String sceneID, Scene scene, boolean activate) {
+	public void registerScene(String sceneId, Scene scene, boolean activate) {
 		if (scene == null) {
 			throw new IllegalArgumentException("The Scene can not be null");
 		}
-		scenes.put(sceneID, scene);
+		scenes.put(sceneId, scene);
 		scene.onRegister();
 		if (activate) {
-			setActiveScene(sceneID);
+			setActiveScene(sceneId);
 		}
 	}
 	
 	/**
 	 * Elimina la Scene asociada al identificador especificado. Si no habia ninguna Scene registrada con este identificador no hace nada.
 	 * 
-	 * @param sceneID Identificador de la Scene a eliminar
+	 * @param sceneId Identificador de la Scene a eliminar
 	 * @return Scene eliminada o null
 	 */
-	public Scene unregisterScene(String sceneID) {
-		return scenes.remove(sceneID);
+	public Scene unregisterScene(String sceneId) {
+		return scenes.remove(sceneId);
 	}
 	
 	/**
 	 * Devuelve la Scene asociada al identificador especificado. Si no habia ninguna Scene registrada con este identificador devuelve null.
 	 * 
-	 * @param sceneID Identificador de la Scene a devolver
+	 * @param sceneId Identificador de la Scene a devolver
 	 * @return Scene asociada al ID especificado o null
 	 */
-	public Scene getScene(String sceneID) {
-		return scenes.get(sceneID);
+	public Scene getScene(String sceneId) {
+		return scenes.get(sceneId);
 	}
 	
 	/**
@@ -98,13 +98,13 @@ public class SceneManager {
 	 * Asigna la Scene que estara activa en el juego a partir del ID especificado.<br>
 	 * Si no habia ninguna Scene registrada con este identificador se asignara null.
 	 * 
-	 * @param sceneID Identificador de la Scene que queremos asignar como Scene activa
+	 * @param sceneId Identificador de la Scene que queremos asignar como Scene activa
 	 */
-	public void setActiveScene(String sceneID) {
+	public void setActiveScene(String sceneId) {
 		if (activeScene != null) {
 			activeScene.onDeactivation();
 		}
-		this.activeScene = scenes.get(sceneID);
+		this.activeScene = scenes.get(sceneId);
 		if (activeScene != null) {
 			activeScene.onActivation();
 		}

@@ -33,10 +33,10 @@ public class PositionTextureOpacityBatchShaderProgram extends PositionTextureBat
 	}
 	
 	@Override
-	protected void link(int programID) {
-		super.link(programID);
+	protected void link(int programId) {
+		super.link(programId);
 		
-		aOpacityHandle = GLES20.glGetAttribLocation(programID, "aOpacity");
+		aOpacityHandle = GLES20.glGetAttribLocation(programId, "aOpacity");
 		GLDebugger.getInstance().passiveCheckGLError();
 		if (aOpacityHandle == -1) {
 			throw new RuntimeException("Could not get attrib location for aOpacity");

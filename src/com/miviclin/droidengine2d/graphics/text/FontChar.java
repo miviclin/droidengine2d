@@ -53,7 +53,7 @@ public class FontChar {
 	 * 
 	 * @return ID
 	 */
-	public int getID() {
+	public int getId() {
 		return id;
 	}
 	
