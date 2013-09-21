@@ -65,13 +65,18 @@ public class SceneManager {
 	}
 	
 	/**
-	 * Elimina la Scene asociada al identificador especificado. Si no habia ninguna Scene registrada con este identificador no hace nada.
+	 * Elimina la Scene asociada al identificador especificado. Si no habia ninguna Scene registrada con este identificador no hace nada.<br>
+	 * Si habia una scene registrada, se llama a {@link Scene#dispose()} al eliminarla del registro.
 	 * 
 	 * @param sceneId Identificador de la Scene a eliminar
 	 * @return Scene eliminada o null
 	 */
 	public Scene unregisterScene(String sceneId) {
-		return scenes.remove(sceneId);
+		Scene removedScene = scenes.remove(sceneId);
+		if (removedScene != null) {
+			removedScene.dispose();
+		}
+		return removedScene;
 	}
 	
 	/**
