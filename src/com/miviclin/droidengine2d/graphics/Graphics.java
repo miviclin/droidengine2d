@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 import android.content.Context;
+import android.opengl.GLES20;
 
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
 import com.miviclin.droidengine2d.graphics.material.ColorMaterial;
@@ -194,6 +195,15 @@ public class Graphics {
 			posX += currentChar.getxAdvance() * scaleRatio;
 			lastChar = currentChar;
 		}
+	}
+	
+	/**
+	 * Asigna el color especificado al color de fondo del GLView
+	 * 
+	 * @param color Color
+	 */
+	public void setBackgroundColor(Color color) {
+		GLES20.glClearColor(color.getR(), color.getG(), color.getB(), color.getA());
 	}
 	
 	/**
