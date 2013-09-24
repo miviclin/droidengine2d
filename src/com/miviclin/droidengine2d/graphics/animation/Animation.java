@@ -92,7 +92,7 @@ public class Animation {
 	 * @param delta Tiempo transcurrido desde la ultima actualizacion
 	 * @return AnimationFrame o null si la lista de frames esta vacia
 	 */
-	public AnimationFrame getCurrentFrame(float delta) {
+	public AnimationFrame update(float delta) {
 		if (state == State.INITIALIZED) {
 			state = State.RUNNING;
 			notifyAnimationStarted();
