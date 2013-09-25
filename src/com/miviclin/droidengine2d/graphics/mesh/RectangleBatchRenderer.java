@@ -52,7 +52,7 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 	protected void beginDraw() {
 		ShaderProgram shaderProgram = getShaderProgram();
 		if (!shaderProgram.isLinked()) {
-			shaderProgram.link();
+			shaderProgram.compileAndLink();
 		}
 		shaderProgram.use();
 	}
