@@ -27,15 +27,20 @@ public abstract class GraphicsBatch<M extends Material> {
 	 * 
 	 * @param shaderProgram ShaderProgram
 	 */
-	public GraphicsBatch(ShaderProgram shaderProgram, int maxBatchSize) {
+	public GraphicsBatch(int maxBatchSize) {
 		this.currentBatchBlendingOptions = new BlendingOptions();
 		this.nextBatchBlendingOptions = new BlendingOptions();
 		this.inBeginEndPair = false;
-		this.shaderProgram = shaderProgram;
+		this.shaderProgram = new ShaderProgram();
 		this.forceDraw = false;
 		this.batchSize = 0;
 		this.batchCapacity = maxBatchSize;
 	}
+	
+	/**
+	 * Inicializa el shader program.
+	 */
+	public abstract void setupShaderProgram();
 	
 	/**
 	 * Prepara el batch para pintar.

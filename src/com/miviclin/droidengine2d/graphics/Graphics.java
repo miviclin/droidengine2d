@@ -70,7 +70,8 @@ public class Graphics {
 	public void initialize() {
 		loadMaterialRenderers();
 		for (Entry<Class<? extends Material>, RectangleBatchRenderer<? extends Material>> entry : renderers.entrySet()) {
-			entry.getValue().getShaderProgram().link();
+			entry.getValue().setupShaderProgram();
+			entry.getValue().getShaderProgram().compileAndLink();
 			entry.getValue().initialize();
 		}
 	}
