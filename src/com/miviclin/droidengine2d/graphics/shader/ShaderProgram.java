@@ -1,5 +1,6 @@
 package com.miviclin.droidengine2d.graphics.shader;
 
+import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -174,6 +175,28 @@ public class ShaderProgram {
 			}
 			entry.setValue(location);
 		}
+	}
+	
+	/**
+	 * Especifica los valores del attribute especificado asociados a cada vertice que se van a enviar al vertex shader
+	 * 
+	 * @param size Numero de valores que se especifican por vertice (Ejemplo: posicion (x, y, z) => size=3)
+	 * @param strideBytes Numero de bytes que hay en el buffer entre la primera componente de un attribute y la primera del siguiente
+	 * @param attributeName Nombre del attribute
+	 * @param dataBuffer Buffer que contiene los valores asociados a cada vertice
+	 * @param dataOffset Posicion del buffer en la que se encuentra el primer valor del attribute
+	 */
+	public void specifyVertexAttributeData(String attributeName, int size, int strideBytes, FloatBuffer dataBuffer, int dataOffset) {
+		int attributeLocation = getAttributeLocation(attributeName);
+		if (attributeLocation == -1) {
+			throw new IllegalArgumentException("The specified attribute is not linked: " + attributeName);
+		}
+		GLES20.glEnableVertexAttribArray(attributeLocation);
+		GLDebugger.getInstance().passiveCheckGLError();
+		
+		dataBuffer.position(dataOffset);
+		GLES20.glVertexAttribPointer(attributeLocation, size, GLES20.GL_FLOAT, false, strideBytes, dataBuffer);
+		GLDebugger.getInstance().passiveCheckGLError();
 	}
 	
 }
