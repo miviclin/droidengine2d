@@ -26,26 +26,12 @@ public class ShaderProgram {
 	
 	/**
 	 * Crea un ShaderProgram
-	 * 
-	 * @param vertexShaderSource Codigo GLSL del vertex shader
-	 * @param fragmentShaderSource Codigo GLSL del fragment shader
-	 * @param attributes Lista de atributes del shader program
-	 * @param uniforms Lista de uniforms del shader program
 	 */
-	public ShaderProgram(String vertexShaderSource, String fragmentShaderSource, ArrayList<String> attributes, ArrayList<String> uniforms) {
-		this.vertexShaderSource = vertexShaderSource;
-		this.fragmentShaderSource = fragmentShaderSource;
-		
+	public ShaderProgram() {
+		this.vertexShaderSource = "";
+		this.fragmentShaderSource = "";
 		this.attributesLocations = new HashMap<String, Integer>();
-		for (int i = 0; i < attributes.size(); i++) {
-			attributesLocations.put(attributes.get(i), -1);
-		}
-		
 		this.uniformsLocations = new HashMap<String, Integer>();
-		for (int i = 0; i < uniforms.size(); i++) {
-			uniformsLocations.put(uniforms.get(i), -1);
-		}
-		
 		this.linked = false;
 	}
 	
@@ -141,12 +127,37 @@ public class ShaderProgram {
 	}
 	
 	/**
+	 * Asigna los shaders que formaran este shader program. Llamar a este metodo antes de {@link #compileAndLink()}
+	 * 
+	 * @param vertexShaderSource Codigo GLSL del vertex shader
+	 * @param fragmentShaderSource Codigo GLSL del fragment shader
+	 * @param attributes Lista de atributes del shader program
+	 * @param uniforms Lista de uniforms del shader program
+	 */
+	public void setShaders(String vertexShaderSource, String fragmentShaderSource, ArrayList<String> attributes, ArrayList<String> uniforms) {
+		this.vertexShaderSource = vertexShaderSource;
+		this.fragmentShaderSource = fragmentShaderSource;
+		
+		for (int i = 0; i < attributes.size(); i++) {
+			attributesLocations.put(attributes.get(i), -1);
+		}
+		
+		for (int i = 0; i < uniforms.size(); i++) {
+			uniformsLocations.put(uniforms.get(i), -1);
+		}
+	}
+	
+	/**
 	 * 1) Compila los shaders creando el ID del program.<br>
 	 * 2) Asigna dicho ID con setProgram(programId);<br>
 	 * 3) Enlaza los atributos de los shaders con el program<br>
 	 * 4) Llama a {@link #setLinked()} para indicar que el program ya ha sido enlazado.
 	 */
 	public void compileAndLink() {
+		if (vertexShaderSource.equals("") || fragmentShaderSource.equals("")) {
+			throw new ShaderProgramException("The source code of the shaders is not loaded.\n" +
+					"Ensure setShaders(...) has been called before trying to compile the shader program.");
+		}
 		int programId = ShaderUtilities.createProgram(vertexShaderSource, fragmentShaderSource);
 		if (programId == 0) {
 			return;
