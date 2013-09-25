@@ -23,7 +23,7 @@ public class PositionTextureBatchShaderProgram extends ShaderProgram {
 	 * Crea un PositionTextureBatchShaderProgram
 	 */
 	public PositionTextureBatchShaderProgram() {
-		super(new PositionTextureBatchShaderDefinitions());
+		super();
 	}
 	
 	/**
@@ -32,7 +32,7 @@ public class PositionTextureBatchShaderProgram extends ShaderProgram {
 	 * @param shaderDefinitions Objeto que define los shaders
 	 */
 	protected PositionTextureBatchShaderProgram(ShaderDefinitions shaderDefinitions) {
-		super(shaderDefinitions);
+		super();
 	}
 	
 	@Override

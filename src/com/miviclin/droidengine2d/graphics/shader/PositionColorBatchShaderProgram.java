@@ -23,7 +23,7 @@ public class PositionColorBatchShaderProgram extends ShaderProgram {
 	 * Crea un PositionColorBatchShaderProgram
 	 */
 	public PositionColorBatchShaderProgram() {
-		super(new PositionColorBatchShaderDefinitions());
+		super();
 	}
 	
 	/**
@@ -32,7 +32,7 @@ public class PositionColorBatchShaderProgram extends ShaderProgram {
 	 * @param shaderDefinitions Objeto que define los shaders
 	 */
 	protected PositionColorBatchShaderProgram(ShaderDefinitions shaderDefinitions) {
-		super(shaderDefinitions);
+		super();
 	}
 	
 	@Override

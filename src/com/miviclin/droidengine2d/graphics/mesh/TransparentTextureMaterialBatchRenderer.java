@@ -1,13 +1,17 @@
 package com.miviclin.droidengine2d.graphics.mesh;
 
+import static com.miviclin.droidengine2d.util.PrimitiveTypeSize.SIZE_OF_FLOAT;
+
 import java.nio.FloatBuffer;
+import java.util.ArrayList;
 
 import android.content.Context;
 
 import com.miviclin.droidengine2d.graphics.Color;
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
 import com.miviclin.droidengine2d.graphics.material.TransparentTextureMaterial;
-import com.miviclin.droidengine2d.graphics.shader.PositionTextureOpacityBatchShaderProgram;
+import com.miviclin.droidengine2d.graphics.shader.ShaderProgram;
+import com.miviclin.droidengine2d.graphics.shader.ShaderVariables;
 import com.miviclin.droidengine2d.util.math.Vector2;
 import com.miviclin.droidengine2d.util.math.Vector3;
 
@@ -29,14 +33,58 @@ public class TransparentTextureMaterialBatchRenderer<M extends TransparentTextur
 	 * @param context Context en el que se ejecuta el juego
 	 */
 	public TransparentTextureMaterialBatchRenderer(Context context) {
-		super(6, context, new PositionTextureOpacityBatchShaderProgram());
+		super(6, context);
 		this.vertexOpacityOffset = 5;
 		setGeometry(new RectangleBatchGeometry(getBatchCapacity(), true, true));
 	}
 	
 	@Override
-	public PositionTextureOpacityBatchShaderProgram getShaderProgram() {
-		return (PositionTextureOpacityBatchShaderProgram) super.getShaderProgram();
+	public void setupShaderProgram() {
+		String vertexShaderSource = "" +
+				"uniform mat4 " + ShaderVariables.U_MVP_MATRIX + "[32];\n" +
+				"attribute float " + ShaderVariables.A_MVP_MATRIX_INDEX + ";\n" +
+				"attribute vec4 " + ShaderVariables.A_POSITION + ";\n" +
+				"attribute vec2 " + ShaderVariables.A_TEXTURE_COORD + ";\n" +
+				"attribute float " + ShaderVariables.A_OPACITY + ";\n" +
+				"varying vec2 " + ShaderVariables.V_TEXTURE_COORD + ";\n" +
+				"varying float " + ShaderVariables.V_OPACITY + ";\n" +
+				"void main() {\n" +
+				"    gl_Position = " + ShaderVariables.U_MVP_MATRIX + "[int(" + ShaderVariables.A_MVP_MATRIX_INDEX + ")] * " + ShaderVariables.A_POSITION + ";\n" +
+				"    " + ShaderVariables.V_TEXTURE_COORD + " = " + ShaderVariables.A_TEXTURE_COORD + ";\n" +
+				"    " + ShaderVariables.V_OPACITY + " = " + ShaderVariables.A_OPACITY + ";\n" +
+				"}";
+		
+		String fragmentShaderSource = "" +
+				"precision mediump float;\n" +
+				"varying vec2 " + ShaderVariables.V_TEXTURE_COORD + ";\n" +
+				"varying float " + ShaderVariables.V_OPACITY + ";\n" +
+				"uniform sampler2D sTexture;\n" +
+				"void main() {\n" +
+				"    gl_FragColor = texture2D(sTexture, " + ShaderVariables.V_TEXTURE_COORD + ");\n" +
+				"    gl_FragColor.w *= " + ShaderVariables.V_OPACITY + ";\n" +
+				"}";
+		
+		ArrayList<String> attributes = new ArrayList<String>();
+		attributes.add(ShaderVariables.A_MVP_MATRIX_INDEX);
+		attributes.add(ShaderVariables.A_POSITION);
+		attributes.add(ShaderVariables.A_TEXTURE_COORD);
+		attributes.add(ShaderVariables.A_OPACITY);
+		
+		ArrayList<String> uniforms = new ArrayList<String>();
+		uniforms.add(ShaderVariables.U_MVP_MATRIX);
+		
+		getShaderProgram().setShaders(vertexShaderSource, fragmentShaderSource, attributes, uniforms);
+	}
+	
+	@Override
+	protected void setupVertexShaderVariables(int batchSize) {
+		int strideBytes = getVerticesDataStrideBytes();
+		ShaderProgram shaderProgram = getShaderProgram();
+		shaderProgram.setUniformMatrix4fv(ShaderVariables.U_MVP_MATRIX, batchSize, getGeometry().getMvpMatrices(), 0);
+		shaderProgram.setAttribute(ShaderVariables.A_MVP_MATRIX_INDEX, 1, SIZE_OF_FLOAT, getMvpIndexBuffer(), 0);
+		shaderProgram.setAttribute(ShaderVariables.A_POSITION, 3, strideBytes, getVertexBuffer(), getVertexPositionOffset());
+		shaderProgram.setAttribute(ShaderVariables.A_TEXTURE_COORD, 2, strideBytes, getVertexBuffer(), getVertexUVOffset());
+		shaderProgram.setAttribute(ShaderVariables.A_OPACITY, 1, strideBytes, getVertexBuffer(), vertexOpacityOffset);
 	}
 	
 	@Override
@@ -84,13 +132,6 @@ public class TransparentTextureMaterialBatchRenderer<M extends TransparentTextur
 			color = getGeometry().getColor(i);
 			vertexBuffer.put(color.getA());
 		}
-	}
-	
-	@Override
-	protected void setupVertexShaderVariables(int batchSize) {
-		super.setupVertexShaderVariables(batchSize);
-		PositionTextureOpacityBatchShaderProgram shaderProgram = getShaderProgram();
-		shaderProgram.specifyVerticesOpacity(getVertexBuffer(), vertexOpacityOffset, getVerticesDataStrideBytes());
 	}
 	
 	@Override

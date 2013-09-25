@@ -42,8 +42,8 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 	 * @param verticesDataStride Stride de los datos de los vertices
 	 * @param shaderProgram ShaderProgram
 	 */
-	public RectangleBatchRenderer(int verticesDataStride, ShaderProgram shaderProgram, int batchCapacity) {
-		super(shaderProgram, batchCapacity);
+	public RectangleBatchRenderer(int verticesDataStride, int batchCapacity) {
+		super(batchCapacity);
 		this.verticesDataStride = verticesDataStride;
 		this.geometry = new RectangleBatchGeometry(32, false, true);
 	}

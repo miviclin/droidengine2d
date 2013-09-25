@@ -205,7 +205,7 @@ public class ShaderProgram {
 	 * @param dataBuffer Buffer que contiene los valores asociados a cada vertice
 	 * @param dataOffset Posicion del buffer en la que se encuentra el primer valor del attribute
 	 */
-	public void setVertexAttribute(String attributeName, int size, int strideBytes, FloatBuffer dataBuffer, int dataOffset) {
+	public void setAttribute(String attributeName, int size, int strideBytes, FloatBuffer dataBuffer, int dataOffset) {
 		int attributeLocation = getAttributeLocation(attributeName);
 		
 		GLES20.glEnableVertexAttribArray(attributeLocation);
@@ -357,6 +357,11 @@ public class ShaderProgram {
 		int uniformLocation = getUniformLocation(uniformName);
 		GLES20.glUniformMatrix4fv(uniformLocation, numMatrices, false, data, dataOffset);
 		GLDebugger.getInstance().passiveCheckGLError();
+	}
+	
+	@Override
+	public String toString() {
+		return vertexShaderSource + "\n\n" + fragmentShaderSource;
 	}
 	
 }
