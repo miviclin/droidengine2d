@@ -8,7 +8,7 @@ package com.miviclin.droidengine2d.graphics.shader;
  */
 @SuppressWarnings("serial")
 public class ShaderProgramException extends RuntimeException {
-	
+
 	/**
 	 * Crea una ShaderProgramException
 	 * 
@@ -17,5 +17,5 @@ public class ShaderProgramException extends RuntimeException {
 	public ShaderProgramException(String message) {
 		super(message);
 	}
-	
+
 }

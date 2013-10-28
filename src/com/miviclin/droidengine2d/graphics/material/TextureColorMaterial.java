@@ -10,9 +10,9 @@ import com.miviclin.droidengine2d.graphics.texture.TextureRegion;
  * 
  */
 public class TextureColorMaterial extends TextureMaterial {
-	
+
 	private Color color;
-	
+
 	/**
 	 * Constructor
 	 * 
@@ -25,7 +25,7 @@ public class TextureColorMaterial extends TextureMaterial {
 		}
 		this.color = color;
 	}
-	
+
 	/**
 	 * Devuelve el color
 	 * 

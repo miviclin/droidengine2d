@@ -9,12 +9,12 @@ import android.opengl.Matrix;
  * @see Matrix
  */
 public class MatrixFix {
-	
+
 	private static float[] temp = new float[32];
-	
+
 	/**
-	 * Este metodo tiene la misma funcionalidad que android.opengl.Matrix.rotateM(...). La diferencia es que Matrix.rotateM(...) en la API
-	 * 10 y anteriores asigna memoria en el heap.<br>
+	 * Este metodo tiene la misma funcionalidad que android.opengl.Matrix.rotateM(...). La diferencia es que
+	 * Matrix.rotateM(...) en la API 10 y anteriores asigna memoria en el heap.<br>
 	 * <br>
 	 * 
 	 * Rotates matrix m by angle a (in degrees) around the axis (x, y, z)
@@ -34,5 +34,5 @@ public class MatrixFix {
 			System.arraycopy(temp, 16, m, mOffset, 16);
 		}
 	}
-	
+
 }

@@ -13,17 +13,17 @@ import com.miviclin.droidengine2d.graphics.Graphics;
  * 
  */
 public class SceneManager {
-	
+
 	private HashMap<String, Scene> scenes;
 	private Scene activeScene;
-	
+
 	/**
 	 * Constructor
 	 */
 	public SceneManager() {
 		this(16);
 	}
-	
+
 	/**
 	 * Constructor
 	 * 
@@ -33,7 +33,7 @@ public class SceneManager {
 		this.scenes = new HashMap<String, Scene>((int) ((initialCapacity / 0.75f) + 1));
 		this.activeScene = null;
 	}
-	
+
 	/**
 	 * Registra una Scene en el SceneManager identificada por el sceneID especificado.<br>
 	 * Si ya habia una Scene registrada con el mismo sceneID, se sustituira la que habia antes por la nueva.
@@ -44,7 +44,7 @@ public class SceneManager {
 	public void registerScene(String sceneId, Scene scene) {
 		registerScene(sceneId, scene, false);
 	}
-	
+
 	/**
 	 * Registra una Scene en el SceneManager identificada por el sceneID especificado.<br>
 	 * Si ya habia una Scene registrada con el mismo sceneID, se sustituira la que habia antes por la nueva.
@@ -63,9 +63,10 @@ public class SceneManager {
 			setActiveScene(sceneId);
 		}
 	}
-	
+
 	/**
-	 * Elimina la Scene asociada al identificador especificado. Si no habia ninguna Scene registrada con este identificador no hace nada.<br>
+	 * Elimina la Scene asociada al identificador especificado. Si no habia ninguna Scene registrada con este
+	 * identificador no hace nada.<br>
 	 * Si habia una scene registrada, se llama a {@link Scene#dispose()} al eliminarla del registro.
 	 * 
 	 * @param sceneId Identificador de la Scene a eliminar
@@ -78,9 +79,10 @@ public class SceneManager {
 		}
 		return removedScene;
 	}
-	
+
 	/**
-	 * Devuelve la Scene asociada al identificador especificado. Si no habia ninguna Scene registrada con este identificador devuelve null.
+	 * Devuelve la Scene asociada al identificador especificado. Si no habia ninguna Scene registrada con este
+	 * identificador devuelve null.
 	 * 
 	 * @param sceneId Identificador de la Scene a devolver
 	 * @return Scene asociada al ID especificado o null
@@ -88,7 +90,7 @@ public class SceneManager {
 	public Scene getScene(String sceneId) {
 		return scenes.get(sceneId);
 	}
-	
+
 	/**
 	 * Devuelve la Scene activa del juego.<br>
 	 * Si no se ha asignado previamente una Scene devolvera null
@@ -98,7 +100,7 @@ public class SceneManager {
 	public Scene getActiveScene() {
 		return activeScene;
 	}
-	
+
 	/**
 	 * Asigna la Scene que estara activa en el juego a partir del ID especificado.<br>
 	 * Si no habia ninguna Scene registrada con este identificador se asignara null.
@@ -114,7 +116,7 @@ public class SceneManager {
 			activeScene.onActivation();
 		}
 	}
-	
+
 	/**
 	 * Llamado cuando el juego se va a background. Llama a {@link Scene#onPause()} en la Scene activa
 	 */
@@ -123,7 +125,7 @@ public class SceneManager {
 			activeScene.onPause();
 		}
 	}
-	
+
 	/**
 	 * Llamado cuando el juego vuelve de background. Llama a {@link Scene#onResume()} en la Scene activa
 	 */
@@ -132,9 +134,10 @@ public class SceneManager {
 			activeScene.onResume();
 		}
 	}
-	
+
 	/**
-	 * Libera los recursos de todas las Scenes registradas en el SceneManager. Llama a {@link Scene#dispose()} en todas las Scenes.<br>
+	 * Libera los recursos de todas las Scenes registradas en el SceneManager. Llama a {@link Scene#dispose()} en todas
+	 * las Scenes.<br>
 	 * El SceneManager quedara vacio.
 	 */
 	public void dispose() {
@@ -144,7 +147,7 @@ public class SceneManager {
 		}
 		scenes.clear();
 	}
-	
+
 	/**
 	 * Actualiza los elementos de la Scene activa.<br>
 	 * Este metodo se llama desde {@link Game#update(float)}
@@ -156,16 +159,17 @@ public class SceneManager {
 			activeScene.update(delta);
 		}
 	}
-	
+
 	/**
 	 * Renderiza los elementos de la Scene activa de forma que puedan verse en pantalla.<br>
 	 * Este metodo se llama desde {@link Game#draw(Graphics)}<br>
-	 * Este metodo se ejecuta en el hilo del GLRenderer tras ejecutar {@link SceneManager#update(float)} en el GameThread
+	 * Este metodo se ejecuta en el hilo del GLRenderer tras ejecutar {@link SceneManager#update(float)} en el
+	 * GameThread
 	 */
 	public void draw(Graphics graphics) {
 		if (activeScene != null) {
 			activeScene.draw(graphics);
 		}
 	}
-	
+
 }

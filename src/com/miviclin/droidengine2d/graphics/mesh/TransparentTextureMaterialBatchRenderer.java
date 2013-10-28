@@ -11,22 +11,23 @@ import com.miviclin.droidengine2d.graphics.Color;
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
 import com.miviclin.droidengine2d.graphics.material.TransparentTextureMaterial;
 import com.miviclin.droidengine2d.graphics.shader.ShaderProgram;
-import com.miviclin.droidengine2d.graphics.shader.ShaderVariables;
+import com.miviclin.droidengine2d.graphics.shader.ShaderVars;
 import com.miviclin.droidengine2d.util.math.Vector2;
 import com.miviclin.droidengine2d.util.math.Vector3;
 
 /**
- * Clase base de la que deben heredar los renderers de mallas que representen batches de figuras rectangulares cuyo material sea
- * TransparentTextureMaterial
+ * Clase base de la que deben heredar los renderers de mallas que representen batches de figuras rectangulares cuyo
+ * material sea TransparentTextureMaterial
  * 
  * @author Miguel Vicente Linares
  * 
  * @param <M> TransparentTextureMaterial
  */
-public class TransparentTextureMaterialBatchRenderer<M extends TransparentTextureMaterial> extends TextureMaterialBatchRendererBase<M> {
-	
+public class TransparentTextureMaterialBatchRenderer<M extends TransparentTextureMaterial>
+		extends TextureMaterialBatchRendererBase<M> {
+
 	private int vertexOpacityOffset;
-	
+
 	/**
 	 * Constructor
 	 * 
@@ -37,56 +38,61 @@ public class TransparentTextureMaterialBatchRenderer<M extends TransparentTextur
 		this.vertexOpacityOffset = 5;
 		setGeometry(new RectangleBatchGeometry(getBatchCapacity(), true, true));
 	}
-	
+
 	@Override
 	public void setupShaderProgram() {
+
+		// @formatter:off
+		
 		String vertexShaderSource = "" +
-				"uniform mat4 " + ShaderVariables.U_MVP_MATRIX + "[32];\n" +
-				"attribute float " + ShaderVariables.A_MVP_MATRIX_INDEX + ";\n" +
-				"attribute vec4 " + ShaderVariables.A_POSITION + ";\n" +
-				"attribute vec2 " + ShaderVariables.A_TEXTURE_COORD + ";\n" +
-				"attribute float " + ShaderVariables.A_OPACITY + ";\n" +
-				"varying vec2 " + ShaderVariables.V_TEXTURE_COORD + ";\n" +
-				"varying float " + ShaderVariables.V_OPACITY + ";\n" +
+				"uniform mat4 " + ShaderVars.U_MVP_MATRIX + "[32];\n" +
+				"attribute float " + ShaderVars.A_MVP_MATRIX_INDEX + ";\n" +
+				"attribute vec4 " + ShaderVars.A_POSITION + ";\n" +
+				"attribute vec2 " + ShaderVars.A_TEXTURE_COORD + ";\n" +
+				"attribute float " + ShaderVars.A_OPACITY + ";\n" +
+				"varying vec2 " + ShaderVars.V_TEXTURE_COORD + ";\n" +
+				"varying float " + ShaderVars.V_OPACITY + ";\n" +
 				"void main() {\n" +
-				"    gl_Position = " + ShaderVariables.U_MVP_MATRIX + "[int(" + ShaderVariables.A_MVP_MATRIX_INDEX + ")] * " + ShaderVariables.A_POSITION + ";\n" +
-				"    " + ShaderVariables.V_TEXTURE_COORD + " = " + ShaderVariables.A_TEXTURE_COORD + ";\n" +
-				"    " + ShaderVariables.V_OPACITY + " = " + ShaderVariables.A_OPACITY + ";\n" +
+				"    gl_Position = " + ShaderVars.U_MVP_MATRIX + "[int(" + ShaderVars.A_MVP_MATRIX_INDEX + ")] * " + ShaderVars.A_POSITION + ";\n" +
+				"    " + ShaderVars.V_TEXTURE_COORD + " = " + ShaderVars.A_TEXTURE_COORD + ";\n" +
+				"    " + ShaderVars.V_OPACITY + " = " + ShaderVars.A_OPACITY + ";\n" +
 				"}";
 		
 		String fragmentShaderSource = "" +
 				"precision mediump float;\n" +
-				"varying vec2 " + ShaderVariables.V_TEXTURE_COORD + ";\n" +
-				"varying float " + ShaderVariables.V_OPACITY + ";\n" +
+				"varying vec2 " + ShaderVars.V_TEXTURE_COORD + ";\n" +
+				"varying float " + ShaderVars.V_OPACITY + ";\n" +
 				"uniform sampler2D sTexture;\n" +
 				"void main() {\n" +
-				"    gl_FragColor = texture2D(sTexture, " + ShaderVariables.V_TEXTURE_COORD + ");\n" +
-				"    gl_FragColor.w *= " + ShaderVariables.V_OPACITY + ";\n" +
+				"    gl_FragColor = texture2D(sTexture, " + ShaderVars.V_TEXTURE_COORD + ");\n" +
+				"    gl_FragColor.w *= " + ShaderVars.V_OPACITY + ";\n" +
 				"}";
 		
+		// @formatter:on
+
 		ArrayList<String> attributes = new ArrayList<String>();
-		attributes.add(ShaderVariables.A_MVP_MATRIX_INDEX);
-		attributes.add(ShaderVariables.A_POSITION);
-		attributes.add(ShaderVariables.A_TEXTURE_COORD);
-		attributes.add(ShaderVariables.A_OPACITY);
-		
+		attributes.add(ShaderVars.A_MVP_MATRIX_INDEX);
+		attributes.add(ShaderVars.A_POSITION);
+		attributes.add(ShaderVars.A_TEXTURE_COORD);
+		attributes.add(ShaderVars.A_OPACITY);
+
 		ArrayList<String> uniforms = new ArrayList<String>();
-		uniforms.add(ShaderVariables.U_MVP_MATRIX);
-		
+		uniforms.add(ShaderVars.U_MVP_MATRIX);
+
 		getShaderProgram().setShaders(vertexShaderSource, fragmentShaderSource, attributes, uniforms);
 	}
-	
+
 	@Override
 	protected void setupVertexShaderVariables(int batchSize) {
 		int strideBytes = getVerticesDataStrideBytes();
 		ShaderProgram shaderProgram = getShaderProgram();
-		shaderProgram.setUniformMatrix4fv(ShaderVariables.U_MVP_MATRIX, batchSize, getGeometry().getMvpMatrices(), 0);
-		shaderProgram.setAttribute(ShaderVariables.A_MVP_MATRIX_INDEX, 1, SIZE_OF_FLOAT, getMvpIndexBuffer(), 0);
-		shaderProgram.setAttribute(ShaderVariables.A_POSITION, 3, strideBytes, getVertexBuffer(), getVertexPositionOffset());
-		shaderProgram.setAttribute(ShaderVariables.A_TEXTURE_COORD, 2, strideBytes, getVertexBuffer(), getVertexUVOffset());
-		shaderProgram.setAttribute(ShaderVariables.A_OPACITY, 1, strideBytes, getVertexBuffer(), vertexOpacityOffset);
+		shaderProgram.setUniformMatrix4fv(ShaderVars.U_MVP_MATRIX, batchSize, getGeometry().getMvpMatrices(), 0);
+		shaderProgram.setAttribute(ShaderVars.A_MVP_MATRIX_INDEX, 1, SIZE_OF_FLOAT, getMvpIndexBuffer(), 0);
+		shaderProgram.setAttribute(ShaderVars.A_POSITION, 3, strideBytes, getVertexBuffer(), getVertexPositionOffset());
+		shaderProgram.setAttribute(ShaderVars.A_TEXTURE_COORD, 2, strideBytes, getVertexBuffer(), getVertexUVOffset());
+		shaderProgram.setAttribute(ShaderVars.A_OPACITY, 1, strideBytes, getVertexBuffer(), vertexOpacityOffset);
 	}
-	
+
 	@Override
 	protected void setupVerticesData() {
 		RectangleBatchGeometry geometry = getGeometry();
@@ -110,7 +116,7 @@ public class TransparentTextureMaterialBatchRenderer<M extends TransparentTextur
 			geometry.addColor(new Color(1.0f, 1.0f, 1.0f, 1.0f));
 		}
 	}
-	
+
 	@Override
 	protected void copyGeometryToVertexBuffer(int batchSize) {
 		FloatBuffer vertexBuffer = getVertexBuffer();
@@ -124,16 +130,16 @@ public class TransparentTextureMaterialBatchRenderer<M extends TransparentTextur
 			vertexBuffer.put(position.getX());
 			vertexBuffer.put(position.getY());
 			vertexBuffer.put(position.getZ());
-			
+
 			textureUV = getGeometry().getTextureUV(i);
 			vertexBuffer.put(textureUV.getX());
 			vertexBuffer.put(textureUV.getY());
-			
+
 			color = getGeometry().getColor(i);
 			vertexBuffer.put(color.getA());
 		}
 	}
-	
+
 	@Override
 	public void draw(Vector2 position, Vector2 scale, Vector2 origin, float rotation, Camera camera) {
 		checkInBeginEndPair();
@@ -142,7 +148,7 @@ public class TransparentTextureMaterialBatchRenderer<M extends TransparentTextur
 		setupOpacity(material.getOpacity());
 		incrementBatchSize();
 	}
-	
+
 	/**
 	 * Define la opacidad del siguiente sprite en el batch
 	 * 
@@ -155,5 +161,5 @@ public class TransparentTextureMaterialBatchRenderer<M extends TransparentTextur
 			getGeometry().getColor(i).setA(opacity);
 		}
 	}
-	
+
 }

@@ -9,12 +9,12 @@ import com.miviclin.droidengine2d.util.math.Vector2;
  * 
  */
 public class Transform {
-	
+
 	private Vector2 position;
 	private Vector2 scale;
 	private Vector2 origin;
 	private float rotation;
-	
+
 	/**
 	 * Crea un objeto Transform con la posicion y escala especificadas.<br>
 	 * El origen es por defecto el punto (scale.getX() / 2, scale.getY() / 2).
@@ -25,7 +25,7 @@ public class Transform {
 	public Transform(Vector2 position, Vector2 scale) {
 		this(position, scale, new Vector2(scale.getX() / 2, scale.getY() / 2), 0.0f);
 	}
-	
+
 	/**
 	 * Crea un objeto Transform con la posicion, escala, origen y rotacion especificada.
 	 * 
@@ -44,7 +44,7 @@ public class Transform {
 		this.origin = origin;
 		this.rotation = rotation;
 	}
-	
+
 	/**
 	 * Devuelve el angulo de rotacion sobre el origen
 	 * 
@@ -53,7 +53,7 @@ public class Transform {
 	public float getRotation() {
 		return rotation;
 	}
-	
+
 	/**
 	 * Asigna el angulo de rotacion sobre el origen
 	 * 
@@ -62,7 +62,7 @@ public class Transform {
 	public void setRotation(float rotation) {
 		this.rotation = rotation;
 	}
-	
+
 	/**
 	 * Devuelve la posicion
 	 * 
@@ -71,7 +71,7 @@ public class Transform {
 	public Vector2 getPosition() {
 		return position;
 	}
-	
+
 	/**
 	 * Devuelve la escala
 	 * 
@@ -80,7 +80,7 @@ public class Transform {
 	public Vector2 getScale() {
 		return scale;
 	}
-	
+
 	/**
 	 * Devuelve el origen
 	 * 
@@ -89,7 +89,7 @@ public class Transform {
 	public Vector2 getOrigin() {
 		return origin;
 	}
-	
+
 	/**
 	 * Comprueba si el vector especificado es null y si lo es lanza una excepcion
 	 * 
@@ -101,5 +101,5 @@ public class Transform {
 			throw new IllegalArgumentException(variableName + " can not be null");
 		}
 	}
-	
+
 }

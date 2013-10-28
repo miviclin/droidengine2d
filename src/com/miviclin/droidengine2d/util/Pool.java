@@ -12,16 +12,16 @@ import java.util.List;
  * @param <T>
  */
 public class Pool<T> {
-	
+
 	private ArrayList<T> elements;
-	
+
 	/**
 	 * Crea un nuevo Pool con una capacidad inicial por defecto de 16 elementos
 	 */
 	public Pool() {
 		this(16);
 	}
-	
+
 	/**
 	 * Crea un nuevo Pool
 	 * 
@@ -30,7 +30,7 @@ public class Pool<T> {
 	public Pool(int initialCapacity) {
 		this.elements = new ArrayList<T>(initialCapacity);
 	}
-	
+
 	/**
 	 * Devuelve un elemento almacenado o null en caso de que no hubiera elementos almacenados
 	 * 
@@ -42,7 +42,7 @@ public class Pool<T> {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Inserta un elemento en el Pool
 	 * 
@@ -54,7 +54,7 @@ public class Pool<T> {
 		}
 		elements.add(element);
 	}
-	
+
 	/**
 	 * Inserta una lista de elementos en el Pool
 	 * 
@@ -70,14 +70,14 @@ public class Pool<T> {
 			this.elements.add(element);
 		}
 	}
-	
+
 	/**
 	 * Elimina todos los elementos del ObjectPool
 	 */
 	public void clear() {
 		elements.clear();
 	}
-	
+
 	/**
 	 * Devuelve el numero de elementos almacenados
 	 * 
@@ -86,5 +86,5 @@ public class Pool<T> {
 	public int size() {
 		return elements.size();
 	}
-	
+
 }

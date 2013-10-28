@@ -9,7 +9,7 @@ import android.opengl.Matrix;
  * 
  */
 public class Matrix4 {
-	
+
 	public static final int M00 = 0;
 	public static final int M01 = 4;
 	public static final int M02 = 8;
@@ -26,11 +26,11 @@ public class Matrix4 {
 	public static final int M31 = 7;
 	public static final int M32 = 11;
 	public static final int M33 = 15;
-	
+
 	private float[] values = new float[16];
 	private float[] tmpMatrix = new float[16];
 	private float[] tmpVector = new float[4];
-	
+
 	/**
 	 * Constructor
 	 */
@@ -40,9 +40,10 @@ public class Matrix4 {
 		this.values[M22] = 1.0f;
 		this.values[M33] = 1.0f;
 	}
-	
+
 	/**
-	 * Devuelve el array de valores que componen la matriz. Se puede acceder a ellos individualmente mediante los indices:<br>
+	 * Devuelve el array de valores que componen la matriz. Se puede acceder a ellos individualmente mediante los
+	 * indices:<br>
 	 * {@link #M00}, {@link #M01}, {@link #M02}, {@link #M03}<br>
 	 * {@link #M10}, {@link #M11}, {@link #M12}, {@link #M13}<br>
 	 * {@link #M20}, {@link #M21}, {@link #M22}, {@link #M23}<br>
@@ -53,7 +54,7 @@ public class Matrix4 {
 	public float[] getValues() {
 		return values;
 	}
-	
+
 	/**
 	 * Asigna el array especificado como representacion interna de la matriz.<br>
 	 * El array debe ser de 16 elementos.
@@ -68,7 +69,7 @@ public class Matrix4 {
 		this.values = values;
 		return this;
 	}
-	
+
 	/**
 	 * Sustituye los elementos de la matriz por los 16 primeros elementos del array especificado<br>
 	 * El array debe ser de 16 elementos.<br>
@@ -80,10 +81,10 @@ public class Matrix4 {
 	public Matrix4 setValues(float[] values) {
 		return setValues(values, 0);
 	}
-	
+
 	/**
-	 * Sustituye los elementos de la matriz por 16 elementos del array especificado, siendo el primer elemento el situado en el indice
-	 * "offset"<br>
+	 * Sustituye los elementos de la matriz por 16 elementos del array especificado, siendo el primer elemento el
+	 * situado en el indice "offset"<br>
 	 * El array debe ser de 16 elementos.
 	 * 
 	 * @param values Nuevos valores
@@ -97,7 +98,7 @@ public class Matrix4 {
 		System.arraycopy(values, offset, this.values, 0, this.values.length);
 		return this;
 	}
-	
+
 	/**
 	 * Convierte la matriz en la matriz identidad.
 	 * 
@@ -122,7 +123,7 @@ public class Matrix4 {
 		values[M33] = 1.0f;
 		return this;
 	}
-	
+
 	/**
 	 * Invierte la matriz
 	 * 
@@ -131,7 +132,7 @@ public class Matrix4 {
 	public boolean invert() {
 		return Matrix.invertM(values, 0, values, 0);
 	}
-	
+
 	/**
 	 * Transpone la matriz
 	 * 
@@ -150,7 +151,7 @@ public class Matrix4 {
 		float m30 = values[M03];
 		float m31 = values[M13];
 		float m32 = values[M23];
-		
+
 		values[M01] = m01;
 		values[M02] = m02;
 		values[M03] = m03;
@@ -165,10 +166,10 @@ public class Matrix4 {
 		values[M32] = m32;
 		return this;
 	}
-	
+
 	/**
-	 * Multiplica la matriz por la matriz especificada (16 valores del array comenzando por la posicion offset) y sobreescribe esta matriz
-	 * con el resultado de la multiplicacion.
+	 * Multiplica la matriz por la matriz especificada (16 valores del array comenzando por la posicion offset) y
+	 * sobreescribe esta matriz con el resultado de la multiplicacion.
 	 * 
 	 * @param matrix Matriz representada en formato array
 	 * @param offset Indice del array en el que se encuentra el primer valor
@@ -185,7 +186,7 @@ public class Matrix4 {
 		tmpMatrix = aux;
 		return this;
 	}
-	
+
 	/**
 	 * Multiplica la matriz por la matriz especificada y sobreescribe esta matriz con el resultado de la multiplicacion.
 	 * 
@@ -200,7 +201,7 @@ public class Matrix4 {
 		tmpMatrix = aux;
 		return this;
 	}
-	
+
 	/**
 	 * Multiplica la matriz por el vector especificado y sobreescribe esta matriz con el resultado de la multiplicacion.
 	 * 
@@ -222,7 +223,7 @@ public class Matrix4 {
 		tmpMatrix = aux;
 		return this;
 	}
-	
+
 	/**
 	 * Multiplica la matriz por el vector especificado y sobreescribe esta matriz con el resultado de la multiplicacion.
 	 * 
@@ -241,7 +242,7 @@ public class Matrix4 {
 		tmpMatrix = aux;
 		return this;
 	}
-	
+
 	/**
 	 * Translada la matriz
 	 * 
@@ -254,7 +255,7 @@ public class Matrix4 {
 		Matrix.translateM(values, 0, x, y, z);
 		return this;
 	}
-	
+
 	/**
 	 * Translada la matriz
 	 * 
@@ -265,7 +266,7 @@ public class Matrix4 {
 		Matrix.translateM(values, 0, translation.getX(), translation.getY(), translation.getZ());
 		return this;
 	}
-	
+
 	/**
 	 * Escala la matriz
 	 * 
@@ -278,7 +279,7 @@ public class Matrix4 {
 		Matrix.scaleM(values, 0, x, y, z);
 		return this;
 	}
-	
+
 	/**
 	 * Escala la matriz
 	 * 
@@ -289,7 +290,7 @@ public class Matrix4 {
 		Matrix.translateM(values, 0, scaleFactor.getX(), scaleFactor.getY(), scaleFactor.getZ());
 		return this;
 	}
-	
+
 	/**
 	 * Rota la matriz
 	 * 
@@ -303,7 +304,7 @@ public class Matrix4 {
 		MatrixFix.rotateM(values, 0, angle, x, y, z);
 		return this;
 	}
-	
+
 	/**
 	 * Rota la matriz
 	 * 
@@ -315,10 +316,10 @@ public class Matrix4 {
 		MatrixFix.rotateM(values, 0, angle, scaleFactor.getX(), scaleFactor.getY(), scaleFactor.getZ());
 		return this;
 	}
-	
+
 	/**
-	 * Define una transformacion en terminos de punto en el que se encuentra el ojo, centro de vista (punto hacia el que mira el ojo) y up
-	 * vector (vector que define la direccion del sistema de coordenadas).
+	 * Define una transformacion en terminos de punto en el que se encuentra el ojo, centro de vista (punto hacia el que
+	 * mira el ojo) y up vector (vector que define la direccion del sistema de coordenadas).
 	 * 
 	 * @param eyeX Coordenada X del ojo
 	 * @param eyeY Coordenada Y del ojo
@@ -331,14 +332,16 @@ public class Matrix4 {
 	 * @param upZ Coordenada Z del up vector
 	 * @return Referencia a esta matriz, para poder encadenar operaciones
 	 */
-	public Matrix4 setLookAt(float eyeX, float eyeY, float eyeZ, float centerX, float centerY, float centerZ, float upX, float upY, float upZ) {
+	public Matrix4 setLookAt(float eyeX, float eyeY, float eyeZ, float centerX, float centerY, float centerZ,
+			float upX, float upY, float upZ) {
+
 		Matrix.setLookAtM(values, 0, eyeX, eyeY, eyeZ, centerX, centerY, centerZ, upX, upY, upZ);
 		return this;
 	}
-	
+
 	/**
-	 * Define una transformacion en terminos de punto en el que se encuentra el ojo, centro de vista (punto hacia el que mira el ojo) y up
-	 * vector (vector que define la direccion del sistema de coordenadas).
+	 * Define una transformacion en terminos de punto en el que se encuentra el ojo, centro de vista (punto hacia el que
+	 * mira el ojo) y up vector (vector que define la direccion del sistema de coordenadas).
 	 * 
 	 * @param eye ojo
 	 * @param center centro de vista
@@ -350,10 +353,10 @@ public class Matrix4 {
 				eye.getX(), eye.getY(), eye.getZ(),
 				center.getX(), center.getY(), center.getZ(),
 				up.getX(), up.getY(), up.getZ());
-		
+
 		return this;
 	}
-	
+
 	/**
 	 * Convierte la matriz en una matriz de proyeccion ortografica.
 	 * 
@@ -378,7 +381,7 @@ public class Matrix4 {
 		Matrix.orthoM(values, 0, left, right, bottom, top, near, far);
 		return this;
 	}
-	
+
 	/**
 	 * Convierte la matriz en una matriz de proyeccion con perspectiva.
 	 * 
@@ -409,7 +412,7 @@ public class Matrix4 {
 		Matrix.frustumM(values, 0, left, right, bottom, top, near, far);
 		return this;
 	}
-	
+
 	@Override
 	public String toString() {
 		String s = "";
@@ -419,5 +422,5 @@ public class Matrix4 {
 		s += values[M30] + " " + values[M31] + " " + values[M32] + " " + values[M33] + "\n";
 		return s;
 	}
-	
+
 }

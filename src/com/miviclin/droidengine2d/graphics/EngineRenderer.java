@@ -10,20 +10,20 @@ import javax.microedition.khronos.opengles.GL10;
  * 
  */
 public interface EngineRenderer {
-	
+
 	/**
 	 * Se llama desde {@link GLRenderer#onSurfaceCreated(GL10, EGLConfig)}
 	 */
 	public abstract void onSurfaceCreated(GL10 glUnused, EGLConfig config);
-	
+
 	/**
 	 * Se llama desde {@link GLRenderer#onSurfaceChanged(GL10, int, int)}
 	 */
 	public abstract void onSurfaceChanged(GL10 glUnused, int width, int height);
-	
+
 	/**
 	 * Se llama desde {@link GLRenderer##onDrawFrame(GL10)}
 	 */
 	public abstract void onDrawFrame(GL10 glUnused);
-	
+
 }

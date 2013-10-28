@@ -9,9 +9,9 @@ import com.miviclin.droidengine2d.graphics.texture.TextureRegion;
  * 
  */
 public class TextureMaterial extends Material {
-	
+
 	private TextureRegion textureRegion;
-	
+
 	/**
 	 * Constructor
 	 * 
@@ -21,7 +21,7 @@ public class TextureMaterial extends Material {
 		super();
 		this.textureRegion = textureRegion;
 	}
-	
+
 	/**
 	 * Devuelve el TextureRegion
 	 * 
@@ -30,7 +30,7 @@ public class TextureMaterial extends Material {
 	public TextureRegion getTextureRegion() {
 		return textureRegion;
 	}
-	
+
 	/**
 	 * Asigna un TextureRegion. No puede ser null.
 	 * 
@@ -39,5 +39,5 @@ public class TextureMaterial extends Material {
 	public void setTextureRegion(TextureRegion textureRegion) {
 		this.textureRegion = textureRegion;
 	}
-	
+
 }

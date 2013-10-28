@@ -7,9 +7,9 @@ package com.miviclin.droidengine2d.graphics.material;
  * 
  */
 public abstract class Material {
-	
+
 	private final BlendingOptions blendingOptions;
-	
+
 	/**
 	 * Constructor
 	 */
@@ -17,7 +17,7 @@ public abstract class Material {
 		super();
 		this.blendingOptions = new BlendingOptions();
 	}
-	
+
 	/**
 	 * Devuelve las opciones de blending
 	 * 
@@ -26,5 +26,5 @@ public abstract class Material {
 	public BlendingOptions getBlendingOptions() {
 		return blendingOptions;
 	}
-	
+
 }

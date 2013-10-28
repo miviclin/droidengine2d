@@ -7,18 +7,19 @@ package com.miviclin.droidengine2d.graphics;
  * 
  */
 public class Color {
-	
+
 	private float r;
 	private float g;
 	private float b;
 	private float a;
-	
+
 	private float h;
 	private float s;
 	private float v;
-	
+
 	/**
-	 * Crea un color con los valores RGB especificados (Valores entre 0.0f y 1.0f). La componente A tendra el valor 1.0f por defecto.
+	 * Crea un color con los valores RGB especificados (Valores entre 0.0f y 1.0f). La componente A tendra el valor 1.0f
+	 * por defecto.
 	 * 
 	 * @param r Red
 	 * @param g Green
@@ -27,7 +28,7 @@ public class Color {
 	public Color(float r, float g, float b) {
 		this(r, g, b, 1.0f);
 	}
-	
+
 	/**
 	 * Crea un color con los valores RGBA especificados (Valores entre 0.0f y 1.0f)
 	 * 
@@ -46,7 +47,7 @@ public class Color {
 		this.a = a;
 		convertRGBtoHSV();
 	}
-	
+
 	/**
 	 * Copia los valores del color especificado en este Color
 	 * 
@@ -61,7 +62,7 @@ public class Color {
 		this.s = color.s;
 		this.v = color.v;
 	}
-	
+
 	/**
 	 * Asigna los valores RGB especificados al color
 	 * 
@@ -78,7 +79,7 @@ public class Color {
 		this.b = b;
 		convertRGBtoHSV();
 	}
-	
+
 	/**
 	 * Actualiza los valores HSV para que representen un color equivalente al que definen los valores RGB.
 	 */
@@ -93,9 +94,9 @@ public class Color {
 			if (r == max) {
 				h = (g - b) / delta;
 			} else if (g == max) {
-					h = 2 + (b - r) / delta;
+				h = 2 + (b - r) / delta;
 			} else {
-					h = 4 + (r - g) / delta;
+				h = 4 + (r - g) / delta;
 			}
 			h *= 60;
 			if (h < 0) {
@@ -106,7 +107,7 @@ public class Color {
 		this.s = s;
 		this.v = v;
 	}
-	
+
 	/**
 	 * Asigna los valores HSV especificados al color
 	 * 
@@ -126,7 +127,7 @@ public class Color {
 		this.v = v;
 		convertHSVtoRGB();
 	}
-	
+
 	/**
 	 * Actualiza los valores RGB para que representen un color equivalente al que definen los valores HSV.
 	 */
@@ -180,9 +181,9 @@ public class Color {
 		default:
 			break;
 		}
-		
+
 	}
-	
+
 	/**
 	 * Devuelve la componente R del color
 	 * 
@@ -191,7 +192,7 @@ public class Color {
 	public float getR() {
 		return r;
 	}
-	
+
 	/**
 	 * Devuelve la componente G del color
 	 * 
@@ -200,7 +201,7 @@ public class Color {
 	public float getG() {
 		return g;
 	}
-	
+
 	/**
 	 * Devuelve la componente B del color
 	 * 
@@ -209,7 +210,7 @@ public class Color {
 	public float getB() {
 		return b;
 	}
-	
+
 	/**
 	 * Devuelve la componente A del color
 	 * 
@@ -218,7 +219,7 @@ public class Color {
 	public float getA() {
 		return a;
 	}
-	
+
 	/**
 	 * Asigna la componente A del color
 	 * 
@@ -230,7 +231,7 @@ public class Color {
 		}
 		this.a = a;
 	}
-	
+
 	/**
 	 * Devuelve el tono del color (componente H en el modelo HSV)
 	 * 
@@ -239,7 +240,7 @@ public class Color {
 	public float getH() {
 		return h;
 	}
-	
+
 	/**
 	 * Devuelve la saturacion del color (componente S en el modelo HSV)
 	 * 
@@ -248,7 +249,7 @@ public class Color {
 	public float getS() {
 		return s;
 	}
-	
+
 	/**
 	 * Devuelve el brillo del color (componente V en el modelo HSV)
 	 * 
@@ -257,7 +258,7 @@ public class Color {
 	public float getV() {
 		return v;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -268,7 +269,7 @@ public class Color {
 		result = prime * result + Float.floatToIntBits(r);
 		return result;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -288,5 +289,5 @@ public class Color {
 			return false;
 		return true;
 	}
-	
+
 }

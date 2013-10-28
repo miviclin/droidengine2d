@@ -11,7 +11,7 @@ import android.content.Context;
  * 
  */
 public interface TextureAtlas {
-	
+
 	/**
 	 * Carga el TextureAtlas desde un archivo XML
 	 * 
@@ -19,14 +19,14 @@ public interface TextureAtlas {
 	 * @param context Context
 	 */
 	public void loadFromXML(String path, Context context);
-	
+
 	/**
 	 * Devuelve la textura que define este TextureAtlas
 	 * 
 	 * @return Texture
 	 */
 	public Texture getSourceTexture();
-	
+
 	/**
 	 * Devuelve la region especificada de este TextureAtlas
 	 * 
@@ -34,15 +34,16 @@ public interface TextureAtlas {
 	 * @return TextureRegion o null en caso de que no exista una TextureRegion con el nombre especificado
 	 */
 	public TextureRegion getTextureRegion(String name);
-	
+
 	/**
 	 * Elimina todas las referencias a las TextureRegions del TextureAtlas y la referencia a la textura principal.<br>
 	 * Este metodo se puede llamar cuando este TextureAtlas deje de ser necesario, para liberar recursos.
 	 */
 	public void clearAtlas();
-	
+
 	/**
-	 * Devuelve el mapa de TextureRegions que contiene todos los TextureRegion del TextureAtlas indexados por su correspondiente clave
+	 * Devuelve el mapa de TextureRegions que contiene todos los TextureRegion del TextureAtlas indexados por su
+	 * correspondiente clave
 	 * 
 	 * @return {@code Map<String, TextureRegion}
 	 */

@@ -2,7 +2,6 @@ package com.miviclin.droidengine2d.input;
 
 import android.view.KeyEvent;
 
-
 /**
  * Interfaz que se utiliza para los eventos Key
  * 
@@ -10,7 +9,7 @@ import android.view.KeyEvent;
  * 
  */
 public interface KeyListener {
-	
+
 	/**
 	 * Metodo que contiene la logica que debe procesarse al recibir un evento Key.<br>
 	 * Se llama cuando se hace una llamada a {@link KeyController#processKeyInput()}.<br>
@@ -21,5 +20,5 @@ public interface KeyListener {
 	 * @return true si se ha consumido el evento, false en caso contrario
 	 */
 	public boolean onKey(int keyCode, KeyEvent event);
-	
+
 }

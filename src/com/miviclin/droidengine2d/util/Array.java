@@ -10,18 +10,18 @@ import java.util.Arrays;
  * @param <T>
  */
 public class Array<T> {
-	
+
 	private Object[] objects;
 	private int size;
 	private int capacityIncrement;
-	
+
 	/**
 	 * Crea un Array
 	 */
 	public Array() {
 		this(16);
 	}
-	
+
 	/**
 	 * Crea un Array
 	 * 
@@ -30,20 +30,20 @@ public class Array<T> {
 	public Array(int initialCapacity) {
 		this(initialCapacity, 16);
 	}
-	
+
 	/**
 	 * Crea un Array
 	 * 
 	 * @param initialCapacity capacidad inicial del Array
-	 * @param capacityIncrement Cuando el Array se llene, se incrementara su capacidad en el numero de elementos especificado en este
-	 *            parametro
+	 * @param capacityIncrement Cuando el Array se llene, se incrementara su capacidad en el numero de elementos
+	 *            especificado en este parametro
 	 */
 	public Array(int initialCapacity, int capacityIncrement) {
 		this.objects = new Object[initialCapacity];
 		this.size = 0;
 		this.capacityIncrement = capacityIncrement;
 	}
-	
+
 	/**
 	 * Agrega un objeto al final del Array. Si el Array esta lleno, se redimensionara automaticamente.
 	 * 
@@ -55,10 +55,10 @@ public class Array<T> {
 		}
 		objects[size++] = object;
 	}
-	
+
 	/**
-	 * Agrega un objeto en la posicion especificada del Array. El elemento se inserta justo delante del elemento que hubiera inicialmente en
-	 * la posicion especificada. Si el Array esta lleno, se redimensionara automaticamente.
+	 * Agrega un objeto en la posicion especificada del Array. El elemento se inserta justo delante del elemento que
+	 * hubiera inicialmente en la posicion especificada. Si el Array esta lleno, se redimensionara automaticamente.
 	 * 
 	 * @param index Indice en el que se insertara el objeto
 	 * @param object Objeto que se va a agregar al Array
@@ -78,7 +78,7 @@ public class Array<T> {
 		objects[index] = object;
 		size++;
 	}
-	
+
 	/**
 	 * Asegura que el Array tenga la capacidad suficiente como para almacenar el numero de elementos especificado
 	 * 
@@ -91,7 +91,7 @@ public class Array<T> {
 			objects = aux;
 		}
 	}
-	
+
 	/**
 	 * Devuelve el objeto que se encuentra en la posicion especficada del Array.
 	 * 
@@ -106,7 +106,7 @@ public class Array<T> {
 		T object = (T) objects[index];
 		return object;
 	}
-	
+
 	/**
 	 * Elimina todos los elementos del Array, dejandolo vacio.
 	 */
@@ -116,7 +116,7 @@ public class Array<T> {
 			size = 0;
 		}
 	}
-	
+
 	/**
 	 * Comprueba si el objeto especificado se encuentra en el Array (utilizando el metodo equals(Object))
 	 * 
@@ -131,7 +131,7 @@ public class Array<T> {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Devuelve el indice en el que se encuentra el objeto especificado
 	 * 
@@ -146,7 +146,7 @@ public class Array<T> {
 		}
 		return -1;
 	}
-	
+
 	/**
 	 * Elimina el elemento situado en el indice especificado del Array y lo devuelve
 	 * 
@@ -163,7 +163,7 @@ public class Array<T> {
 		objects[size] = null;
 		return removedObject;
 	}
-	
+
 	/**
 	 * Elimina el objeto especificado del Array
 	 * 
@@ -180,10 +180,10 @@ public class Array<T> {
 		}
 		return false;
 	}
-	
+
 	/**
-	 * Inserta el elemento especificado en la posicion especificada del Array. Sustituye el elemento que hubiera previamente en dicha
-	 * posicion.
+	 * Inserta el elemento especificado en la posicion especificada del Array. Sustituye el elemento que hubiera
+	 * previamente en dicha posicion.
 	 * 
 	 * @param index Indice en el que se quiere insertar el objeto
 	 * @param object Objeto que se va a insertar
@@ -198,7 +198,7 @@ public class Array<T> {
 		objects[size] = object;
 		return removedObject;
 	}
-	
+
 	/**
 	 * Devuelve el numero de elementos del Array
 	 * 
@@ -207,5 +207,5 @@ public class Array<T> {
 	public int size() {
 		return size;
 	}
-	
+
 }

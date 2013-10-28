@@ -32,18 +32,18 @@ import com.miviclin.droidengine2d.util.math.Vector2;
  * 
  */
 public class Graphics {
-	
+
 	private final Vector2 tmpOrigin;
 	private final Vector2 tmpScale;
 	private final Vector2 tmpPosition;
 	private final TextureColorMaterial tmpTextureColorMaterial;
-	
+
 	private Camera camera;
 	private Context context;
 	private RectangleBatchRenderer<? extends Material> currentRenderer;
 	private HashMap<Class<? extends Material>, RectangleBatchRenderer<? extends Material>> renderers;
 	private boolean inBeginEndPair;
-	
+
 	/**
 	 * Constructor
 	 * 
@@ -61,9 +61,10 @@ public class Graphics {
 		this.renderers = new HashMap<Class<? extends Material>, RectangleBatchRenderer<? extends Material>>();
 		this.inBeginEndPair = false;
 	}
-	
+
 	/**
-	 * Metodo que inicializa el objeto graphics. Debe llamarse desde el hilo del renderer, que es el que tiene el contexto de OpenGL.
+	 * Metodo que inicializa el objeto graphics. Debe llamarse desde el hilo del renderer, que es el que tiene el
+	 * contexto de OpenGL.
 	 * 
 	 * @see Graphics#loadMaterialRenderers()
 	 */
@@ -75,7 +76,7 @@ public class Graphics {
 			entry.getValue().initialize();
 		}
 	}
-	
+
 	/**
 	 * Carga los renderers de materiales en el mapa de renderers soportados.<br>
 	 * Este metodo se llama desde {@link Graphics#initialize()}.<br>
@@ -93,11 +94,12 @@ public class Graphics {
 	protected void loadMaterialRenderers() {
 		renderers.put(ColorMaterial.class, new ColorMaterialBatchRenderer<ColorMaterial>());
 		renderers.put(TextureMaterial.class, new TextureMaterialBatchRenderer<TextureMaterial>(context));
-		renderers.put(TransparentTextureMaterial.class, new TransparentTextureMaterialBatchRenderer<TransparentTextureMaterial>(context));
 		renderers.put(TextureColorMaterial.class, new TextureColorMaterialBatchRenderer<TextureColorMaterial>(context));
 		renderers.put(TextureHSVMaterial.class, new TextureHSVMaterialBatchRenderer<TextureHSVMaterial>(context));
+		renderers.put(TransparentTextureMaterial.class,
+				new TransparentTextureMaterialBatchRenderer<TransparentTextureMaterial>(context));
 	}
-	
+
 	/**
 	 * Renderiza una figura rectangular
 	 * 
@@ -110,22 +112,23 @@ public class Graphics {
 		if (batchRenderer == null) {
 			throw new UnsupportedMaterialException();
 		}
-		
+
 		Vector2 scale = transform.getScale();
 		if (scale.getX() < 1 || scale.getY() < 1) {
 			throw new IllegalArgumentException("The scale of the transform has to be at least (1, 1)");
 		}
-		
+
 		Vector2 origin = transform.getOrigin();
 		if (origin.getX() < 0 || origin.getX() > scale.getX() || origin.getY() < 0 || origin.getY() > scale.getY()) {
-			throw new IllegalArgumentException("The origin of the transform must be between (0, 0) and (scale.getX(), scale.getY()");
+			throw new IllegalArgumentException("" +
+					"The origin of the transform must be between (0, 0) and (scale.getX(), scale.getY()");
 		}
 		Vector2.divide(tmpOrigin, origin, scale);
 		selectCurrentRenderer(batchRenderer);
 		batchRenderer.setCurrentMaterial(material);
 		batchRenderer.draw(transform.getPosition(), scale, tmpOrigin, transform.getRotation(), camera);
 	}
-	
+
 	/**
 	 * Renderiza texto en pantalla
 	 * 
@@ -138,7 +141,7 @@ public class Graphics {
 	public void drawText(CharSequence text, BitmapFont font, Vector2 position, float fontSizePx, Color color) {
 		drawText(text, font, position, fontSizePx, null, 0.0f, color);
 	}
-	
+
 	/**
 	 * Renderiza texto en pantalla
 	 * 
@@ -151,7 +154,9 @@ public class Graphics {
 	 * @param color Color del texto
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void drawText(CharSequence text, BitmapFont font, Vector2 position, float fontSizePx, Vector2 rotationPoint, float rotation, Color color) {
+	public void drawText(CharSequence text, BitmapFont font, Vector2 position, float fontSizePx, Vector2 rotationPoint,
+			float rotation, Color color) {
+
 		RectangleBatchRenderer batchRenderer = renderers.get(TextureColorMaterial.class);
 		if (batchRenderer == null) {
 			throw new UnsupportedMaterialException();
@@ -163,12 +168,12 @@ public class Graphics {
 		batchRenderer.setCurrentMaterial(tmpTextureColorMaterial);
 		tmpTextureColorMaterial.getColor().set(color);
 		tmpOrigin.set(0, 1);
-		
+
 		int textLength = text.length();
 		float scaleRatio = fontSizePx / font.getSize();
 		float posX = position.getX();
 		float posY = position.getY();
-		
+
 		FontChar currentChar;
 		FontChar lastChar = null;
 		float cosR, sinR;
@@ -181,23 +186,28 @@ public class Graphics {
 			posY = position.getY() - currentChar.getyOffset() * scaleRatio;
 			tmpScale.setX(currentChar.getTextureRegion().getWidth() * scaleRatio);
 			tmpScale.setY(currentChar.getTextureRegion().getHeight() * scaleRatio);
-			
+
 			if (rotation != 0 && rotationPoint != null) {
 				cosR = (float) Math.cos(Math.toRadians(rotation));
 				sinR = (float) Math.sin(Math.toRadians(rotation));
-				tmpPosition.setX(((posX - rotationPoint.getX()) * cosR - (posY - rotationPoint.getY()) * sinR) + rotationPoint.getX());
-				tmpPosition.setY(((posY - rotationPoint.getY()) * cosR + (posX - rotationPoint.getX()) * sinR) + rotationPoint.getY());
+
+				tmpPosition.setX(((posX - rotationPoint.getX()) * cosR - (posY - rotationPoint.getY()) * sinR)
+						+ rotationPoint.getX());
+
+				tmpPosition.setY(((posY - rotationPoint.getY()) * cosR + (posX - rotationPoint.getX()) * sinR)
+						+ rotationPoint.getY());
+
 			} else {
 				tmpPosition.set(posX, posY);
 			}
-			
+
 			tmpTextureColorMaterial.setTextureRegion(currentChar.getTextureRegion());
 			batchRenderer.draw(tmpPosition, tmpScale, tmpOrigin, (rotationPoint != null) ? rotation : 0.0f, camera);
 			posX += currentChar.getxAdvance() * scaleRatio;
 			lastChar = currentChar;
 		}
 	}
-	
+
 	/**
 	 * Asigna el color especificado al color de fondo del GLView
 	 * 
@@ -206,10 +216,11 @@ public class Graphics {
 	public void setBackgroundColor(Color color) {
 		GLES20.glClearColor(color.getR(), color.getG(), color.getB(), color.getA());
 	}
-	
+
 	/**
 	 * Renderiza en pantalla los elementos que aun estan en el batch sin renderizar.<br>
-	 * Este metodo debe llamarse siempre al final de cada frame para asegurarse de que no queden elementos sin renderizar.
+	 * Este metodo debe llamarse siempre al final de cada frame para asegurarse de que no queden elementos sin
+	 * renderizar.
 	 */
 	public void flush() {
 		if (inBeginEndPair && currentRenderer != null) {
@@ -217,10 +228,12 @@ public class Graphics {
 			inBeginEndPair = false;
 		}
 	}
-	
+
 	/**
-	 * Comprueba si el renderer especificado es el seleccionado actualmente, y si no lo es, lo selecciona y lo prepara para su uso.<br>
-	 * Si habia elementos sin renderizar en el renderer previamente seleccionado, los renderiza antes de seleccionar el nuevo.
+	 * Comprueba si el renderer especificado es el seleccionado actualmente, y si no lo es, lo selecciona y lo prepara
+	 * para su uso.<br>
+	 * Si habia elementos sin renderizar en el renderer previamente seleccionado, los renderiza antes de seleccionar el
+	 * nuevo.
 	 * 
 	 * @param renderer RectangleBatchMesh
 	 */
@@ -235,7 +248,7 @@ public class Graphics {
 			inBeginEndPair = true;
 		}
 	}
-	
+
 	/**
 	 * Devuelve la camara
 	 * 
@@ -244,7 +257,7 @@ public class Graphics {
 	protected Camera getCamera() {
 		return camera;
 	}
-	
+
 	/**
 	 * Devuelve el Context en el que se ejecuta el juego
 	 * 
@@ -253,26 +266,27 @@ public class Graphics {
 	protected Context getContext() {
 		return context;
 	}
-	
+
 	/**
 	 * Devuelve si aun hay elementos pendientes de ser renderizados en el batch que esta actualmente en uso
 	 * 
-	 * @return true si se ha llamado a {@link GraphicsBatch#begin()} , pero aun no se ha llamado a {@link GraphicsBatch#end()} en el batch
-	 *         seleccionado actualmente
+	 * @return true si se ha llamado a {@link GraphicsBatch#begin()} , pero aun no se ha llamado a
+	 *         {@link GraphicsBatch#end()} en el batch seleccionado actualmente
 	 */
 	protected boolean isInBeginEndPair() {
 		return inBeginEndPair;
 	}
-	
+
 	/**
 	 * Devuelve el mapa que almacena los renderers soportados actualmente.<br>
 	 * Para poder renderizar materials no soportados por defecto, hay que agregar una entrada a este mapa.<br>
-	 * La forma recomendada de agregar entradas al mapa es sobreescribiendo el metodo {@link Graphics#loadMaterialRenderers()}.
+	 * La forma recomendada de agregar entradas al mapa es sobreescribiendo el metodo
+	 * {@link Graphics#loadMaterialRenderers()}.
 	 * 
 	 * @return Mapa que contiene los renderers soportados por este objeto Graphics indexados por Material
 	 */
 	protected HashMap<Class<? extends Material>, RectangleBatchRenderer<? extends Material>> getMaterialRenderers() {
 		return renderers;
 	}
-	
+
 }

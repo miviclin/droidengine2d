@@ -14,10 +14,10 @@ import com.miviclin.droidengine2d.EngineLock;
  * 
  */
 public class GLRenderer implements GLSurfaceView.Renderer {
-	
+
 	private EngineRenderer engineRenderer;
 	private EngineLock engineLock;
-	
+
 	/**
 	 * Crea un GLRenderer
 	 * 
@@ -28,7 +28,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 		this.engineRenderer = engineRenderer;
 		this.engineLock = engineLock;
 	}
-	
+
 	@Override
 	public final void onDrawFrame(GL10 glUnused) {
 		if (!engineLock.allowUpdate.get()) {
@@ -39,15 +39,15 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 			}
 		}
 	}
-	
+
 	@Override
 	public void onSurfaceChanged(GL10 glUnused, int width, int height) {
 		engineRenderer.onSurfaceChanged(glUnused, width, height);
 	}
-	
+
 	@Override
 	public void onSurfaceCreated(GL10 glUnused, EGLConfig config) {
 		engineRenderer.onSurfaceCreated(glUnused, config);
 	}
-	
+
 }

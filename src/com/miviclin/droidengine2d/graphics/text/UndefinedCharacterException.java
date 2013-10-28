@@ -8,5 +8,5 @@ package com.miviclin.droidengine2d.graphics.text;
  */
 @SuppressWarnings("serial")
 public class UndefinedCharacterException extends RuntimeException {
-	
+
 }

@@ -18,15 +18,15 @@ import com.miviclin.droidengine2d.util.math.Vector2;
  * 
  */
 public class AssetsLoader {
-	
+
 	/**
-	 * Constructor privado porque no tiene sentido instanciar un objeto de esta clase al ser una clase de utilidad cuyos metodos son todos
-	 * estaticos. Tambien impide crear subclases de esta clase.
+	 * Constructor privado porque no tiene sentido instanciar un objeto de esta clase al ser una clase de utilidad cuyos
+	 * metodos son todos estaticos. Tambien impide crear subclases de esta clase.
 	 */
 	private AssetsLoader() {
-		
+
 	}
-	
+
 	/**
 	 * Devuelve un InputStream para poder leer un asset
 	 * 
@@ -38,7 +38,7 @@ public class AssetsLoader {
 	public static InputStream getAsset(Context context, String path) throws IOException {
 		return context.getAssets().open(path);
 	}
-	
+
 	/**
 	 * Devuelve un InputStream para poder leer un asset
 	 * 
@@ -50,7 +50,7 @@ public class AssetsLoader {
 	public static InputStream getAsset(AssetManager assetManager, String path) throws IOException {
 		return assetManager.open(path);
 	}
-	
+
 	/**
 	 * Carga un Bitmap de la carpeta de assets y lo devuelve
 	 * 
@@ -77,7 +77,7 @@ public class AssetsLoader {
 		}
 		return bitmap;
 	}
-	
+
 	/**
 	 * Carga un Bitmap de la carpeta de assets y lo devuelve
 	 * 
@@ -104,7 +104,7 @@ public class AssetsLoader {
 		}
 		return bitmap;
 	}
-	
+
 	/**
 	 * Devuelve las dimensiones de un bitmap que se encuentre en la carpeta de assets.<br>
 	 * No carga el bitmap en memoria.
@@ -135,7 +135,7 @@ public class AssetsLoader {
 		}
 		return new Vector2(width, height);
 	}
-	
+
 	/**
 	 * Devuelve un AssetFileDescriptor que se puede utilizar para leer el asset especificado
 	 * 
@@ -152,5 +152,5 @@ public class AssetsLoader {
 		}
 		return descriptor;
 	}
-	
+
 }

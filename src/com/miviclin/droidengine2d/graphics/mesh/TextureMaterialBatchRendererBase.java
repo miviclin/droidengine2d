@@ -9,21 +9,21 @@ import com.miviclin.droidengine2d.graphics.texture.TextureRegion;
 import com.miviclin.droidengine2d.util.math.Vector2;
 
 /**
- * Clase base de la que deben heredar los renderers de mallas que representen batches de figuras rectangulares cuyo material sea
- * TextureMaterial
+ * Clase base de la que deben heredar los renderers de mallas que representen batches de figuras rectangulares cuyo
+ * material sea TextureMaterial
  * 
  * @author Miguel Vicente Linares
  * 
  * @param <M> Material
  */
 public abstract class TextureMaterialBatchRendererBase<M extends Material> extends RectangleBatchRenderer<M> {
-	
+
 	private int vertexPositionOffset;
 	private int vertexUVOffset;
 	private Texture texture;
 	private Context context;
 	private boolean requestTextureBind;
-	
+
 	/**
 	 * Constructor
 	 * 
@@ -38,13 +38,13 @@ public abstract class TextureMaterialBatchRendererBase<M extends Material> exten
 		this.context = context;
 		this.texture = null;
 	}
-	
+
 	@Override
 	protected void beginDraw() {
 		super.beginDraw();
 		requestTextureBind = true;
 	}
-	
+
 	/**
 	 * Agrega el Sprite al batch.<br>
 	 * En caso de que el batch estuviera lleno, se renderiza en 1 sola llamada y se vacia para agregar el nuevo sprite.
@@ -56,7 +56,9 @@ public abstract class TextureMaterialBatchRendererBase<M extends Material> exten
 	 * @param rotation Angulo de rotacion sobre el centro
 	 * @param camera Camara
 	 */
-	protected void setupSprite(TextureRegion textureRegion, Vector2 position, Vector2 scale, Vector2 origin, float rotation, Camera camera) {
+	protected void setupSprite(TextureRegion textureRegion, Vector2 position, Vector2 scale, Vector2 origin,
+			float rotation, Camera camera) {
+
 		boolean textureChanged = checkTextureChanged(textureRegion);
 		if ((getBatchSize() > 0) && ((getBatchSize() == getBatchCapacity()) || textureChanged || isForceDraw())) {
 			drawBatch();
@@ -65,7 +67,7 @@ public abstract class TextureMaterialBatchRendererBase<M extends Material> exten
 		setupTexture(textureRegion.getTexture(), textureChanged);
 		setupUVCoords(textureRegion);
 	}
-	
+
 	/**
 	 * Comprueba si la textura es distinta a la textura seleccionada actualmente
 	 * 
@@ -81,7 +83,7 @@ public abstract class TextureMaterialBatchRendererBase<M extends Material> exten
 		}
 		return textureChanged;
 	}
-	
+
 	/**
 	 * Prepara la textura. La recarga y enlaza si es necesario.
 	 * 
@@ -100,7 +102,7 @@ public abstract class TextureMaterialBatchRendererBase<M extends Material> exten
 			requestTextureBind = false;
 		}
 	}
-	
+
 	/**
 	 * Actualiza las coordenadas UV del sprite en la geometria de la malla del batch.
 	 * 
@@ -118,7 +120,7 @@ public abstract class TextureMaterialBatchRendererBase<M extends Material> exten
 		// Top-Left
 		geometry.getTextureUV(i + 3).set(textureRegion.getU1(), textureRegion.getV1());
 	}
-	
+
 	/**
 	 * Offset de la posicion en los datos de un vertice
 	 * 
@@ -127,7 +129,7 @@ public abstract class TextureMaterialBatchRendererBase<M extends Material> exten
 	public int getVertexPositionOffset() {
 		return vertexPositionOffset;
 	}
-	
+
 	/**
 	 * Offset de las coordenadas UV en los datos de un vertice
 	 * 
@@ -136,5 +138,5 @@ public abstract class TextureMaterialBatchRendererBase<M extends Material> exten
 	public int getVertexUVOffset() {
 		return vertexUVOffset;
 	}
-	
+
 }

@@ -7,10 +7,10 @@ package com.miviclin.droidengine2d.util;
  * 
  */
 public class MutexLock {
-	
+
 	private Object lock;
 	private boolean notified;
-	
+
 	/**
 	 * Constructor
 	 */
@@ -18,7 +18,7 @@ public class MutexLock {
 		this.lock = new Object();
 		this.notified = false;
 	}
-	
+
 	/**
 	 * Bloquea el lock
 	 */
@@ -33,7 +33,7 @@ public class MutexLock {
 			notified = false;
 		}
 	}
-	
+
 	/**
 	 * Desbloquea el lock
 	 */
@@ -43,5 +43,5 @@ public class MutexLock {
 			lock.notify();
 		}
 	}
-	
+
 }

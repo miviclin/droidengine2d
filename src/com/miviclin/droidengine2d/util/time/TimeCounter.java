@@ -9,11 +9,11 @@ import java.util.Locale;
  * 
  */
 public class TimeCounter {
-	
+
 	private long milliseconds;
 	private long start;
 	private boolean started;
-	
+
 	/**
 	 * Crea un contador de tiempo inicializado a 0
 	 */
@@ -22,7 +22,7 @@ public class TimeCounter {
 		start = System.currentTimeMillis();
 		started = false;
 	}
-	
+
 	/**
 	 * Reinicia el contador
 	 */
@@ -31,7 +31,7 @@ public class TimeCounter {
 		start = System.currentTimeMillis();
 		started = false;
 	}
-	
+
 	/**
 	 * Actualiza el contador
 	 */
@@ -43,7 +43,7 @@ public class TimeCounter {
 			milliseconds = System.currentTimeMillis() - start;
 		}
 	}
-	
+
 	/**
 	 * Devuelve el tiempo almacenado en el contador, en milisegundos.
 	 * 
@@ -52,7 +52,7 @@ public class TimeCounter {
 	public long getMilliseconds() {
 		return milliseconds;
 	}
-	
+
 	/**
 	 * Devuelve el tiempo almacenado en el contador, en segundos.
 	 * 
@@ -61,7 +61,7 @@ public class TimeCounter {
 	public long getSeconds() {
 		return milliseconds / TimeConstants.MILLISECONDS_PER_SECOND;
 	}
-	
+
 	/**
 	 * Devuelve el tiempo almacenado en el contador, en minutos.
 	 * 
@@ -70,7 +70,7 @@ public class TimeCounter {
 	public long getMinutes() {
 		return milliseconds / TimeConstants.MILLISECONDS_PER_MINUTE;
 	}
-	
+
 	/**
 	 * Devuelve el tiempo almacenado en el contador, en horas.
 	 * 
@@ -79,7 +79,7 @@ public class TimeCounter {
 	public long getHours() {
 		return milliseconds / TimeConstants.MILLISECONDS_PER_HOUR;
 	}
-	
+
 	/**
 	 * Devuelve el tiempo almacenado en el contador, en dias.
 	 * 
@@ -88,7 +88,7 @@ public class TimeCounter {
 	public long getDays() {
 		return milliseconds / TimeConstants.MILLISECONDS_PER_DAY;
 	}
-	
+
 	@Override
 	public String toString() {
 		long days = getDays();
@@ -98,5 +98,5 @@ public class TimeCounter {
 		long milliseconds = this.milliseconds % TimeConstants.MILLISECONDS_PER_SECOND;
 		return String.format(Locale.US, "%02d:%02d:%02d:%02d.%03d", days, hours, minutes, seconds, milliseconds);
 	}
-	
+
 }

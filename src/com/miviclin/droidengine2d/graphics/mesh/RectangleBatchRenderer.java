@@ -27,15 +27,15 @@ import com.miviclin.droidengine2d.util.math.Vector2;
  * @param <M> Material
  */
 public abstract class RectangleBatchRenderer<M extends Material> extends GraphicsBatch<M> {
-	
+
 	private int verticesDataStride;
-	
+
 	private ShortBuffer indexBuffer;
 	private FloatBuffer vertexBuffer;
 	private FloatBuffer mvpIndexBuffer;
-	
+
 	private RectangleBatchGeometry geometry;
-	
+
 	/**
 	 * Crea un PositionTextureSpriteBatch
 	 * 
@@ -47,7 +47,7 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 		this.verticesDataStride = verticesDataStride;
 		this.geometry = new RectangleBatchGeometry(32, false, true);
 	}
-	
+
 	@Override
 	protected void beginDraw() {
 		ShaderProgram shaderProgram = getShaderProgram();
@@ -56,45 +56,46 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 		}
 		shaderProgram.use();
 	}
-	
+
 	@Override
 	protected void endDraw() {
 		if (getBatchSize() > 0) {
 			drawBatch();
 		}
 	}
-	
+
 	/**
 	 * Inicializa. Llamar tras crear el objeto.
 	 */
 	public void initialize() {
 		setupIndices();
 		setupVerticesData();
-		
+
 		indexBuffer = ByteBuffer.allocateDirect(getBatchCapacity() * 6 * SIZE_OF_SHORT)
 				.order(ByteOrder.nativeOrder())
 				.asShortBuffer();
 		copyIndicesToIndexBuffer();
-		
+
 		vertexBuffer = ByteBuffer.allocateDirect(getBatchCapacity() * 4 * verticesDataStride * SIZE_OF_FLOAT)
 				.order(ByteOrder.nativeOrder())
 				.asFloatBuffer();
 		copyGeometryToVertexBuffer(getBatchCapacity());
 		setVertexBufferLimit(getBatchCapacity());
-		
+
 		mvpIndexBuffer = ByteBuffer.allocateDirect(geometry.getMvpIndices().length * SIZE_OF_FLOAT)
 				.order(ByteOrder.nativeOrder())
 				.asFloatBuffer();
 		mvpIndexBuffer.put(geometry.getMvpIndices()).flip();
 	}
-	
+
 	/**
-	 * Vacia el vertex buffer y copia los datos de la geometria al buffer. Llamar a {@link #setVertexBufferLimit()} despues de este metodo.
+	 * Vacia el vertex buffer y copia los datos de la geometria al buffer. Llamar a {@link #setVertexBufferLimit()}
+	 * despues de este metodo.
 	 * 
 	 * @param batchSize Numero de elementos del batch que se copiaran
 	 */
 	protected abstract void copyGeometryToVertexBuffer(int batchSize);
-	
+
 	/**
 	 * Asigna el limite del vertex buffer. Llamar a este metodo despues de {@link #copyGeometryToVertexBuffer()}
 	 * 
@@ -103,7 +104,7 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 	protected void setVertexBufferLimit(int batchSize) {
 		vertexBuffer.position(batchSize * verticesDataStride * 4).flip();
 	}
-	
+
 	/**
 	 * Copia los datos de la geometria al buffer
 	 */
@@ -114,7 +115,7 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 		}
 		indexBuffer.flip();
 	}
-	
+
 	/**
 	 * Inicializa el array de indices de los vertices que definen la geometria de la malla de sprites
 	 */
@@ -129,7 +130,7 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 			geometry.addIndex((short) (j + 0));
 		}
 	}
-	
+
 	/**
 	 * Inicializa el array de vertices que definen la geometria de la malla del batch.<br>
 	 * El orden de inicializacion de los vertices debe ser:<br>
@@ -139,7 +140,7 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 	 * 4. Top-left
 	 */
 	protected abstract void setupVerticesData();
-	
+
 	/**
 	 * Transforma la figura situada en el indice (mvpIndex) especificado con los datos especificados.<br>
 	 * Para que este metodo funcione como se espera, el orden de inicializacion de los vertices debe ser:<br>
@@ -157,12 +158,13 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 	 * 
 	 * @see RectangleBatchRenderer#setupVerticesData()
 	 */
-	protected void updateTransform(int index, Vector2 position, Vector2 scale, Vector2 origin, float rotation, Camera camera) {
-		
+	protected void updateTransform(int index, Vector2 position, Vector2 scale, Vector2 origin, float rotation,
+			Camera camera) {
+
 		if (origin.getX() < 0 || origin.getX() > 1 || origin.getY() < 0 || origin.getY() > 1) {
 			throw new IllegalArgumentException("The origin coordinates must be in the [0..1] interval.");
 		}
-		
+
 		int i = index * 4;
 		float modelOriginX = 0.0f - (origin.getX() - 0.5f);
 		float modelOriginY = 0.0f - (origin.getY() - 0.5f);
@@ -177,14 +179,14 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 		// Update MVP matrix
 		geometry.updateMVPMatrix(index, position, scale, rotation, camera);
 	}
-	
+
 	/**
 	 * Prepara los datos de la geometria para ser enviados a los shaders
 	 * 
 	 * @param batchSize Numero de elementos en el batch
 	 */
 	protected abstract void setupVertexShaderVariables(int batchSize);
-	
+
 	/**
 	 * Prepara el batch para ser renderizado
 	 */
@@ -196,29 +198,29 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 		indexBuffer.limit(batchSize * 6).position(0);
 		setupVertexShaderVariables(batchSize);
 	}
-	
+
 	/**
 	 * Renderiza todos los sprites del batch en 1 sola llamada
 	 */
 	protected void drawBatch() {
 		prepareDrawBatch();
-		
+
 		BlendingOptions blendingOptions = getCurrentBatchBlendingOptions();
 		GLES20.glBlendFunc(blendingOptions.getSourceFactor(), blendingOptions.getDestinationFactor());
 		GLES20.glBlendEquation(blendingOptions.getBlendEquationMode());
-		
+
 		GLES20.glDrawElements(GLES20.GL_TRIANGLES, indexBuffer.limit(), GLES20.GL_UNSIGNED_SHORT, indexBuffer);
 		GLDebugger.getInstance().passiveCheckGLError();
-		
+
 		if (BuildConfig.DEBUG) {
-			GLDebugger.getInstance().incrementNumDrawCallsFrame();			
+			GLDebugger.getInstance().incrementNumDrawCallsFrame();
 		}
-		
+
 		getCurrentBatchBlendingOptions().copy(getNextBatchBlendingOptions());
 		setForceDraw(false);
 		resetBatchSize();
 	}
-	
+
 	/**
 	 * Agrega el Sprite al batch.<br>
 	 * En caso de que el batch estuviera lleno, se renderiza en 1 sola llamada y se vacia para agregar el nuevo sprite.
@@ -230,7 +232,7 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 	 * @param camera Camara
 	 */
 	public abstract void draw(Vector2 position, Vector2 scale, Vector2 origin, float rotation, Camera camera);
-	
+
 	/**
 	 * Devuelve el stride
 	 * 
@@ -239,7 +241,7 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 	protected int getVerticesDataStride() {
 		return verticesDataStride;
 	}
-	
+
 	/**
 	 * Stride de los datos de los vertices en bytes
 	 * 
@@ -248,7 +250,7 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 	public int getVerticesDataStrideBytes() {
 		return verticesDataStride * SIZE_OF_FLOAT;
 	}
-	
+
 	/**
 	 * Asigna el stride del buffer que contiene los datos de los vertices
 	 * 
@@ -257,7 +259,7 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 	protected void setVerticesDataStride(int verticesDataStride) {
 		this.verticesDataStride = verticesDataStride;
 	}
-	
+
 	/**
 	 * Devuelve el index buffer
 	 * 
@@ -266,7 +268,7 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 	public ShortBuffer getIndexBuffer() {
 		return indexBuffer;
 	}
-	
+
 	/**
 	 * Devuelve el vertex buffer
 	 * 
@@ -275,7 +277,7 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 	public FloatBuffer getVertexBuffer() {
 		return vertexBuffer;
 	}
-	
+
 	/**
 	 * Devuelve el MVP index buffer
 	 * 
@@ -284,7 +286,7 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 	public FloatBuffer getMvpIndexBuffer() {
 		return mvpIndexBuffer;
 	}
-	
+
 	/**
 	 * Devuelve la geometria
 	 * 
@@ -293,7 +295,7 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 	public RectangleBatchGeometry getGeometry() {
 		return geometry;
 	}
-	
+
 	/**
 	 * Asigna la geometria
 	 * 

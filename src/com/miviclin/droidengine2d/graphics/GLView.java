@@ -11,7 +11,7 @@ import android.util.AttributeSet;
  * 
  */
 public class GLView extends GLSurfaceView {
-	
+
 	/**
 	 * Constructor
 	 * 
@@ -20,7 +20,7 @@ public class GLView extends GLSurfaceView {
 	public GLView(Context context) {
 		super(context);
 	}
-	
+
 	/**
 	 * Constructor
 	 * 

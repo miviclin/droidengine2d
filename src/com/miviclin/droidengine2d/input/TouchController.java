@@ -11,11 +11,11 @@ import com.miviclin.droidengine2d.scene.Scene;
  * 
  */
 public class TouchController {
-	
+
 	private volatile boolean touchDetected;
 	private volatile MotionEvent motionEvent;
 	private TouchListener touchListener;
-	
+
 	/**
 	 * Constructor
 	 */
@@ -24,9 +24,10 @@ public class TouchController {
 		this.motionEvent = null;
 		this.touchListener = null;
 	}
-	
+
 	/**
-	 * Asigna un MotionEvent al TouchController. Este MotionEvent sera el que se le pase a {@link TouchListener#onTouch(MotionEvent)}.
+	 * Asigna un MotionEvent al TouchController. Este MotionEvent sera el que se le pase a
+	 * {@link TouchListener#onTouch(MotionEvent)}.
 	 * 
 	 * @param motionEvent MotionEvent
 	 */
@@ -36,7 +37,7 @@ public class TouchController {
 			touchDetected = true;
 		}
 	}
-	
+
 	/**
 	 * Asigna un {@link TouchListener} al TouchController
 	 * 
@@ -45,11 +46,11 @@ public class TouchController {
 	public void setTouchListener(TouchListener touchListener) {
 		this.touchListener = touchListener;
 	}
-	
+
 	/**
 	 * Procesa el touch.<br>
-	 * Este metodo deberia ser llamado desde {@link Scene#update(float)} para que en caso de que haya un evento de touch, ejecute
-	 * {@link TouchListener#onTouch(MotionEvent)}
+	 * Este metodo deberia ser llamado desde {@link Scene#update(float)} para que en caso de que haya un evento de
+	 * touch, ejecute {@link TouchListener#onTouch(MotionEvent)}
 	 */
 	public void processTouchInput() {
 		if ((touchListener != null) && touchDetected) {
@@ -57,5 +58,5 @@ public class TouchController {
 		}
 		touchDetected = false;
 	}
-	
+
 }

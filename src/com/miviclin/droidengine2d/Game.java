@@ -23,7 +23,7 @@ import com.miviclin.droidengine2d.scene.SceneManager;
  * 
  */
 public abstract class Game implements OnTouchListener, OnKeyListener {
-	
+
 	private final String name;
 	private final Activity activity;
 	private final TextureManager textureManager;
@@ -34,7 +34,7 @@ public abstract class Game implements OnTouchListener, OnKeyListener {
 	private volatile boolean initialized;
 	private boolean onTouchListener;
 	private boolean onKeyListener;
-	
+
 	/**
 	 * Constructor
 	 * 
@@ -44,7 +44,7 @@ public abstract class Game implements OnTouchListener, OnKeyListener {
 	public Game(String name, Activity activity) {
 		this(name, new GLView(activity), activity);
 	}
-	
+
 	/**
 	 * Constructor
 	 * 
@@ -67,7 +67,7 @@ public abstract class Game implements OnTouchListener, OnKeyListener {
 		this.onTouchListener = false;
 		this.onKeyListener = false;
 	}
-	
+
 	/**
 	 * Devuelve el nombre del juego
 	 * 
@@ -76,7 +76,7 @@ public abstract class Game implements OnTouchListener, OnKeyListener {
 	public String getName() {
 		return name;
 	}
-	
+
 	/**
 	 * Devuelve la Activity en la que se ejecuta el juego
 	 * 
@@ -85,7 +85,7 @@ public abstract class Game implements OnTouchListener, OnKeyListener {
 	public Activity getActivity() {
 		return activity;
 	}
-	
+
 	/**
 	 * Devuelve el ancho del View en el que se representa el juego
 	 * 
@@ -94,7 +94,7 @@ public abstract class Game implements OnTouchListener, OnKeyListener {
 	public int getGameViewWidth() {
 		return glView.getWidth();
 	}
-	
+
 	/**
 	 * Devuelve el alto del View en el que se representa el juego
 	 * 
@@ -103,7 +103,7 @@ public abstract class Game implements OnTouchListener, OnKeyListener {
 	public int getGameViewHeight() {
 		return glView.getHeight();
 	}
-	
+
 	/**
 	 * Devuelve el GLView en el que se representa el juego.<br>
 	 * Este metodo se utiliza internamente en el engine para configurar el GLView.
@@ -113,7 +113,7 @@ public abstract class Game implements OnTouchListener, OnKeyListener {
 	GLView getGLView() {
 		return glView;
 	}
-	
+
 	/**
 	 * Asigna un GLView para representar el juego. Translada los listeners del GLView antiguo al nuevo.<br>
 	 * Este metodo se utiliza internamente en el engine para configurar el GLView.
@@ -135,7 +135,7 @@ public abstract class Game implements OnTouchListener, OnKeyListener {
 			enableKeyListener();
 		}
 	}
-	
+
 	/**
 	 * Devuelve el TextureManager.
 	 * 
@@ -144,7 +144,7 @@ public abstract class Game implements OnTouchListener, OnKeyListener {
 	public TextureManager getTextureManager() {
 		return textureManager;
 	}
-	
+
 	/**
 	 * Devuelve el SceneManager.
 	 * 
@@ -153,7 +153,7 @@ public abstract class Game implements OnTouchListener, OnKeyListener {
 	public SceneManager getSceneManager() {
 		return sceneManager;
 	}
-	
+
 	/**
 	 * Devuelve la camara.
 	 * 
@@ -162,7 +162,7 @@ public abstract class Game implements OnTouchListener, OnKeyListener {
 	public Camera getCamera() {
 		return camera;
 	}
-	
+
 	/**
 	 * Asigna una nueva camara al juego.
 	 * 
@@ -174,7 +174,7 @@ public abstract class Game implements OnTouchListener, OnKeyListener {
 		}
 		this.camera = camera;
 	}
-	
+
 	/**
 	 * Indica si el core del juego ha sido inicializado y esta preparado para inicializar las Scenes
 	 * 
@@ -183,52 +183,54 @@ public abstract class Game implements OnTouchListener, OnKeyListener {
 	public boolean isPrepared() {
 		return prepared;
 	}
-	
+
 	/**
 	 * Indica que el core del juego ha sido inicializado y esta preparado para inicializar las Scenes
 	 */
 	public void prepare() {
 		this.prepared = true;
 	}
-	
+
 	/**
-	 * Registra este juego para que sea notificado cuando se produzcan eventos Touch sobre la View en el que se desarrolla el juego.
+	 * Registra este juego para que sea notificado cuando se produzcan eventos Touch sobre la View en el que se
+	 * desarrolla el juego.
 	 */
 	public void enableTouchListener() {
 		glView.setOnTouchListener(this);
 		onTouchListener = true;
 	}
-	
+
 	/**
-	 * Si este juego estaba registrado para ser notificado de los eventos Touch que se produjeran en la View en la que se desarrolla el
-	 * juego, dejara de estarlo tras llamar a este metodo.
+	 * Si este juego estaba registrado para ser notificado de los eventos Touch que se produjeran en la View en la que
+	 * se desarrolla el juego, dejara de estarlo tras llamar a este metodo.
 	 */
 	public void disableTouchListener() {
 		glView.setOnTouchListener(null);
 		onTouchListener = false;
 	}
-	
+
 	/**
-	 * Registra este juego para que sea notificado cuando se produzcan eventos Key sobre la View en el que se desarrolla el juego.
+	 * Registra este juego para que sea notificado cuando se produzcan eventos Key sobre la View en el que se desarrolla
+	 * el juego.
 	 */
 	public void enableKeyListener() {
 		glView.setOnKeyListener(this);
 		onKeyListener = true;
 	}
-	
+
 	/**
-	 * Si este juego estaba registrado para ser notificado de los eventos Key que se produjeran en la View en la que se desarrolla el juego,
-	 * dejara de estarlo tras llamar a este metodo.
+	 * Si este juego estaba registrado para ser notificado de los eventos Key que se produjeran en la View en la que se
+	 * desarrolla el juego, dejara de estarlo tras llamar a este metodo.
 	 */
 	public void disableKeyListener() {
 		glView.setOnKeyListener(null);
 		onKeyListener = false;
 	}
-	
+
 	/**
 	 * Se llama cuando en la View en la que se produce un evento Touch.<br>
-	 * Para que este metodo sea llamado, se debe haber registrado este juego para que reciba eventos Key mediante una llamada a
-	 * {@link Game#enableTouchListener()}<br>
+	 * Para que este metodo sea llamado, se debe haber registrado este juego para que reciba eventos Key mediante una
+	 * llamada a {@link Game#enableTouchListener()}<br>
 	 * Por defecto este metodo no realiza ninguna accion. Sobreescribir si es necesario.
 	 * 
 	 * @param v La View en la que se ha hecho click
@@ -243,11 +245,11 @@ public abstract class Game implements OnTouchListener, OnKeyListener {
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Se llama cuando en la View en la que se produce un evento Key.<br>
-	 * Para que este metodo sea llamado, se debe haber registrado este juego para que reciba eventos Key mediante una llamada a
-	 * {@link Game#enableKeyListener()}<br>
+	 * Para que este metodo sea llamado, se debe haber registrado este juego para que reciba eventos Key mediante una
+	 * llamada a {@link Game#enableKeyListener()}<br>
 	 * Por defecto este metodo no realiza ninguna accion. Sobreescribir si es necesario.
 	 * 
 	 * @param v La View en la que se ha hecho click
@@ -263,7 +265,7 @@ public abstract class Game implements OnTouchListener, OnKeyListener {
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Llamado por {@link Engine#onBackPressed()}<br>
 	 * Destruye la Activity en la que se ejecuta el juego.<br>
@@ -272,7 +274,7 @@ public abstract class Game implements OnTouchListener, OnKeyListener {
 	public void onBackPressed() {
 		getActivity().finish();
 	}
-	
+
 	/**
 	 * Se llama cuando se pausa el GameThread, normalmente debido a que la Activity recibe una llamada a onPause()
 	 */
@@ -281,17 +283,17 @@ public abstract class Game implements OnTouchListener, OnKeyListener {
 			sceneManager.pause();
 		}
 	}
-	
+
 	/**
-	 * Se llama cuando se reanuda el GameThread tras haber sido pausado, normalmente debido a que la Activity recibe una llamada a
-	 * onResume()
+	 * Se llama cuando se reanuda el GameThread tras haber sido pausado, normalmente debido a que la Activity recibe una
+	 * llamada a onResume()
 	 */
 	public void onEngineResumed() {
 		if (initialized) {
 			sceneManager.resume();
 		}
 	}
-	
+
 	/**
 	 * Se llama cuando se para el GameThread, normalmente debido a que la Activity ha sido destruida.
 	 */
@@ -300,7 +302,7 @@ public abstract class Game implements OnTouchListener, OnKeyListener {
 			sceneManager.dispose();
 		}
 	}
-	
+
 	/**
 	 * Actualiza la logica del juego.<br>
 	 * Este metodo es llamado periodicamente por GameThread.
@@ -316,7 +318,7 @@ public abstract class Game implements OnTouchListener, OnKeyListener {
 			initialized = true;
 		}
 	}
-	
+
 	/**
 	 * Renderiza los elementos del juego de forma que puedan verse en pantalla.<br>
 	 * Este metodo se ejecuta en el hilo del GLRenderer tras ejecutar {@link #update(float)} en el GameThread
@@ -328,10 +330,10 @@ public abstract class Game implements OnTouchListener, OnKeyListener {
 			sceneManager.draw(graphics);
 		}
 	}
-	
+
 	/**
 	 * Inicializa el juego
 	 */
 	public abstract void initialize();
-	
+
 }

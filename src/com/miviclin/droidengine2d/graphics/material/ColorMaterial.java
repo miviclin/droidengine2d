@@ -9,16 +9,16 @@ import com.miviclin.droidengine2d.graphics.Color;
  * 
  */
 public class ColorMaterial extends Material {
-	
+
 	private Color color;
-	
+
 	/**
 	 * Constructor por defecto. Crea un ColorMaterial de color blanco.
 	 */
 	public ColorMaterial() {
 		this(new Color(1, 1, 1));
 	}
-	
+
 	/**
 	 * Constructor
 	 * 
@@ -31,7 +31,7 @@ public class ColorMaterial extends Material {
 		}
 		this.color = color;
 	}
-	
+
 	/**
 	 * Devuelve el color
 	 * 

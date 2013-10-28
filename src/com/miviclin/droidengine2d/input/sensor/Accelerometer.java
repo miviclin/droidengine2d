@@ -14,11 +14,11 @@ import android.hardware.SensorManager;
  * 
  */
 public class Accelerometer implements SensorEventListener {
-	
+
 	private volatile float lowPassFilterAttenuation;
 	private volatile float[] accelerometerValues;
 	private SensorManager sensorManager;
-	
+
 	/**
 	 * Crea el objeto y empieza a registrar valores.
 	 * 
@@ -27,7 +27,7 @@ public class Accelerometer implements SensorEventListener {
 	public Accelerometer(Activity activity) {
 		this(0.2f, activity);
 	}
-	
+
 	/**
 	 * Crea el objeto y empieza a registrar valores.
 	 * 
@@ -38,34 +38,37 @@ public class Accelerometer implements SensorEventListener {
 		this.lowPassFilterAttenuation = lowPassFilterAttenuation;
 		accelerometerValues = new float[3];
 		sensorManager = (SensorManager) activity.getSystemService(Context.SENSOR_SERVICE);
-		sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
+
+		Sensor accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+		sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
 	}
-	
+
 	@Override
 	public void onSensorChanged(SensorEvent event) {
 		if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
 			SensorUtilities.lowPassFilter(event.values, accelerometerValues, 3, lowPassFilterAttenuation);
 		}
 	}
-	
+
 	@Override
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
 	}
-	
+
 	/**
 	 * Comienza a registrar valores del sensor
 	 */
 	public void startListening() {
-		sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
+		Sensor accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+		sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
 	}
-	
+
 	/**
 	 * Para de registrar valores del sensor
 	 */
 	public void stopListening() {
 		sensorManager.unregisterListener(this);
 	}
-	
+
 	/**
 	 * Devuelve el coeficiente de atenuacion del filtro a paso bajo
 	 * 
@@ -74,7 +77,7 @@ public class Accelerometer implements SensorEventListener {
 	public float getLowPassFilterAttenuation() {
 		return lowPassFilterAttenuation;
 	}
-	
+
 	/**
 	 * Asigna el coeficiente de atenuacion del filtro a paso bajo
 	 * 
@@ -83,7 +86,7 @@ public class Accelerometer implements SensorEventListener {
 	public void setLowPassFilterAttenuation(float lowPassFilterAttenuation) {
 		this.lowPassFilterAttenuation = lowPassFilterAttenuation;
 	}
-	
+
 	/**
 	 * Devuelve la componente X del acelerometro
 	 * 
@@ -92,7 +95,7 @@ public class Accelerometer implements SensorEventListener {
 	public float getX() {
 		return accelerometerValues[0];
 	}
-	
+
 	/**
 	 * Devuelve la componente Y del acelerometro
 	 * 
@@ -101,7 +104,7 @@ public class Accelerometer implements SensorEventListener {
 	public float getY() {
 		return accelerometerValues[1];
 	}
-	
+
 	/**
 	 * Devuelve la componente Z del acelerometro
 	 * 

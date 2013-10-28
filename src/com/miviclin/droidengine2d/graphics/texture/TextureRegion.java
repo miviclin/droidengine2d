@@ -17,7 +17,7 @@ public class TextureRegion { // TODO: revisar el calculo de U y V (restar medio 
 	private float y;
 	private float width;
 	private float height;
-	
+
 	/**
 	 * Crea un nuevo TextureRegion
 	 * 
@@ -37,7 +37,7 @@ public class TextureRegion { // TODO: revisar el calculo de U y V (restar medio 
 		setX(x);
 		setY(y);
 	}
-	
+
 	/**
 	 * Invierte la coordenada U de la region
 	 * 
@@ -49,7 +49,7 @@ public class TextureRegion { // TODO: revisar el calculo de U y V (restar medio 
 		u2 = u;
 		return this;
 	}
-	
+
 	/**
 	 * Invierte la coordenada V de la region
 	 * 
@@ -61,7 +61,7 @@ public class TextureRegion { // TODO: revisar el calculo de U y V (restar medio 
 		v2 = v;
 		return this;
 	}
-	
+
 	/**
 	 * Devuelve la textura a la que pertenece esta region
 	 * 
@@ -70,7 +70,7 @@ public class TextureRegion { // TODO: revisar el calculo de U y V (restar medio 
 	public final Texture getTexture() {
 		return texture;
 	}
-	
+
 	/**
 	 * Devuelve la coordenada U1 de la region. [0..1]
 	 * 
@@ -79,7 +79,7 @@ public class TextureRegion { // TODO: revisar el calculo de U y V (restar medio 
 	public float getU1() {
 		return u1;
 	}
-	
+
 	/**
 	 * Devuelve la coordenada V1 de la region. [0..1]
 	 * 
@@ -88,7 +88,7 @@ public class TextureRegion { // TODO: revisar el calculo de U y V (restar medio 
 	public float getV1() {
 		return v1;
 	}
-	
+
 	/**
 	 * Devuelve la coordenada U2 de la region. [0..1]
 	 * 
@@ -97,7 +97,7 @@ public class TextureRegion { // TODO: revisar el calculo de U y V (restar medio 
 	public float getU2() {
 		return u2;
 	}
-	
+
 	/**
 	 * Devuelve la coordenada V2 de la region. [0..1]
 	 * 
@@ -106,18 +106,20 @@ public class TextureRegion { // TODO: revisar el calculo de U y V (restar medio 
 	public float getV2() {
 		return v2;
 	}
-	
+
 	/**
-	 * Devuelve la posicion en el eje X de la region con respecto a la esquina superior izquierda de la textura, en pixeles
+	 * Devuelve la posicion en el eje X de la region con respecto a la esquina superior izquierda de la textura, en
+	 * pixeles
 	 * 
 	 * @return posicion en el eje X
 	 */
 	public final float getX() {
 		return x;
 	}
-	
+
 	/**
-	 * Asigna la posicion en el eje X de la region con respecto a la esquina superior izquierda de la textura, en pixeles
+	 * Asigna la posicion en el eje X de la region con respecto a la esquina superior izquierda de la textura, en
+	 * pixeles
 	 * 
 	 * @param x Nueva posicion en el eje X
 	 */
@@ -132,18 +134,20 @@ public class TextureRegion { // TODO: revisar el calculo de U y V (restar medio 
 		this.u2 = (x + width) / texture.getWidth();
 		this.x = x;
 	}
-	
+
 	/**
-	 * Devuelve la posicion en el eje Y de la region con respecto a la esquina superior izquierda de la textura, en pixeles
+	 * Devuelve la posicion en el eje Y de la region con respecto a la esquina superior izquierda de la textura, en
+	 * pixeles
 	 * 
 	 * @return posicion en el eje Y
 	 */
 	public final float getY() {
 		return y;
 	}
-	
+
 	/**
-	 * Asigna la posicion en el eje Y de la region con respecto a la esquina superior izquierda de la textura, en pixeles
+	 * Asigna la posicion en el eje Y de la region con respecto a la esquina superior izquierda de la textura, en
+	 * pixeles
 	 * 
 	 * @param y Nueva posicion en el eje Y
 	 */
@@ -158,7 +162,7 @@ public class TextureRegion { // TODO: revisar el calculo de U y V (restar medio 
 		this.v2 = (y + height) / texture.getHeight();
 		this.y = y;
 	}
-	
+
 	/**
 	 * Devuelve el ancho de la region, en pixeles
 	 * 
@@ -167,7 +171,7 @@ public class TextureRegion { // TODO: revisar el calculo de U y V (restar medio 
 	public final float getWidth() {
 		return width;
 	}
-	
+
 	/**
 	 * Asigna el ancho de la region, en pixeles
 	 * 
@@ -179,7 +183,7 @@ public class TextureRegion { // TODO: revisar el calculo de U y V (restar medio 
 		}
 		this.width = width;
 	}
-	
+
 	/**
 	 * Devuelve el alto de la region, en pixeles
 	 * 
@@ -188,7 +192,7 @@ public class TextureRegion { // TODO: revisar el calculo de U y V (restar medio 
 	public final float getHeight() {
 		return height;
 	}
-	
+
 	/**
 	 * Asigna el alto de la region, en pixeles
 	 * 

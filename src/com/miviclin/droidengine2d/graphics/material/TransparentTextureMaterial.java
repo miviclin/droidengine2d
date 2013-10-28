@@ -9,9 +9,9 @@ import com.miviclin.droidengine2d.graphics.texture.TextureRegion;
  * 
  */
 public class TransparentTextureMaterial extends TextureMaterial {
-	
+
 	private float opacity;
-	
+
 	/**
 	 * Constructor
 	 * 
@@ -20,7 +20,7 @@ public class TransparentTextureMaterial extends TextureMaterial {
 	public TransparentTextureMaterial(TextureRegion textureRegion) {
 		this(textureRegion, 1.0f);
 	}
-	
+
 	/**
 	 * Constructor
 	 * 
@@ -32,7 +32,7 @@ public class TransparentTextureMaterial extends TextureMaterial {
 		checkOpacity(opacity);
 		this.opacity = opacity;
 	}
-	
+
 	/**
 	 * Devuelve la opacidad
 	 * 
@@ -41,7 +41,7 @@ public class TransparentTextureMaterial extends TextureMaterial {
 	public float getOpacity() {
 		return opacity;
 	}
-	
+
 	/**
 	 * Asigna la opacidad
 	 * 
@@ -51,7 +51,7 @@ public class TransparentTextureMaterial extends TextureMaterial {
 		checkOpacity(opacity);
 		this.opacity = opacity;
 	}
-	
+
 	/**
 	 * Comprueba que la opacidad sea un valor entre 0.0f y 1.0f y lanza una excepcion en caso contrario
 	 * 
@@ -62,5 +62,5 @@ public class TransparentTextureMaterial extends TextureMaterial {
 			throw new IllegalArgumentException("The opacity value must be a value between 0.0f and 1.0f");
 		}
 	}
-	
+
 }

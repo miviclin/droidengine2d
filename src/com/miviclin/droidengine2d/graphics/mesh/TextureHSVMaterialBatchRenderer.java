@@ -11,22 +11,22 @@ import com.miviclin.droidengine2d.graphics.Color;
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
 import com.miviclin.droidengine2d.graphics.material.TextureHSVMaterial;
 import com.miviclin.droidengine2d.graphics.shader.ShaderProgram;
-import com.miviclin.droidengine2d.graphics.shader.ShaderVariables;
+import com.miviclin.droidengine2d.graphics.shader.ShaderVars;
 import com.miviclin.droidengine2d.util.math.Vector2;
 import com.miviclin.droidengine2d.util.math.Vector3;
 
 /**
- * Clase base de la que deben heredar los renderers de mallas que representen batches de figuras rectangulares cuyo material sea
- * TextureHSVMaterial
+ * Clase base de la que deben heredar los renderers de mallas que representen batches de figuras rectangulares cuyo
+ * material sea TextureHSVMaterial
  * 
  * @author Miguel Vicente Linares
  * 
  * @param <M> TextureHSVMaterial
  */
 public class TextureHSVMaterialBatchRenderer<M extends TextureHSVMaterial> extends TextureMaterialBatchRendererBase<M> {
-	
+
 	private int vertexColorOffset;
-	
+
 	/**
 	 * Constructor
 	 * 
@@ -37,27 +37,30 @@ public class TextureHSVMaterialBatchRenderer<M extends TextureHSVMaterial> exten
 		this.vertexColorOffset = 5;
 		setGeometry(new RectangleBatchGeometry(getBatchCapacity(), true, true));
 	}
-	
+
 	@Override
 	public void setupShaderProgram() {
+
+		// @formatter:off
+		
 		String vertexShaderSource = "" +
-				"uniform mat4 " + ShaderVariables.U_MVP_MATRIX + "[32];\n" +
-				"attribute float " + ShaderVariables.A_MVP_MATRIX_INDEX + ";\n" +
-				"attribute vec4 " + ShaderVariables.A_POSITION + ";\n" +
-				"attribute vec2 " + ShaderVariables.A_TEXTURE_COORD + ";\n" +
-				"attribute vec4 " + ShaderVariables.A_COLOR + ";\n" +
-				"varying vec2 " + ShaderVariables.V_TEXTURE_COORD + ";\n" +
-				"varying vec4 " + ShaderVariables.V_COLOR + ";\n" +
+				"uniform mat4 " + ShaderVars.U_MVP_MATRIX + "[32];\n" +
+				"attribute float " + ShaderVars.A_MVP_MATRIX_INDEX + ";\n" +
+				"attribute vec4 " + ShaderVars.A_POSITION + ";\n" +
+				"attribute vec2 " + ShaderVars.A_TEXTURE_COORD + ";\n" +
+				"attribute vec4 " + ShaderVars.A_COLOR + ";\n" +
+				"varying vec2 " + ShaderVars.V_TEXTURE_COORD + ";\n" +
+				"varying vec4 " + ShaderVars.V_COLOR + ";\n" +
 				"void main() {\n" +
-				"    gl_Position = " + ShaderVariables.U_MVP_MATRIX + "[int(" + ShaderVariables.A_MVP_MATRIX_INDEX + ")] * " + ShaderVariables.A_POSITION + ";\n" +
-				"    " + ShaderVariables.V_TEXTURE_COORD + " = " + ShaderVariables.A_TEXTURE_COORD + ";\n" +
-				"    " + ShaderVariables.V_COLOR + " = " + ShaderVariables.A_COLOR + ";\n" +
+				"    gl_Position = " + ShaderVars.U_MVP_MATRIX + "[int(" + ShaderVars.A_MVP_MATRIX_INDEX + ")] * " + ShaderVars.A_POSITION + ";\n" +
+				"    " + ShaderVars.V_TEXTURE_COORD + " = " + ShaderVars.A_TEXTURE_COORD + ";\n" +
+				"    " + ShaderVars.V_COLOR + " = " + ShaderVars.A_COLOR + ";\n" +
 				"}";
 		
 		String fragmentShaderSource = "" +
 				"precision mediump float;\n" +
-				"varying vec2 " + ShaderVariables.V_TEXTURE_COORD + ";\n" +
-				"varying vec4 " + ShaderVariables.V_COLOR + ";\n" +
+				"varying vec2 " + ShaderVars.V_TEXTURE_COORD + ";\n" +
+				"varying vec4 " + ShaderVars.V_COLOR + ";\n" +
 				"uniform sampler2D sTexture;\n" +
 				"vec3 RGBtoHSV(vec3 c) {\n" +
 				"    vec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);\n" +
@@ -73,39 +76,41 @@ public class TextureHSVMaterialBatchRenderer<M extends TextureHSVMaterial> exten
 				"    return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);\n" +
 				"}\n" +
 				"void main() {\n" +
-				"    vec4 textureColor = texture2D(sTexture, " + ShaderVariables.V_TEXTURE_COORD + ");\n" +
+				"    vec4 textureColor = texture2D(sTexture, " + ShaderVars.V_TEXTURE_COORD + ");\n" +
 				"    vec3 fragRGB = textureColor.rgb;\n" +
 				"    vec3 fragHSV = RGBtoHSV(fragRGB);\n" +
-				"    fragHSV.x += " + ShaderVariables.V_COLOR + ".x / 360.0;\n" +
-				"    fragHSV.yz *= " + ShaderVariables.V_COLOR + ".yz;\n" +
+				"    fragHSV.x += " + ShaderVars.V_COLOR + ".x / 360.0;\n" +
+				"    fragHSV.yz *= " + ShaderVars.V_COLOR + ".yz;\n" +
 				"    fragHSV.xyz = mod(fragHSV.xyz, 1.0);\n" +
 				"    fragRGB = HSVtoRGB(fragHSV);\n" +
 				"    gl_FragColor = vec4(fragRGB, textureColor.w);\n" +
 				"}";
 		
+		// @formatter:on
+
 		ArrayList<String> attributes = new ArrayList<String>();
-		attributes.add(ShaderVariables.A_MVP_MATRIX_INDEX);
-		attributes.add(ShaderVariables.A_POSITION);
-		attributes.add(ShaderVariables.A_TEXTURE_COORD);
-		attributes.add(ShaderVariables.A_COLOR);
-		
+		attributes.add(ShaderVars.A_MVP_MATRIX_INDEX);
+		attributes.add(ShaderVars.A_POSITION);
+		attributes.add(ShaderVars.A_TEXTURE_COORD);
+		attributes.add(ShaderVars.A_COLOR);
+
 		ArrayList<String> uniforms = new ArrayList<String>();
-		uniforms.add(ShaderVariables.U_MVP_MATRIX);
-		
+		uniforms.add(ShaderVars.U_MVP_MATRIX);
+
 		getShaderProgram().setShaders(vertexShaderSource, fragmentShaderSource, attributes, uniforms);
 	}
-	
+
 	@Override
 	protected void setupVertexShaderVariables(int batchSize) {
 		int strideBytes = getVerticesDataStrideBytes();
 		ShaderProgram shaderProgram = getShaderProgram();
-		shaderProgram.setUniformMatrix4fv(ShaderVariables.U_MVP_MATRIX, batchSize, getGeometry().getMvpMatrices(), 0);
-		shaderProgram.setAttribute(ShaderVariables.A_MVP_MATRIX_INDEX, 1, SIZE_OF_FLOAT, getMvpIndexBuffer(), 0);
-		shaderProgram.setAttribute(ShaderVariables.A_POSITION, 3, strideBytes, getVertexBuffer(), getVertexPositionOffset());
-		shaderProgram.setAttribute(ShaderVariables.A_TEXTURE_COORD, 2, strideBytes, getVertexBuffer(), getVertexUVOffset());
-		shaderProgram.setAttribute(ShaderVariables.A_COLOR, 4, strideBytes, getVertexBuffer(), vertexColorOffset);
+		shaderProgram.setUniformMatrix4fv(ShaderVars.U_MVP_MATRIX, batchSize, getGeometry().getMvpMatrices(), 0);
+		shaderProgram.setAttribute(ShaderVars.A_MVP_MATRIX_INDEX, 1, SIZE_OF_FLOAT, getMvpIndexBuffer(), 0);
+		shaderProgram.setAttribute(ShaderVars.A_POSITION, 3, strideBytes, getVertexBuffer(), getVertexPositionOffset());
+		shaderProgram.setAttribute(ShaderVars.A_TEXTURE_COORD, 2, strideBytes, getVertexBuffer(), getVertexUVOffset());
+		shaderProgram.setAttribute(ShaderVars.A_COLOR, 4, strideBytes, getVertexBuffer(), vertexColorOffset);
 	}
-	
+
 	@Override
 	protected void setupVerticesData() {
 		RectangleBatchGeometry geometry = getGeometry();
@@ -129,7 +134,7 @@ public class TextureHSVMaterialBatchRenderer<M extends TextureHSVMaterial> exten
 			geometry.addColor(new Color(1.0f, 1.0f, 1.0f, 1.0f));
 		}
 	}
-	
+
 	@Override
 	protected void copyGeometryToVertexBuffer(int batchSize) {
 		FloatBuffer vertexBuffer = getVertexBuffer();
@@ -143,11 +148,11 @@ public class TextureHSVMaterialBatchRenderer<M extends TextureHSVMaterial> exten
 			vertexBuffer.put(position.getX());
 			vertexBuffer.put(position.getY());
 			vertexBuffer.put(position.getZ());
-			
+
 			textureUV = getGeometry().getTextureUV(i);
 			vertexBuffer.put(textureUV.getX());
 			vertexBuffer.put(textureUV.getY());
-			
+
 			color = getGeometry().getColor(i);
 			vertexBuffer.put(color.getH());
 			vertexBuffer.put(color.getS());
@@ -155,7 +160,7 @@ public class TextureHSVMaterialBatchRenderer<M extends TextureHSVMaterial> exten
 			vertexBuffer.put(color.getA());
 		}
 	}
-	
+
 	@Override
 	public void draw(Vector2 position, Vector2 scale, Vector2 origin, float rotation, Camera camera) {
 		checkInBeginEndPair();
@@ -164,7 +169,7 @@ public class TextureHSVMaterialBatchRenderer<M extends TextureHSVMaterial> exten
 		setupHSV(material.getHOffset(), material.getSMulti(), material.getVMulti());
 		incrementBatchSize();
 	}
-	
+
 	/**
 	 * Define el color del siguiente sprite en el batch
 	 * 
@@ -177,5 +182,5 @@ public class TextureHSVMaterialBatchRenderer<M extends TextureHSVMaterial> exten
 			getGeometry().getColor(i).setHSV(hOffset, sMulti, vMulti);
 		}
 	}
-	
+
 }

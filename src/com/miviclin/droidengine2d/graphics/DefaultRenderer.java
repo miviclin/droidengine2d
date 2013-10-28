@@ -17,13 +17,13 @@ import com.miviclin.droidengine2d.graphics.cameras.Camera;
  * 
  */
 public class DefaultRenderer implements EngineRenderer {
-	
+
 	private Game game;
 	private Camera camera;
 	private Context context;
-	
+
 	private Graphics graphics;
-	
+
 	/**
 	 * Crea un DefaultRenderer
 	 * 
@@ -34,36 +34,36 @@ public class DefaultRenderer implements EngineRenderer {
 		this.camera = game.getCamera();
 		this.context = game.getActivity();
 	}
-	
+
 	@Override
 	public void onSurfaceCreated(GL10 glUnused, EGLConfig config) {
 		graphics = new Graphics(camera, context);
 		graphics.initialize();
-		
+
 		GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		GLES20.glEnable(GLES20.GL_CULL_FACE);
 		GLES20.glEnable(GLES20.GL_BLEND);
 		GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
 		GLES20.glDisable(GLES20.GL_DEPTH_TEST);
 	}
-	
+
 	@Override
 	public void onSurfaceChanged(GL10 glUnused, int width, int height) {
 		camera.setViewportDimensions(width, height);
 		camera.update();
 		game.getTextureManager().loadAllTextures();
 	}
-	
+
 	@Override
 	public void onDrawFrame(GL10 glUnused) {
 		GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
 		game.draw(graphics);
 		graphics.flush();
-		
+
 		if (BuildConfig.DEBUG) {
 			GLDebugger.getInstance().logNumDrawCallsFrame();
 			GLDebugger.getInstance().resetNumDrawCallsFrame();
 		}
 	}
-	
+
 }

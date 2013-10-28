@@ -12,7 +12,7 @@ import com.miviclin.droidengine2d.util.math.MatrixFix;
  * 
  */
 public class TransformUtilities {
-	
+
 	/**
 	 * Aplica las siguientes transformaciones sobre una matriz:<br>
 	 * - Translacion<br>
@@ -32,7 +32,7 @@ public class TransformUtilities {
 		Matrix.translateM(matrix, offset, x, y, 0.0f);
 		Matrix.scaleM(matrix, offset, sx, sy, 0.0f);
 	}
-	
+
 	/**
 	 * Aplica las siguientes transformaciones sobre una matriz:<br>
 	 * - Translacion<br>
@@ -47,7 +47,9 @@ public class TransformUtilities {
 	 * @param sx Escala en el eje X
 	 * @param sy Escala en el eje Y
 	 */
-	public static void transform2D(float[] matrix, int offset, float tx, float ty, float rotationAroundCenter, float sx, float sy) {
+	public static void transform2D(float[] matrix, int offset, float tx, float ty, float rotationAroundCenter,
+			float sx, float sy) {
+
 		float x = tx + sx / 2;
 		float y = ty + sy / 2;
 		Matrix.setIdentityM(matrix, offset);
@@ -55,7 +57,7 @@ public class TransformUtilities {
 		MatrixFix.rotateM(matrix, offset, rotationAroundCenter, 0.0f, 0.0f, 1.0f);
 		Matrix.scaleM(matrix, offset, sx, sy, 0.0f);
 	}
-	
+
 	/**
 	 * Aplica las siguientes transformaciones sobre una matriz:<br>
 	 * - Translacion<br>
@@ -72,7 +74,9 @@ public class TransformUtilities {
 	 * @param sx Escala en el eje X
 	 * @param sy Escala en el eje Y
 	 */
-	public static void transform2D(float[] matrix, int offset, float tx, float ty, float ox, float oy, float rotationAroundPoint, float sx, float sy) {
+	public static void transform2D(float[] matrix, int offset, float tx, float ty, float ox, float oy,
+			float rotationAroundPoint, float sx, float sy) {
+
 		float x = tx + sx / 2;
 		float y = ty + sy / 2;
 		float originX = ox - x;
@@ -84,7 +88,7 @@ public class TransformUtilities {
 		Matrix.translateM(matrix, offset, -originX, -originY, 0.0f);
 		Matrix.scaleM(matrix, offset, sx, sy, 0.0f);
 	}
-	
+
 	/**
 	 * Aplica las siguientes transformaciones sobre una matriz:<br>
 	 * - Translacion<br>
@@ -103,7 +107,9 @@ public class TransformUtilities {
 	 * @param sx Escala en el eje X
 	 * @param sy Escala en el eje Y
 	 */
-	public static void transform2D(float[] matrix, int offset, float tx, float ty, float ox, float oy, float rotationAroundPoint, float rotationAroundCenter, float sx, float sy) {
+	public static void transform2D(float[] matrix, int offset, float tx, float ty, float ox, float oy,
+			float rotationAroundPoint, float rotationAroundCenter, float sx, float sy) {
+
 		float x = tx + sx / 2;
 		float y = ty + sy / 2;
 		float originX = ox - x;
@@ -116,7 +122,7 @@ public class TransformUtilities {
 		MatrixFix.rotateM(matrix, offset, rotationAroundCenter, 0.0f, 0.0f, 1.0f);
 		Matrix.scaleM(matrix, offset, sx, sy, 0.0f);
 	}
-	
+
 	/**
 	 * Aplica las siguientes transformaciones sobre una matriz:<br>
 	 * - Translacion<br>
@@ -133,7 +139,7 @@ public class TransformUtilities {
 		matrix.translate(tx, ty, 0.0f);
 		matrix.scale(sx, sy, 0.0f);
 	}
-	
+
 	/**
 	 * Aplica las siguientes transformaciones sobre una matriz:<br>
 	 * - Translacion<br>
@@ -153,7 +159,7 @@ public class TransformUtilities {
 		matrix.rotate(rotationAroundCenter, 0.0f, 0.0f, 1.0f);
 		matrix.scale(sx, sy, 0.0f);
 	}
-	
+
 	/**
 	 * Aplica las siguientes transformaciones sobre una matriz:<br>
 	 * - Translacion<br>
@@ -169,7 +175,9 @@ public class TransformUtilities {
 	 * @param sx Escala en el eje X
 	 * @param sy Escala en el eje Y
 	 */
-	public static void transform2D(Matrix4 matrix, float tx, float ty, float ox, float oy, float rotationAroundPoint, float sx, float sy) {
+	public static void transform2D(Matrix4 matrix, float tx, float ty, float ox, float oy, float rotationAroundPoint,
+			float sx, float sy) {
+
 		float originX = ox - tx;
 		float originY = oy - ty;
 		matrix.setIdentity();
@@ -179,7 +187,7 @@ public class TransformUtilities {
 		matrix.translate(-originX, -originY, 0.0f);
 		matrix.scale(sx, sy, 0.0f);
 	}
-	
+
 	/**
 	 * Aplica las siguientes transformaciones sobre una matriz:<br>
 	 * - Translacion<br>
@@ -197,7 +205,9 @@ public class TransformUtilities {
 	 * @param sx Escala en el eje X
 	 * @param sy Escala en el eje Y
 	 */
-	public static void transform2D(Matrix4 matrix, float tx, float ty, float ox, float oy, float rotationAroundPoint, float rotationAroundCenter, float sx, float sy) {
+	public static void transform2D(Matrix4 matrix, float tx, float ty, float ox, float oy, float rotationAroundPoint,
+			float rotationAroundCenter, float sx, float sy) {
+
 		float originX = ox - tx;
 		float originY = oy - ty;
 		matrix.setIdentity();
@@ -208,5 +218,5 @@ public class TransformUtilities {
 		matrix.rotate(rotationAroundCenter, 0.0f, 0.0f, 1.0f);
 		matrix.scale(sx, sy, 0.0f);
 	}
-	
+
 }

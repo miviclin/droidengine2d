@@ -7,10 +7,10 @@ package com.miviclin.droidengine2d.util.math;
  * 
  */
 public class Vector2 {
-	
+
 	private float x;
 	private float y;
-	
+
 	/**
 	 * Constructor
 	 * 
@@ -21,7 +21,7 @@ public class Vector2 {
 		this.x = x;
 		this.y = y;
 	}
-	
+
 	/**
 	 * Asigna los valores especificados al vector
 	 * 
@@ -33,7 +33,7 @@ public class Vector2 {
 		this.x = x;
 		this.y = y;
 	}
-	
+
 	/**
 	 * Asigna los valores del vector especificado a este vector
 	 * 
@@ -45,7 +45,7 @@ public class Vector2 {
 		this.y = vector.y;
 		return this;
 	}
-	
+
 	/**
 	 * Copia el vector especificado en output
 	 * 
@@ -56,7 +56,7 @@ public class Vector2 {
 		output.x = vector.x;
 		output.y = vector.y;
 	}
-	
+
 	/**
 	 * Suma a todas las coordenadas del vector el escalar especificado
 	 * 
@@ -68,7 +68,7 @@ public class Vector2 {
 		this.y += scalar;
 		return this;
 	}
-	
+
 	/**
 	 * Suma vector + scalar y almacena el resultado en output
 	 * 
@@ -80,7 +80,7 @@ public class Vector2 {
 		output.x = vector.x + scalar;
 		output.y = vector.y + scalar;
 	}
-	
+
 	/**
 	 * Suma los valores especificados a las 2 coordenadas del vector
 	 * 
@@ -93,7 +93,7 @@ public class Vector2 {
 		this.y += y;
 		return this;
 	}
-	
+
 	/**
 	 * Suma el vector especificado a este vector
 	 * 
@@ -105,7 +105,7 @@ public class Vector2 {
 		this.y += vector.y;
 		return this;
 	}
-	
+
 	/**
 	 * Suma v1 + v2 y almacena el resultado en output
 	 * 
@@ -117,7 +117,7 @@ public class Vector2 {
 		output.x = v1.x + v2.x;
 		output.y = v1.y + v2.y;
 	}
-	
+
 	/**
 	 * Resta a todas las coordenadas del vector el escalar especificado
 	 * 
@@ -129,7 +129,7 @@ public class Vector2 {
 		this.y -= scalar;
 		return this;
 	}
-	
+
 	/**
 	 * Resta vector - scalar y almacena el resultado en output
 	 * 
@@ -141,7 +141,7 @@ public class Vector2 {
 		output.x = vector.x - scalar;
 		output.y = vector.y - scalar;
 	}
-	
+
 	/**
 	 * Resta los valores especificados a las 2 coordenadas del vector
 	 * 
@@ -154,7 +154,7 @@ public class Vector2 {
 		this.y -= y;
 		return this;
 	}
-	
+
 	/**
 	 * Resta el vector especificado a este vector
 	 * 
@@ -166,7 +166,7 @@ public class Vector2 {
 		this.y -= vector.y;
 		return this;
 	}
-	
+
 	/**
 	 * Resta v1 - v2 y almacena el resultado en output
 	 * 
@@ -178,7 +178,7 @@ public class Vector2 {
 		output.x = v1.x - v2.x;
 		output.y = v1.y - v2.y;
 	}
-	
+
 	/**
 	 * Multiplica las 2 coordenadas del vector por el escalar especificado
 	 * 
@@ -190,7 +190,7 @@ public class Vector2 {
 		this.y *= scalar;
 		return this;
 	}
-	
+
 	/**
 	 * Multiplica vector * scalar y almacena el resultado en output
 	 * 
@@ -202,7 +202,7 @@ public class Vector2 {
 		output.x = vector.x * scalar;
 		output.y = vector.y * scalar;
 	}
-	
+
 	/**
 	 * Multiplica las 2 coordenadas del vector por los valores especificados
 	 * 
@@ -215,7 +215,7 @@ public class Vector2 {
 		this.y *= y;
 		return this;
 	}
-	
+
 	/**
 	 * Multiplica el vector especificado por este vector (coordenada a coordenada)
 	 * 
@@ -227,7 +227,7 @@ public class Vector2 {
 		this.y *= vector.y;
 		return this;
 	}
-	
+
 	/**
 	 * Multiplica v1 * v2 y almacena el resultado en output
 	 * 
@@ -239,7 +239,7 @@ public class Vector2 {
 		output.x = v1.x * v2.x;
 		output.y = v1.y * v2.y;
 	}
-	
+
 	/**
 	 * Divide las 2 coordenadas del vector por el escalar especificado
 	 * 
@@ -251,7 +251,7 @@ public class Vector2 {
 		this.y /= scalar;
 		return this;
 	}
-	
+
 	/**
 	 * Divide vector / scalar y almacena el resultado en output
 	 * 
@@ -263,7 +263,7 @@ public class Vector2 {
 		output.x = vector.x / scalar;
 		output.y = vector.y / scalar;
 	}
-	
+
 	/**
 	 * Divide las 2 coordenadas del vector por los valores especificados
 	 * 
@@ -276,7 +276,7 @@ public class Vector2 {
 		this.y /= y;
 		return this;
 	}
-	
+
 	/**
 	 * Divide este vector por el vector especificado (coordenada a coordenada)
 	 * 
@@ -288,7 +288,7 @@ public class Vector2 {
 		this.y /= vector.y;
 		return this;
 	}
-	
+
 	/**
 	 * Divide v1 / v2 y almacena el resultado en output
 	 * 
@@ -300,7 +300,7 @@ public class Vector2 {
 		output.x = v1.x / v2.x;
 		output.y = v1.y / v2.y;
 	}
-	
+
 	/**
 	 * Realiza el producto escalar de este vector por el vector definido por las 2 coordenadas especificadas
 	 * 
@@ -311,7 +311,7 @@ public class Vector2 {
 	public final float dotProduct(float x, float y) {
 		return this.x * x + this.y * y;
 	}
-	
+
 	/**
 	 * Realiza el producto escalar de este vector por el vector especificado
 	 * 
@@ -321,7 +321,7 @@ public class Vector2 {
 	public final float dotProduct(Vector2 vector) {
 		return x * vector.x + y * vector.y;
 	}
-	
+
 	/**
 	 * Realiza el producto escalar de v1 y v2
 	 * 
@@ -332,7 +332,7 @@ public class Vector2 {
 	public static final float dotProduct(Vector2 v1, Vector2 v2) {
 		return v1.x * v2.x + v1.y * v2.y;
 	}
-	
+
 	/**
 	 * Calcula el modulo del vector
 	 * 
@@ -341,7 +341,7 @@ public class Vector2 {
 	public final float length() {
 		return (float) Math.sqrt(x * x + y * y);
 	}
-	
+
 	/**
 	 * Calcula el modulo del vector especificado
 	 * 
@@ -351,7 +351,7 @@ public class Vector2 {
 	public static final float length(Vector2 vector) {
 		return (float) Math.sqrt(vector.x * vector.x + vector.y * vector.y);
 	}
-	
+
 	/**
 	 * Normaliza este vector
 	 * 
@@ -364,7 +364,7 @@ public class Vector2 {
 		}
 		return this.divide(length);
 	}
-	
+
 	/**
 	 * Normaliza el vector especificado y almacena las coordenadas del vector normalizado en output
 	 * 
@@ -379,7 +379,7 @@ public class Vector2 {
 		}
 		Vector2.copy(output, vector.divide(length));
 	}
-	
+
 	/**
 	 * Convierte las coordenadas de este vector a valor absoluto
 	 * 
@@ -390,7 +390,7 @@ public class Vector2 {
 		this.y = Math.abs(this.y);
 		return this;
 	}
-	
+
 	/**
 	 * Convierte las coordenadas de vector a valor absoluto y las almacena en output
 	 * 
@@ -401,7 +401,7 @@ public class Vector2 {
 		output.x = Math.abs(vector.x);
 		output.y = Math.abs(vector.y);
 	}
-	
+
 	/**
 	 * Devuelve la coordenada X de este vector
 	 * 
@@ -410,7 +410,7 @@ public class Vector2 {
 	public final float getX() {
 		return x;
 	}
-	
+
 	/**
 	 * Asigna el valor de la coordenada X de este vector
 	 * 
@@ -419,7 +419,7 @@ public class Vector2 {
 	public final void setX(float x) {
 		this.x = x;
 	}
-	
+
 	/**
 	 * Devuelve la coordenada Y de este vector
 	 * 
@@ -428,7 +428,7 @@ public class Vector2 {
 	public final float getY() {
 		return y;
 	}
-	
+
 	/**
 	 * Asigna el valor de la coordenada Y de este vector
 	 * 
@@ -437,10 +437,10 @@ public class Vector2 {
 	public final void setY(float y) {
 		this.y = y;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "(" + x + ", " + y + ")";
 	}
-	
+
 }

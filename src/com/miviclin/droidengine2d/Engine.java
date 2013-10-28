@@ -14,10 +14,13 @@ import com.miviclin.droidengine2d.graphics.GLView;
 /**
  * Gestor principal del engine. Maneja el hilo del juego y el hilo del renderer.<br>
  * <br>
- * ATENCION: Para que el Engine actue de acuerdo al ciclo de vide de la Activity en la que se utiliza, es necesario llamar a
- * {@link Engine#onPause()}, {@link Engine#onResume()} y {@link Engine#onDestroy()} en los metodos correspondientes de la Activity.<br>
- * Tambien se puede interceptar el boton back llamando a {@link Engine#onBackPressed()} desde {@link Activity#onBackPressed()}<br>
- * AndroidEngine utiliza OpenGL ES 2.0, por tanto, es recomendable comprobar primero si el dispositivo soporta OpenGL ES 2.0. Ejemplo:
+ * ATENCION: Para que el Engine actue de acuerdo al ciclo de vide de la Activity en la que se utiliza, es necesario
+ * llamar a {@link Engine#onPause()}, {@link Engine#onResume()} y {@link Engine#onDestroy()} en los metodos
+ * correspondientes de la Activity.<br>
+ * Tambien se puede interceptar el boton back llamando a {@link Engine#onBackPressed()} desde
+ * {@link Activity#onBackPressed()}<br>
+ * AndroidEngine utiliza OpenGL ES 2.0, por tanto, es recomendable comprobar primero si el dispositivo soporta OpenGL ES
+ * 2.0. Ejemplo:
  * 
  * <pre>
  * {@code Engine engine;
@@ -32,12 +35,12 @@ import com.miviclin.droidengine2d.graphics.GLView;
  * 
  */
 public class Engine {
-	
+
 	private Game game;
 	private GameThread gameThread;
 	private GLRenderer renderer;
 	private GLView glView;
-	
+
 	/**
 	 * Crea un Engine.<br>
 	 * LEER: {@link Engine}
@@ -55,7 +58,7 @@ public class Engine {
 		this.gameThread = engineBuilder.gameThread;
 		this.renderer = engineBuilder.glRenderer;
 	}
-	
+
 	/**
 	 * Devuelve el Game
 	 * 
@@ -64,7 +67,7 @@ public class Engine {
 	public Game getGame() {
 		return game;
 	}
-	
+
 	/**
 	 * Devuelve el GLView
 	 * 
@@ -73,11 +76,11 @@ public class Engine {
 	public GLView getGLView() {
 		return glView;
 	}
-	
+
 	/**
 	 * Asigna un nuevo GLView, le asigna el renderer del Engine y lanza el hilo de OpenGL.<br>
-	 * No es necesario llamar a este metodo la primera vez que se lanza el Engine, solo si se quiere cambiar el GLView en mitad de la
-	 * ejecucion.
+	 * No es necesario llamar a este metodo la primera vez que se lanza el Engine, solo si se quiere cambiar el GLView
+	 * en mitad de la ejecucion.
 	 * 
 	 * @param GLView nuevo GLView
 	 */
@@ -89,7 +92,7 @@ public class Engine {
 		glView.setRenderer(renderer);
 		glView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
 	}
-	
+
 	/**
 	 * Lanza los hilos del Juego y GLView e inicia el juego
 	 */
@@ -98,7 +101,7 @@ public class Engine {
 		glView.setRenderer(renderer);
 		glView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
 	}
-	
+
 	/**
 	 * Pausa los hilos del juego. Llamar en {@link Activity.onPause()}<br>
 	 * Si se ha llamado a onPause() porque la Activity se esta cerrando, este metodo llama a {@link Engine#onFinish()}
@@ -107,7 +110,7 @@ public class Engine {
 		glView.onPause();
 		gameThread.pause();
 	}
-	
+
 	/**
 	 * Reanuda los hilos del juego. Llamar en {@link Activity.onResume()}
 	 */
@@ -115,22 +118,22 @@ public class Engine {
 		glView.onResume();
 		gameThread.resume();
 	}
-	
+
 	/**
 	 * Destruye el hilo del juego y libera recursos. Llamar en {@link Activity#onDestroy()}
 	 */
 	public void onDestroy() {
 		gameThread.terminate();
 	}
-	
+
 	/**
-	 * Llamar desde {@link Activity#onBackPressed()} para que el juego pueda interceptar las pulsaciones del boton BACK del dispositivo y
-	 * pueda realizar acciones antes de que la activity sea destruida.
+	 * Llamar desde {@link Activity#onBackPressed()} para que el juego pueda interceptar las pulsaciones del boton BACK
+	 * del dispositivo y pueda realizar acciones antes de que la activity sea destruida.
 	 */
 	public void onBackPressed() {
 		game.onBackPressed();
 	}
-	
+
 	/**
 	 * Builder que se utiliza para construir un {@link Engine}.
 	 * 
@@ -138,7 +141,7 @@ public class Engine {
 	 * 
 	 */
 	public static final class EngineBuilder {
-		
+
 		private final Game game;
 		private final GLView glView;
 		private EngineRenderer renderer;
@@ -146,7 +149,7 @@ public class Engine {
 		private GameThread gameThread;
 		private int maxFPS;
 		private int maxSkippedFrames;
-		
+
 		/**
 		 * Crea un EngineBuilder.<br>
 		 * LEER: {@link Engine}
@@ -167,7 +170,7 @@ public class Engine {
 			this.maxFPS = 30;
 			this.maxSkippedFrames = 5;
 		}
-		
+
 		/**
 		 * Asigna el renderer que utilizara el Engine.<br>
 		 * El renderer por defecto es {@link DefaultRenderer}
@@ -182,12 +185,12 @@ public class Engine {
 			this.renderer = renderer;
 			return this;
 		}
-		
+
 		/**
 		 * Asigna el maximo numero de FPS al que se actualizara y se repintara el juego.<br>
-		 * La frecuencia de actualizacion del juego no superara la frecuencia de refresco de la pantalla, por tanto, si el valor
-		 * especificado es mayor que la frecuencia de refresco de la pantalla, la frecuencia de actualizacion del juego coincidira con la
-		 * frecuencia de refresco de la pantalla, independientemente del valor especificado.<br>
+		 * La frecuencia de actualizacion del juego no superara la frecuencia de refresco de la pantalla, por tanto, si
+		 * el valor especificado es mayor que la frecuencia de refresco de la pantalla, la frecuencia de actualizacion
+		 * del juego coincidira con la frecuencia de refresco de la pantalla, independientemente del valor especificado.<br>
 		 * Si se asigna un valor alto es posible que el rendimiento decrezca en los dispositivos menos potentes.<br>
 		 * El valor por defecto es 30.
 		 * 
@@ -195,15 +198,16 @@ public class Engine {
 		 * @return El propio EngineBuilder, para poder encadenar llamadas a metodos
 		 */
 		public EngineBuilder setMaxFPS(int maxFPS) {
-			Display display = ((WindowManager) game.getActivity().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+			WindowManager windowManager = (WindowManager) game.getActivity().getSystemService(Context.WINDOW_SERVICE);
+			Display display = windowManager.getDefaultDisplay();
 			int refreshRate = (int) display.getRefreshRate();
 			this.maxFPS = (maxFPS > refreshRate) ? ((refreshRate > 30) ? refreshRate : 30) : maxFPS;
 			return this;
 		}
-		
+
 		/**
-		 * Asigna el maximo numero de frames seguidos que se puede actualizar sin renderizar en caso de que una vuelta del bucle principal
-		 * del juego tarde mas de lo estipulado.
+		 * Asigna el maximo numero de frames seguidos que se puede actualizar sin renderizar en caso de que una vuelta
+		 * del bucle principal del juego tarde mas de lo estipulado.
 		 * 
 		 * @param maxSkippedFrames Nuevo valor
 		 * @return El propio EngineBuilder, para poder encadenar llamadas a metodos
@@ -212,7 +216,7 @@ public class Engine {
 			this.maxSkippedFrames = maxSkippedFrames;
 			return this;
 		}
-		
+
 		/**
 		 * Construye un {@link Engine} a partir de la configuracion del EngineBuilder
 		 * 
@@ -224,7 +228,7 @@ public class Engine {
 			this.gameThread = new GameThread(maxFPS, maxSkippedFrames, game, glView, engineLock);
 			return new Engine(this);
 		}
-		
+
 	}
-	
+
 }

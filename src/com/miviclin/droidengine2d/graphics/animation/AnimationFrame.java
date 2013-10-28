@@ -9,10 +9,10 @@ import com.miviclin.droidengine2d.graphics.texture.TextureRegion;
  * 
  */
 public class AnimationFrame {
-	
+
 	private float delay;
 	private TextureRegion textureRegion;
-	
+
 	/**
 	 * Crea un AnimationFrame
 	 * 
@@ -24,7 +24,7 @@ public class AnimationFrame {
 		this.delay = delay;
 		this.textureRegion = textureRegion;
 	}
-	
+
 	/**
 	 * Devuelve el tiempo minimo que se mostrara este frame antes de actualizar al siguiente
 	 * 
@@ -33,7 +33,7 @@ public class AnimationFrame {
 	public float getDelay() {
 		return delay;
 	}
-	
+
 	/**
 	 * Asigna el tiempo minimo que se mostrara este frame antes de actualizar al siguiente
 	 * 
@@ -42,7 +42,7 @@ public class AnimationFrame {
 	public void setDelay(float delay) {
 		this.delay = delay;
 	}
-	
+
 	/**
 	 * Devuelve el TextureRegion que se mostrara en este frame
 	 * 
@@ -51,7 +51,7 @@ public class AnimationFrame {
 	public TextureRegion getTextureRegion() {
 		return textureRegion;
 	}
-	
+
 	/**
 	 * Asigna el TextureRegion que se mostrara en este frame
 	 * 
@@ -60,5 +60,5 @@ public class AnimationFrame {
 	public void setTextureRegion(TextureRegion textureRegion) {
 		this.textureRegion = textureRegion;
 	}
-	
+
 }

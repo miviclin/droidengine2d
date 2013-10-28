@@ -12,20 +12,20 @@ import com.miviclin.droidengine2d.util.Pool;
 
 /**
  * Se encarga de gestionar las texturas.<br>
- * Al eliminar una textura se almacena en un Pool para poder eliminarlas por completo en algun momento en el que el recolector de basura no
- * comprometa el rendimiento del juego.
+ * Al eliminar una textura se almacena en un Pool para poder eliminarlas por completo en algun momento en el que el
+ * recolector de basura no comprometa el rendimiento del juego.
  * 
  * @author Miguel Vicente Linares
  * 
  */
 public final class TextureManager {
-	
+
 	private Context context;
 	private HashMap<String, TextureRegion> textureRegions;
 	private ArrayList<Texture> activeTextures;
 	private Pool<Texture> removedTextures;
 	private int texturesToLoad;
-	
+
 	/**
 	 * Crea un TextureManager con una capacidad inicial de 16
 	 * 
@@ -34,7 +34,7 @@ public final class TextureManager {
 	public TextureManager(Context context) {
 		this(16, 16, context);
 	}
-	
+
 	/**
 	 * Crea un TextureManager
 	 * 
@@ -43,30 +43,32 @@ public final class TextureManager {
 	 * @param context Context en el que se ejecuta el juego, necesario para poder cargar las texturas
 	 */
 	public TextureManager(int initialCapacityForTextures, int initialCapacityForTextureRegions, Context context) {
+		int mapCapacity = (int) ((initialCapacityForTextureRegions / 0.75f) + 1);
+		this.textureRegions = new HashMap<String, TextureRegion>(mapCapacity);
 		this.context = context;
-		this.textureRegions = new HashMap<String, TextureRegion>((int) ((initialCapacityForTextureRegions / 0.75f) + 1));
 		this.activeTextures = new ArrayList<Texture>(initialCapacityForTextures);
 		this.removedTextures = new Pool<Texture>(initialCapacityForTextures);
 		this.texturesToLoad = 0;
 	}
-	
+
 	/**
-	 * Agrega un TextureRegion al TextureManager. La clave especificada permitira identificar al TextureRegion agregado. Si se inserta
-	 * posteriormente otro TextureRegion con la misma clave, se reemplazara al que hubiera, no puede haber 2 TextureRegion registrados con
-	 * la misma clave.
+	 * Agrega un TextureRegion al TextureManager. La clave especificada permitira identificar al TextureRegion agregado.
+	 * Si se inserta posteriormente otro TextureRegion con la misma clave, se reemplazara al que hubiera, no puede haber
+	 * 2 TextureRegion registrados con la misma clave.
 	 * 
 	 * @param key Clave que identifica al TextureRegion agregado
 	 * @param textureRegion TextureRegion
-	 * @return Devuelve el TextureRegion que hubiera previamente registrado con la clave especificada o null si no habia ninguno
+	 * @return Devuelve el TextureRegion que hubiera previamente registrado con la clave especificada o null si no habia
+	 *         ninguno
 	 */
 	public TextureRegion addTextureRegion(String key, TextureRegion textureRegion) {
 		addTexture(textureRegion.getTexture());
 		return textureRegions.put(key, textureRegion);
 	}
-	
+
 	/**
-	 * Elimina el TextureRegion asociado a la clave especificada. El objeto Texture asociado al TextureRegion eliminado no sera eliminado
-	 * del TextureManager.
+	 * Elimina el TextureRegion asociado a la clave especificada. El objeto Texture asociado al TextureRegion eliminado
+	 * no sera eliminado del TextureManager.
 	 * 
 	 * @param key Clave
 	 * @return TextureRegion eliminado o null si no hay ninguno asociado a dicha clave
@@ -74,7 +76,7 @@ public final class TextureManager {
 	public TextureRegion removeTextureRegion(String key) {
 		return textureRegions.remove(key);
 	}
-	
+
 	/**
 	 * Devuelve el TextureRegion asociado a la clave especificada.
 	 * 
@@ -84,10 +86,10 @@ public final class TextureManager {
 	public TextureRegion getTextureRegion(String key) {
 		return textureRegions.get(key);
 	}
-	
+
 	/**
-	 * Agrega todos los TextureRegion del TextureAtlas especificado al TextureManager, de forma que se podra acceder por su clave
-	 * posteriormente.
+	 * Agrega todos los TextureRegion del TextureAtlas especificado al TextureManager, de forma que se podra acceder por
+	 * su clave posteriormente.
 	 * 
 	 * @param textureAtlas TextureAtlas especificado
 	 */
@@ -98,10 +100,10 @@ public final class TextureManager {
 		}
 		addTexture(textureAtlas.getSourceTexture());
 	}
-	
+
 	/**
-	 * Elimina todos los TextureRegion del TextureAtlas especificado al TextureManager. El objeto Texture asociado al TextureAtlas
-	 * especificado no sera eliminado del TextureManager al llamar a este metodo.
+	 * Elimina todos los TextureRegion del TextureAtlas especificado al TextureManager. El objeto Texture asociado al
+	 * TextureAtlas especificado no sera eliminado del TextureManager al llamar a este metodo.
 	 * 
 	 * @param textureAtlas TextureAtlas especificado
 	 */
@@ -111,12 +113,13 @@ public final class TextureManager {
 			textureRegions.remove(entry.getKey());
 		}
 	}
-	
+
 	/**
 	 * Agrega la textura al TextureManager.
 	 * 
 	 * @param texture Texture que se va a agregar
-	 * @return true si se ha agregado, false si ya se encontraba insertada otra textura con el mismo identificador (ruta del asset)
+	 * @return true si se ha agregado, false si ya se encontraba insertada otra textura con el mismo identificador (ruta
+	 *         del asset)
 	 */
 	public boolean addTexture(Texture texture) {
 		int j;
@@ -143,7 +146,7 @@ public final class TextureManager {
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Agrega todas las texturas de una fuente al TextureManager
 	 * 
@@ -155,12 +158,13 @@ public final class TextureManager {
 			addTexture(texturePages.valueAt(i));
 		}
 	}
-	
+
 	/**
 	 * Elimina una textura de la colleccion de texturas activas.<br>
-	 * La textura se traslada a un Pool, por tanto, se mantiene una referencia a ella para evitar que sea reciclada por el GC.<br>
-	 * Para eliminar por completo todas las texturas, llamar a {@link #clearAll()}, o, en caso de querer eliminar solo las texturas
-	 * almacenadas en el Pool de texturas eliminadas, llamar a {@link #clearRemovedTextures()}
+	 * La textura se traslada a un Pool, por tanto, se mantiene una referencia a ella para evitar que sea reciclada por
+	 * el GC.<br>
+	 * Para eliminar por completo todas las texturas, llamar a {@link #clearAll()}, o, en caso de querer eliminar solo
+	 * las texturas almacenadas en el Pool de texturas eliminadas, llamar a {@link #clearRemovedTextures()}
 	 * 
 	 * @param texture Textura que se va a eliminar
 	 */
@@ -184,12 +188,13 @@ public final class TextureManager {
 			}
 		}
 	}
-	
+
 	/**
 	 * Elimina todas las texturas de la colleccion de texturas activas.<br>
-	 * Las texturas se trasladan a un Pool, por tanto, se mantiene una referencia a ellas para evitar que sean recicladas por el GC.<br>
-	 * Para eliminar por completo todas las texturas, llamar a {@link #clearAll()}, o, en caso de querer eliminar solo las texturas
-	 * almacenadas en el Pool de texturas eliminadas, llamar a {@link #clearRemovedTextures()}
+	 * Las texturas se trasladan a un Pool, por tanto, se mantiene una referencia a ellas para evitar que sean
+	 * recicladas por el GC.<br>
+	 * Para eliminar por completo todas las texturas, llamar a {@link #clearAll()}, o, en caso de querer eliminar solo
+	 * las texturas almacenadas en el Pool de texturas eliminadas, llamar a {@link #clearRemovedTextures()}
 	 */
 	public void removeAllTextures() {
 		for (int i = activeTextures.size() - 1; i >= 0; i--) {
@@ -197,10 +202,10 @@ public final class TextureManager {
 		}
 		texturesToLoad = 0;
 	}
-	
+
 	/**
-	 * Elimina por completo las texturas del Pool de texturas previamente eliminadas con {@link #removeTexture(Texture)} o
-	 * {@link #removeAllTextures()}<br>
+	 * Elimina por completo las texturas del Pool de texturas previamente eliminadas con {@link #removeTexture(Texture)}
+	 * o {@link #removeAllTextures()}<br>
 	 * NOTA: Este metodo debe ejecutarse en el hilo del GLRenderer
 	 */
 	public void clearRemovedTextures() {
@@ -208,7 +213,7 @@ public final class TextureManager {
 			removedTextures.get().delete();
 		}
 	}
-	
+
 	/**
 	 * Elimina por completo todas las texturas y TextureRegions almacenadas en el TextureManager, dejandolo vacio.<br>
 	 * NOTA: Este metodo debe ejecutarse en el hilo del GLRenderer
@@ -228,7 +233,7 @@ public final class TextureManager {
 		texturesToLoad = 0;
 		textureRegions.clear();
 	}
-	
+
 	/**
 	 * Carga todas las texturas que no estuvieran cargadas.<br>
 	 * NOTA: Este metodo debe ejecutarse en el hilo del GLRenderer
@@ -247,7 +252,7 @@ public final class TextureManager {
 			texturesToLoad = 0;
 		}
 	}
-	
+
 	/**
 	 * Carga todas las texturas.<br>
 	 * NOTA: Este metodo debe ejecutarse en el hilo del GLRenderer
@@ -258,5 +263,5 @@ public final class TextureManager {
 		}
 		texturesToLoad = 0;
 	}
-	
+
 }

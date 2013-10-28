@@ -11,12 +11,12 @@ import com.miviclin.droidengine2d.scene.Scene;
  * 
  */
 public class KeyController {
-	
+
 	private volatile boolean keyDetected;
 	private volatile int keyCode;
 	private volatile KeyEvent keyEvent;
 	private KeyListener keyListener;
-	
+
 	/**
 	 * Constructor
 	 */
@@ -26,9 +26,10 @@ public class KeyController {
 		this.keyEvent = null;
 		this.keyListener = null;
 	}
-	
+
 	/**
-	 * Asigna un KeyEvent al KeyController. Este KeyEvent sera el que se le pase a {@link KeyListener#onKey(int, KeyEvent)}.
+	 * Asigna un KeyEvent al KeyController. Este KeyEvent sera el que se le pase a
+	 * {@link KeyListener#onKey(int, KeyEvent)}.
 	 * 
 	 * @param keyCode Codigo de tecla
 	 * @param keyEvent KeyEvent
@@ -40,7 +41,7 @@ public class KeyController {
 			keyDetected = true;
 		}
 	}
-	
+
 	/**
 	 * Asigna un {@link KeyListener} al KeyController
 	 * 
@@ -49,11 +50,11 @@ public class KeyController {
 	public void setKeyListener(KeyListener keyListener) {
 		this.keyListener = keyListener;
 	}
-	
+
 	/**
 	 * Procesa el evento de tecla.<br>
-	 * Este metodo deberia ser llamado desde {@link Scene#update(float)} para que en caso de que haya un evento de tecla, ejecute
-	 * {@link KeyListener#onKey(int, KeyEvent)}
+	 * Este metodo deberia ser llamado desde {@link Scene#update(float)} para que en caso de que haya un evento de
+	 * tecla, ejecute {@link KeyListener#onKey(int, KeyEvent)}
 	 */
 	public void processKeyInput() {
 		if ((keyListener != null) && keyDetected) {
@@ -61,5 +62,5 @@ public class KeyController {
 		}
 		keyDetected = false;
 	}
-	
+
 }

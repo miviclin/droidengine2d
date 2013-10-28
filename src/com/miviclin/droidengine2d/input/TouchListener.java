@@ -2,7 +2,6 @@ package com.miviclin.droidengine2d.input;
 
 import android.view.MotionEvent;
 
-
 /**
  * Interfaz que se utiliza para los eventos Touch
  * 
@@ -10,7 +9,7 @@ import android.view.MotionEvent;
  * 
  */
 public interface TouchListener {
-	
+
 	/**
 	 * Metodo que contiene la logica que debe procesarse al recibir un evento Touch.<br>
 	 * Se llama cuando se hace una llamada a {@link TouchController#processTouchInput()}.<br>
@@ -20,5 +19,5 @@ public interface TouchListener {
 	 * @return true si se ha consumido el evento, false en caso contrario
 	 */
 	public boolean onTouch(MotionEvent motionEvent);
-	
+
 }

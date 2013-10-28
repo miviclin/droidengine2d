@@ -11,17 +11,17 @@ import com.miviclin.droidengine2d.graphics.shader.ShaderProgram;
  * 
  */
 public abstract class GraphicsBatch<M extends Material> {
-	
+
 	private final BlendingOptions currentBatchBlendingOptions;
 	private final BlendingOptions nextBatchBlendingOptions;
-	
+
 	private boolean inBeginEndPair;
 	private ShaderProgram shaderProgram;
 	private M currentMaterial;
 	private boolean forceDraw;
 	private int batchSize;
 	private int batchCapacity;
-	
+
 	/**
 	 * Constructor
 	 * 
@@ -36,12 +36,12 @@ public abstract class GraphicsBatch<M extends Material> {
 		this.batchSize = 0;
 		this.batchCapacity = maxBatchSize;
 	}
-	
+
 	/**
 	 * Inicializa el shader program.
 	 */
 	public abstract void setupShaderProgram();
-	
+
 	/**
 	 * Prepara el batch para pintar.
 	 */
@@ -52,16 +52,17 @@ public abstract class GraphicsBatch<M extends Material> {
 		inBeginEndPair = true;
 		beginDraw();
 	}
-	
+
 	/**
 	 * Prepara el batch para pintar.<br>
 	 * Este metodo se llama desde {@link #begin()}
 	 */
 	protected abstract void beginDraw();
-	
+
 	/**
 	 * Renderiza todos los elementos que contenga el batch.<br>
-	 * Este metodo debe llamarse siempre al terminar de agregar todos los elementos al batch. Es necesario llamar antes a {@link #begin()}
+	 * Este metodo debe llamarse siempre al terminar de agregar todos los elementos al batch. Es necesario llamar antes
+	 * a {@link #begin()}
 	 */
 	public final void end() {
 		if (!inBeginEndPair) {
@@ -70,31 +71,33 @@ public abstract class GraphicsBatch<M extends Material> {
 		endDraw();
 		inBeginEndPair = false;
 	}
-	
+
 	/**
 	 * Renderiza todos los elementos que contenga el batch.<br>
 	 * Este metodo se llama desde {@link #end()}
 	 */
 	protected abstract void endDraw();
-	
+
 	/**
 	 * Devuelve si se ha llamado a {@link #begin()} pero aun no se ha llamado a {@link #end()}
 	 * 
-	 * @return true si se ha llamado a {@link #begin()} pero aun no se ha llamado a {@link #end()}, false en caso contrario
+	 * @return true si se ha llamado a {@link #begin()} pero aun no se ha llamado a {@link #end()}, false en caso
+	 *         contrario
 	 */
 	public boolean isInBeginEndPair() {
 		return inBeginEndPair;
 	}
-	
+
 	/**
-	 * Si se ha llamado a {@link #begin()} pero aun no se ha llamado a {@link #end()} no hace nada. En caso contrario lanza una excepcion.
+	 * Si se ha llamado a {@link #begin()} pero aun no se ha llamado a {@link #end()} no hace nada. En caso contrario
+	 * lanza una excepcion.
 	 */
 	public void checkInBeginEndPair() {
 		if (!inBeginEndPair) {
 			throw new RuntimeException("begin() must be called once before calling draw(...)");
 		}
 	}
-	
+
 	/**
 	 * Devuelve las opciones de blending que se deben usar para renderizar el batch actual
 	 * 
@@ -103,7 +106,7 @@ public abstract class GraphicsBatch<M extends Material> {
 	public BlendingOptions getCurrentBatchBlendingOptions() {
 		return currentBatchBlendingOptions;
 	}
-	
+
 	/**
 	 * Devuelve las opciones de blending que se deben usar para renderizar el siguiente batch
 	 * 
@@ -112,7 +115,7 @@ public abstract class GraphicsBatch<M extends Material> {
 	public BlendingOptions getNextBatchBlendingOptions() {
 		return nextBatchBlendingOptions;
 	}
-	
+
 	/**
 	 * Devuelve el ShaderProgram
 	 * 
@@ -121,7 +124,7 @@ public abstract class GraphicsBatch<M extends Material> {
 	public ShaderProgram getShaderProgram() {
 		return shaderProgram;
 	}
-	
+
 	/**
 	 * Devuelve el Material enlazado actualmente al GraphicsBatch
 	 * 
@@ -130,7 +133,7 @@ public abstract class GraphicsBatch<M extends Material> {
 	public M getCurrentMaterial() {
 		return currentMaterial;
 	}
-	
+
 	/**
 	 * Asigna el Material enlazado actualmente al GraphicsBatch
 	 * 
@@ -149,7 +152,7 @@ public abstract class GraphicsBatch<M extends Material> {
 		this.nextBatchBlendingOptions.copy(nextBatchBlendingOptions);
 		this.currentMaterial = material;
 	}
-	
+
 	/**
 	 * Devuelve true si hay que forzar el renderizado de los elementos del batch
 	 * 
@@ -158,7 +161,7 @@ public abstract class GraphicsBatch<M extends Material> {
 	public boolean isForceDraw() {
 		return forceDraw;
 	}
-	
+
 	/**
 	 * Asigna si hay que forzar el renderizado de los elementos del batch
 	 * 
@@ -167,7 +170,7 @@ public abstract class GraphicsBatch<M extends Material> {
 	protected void setForceDraw(boolean forceDraw) {
 		this.forceDraw = forceDraw;
 	}
-	
+
 	/**
 	 * Devuelve el numero de sprites que hay en el batch
 	 * 
@@ -176,21 +179,21 @@ public abstract class GraphicsBatch<M extends Material> {
 	public int getBatchSize() {
 		return batchSize;
 	}
-	
+
 	/**
 	 * Incrementa en 1 el numero de sprites que hay en el batch
 	 */
 	protected void incrementBatchSize() {
 		batchSize++;
 	}
-	
+
 	/**
 	 * Reinicia a 0 el numero de sprites que hay en el batch
 	 */
 	protected void resetBatchSize() {
 		batchSize = 0;
 	}
-	
+
 	/**
 	 * Devuelve el maximo numero de elementos que puede almacenar el batch antes de renderizar
 	 * 

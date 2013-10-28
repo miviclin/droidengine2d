@@ -7,10 +7,10 @@ package com.miviclin.droidengine2d.util;
  * 
  */
 public interface Poolable {
-	
+
 	/**
 	 * Reinicia las propiedades del objeto a los valores por defecto
 	 */
 	public void reset();
-	
+
 }

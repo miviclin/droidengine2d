@@ -3,18 +3,18 @@ package com.miviclin.droidengine2d.graphics.material;
 import com.miviclin.droidengine2d.graphics.texture.TextureRegion;
 
 /**
- * Material que tiene una textura y permite variar la opacidad. Tambien se permite variar el tono de la textura y se puede reducir la
- * saturacion y el brillo.
+ * Material que tiene una textura y permite variar la opacidad. Tambien se permite variar el tono de la textura y se
+ * puede reducir la saturacion y el brillo.
  * 
  * @author Miguel Vicente Linares
  * 
  */
 public class TextureHSVMaterial extends TransparentTextureMaterial {
-	
+
 	private float hOffset;
 	private float sMulti;
 	private float vMulti;
-	
+
 	/**
 	 * Constructor
 	 * 
@@ -23,7 +23,7 @@ public class TextureHSVMaterial extends TransparentTextureMaterial {
 	public TextureHSVMaterial(TextureRegion textureRegion) {
 		this(textureRegion, 1.0f, 0.0f, 1.0f, 1.0f);
 	}
-	
+
 	/**
 	 * Constructor
 	 * 
@@ -35,7 +35,7 @@ public class TextureHSVMaterial extends TransparentTextureMaterial {
 	public TextureHSVMaterial(TextureRegion textureRegion, float hOffset, float sMulti, float vMulti) {
 		this(textureRegion, 1.0f, hOffset, sMulti, vMulti);
 	}
-	
+
 	/**
 	 * Constructor
 	 * 
@@ -54,7 +54,7 @@ public class TextureHSVMaterial extends TransparentTextureMaterial {
 		this.sMulti = sMulti;
 		this.vMulti = vMulti;
 	}
-	
+
 	/**
 	 * Devuelve el offset del valor H (tono)
 	 * 
@@ -63,7 +63,7 @@ public class TextureHSVMaterial extends TransparentTextureMaterial {
 	public float getHOffset() {
 		return hOffset;
 	}
-	
+
 	/**
 	 * Asigna el offset del valor H (tono)
 	 * 
@@ -73,7 +73,7 @@ public class TextureHSVMaterial extends TransparentTextureMaterial {
 		checkH(hOffset);
 		this.hOffset = hOffset;
 	}
-	
+
 	/**
 	 * Devuelve el multiplicador del valor S (saturacion)
 	 * 
@@ -82,7 +82,7 @@ public class TextureHSVMaterial extends TransparentTextureMaterial {
 	public float getSMulti() {
 		return sMulti;
 	}
-	
+
 	/**
 	 * Asigna el multiplicador del valor S (saturacion)
 	 * 
@@ -92,7 +92,7 @@ public class TextureHSVMaterial extends TransparentTextureMaterial {
 		checkS(sMulti);
 		this.sMulti = sMulti;
 	}
-	
+
 	/**
 	 * Devuelve el multiplicador del valor V (brillo)
 	 * 
@@ -101,7 +101,7 @@ public class TextureHSVMaterial extends TransparentTextureMaterial {
 	public float getVMulti() {
 		return vMulti;
 	}
-	
+
 	/**
 	 * Asigna el multiplicador del valor V (brillo)
 	 * 
@@ -111,7 +111,7 @@ public class TextureHSVMaterial extends TransparentTextureMaterial {
 		checkV(vMulti);
 		this.vMulti = vMulti;
 	}
-	
+
 	/**
 	 * Comprueba que hOffset sea un valor entre 0.0f y 360.0f y lanza una excepcion en caso contrario
 	 * 
@@ -122,7 +122,7 @@ public class TextureHSVMaterial extends TransparentTextureMaterial {
 			throw new IllegalArgumentException("The H component must be a value between 0.0 and 360.0");
 		}
 	}
-	
+
 	/**
 	 * Comprueba que sMulti sea un valor entre 0.0f y 1.0f y lanza una excepcion en caso contrario
 	 * 
@@ -133,7 +133,7 @@ public class TextureHSVMaterial extends TransparentTextureMaterial {
 			throw new IllegalArgumentException("The S component must be a value between 0.0 and 1.0");
 		}
 	}
-	
+
 	/**
 	 * Comprueba que vMulti sea un valor entre 0.0f y 1.0f y lanza una excepcion en caso contrario
 	 * 

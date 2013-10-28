@@ -14,22 +14,30 @@ import com.miviclin.droidengine2d.util.math.Vector2;
  * 
  */
 public class RectangleBatchGeometry extends Geometry {
-	
+
 	protected final float[] temp = new float[16];
-	
+
 	private float[] mvpIndices;
 	private float[] mvpMatrices;
 	private Matrix4 modelMatrix;
-	
+
+	/**
+	 * Constructor
+	 * 
+	 * @param batchCapacity Numero maximo de elementos que se puede almacenar en el batch
+	 * @param usesColors true si el batch incluye colores en las definiciones de los vertices, false en caso contrario
+	 * @param usesTexturesUV true si el batch incluye coordenadas UV de texturas en las definiciones de los vertices,
+	 *            false en caso contrario
+	 */
 	public RectangleBatchGeometry(int batchCapacity, boolean usesColors, boolean usesTexturesUV) {
 		super(batchCapacity * 4, batchCapacity * 6, usesColors, usesTexturesUV);
 		this.mvpIndices = new float[batchCapacity * 4];
 		this.mvpMatrices = new float[batchCapacity * 16];
 		this.modelMatrix = new Matrix4();
-		
+
 		setupMVPIndices();
 	}
-	
+
 	/**
 	 * Inicializa el array de indices que permiten acceder a las matrices MVP en el vertex shader.
 	 */
@@ -42,7 +50,7 @@ public class RectangleBatchGeometry extends Geometry {
 			mvpIndices[i] = value;
 		}
 	}
-	
+
 	/**
 	 * Transforma la matriz MVP del indice especificado
 	 * 
@@ -56,7 +64,7 @@ public class RectangleBatchGeometry extends Geometry {
 		int mvpOffset;
 		float tx = position.getX();
 		float ty = position.getY();
-		
+
 		if (rotation != 0) {
 			TransformUtilities.transform2D(modelMatrix, tx, ty, rotation, scale.getX(), scale.getY());
 		} else {
@@ -66,7 +74,7 @@ public class RectangleBatchGeometry extends Geometry {
 		Matrix.multiplyMM(temp, 0, camera.getViewMatrix().getValues(), 0, modelMatrix.getValues(), 0);
 		Matrix.multiplyMM(mvpMatrices, mvpOffset, camera.getProjectionMatrix().getValues(), 0, temp, 0);
 	}
-	
+
 	/**
 	 * Devuelve el array de indices de las matrices MVP
 	 * 
@@ -75,7 +83,7 @@ public class RectangleBatchGeometry extends Geometry {
 	public float[] getMvpIndices() {
 		return mvpIndices;
 	}
-	
+
 	/**
 	 * Asigna el array de indices de las matrices MVP
 	 * 
@@ -84,7 +92,7 @@ public class RectangleBatchGeometry extends Geometry {
 	public void setMvpIndices(float[] mvpIndices) {
 		this.mvpIndices = mvpIndices;
 	}
-	
+
 	/**
 	 * Devuelve las matrices MVP, todas almacenadas en el mismo array. Cada 16 elementos es una matriz.
 	 * 

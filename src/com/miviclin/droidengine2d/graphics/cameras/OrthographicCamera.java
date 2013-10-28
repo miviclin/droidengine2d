@@ -7,7 +7,7 @@ package com.miviclin.droidengine2d.graphics.cameras;
  * 
  */
 public class OrthographicCamera extends Camera {
-	
+
 	/**
 	 * Crea una nueva OrthographicCamera
 	 */
@@ -18,11 +18,12 @@ public class OrthographicCamera extends Camera {
 		setNear(1.0f);
 		setFar(10.0f);
 	}
-	
+
 	@Override
 	public void update() {
-		getViewMatrix().setLookAt(getEye(), getCenter().set(getEye().getX(), getEye().getY(), getCenter().getZ()), getUp());
+		getCenter().set(getEye().getX(), getEye().getY(), getCenter().getZ());
+		getViewMatrix().setLookAt(getEye(), getCenter(), getUp());
 		getProjectionMatrix().setOrtho(0, getViewportWidth(), 0, getViewportHeight(), getNear(), getFar());
 	}
-	
+
 }

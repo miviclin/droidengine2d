@@ -12,16 +12,16 @@ import android.util.Log;
  * 
  */
 public final class GLDebugger {
-	
+
 	public static final int FLAG_NO_LOGGING = 0;
 	public static final int FLAG_LOG_NUM_DRAW_CALLS_FRAME = 1;
-	
+
 	private static GLDebugger instance = null;
-	
+
 	private boolean debugModeEnabled;
 	private int numDrawCallsFrame;
 	private int logFlags;
-	
+
 	/**
 	 * Constructor
 	 */
@@ -30,7 +30,7 @@ public final class GLDebugger {
 		this.numDrawCallsFrame = 0;
 		this.logFlags = GLDebugger.FLAG_NO_LOGGING;
 	}
-	
+
 	/**
 	 * Devuelve la instancia de GLDebugger
 	 * 
@@ -42,7 +42,7 @@ public final class GLDebugger {
 		}
 		return GLDebugger.instance;
 	}
-	
+
 	/**
 	 * Asigna los flags de logging. Utilizar {@link GLDebugger#FLAG_NO_LOGGING} para desactivar el logging
 	 * 
@@ -51,7 +51,7 @@ public final class GLDebugger {
 	public void setLoggingFlags(int flags) {
 		this.logFlags = flags;
 	}
-	
+
 	/**
 	 * Comprueba si se ha producido un error en alguna funcion de OpenGL llamada previamente.<br>
 	 * Si el modo debug esta desactivado, este metodo no hace nada a menos que se detecte un fallo al llamar a
@@ -67,11 +67,11 @@ public final class GLDebugger {
 			}
 		}
 	}
-	
+
 	/**
 	 * Comprueba si se ha producido un error en alguna funcion de OpenGL llamada previamente.<br>
-	 * Si se detecta un error, se activara el modo debug, de forma que las llamadas a {@link #passiveCheckGLError()} comprobaran tambien si
-	 * se ha producido error y podran lanzar
+	 * Si se detecta un error, se activara el modo debug, de forma que las llamadas a {@link #passiveCheckGLError()}
+	 * comprobaran tambien si se ha producido error y podran lanzar
 	 * 
 	 * @throws GLException Si se detecta un error
 	 */
@@ -91,7 +91,7 @@ public final class GLDebugger {
 			}
 		}
 	}
-	
+
 	/**
 	 * Lanza una excepcion con el codigo de error especificado y un mensaje de descripcion de dicho error
 	 * 
@@ -101,7 +101,7 @@ public final class GLDebugger {
 	private static void throwGLException(int errorCode) {
 		throw new GLException(errorCode, "GLError " + errorCode + ", " + GLDebugger.getErrorString(errorCode));
 	}
-	
+
 	/**
 	 * Devuelve la descripcion de un error de OpenGL
 	 * 
@@ -115,42 +115,43 @@ public final class GLDebugger {
 		}
 		return errorString;
 	}
-	
+
 	/**
 	 * Devuelve el numero de llamadas a draw realizadas.<br>
-	 * Para que el numero devuelto sea correcto, es necesario haber llamado a {@link #incrementNumDrawCallsFrame()} tras cada llamada
-	 * realizada y {@link #resetNumDrawCallsFrame()} al final de cada frame
+	 * Para que el numero devuelto sea correcto, es necesario haber llamado a {@link #incrementNumDrawCallsFrame()} tras
+	 * cada llamada realizada y {@link #resetNumDrawCallsFrame()} al final de cada frame
 	 * 
 	 * @return Numero de llamadas a draw
 	 */
 	public int getNumDrawCallsFrame() {
 		return numDrawCallsFrame;
 	}
-	
+
 	/**
 	 * Incrementa el contador de llamadas a draw
 	 */
 	public void incrementNumDrawCallsFrame() {
 		numDrawCallsFrame++;
 	}
-	
+
 	/**
 	 * Reinicia el contador de llamadas a draw
 	 */
 	public void resetNumDrawCallsFrame() {
 		numDrawCallsFrame = 0;
 	}
-	
+
 	/**
-	 * Muestra un mensaje en el log con el numero de llamadas a draw realizadas hasta el momento. Solo se mostrara si el flag
-	 * {@link GLDebugger#FLAG_LOG_NUM_DRAW_CALLS_FRAME} esta activo
+	 * Muestra un mensaje en el log con el numero de llamadas a draw realizadas hasta el momento. Solo se mostrara si el
+	 * flag {@link GLDebugger#FLAG_LOG_NUM_DRAW_CALLS_FRAME} esta activo
 	 * 
 	 * @see #getNumDrawCallsFrame()
 	 */
 	public void logNumDrawCallsFrame() {
 		if ((logFlags & GLDebugger.FLAG_LOG_NUM_DRAW_CALLS_FRAME) == GLDebugger.FLAG_LOG_NUM_DRAW_CALLS_FRAME) {
-			Log.d(DefaultRenderer.class.getSimpleName(), "draw calls: " + GLDebugger.getInstance().getNumDrawCallsFrame());
+			Log.d(DefaultRenderer.class.getSimpleName(), "draw calls: "
+					+ GLDebugger.getInstance().getNumDrawCallsFrame());
 		}
 	}
-	
+
 }

@@ -7,7 +7,7 @@ package com.miviclin.droidengine2d.input.sensor;
  * 
  */
 public class SensorUtilities {
-	
+
 	/**
 	 * Aplica un filtro a paso bajo para atenuar los valores de input en funcion a los valores de output y alpha
 	 * 
@@ -33,5 +33,5 @@ public class SensorUtilities {
 			output[i] += (alpha * (input[i] - output[i]));
 		}
 	}
-	
+
 }

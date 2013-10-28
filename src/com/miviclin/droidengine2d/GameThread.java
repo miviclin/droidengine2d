@@ -12,14 +12,14 @@ import com.miviclin.droidengine2d.util.MutexLock;
  * 
  */
 public class GameThread implements Runnable {
-	
+
 	private enum State {
 		INITIALIZING,
 		RUNNING,
 		PAUSED,
 		TERMINATED;
 	}
-	
+
 	private final int maxSkippedFrames;
 	private final float idealTimePerFrame;
 	private final Game game;
@@ -27,13 +27,13 @@ public class GameThread implements Runnable {
 	private final MutexLock pauseLock;
 	private final MutexLock terminateLock;
 	private GLView glView;
-	
+
 	private State currentState;
 	private boolean started;
-	
+
 	/**
-	 * Constructor. Crea un nuevo HiloJuego. Por defecto, el maximo de FPS al que funcionara el juego es 30 y el numero de frames que puede
-	 * actualizar sin renderizar es 5.
+	 * Constructor. Crea un nuevo HiloJuego. Por defecto, el maximo de FPS al que funcionara el juego es 30 y el numero
+	 * de frames que puede actualizar sin renderizar es 5.
 	 * 
 	 * @param game Juego que va a gestionar este hilo
 	 * @param glView GLView en la que se representa el juego
@@ -41,14 +41,14 @@ public class GameThread implements Runnable {
 	 */
 	public GameThread(Game game, GLView glView, EngineLock engineLock) {
 		this(30, 5, game, glView, engineLock);
-		
+
 	}
-	
+
 	/**
 	 * Constructor. Crea un nuevo HiloJuego. Por defecto, el numero de frames que puede actualizar sin renderizar es 5.
 	 * 
-	 * @param maxFPS Maximos FPS a los que va a actualizarse el juego. En caso de que el dispositivo no sea capaz de mantener los FPS
-	 *            especificados, el juego podria experimentar ralentizacionas.
+	 * @param maxFPS Maximos FPS a los que va a actualizarse el juego. En caso de que el dispositivo no sea capaz de
+	 *            mantener los FPS especificados, el juego podria experimentar ralentizacionas.
 	 * @param game Juego que va a gestionar este hilo
 	 * @param glView GLView en la que se representa el juego
 	 * @param engineLock Utilizado para sincronizar correctamente los hilos
@@ -56,13 +56,13 @@ public class GameThread implements Runnable {
 	public GameThread(int maxFPS, Game game, GLView glView, EngineLock engineLock) {
 		this(maxFPS, 5, game, glView, engineLock);
 	}
-	
+
 	/**
 	 * Constructor
 	 * 
 	 * @param maxFPS Maximos FPS a los que va a actualizarse el juego
-	 * @param maxSkippedFrames Maximos frames seguidos que se puede saltar sin renderizar en caso de que una vuelta del bucle principal del
-	 *            juego tarde mas de lo estipulado.
+	 * @param maxSkippedFrames Maximos frames seguidos que se puede saltar sin renderizar en caso de que una vuelta del
+	 *            bucle principal del juego tarde mas de lo estipulado.
 	 * @param game Juego que va a gestionar este hilo
 	 * @param glView GLView en la que se representa el juego
 	 * @param engineLock Utilizado para sincronizar correctamente los hilos
@@ -84,14 +84,14 @@ public class GameThread implements Runnable {
 		this.terminateLock = new MutexLock();
 		this.started = false;
 	}
-	
+
 	@Override
 	public void run() {
 		long startingTime;
 		long frameTime;
 		long waitingTime;
 		int skippedFrames;
-		
+
 		while (currentState != State.TERMINATED) {
 			if (currentState == State.PAUSED) {
 				game.onEnginePaused();
@@ -109,7 +109,7 @@ public class GameThread implements Runnable {
 				}
 				frameTime = System.currentTimeMillis() - startingTime;
 				waitingTime = (long) (idealTimePerFrame - frameTime);
-				
+
 				if (waitingTime > 0) {
 					sleep(waitingTime, 0.333f);
 				}
@@ -128,18 +128,21 @@ public class GameThread implements Runnable {
 		game.onEngineDisposed();
 		terminateLock.unlock();
 	}
-	
+
 	/**
-	 * Tiene un comportamiento similar a {@code Thread#sleep(long)}. Pone el hilo en espera durante el tiempo especificado.<br>
-	 * Para llevar esto a cabo, se hace uso de {@code Thread#sleep(long)} hasta que se sobrepase el porcentaje de tiempo especificado, a
-	 * partir de ahi, se llama a {@code Thread#yield()} hasta completar el tiempo total.<br>
-	 * Este metodo pretende ser mas preciso que {@code Thread#sleep(long)}. Cuanto mayor sea el porcentaje especificado, mas CPU consumira
-	 * la espera (si el porcentaje es 0, la espera no consume CPU), sin embargo, {@code Thread#sleep(long)} puede ser bastante impreciso,
-	 * por lo que puede ser conveniente cargar un poco mas la CPU si se necesita mas precision en el tiempo de espera.<br>
+	 * Tiene un comportamiento similar a {@code Thread#sleep(long)}. Pone el hilo en espera durante el tiempo
+	 * especificado.<br>
+	 * Para llevar esto a cabo, se hace uso de {@code Thread#sleep(long)} hasta que se sobrepase el porcentaje de tiempo
+	 * especificado, a partir de ahi, se llama a {@code Thread#yield()} hasta completar el tiempo total.<br>
+	 * Este metodo pretende ser mas preciso que {@code Thread#sleep(long)}. Cuanto mayor sea el porcentaje especificado,
+	 * mas CPU consumira la espera (si el porcentaje es 0, la espera no consume CPU), sin embargo,
+	 * {@code Thread#sleep(long)} puede ser bastante impreciso, por lo que puede ser conveniente cargar un poco mas la
+	 * CPU si se necesita mas precision en el tiempo de espera.<br>
 	 * Especificando como porcentaje 0.333f parece ser lo suficientemente preciso y no carga la CPU al 100%
 	 * 
 	 * @param sleepTimeMillis Tiempo total de espera
-	 * @param sleepTimePercentage Porcentaje del tiempo total que se hara uso de {@code Thread#sleep(long)} (Valor entre 0 y 1)
+	 * @param sleepTimePercentage Porcentaje del tiempo total que se hara uso de {@code Thread#sleep(long)} (Valor entre
+	 *            0 y 1)
 	 * @see Thread#sleep(long)
 	 * @see Thread#yield()
 	 */
@@ -161,7 +164,7 @@ public class GameThread implements Runnable {
 			}
 		}
 	}
-	
+
 	/**
 	 * Inicia el hilo
 	 */
@@ -176,9 +179,10 @@ public class GameThread implements Runnable {
 		currentState = State.RUNNING;
 		thread.start();
 	}
-	
+
 	/**
-	 * Para el hilo del juego. Llamar solo cuando no se vaya a utilizar nunca mas, por ejemplo al salir de la aplicacion.
+	 * Para el hilo del juego. Llamar solo cuando no se vaya a utilizar nunca mas, por ejemplo al salir de la
+	 * aplicacion.
 	 */
 	public void terminate() {
 		currentState = State.TERMINATED;
@@ -186,7 +190,7 @@ public class GameThread implements Runnable {
 		engineLock.allowUpdate.set(true);
 		terminateLock.lock();
 	}
-	
+
 	/**
 	 * Pausa el hilo del juego
 	 */
@@ -194,7 +198,7 @@ public class GameThread implements Runnable {
 		currentState = State.PAUSED;
 		engineLock.allowUpdate.set(true);
 	}
-	
+
 	/**
 	 * Reanuda el hilo del juego
 	 */
@@ -206,7 +210,7 @@ public class GameThread implements Runnable {
 			pauseLock.unlock();
 		}
 	}
-	
+
 	/**
 	 * Asigna un GLView para representar el juego. Translada los listeners del GLView antiguo al nuevo.<br>
 	 * Este metodo se utiliza internamente en el engine para configurar el GLView.
@@ -216,5 +220,5 @@ public class GameThread implements Runnable {
 	void setGLView(GLView glView) {
 		this.glView = glView;
 	}
-	
+
 }

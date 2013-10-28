@@ -7,11 +7,11 @@ package com.miviclin.droidengine2d.util.math;
  * 
  */
 public class Vector3 {
-	
+
 	private float x;
 	private float y;
 	private float z;
-	
+
 	/**
 	 * Constructor
 	 * 
@@ -24,7 +24,7 @@ public class Vector3 {
 		this.y = y;
 		this.z = z;
 	}
-	
+
 	/**
 	 * Asigna los valores especificados al vector
 	 * 
@@ -39,7 +39,7 @@ public class Vector3 {
 		this.z = z;
 		return this;
 	}
-	
+
 	/**
 	 * Asigna los valores del vector especificado a este vector
 	 * 
@@ -52,7 +52,7 @@ public class Vector3 {
 		this.z = vector.z;
 		return this;
 	}
-	
+
 	/**
 	 * Copia el vector especificado en output
 	 * 
@@ -64,7 +64,7 @@ public class Vector3 {
 		output.y = vector.y;
 		output.z = vector.z;
 	}
-	
+
 	/**
 	 * Suma a todas las coordenadas del vector el escalar especificado
 	 * 
@@ -77,7 +77,7 @@ public class Vector3 {
 		this.z += scalar;
 		return this;
 	}
-	
+
 	/**
 	 * Suma vector + scalar y almacena el resultado en output
 	 * 
@@ -90,7 +90,7 @@ public class Vector3 {
 		output.y = vector.y + scalar;
 		output.z = vector.z + scalar;
 	}
-	
+
 	/**
 	 * Suma los valores especificados a las 3 coordenadas del vector
 	 * 
@@ -105,7 +105,7 @@ public class Vector3 {
 		this.z += z;
 		return this;
 	}
-	
+
 	/**
 	 * Suma el vector especificado a este vector
 	 * 
@@ -118,7 +118,7 @@ public class Vector3 {
 		this.z += vector.z;
 		return this;
 	}
-	
+
 	/**
 	 * Suma v1 + v2 y almacena el resultado en output
 	 * 
@@ -131,7 +131,7 @@ public class Vector3 {
 		output.y = v1.y + v2.y;
 		output.z = v1.z + v2.z;
 	}
-	
+
 	/**
 	 * Resta a todas las coordenadas del vector el escalar especificado
 	 * 
@@ -144,7 +144,7 @@ public class Vector3 {
 		this.z -= scalar;
 		return this;
 	}
-	
+
 	/**
 	 * Resta vector - scalar y almacena el resultado en output
 	 * 
@@ -157,7 +157,7 @@ public class Vector3 {
 		output.y = vector.y - scalar;
 		output.z = vector.z - scalar;
 	}
-	
+
 	/**
 	 * Resta los valores especificados a las 3 coordenadas del vector
 	 * 
@@ -172,7 +172,7 @@ public class Vector3 {
 		this.z -= z;
 		return this;
 	}
-	
+
 	/**
 	 * Resta el vector especificado a este vector
 	 * 
@@ -185,7 +185,7 @@ public class Vector3 {
 		this.z -= vector.z;
 		return this;
 	}
-	
+
 	/**
 	 * Resta v1 - v2 y almacena el resultado en output
 	 * 
@@ -198,7 +198,7 @@ public class Vector3 {
 		output.y = v1.y - v2.y;
 		output.z = v1.z - v2.z;
 	}
-	
+
 	/**
 	 * Multiplica las 3 coordenadas del vector por el escalar especificado
 	 * 
@@ -211,7 +211,7 @@ public class Vector3 {
 		this.z *= scalar;
 		return this;
 	}
-	
+
 	/**
 	 * Multiplica vector * scalar y almacena el resultado en output
 	 * 
@@ -224,7 +224,7 @@ public class Vector3 {
 		output.y = vector.y * scalar;
 		output.z = vector.z * scalar;
 	}
-	
+
 	/**
 	 * Multiplica las 3 coordenadas del vector por los valores especificados
 	 * 
@@ -239,7 +239,7 @@ public class Vector3 {
 		this.z *= z;
 		return this;
 	}
-	
+
 	/**
 	 * Multiplica el vector especificado por este vector (coordenada a coordenada)
 	 * 
@@ -252,7 +252,7 @@ public class Vector3 {
 		this.z *= vector.z;
 		return this;
 	}
-	
+
 	/**
 	 * Multiplica v1 * v2 y almacena el resultado en output
 	 * 
@@ -265,7 +265,7 @@ public class Vector3 {
 		output.y = v1.y * v2.y;
 		output.z = v1.z * v2.z;
 	}
-	
+
 	/**
 	 * Divide las 3 coordenadas del vector por el escalar especificado
 	 * 
@@ -278,7 +278,7 @@ public class Vector3 {
 		this.z /= scalar;
 		return this;
 	}
-	
+
 	/**
 	 * Divide vector / scalar y almacena el resultado en output
 	 * 
@@ -291,7 +291,7 @@ public class Vector3 {
 		output.y = vector.y / scalar;
 		output.z = vector.z / scalar;
 	}
-	
+
 	/**
 	 * Divide las 3 coordenadas del vector por los valores especificados
 	 * 
@@ -306,7 +306,7 @@ public class Vector3 {
 		this.z /= z;
 		return this;
 	}
-	
+
 	/**
 	 * Divide este vector por el vector especificado (coordenada a coordenada)
 	 * 
@@ -319,7 +319,7 @@ public class Vector3 {
 		this.z /= vector.z;
 		return this;
 	}
-	
+
 	/**
 	 * Divide v1 / v2 y almacena el resultado en output
 	 * 
@@ -332,7 +332,7 @@ public class Vector3 {
 		output.y = v1.y / v2.y;
 		output.z = v1.z / v2.z;
 	}
-	
+
 	/**
 	 * Realiza el producto en cruz de este vector por el vector definido por las 3 coordenadas especificadas.
 	 * 
@@ -347,7 +347,7 @@ public class Vector3 {
 		this.z = this.x * y - this.y * x;
 		return this;
 	}
-	
+
 	/**
 	 * Realiza el producto en cruz de este vector por el vector especificado
 	 * 
@@ -360,7 +360,7 @@ public class Vector3 {
 		this.z = x * vector.y - y * vector.x;
 		return this;
 	}
-	
+
 	/**
 	 * Realiza el producto en cruz de v1 y v2 y almacena el resultado en output
 	 * 
@@ -373,7 +373,7 @@ public class Vector3 {
 		output.y = v1.z * v2.x - v1.x * v2.z;
 		output.z = v1.x * v2.y - v1.y * v2.x;
 	}
-	
+
 	/**
 	 * Realiza el producto escalar de este vector por el vector definido por las 3 coordenadas especificadas
 	 * 
@@ -385,7 +385,7 @@ public class Vector3 {
 	public final float dotProduct(float x, float y, float z) {
 		return this.x * x + this.y * y + this.z * z;
 	}
-	
+
 	/**
 	 * Realiza el producto escalar de este vector por el vector especificado
 	 * 
@@ -395,7 +395,7 @@ public class Vector3 {
 	public final float dotProduct(Vector3 vector) {
 		return x * vector.x + y * vector.y + z * vector.z;
 	}
-	
+
 	/**
 	 * Realiza el producto escalar de v1 y v2
 	 * 
@@ -406,7 +406,7 @@ public class Vector3 {
 	public static final float dotProduct(Vector3 v1, Vector3 v2) {
 		return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
 	}
-	
+
 	/**
 	 * Calcula el modulo del vector
 	 * 
@@ -415,7 +415,7 @@ public class Vector3 {
 	public final float length() {
 		return (float) Math.sqrt(x * x + y * y + z * z);
 	}
-	
+
 	/**
 	 * Calcula el modulo del vector especificado
 	 * 
@@ -425,7 +425,7 @@ public class Vector3 {
 	public static final float length(Vector3 vector) {
 		return (float) Math.sqrt(vector.x * vector.x + vector.y * vector.y + vector.z * vector.z);
 	}
-	
+
 	/**
 	 * Normaliza este vector
 	 * 
@@ -438,7 +438,7 @@ public class Vector3 {
 		}
 		return this.divide(length);
 	}
-	
+
 	/**
 	 * Normaliza el vector especificado y almacena las coordenadas del vector normalizado en output
 	 * 
@@ -453,7 +453,7 @@ public class Vector3 {
 		}
 		Vector3.copy(output, vector.divide(length));
 	}
-	
+
 	/**
 	 * Convierte las coordenadas de este vector a valor absoluto
 	 * 
@@ -465,7 +465,7 @@ public class Vector3 {
 		this.z = Math.abs(this.z);
 		return this;
 	}
-	
+
 	/**
 	 * Convierte las coordenadas de vector a valor absoluto y las almacena en output
 	 * 
@@ -477,7 +477,7 @@ public class Vector3 {
 		output.y = Math.abs(vector.y);
 		output.z = Math.abs(vector.z);
 	}
-	
+
 	/**
 	 * Devuelve la coordenada X de este vector
 	 * 
@@ -486,7 +486,7 @@ public class Vector3 {
 	public final float getX() {
 		return x;
 	}
-	
+
 	/**
 	 * Asigna el valor de la coordenada X de este vector
 	 * 
@@ -495,7 +495,7 @@ public class Vector3 {
 	public final void setX(float x) {
 		this.x = x;
 	}
-	
+
 	/**
 	 * Devuelve la coordenada Y de este vector
 	 * 
@@ -504,7 +504,7 @@ public class Vector3 {
 	public final float getY() {
 		return y;
 	}
-	
+
 	/**
 	 * Asigna el valor de la coordenada Y de este vector
 	 * 
@@ -513,7 +513,7 @@ public class Vector3 {
 	public final void setY(float y) {
 		this.y = y;
 	}
-	
+
 	/**
 	 * Devuelve la coordenada Z de este vector
 	 * 
@@ -522,7 +522,7 @@ public class Vector3 {
 	public final float getZ() {
 		return z;
 	}
-	
+
 	/**
 	 * Asigna el valor de la coordenada Z de este vector
 	 * 
@@ -531,10 +531,10 @@ public class Vector3 {
 	public final void setZ(float z) {
 		this.z = z;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "(" + x + ", " + y + ", " + z + ")";
 	}
-	
+
 }

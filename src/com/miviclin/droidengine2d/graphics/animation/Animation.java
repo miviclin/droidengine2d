@@ -9,29 +9,29 @@ import java.util.ArrayList;
  * 
  */
 public class Animation {
-	
+
 	private enum State {
 		INITIALIZED,
 		RUNNING,
 		PAUSED,
 		FINISHED;
 	}
-	
+
 	private ArrayList<AnimationStateListener> listeners;
 	private ArrayList<AnimationFrame> frames;
 	private int currentFrameIndex;
 	private float elapsedTime;
 	private boolean loopModeEnabled;
 	private State state;
-	
+
 	/**
-	 * Crea una animacion con capacidad inicial de 10 frames y con repeticion activada, de forma que cuando se complete el primer ciclo,
-	 * volvera a repetirse todo el ciclo de la animacion.
+	 * Crea una animacion con capacidad inicial de 10 frames y con repeticion activada, de forma que cuando se complete
+	 * el primer ciclo, volvera a repetirse todo el ciclo de la animacion.
 	 */
 	public Animation() {
 		this(10, true);
 	}
-	
+
 	/**
 	 * Crea una animacion con capaidad inicial para 10 frames.
 	 * 
@@ -40,11 +40,12 @@ public class Animation {
 	public Animation(boolean loop) {
 		this(10, loop);
 	}
-	
+
 	/**
 	 * Crea una animacion
 	 * 
-	 * @param initialCapacity Numero minimo de frames que se pueden agregar antes de que se redimensione la estructura de datos
+	 * @param initialCapacity Numero minimo de frames que se pueden agregar antes de que se redimensione la estructura
+	 *            de datos
 	 * @param repeat Indica si se repetira el ciclo de la animacion o no
 	 */
 	public Animation(int initialCapacity, boolean repeat) {
@@ -55,7 +56,7 @@ public class Animation {
 		this.loopModeEnabled = repeat;
 		this.state = State.INITIALIZED;
 	}
-	
+
 	/**
 	 * Agrega un frame a la animacion
 	 * 
@@ -64,7 +65,7 @@ public class Animation {
 	public void addFrame(AnimationFrame frame) {
 		frames.add(frame);
 	}
-	
+
 	/**
 	 * Devuelve todos los frames de la animacion
 	 * 
@@ -73,7 +74,7 @@ public class Animation {
 	public ArrayList<AnimationFrame> getFrames() {
 		return frames;
 	}
-	
+
 	/**
 	 * Devuelve el frame actual
 	 * 
@@ -85,7 +86,7 @@ public class Animation {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Actualiza la animacion y devuelve el frame actual
 	 * 
@@ -119,7 +120,7 @@ public class Animation {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Reinicia la animacion. No vacia la lista de frames.
 	 */
@@ -128,7 +129,7 @@ public class Animation {
 		elapsedTime = 0;
 		state = State.INITIALIZED;
 	}
-	
+
 	/**
 	 * Vacia la lista de frames y reinicia la configuracion
 	 */
@@ -138,7 +139,7 @@ public class Animation {
 		state = State.INITIALIZED;
 		frames.clear();
 	}
-	
+
 	/**
 	 * Devuelve si la repeticion esta activada
 	 * 
@@ -147,7 +148,7 @@ public class Animation {
 	public boolean isLoopModeEnabled() {
 		return loopModeEnabled;
 	}
-	
+
 	/**
 	 * Asigna si se repite el ciclo de la animacion o no
 	 * 
@@ -160,7 +161,7 @@ public class Animation {
 			currentFrameIndex = 0;
 		}
 	}
-	
+
 	/**
 	 * Si la animacion no ha terminado, la pausa. Se puede reanudar con {@link #resume()}
 	 */
@@ -170,7 +171,7 @@ public class Animation {
 			notifyAnimationPaused();
 		}
 	}
-	
+
 	/**
 	 * Si la animacion esta pausada, la reanuda. Se puede reanudar con {@link #pause()}
 	 */
@@ -180,7 +181,7 @@ public class Animation {
 			notifyAnimationResumed();
 		}
 	}
-	
+
 	/**
 	 * Devuelve si la animacion se esta ejecutando (esta pausada ni ha terminado)
 	 * 
@@ -189,7 +190,7 @@ public class Animation {
 	public boolean isRunning() {
 		return state == State.RUNNING;
 	}
-	
+
 	/**
 	 * Devuelve si la animacion esta pausada
 	 * 
@@ -198,7 +199,7 @@ public class Animation {
 	public boolean isPaused() {
 		return state == State.PAUSED;
 	}
-	
+
 	/**
 	 * Devuelve si la animacion ha terminado.<br>
 	 * Si la repeticion esta activada, devolvera siempre true, puesto que la animacion no termina nunca.
@@ -208,7 +209,7 @@ public class Animation {
 	public boolean isFinished() {
 		return state == State.FINISHED;
 	}
-	
+
 	/**
 	 * Agrega un {@link AnimationStateListener} a la lista de listeners
 	 * 
@@ -217,7 +218,7 @@ public class Animation {
 	public void addAnimationStateListener(AnimationStateListener listener) {
 		listeners.add(listener);
 	}
-	
+
 	/**
 	 * Elimina un {@link AnimationStateListener} de la lista de listeners
 	 * 
@@ -227,7 +228,7 @@ public class Animation {
 	public boolean removeAnimationStateListener(AnimationStateListener listener) {
 		return listeners.remove(listener);
 	}
-	
+
 	/**
 	 * Notifica a todos los listeners que la animacion ha comenzado.<br>
 	 * Llama a {@link AnimationStateListener#onAnimationStarted(Animation)}
@@ -237,7 +238,7 @@ public class Animation {
 			listeners.get(i).onAnimationStarted(this);
 		}
 	}
-	
+
 	/**
 	 * Notifica a todos los listeners que la animacion ha sido pausada.<br>
 	 * Llama a {@link AnimationStateListener#onAnimationStarted(Animation)}
@@ -247,7 +248,7 @@ public class Animation {
 			listeners.get(i).onAnimationPaused(this);
 		}
 	}
-	
+
 	/**
 	 * Notifica a todos los listeners que la animacion ha sido reanudada tras haber sido pausada previamente.<br>
 	 * Llama a {@link AnimationStateListener#onAnimationStarted(Animation)}
@@ -257,7 +258,7 @@ public class Animation {
 			listeners.get(i).onAnimationResumed(this);
 		}
 	}
-	
+
 	/**
 	 * Notifica a todos los listeners que la animacion ha pasado de un frame a otro.<br>
 	 * Llama a {@link AnimationStateListener#onAnimationFrameChanged(Animation)}
@@ -267,7 +268,7 @@ public class Animation {
 			listeners.get(i).onAnimationFrameChanged(this);
 		}
 	}
-	
+
 	/**
 	 * Notifica a todos los listeners que la animacion ha completado un loop.<br>
 	 * Llama a {@link AnimationStateListener#onAnimationLoopFinished(Animation)}
@@ -277,10 +278,10 @@ public class Animation {
 			listeners.get(i).onAnimationLoopFinished(this);
 		}
 	}
-	
+
 	/**
-	 * Notifica a todos los listeners que la animacion ha terminado. Si el modo loop esta activado, la animacion no termina nunca, por lo
-	 * que este metodo no deberia ser llamado en dicho caso.<br>
+	 * Notifica a todos los listeners que la animacion ha terminado. Si el modo loop esta activado, la animacion no
+	 * termina nunca, por lo que este metodo no deberia ser llamado en dicho caso.<br>
 	 * Llama a {@link AnimationStateListener#onAnimationFinished(Animation)}
 	 */
 	protected void notifyAnimationFinished() {
@@ -288,5 +289,5 @@ public class Animation {
 			listeners.get(i).onAnimationFinished(this);
 		}
 	}
-	
+
 }

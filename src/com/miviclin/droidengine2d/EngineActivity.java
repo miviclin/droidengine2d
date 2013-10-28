@@ -18,29 +18,30 @@ import com.miviclin.droidengine2d.graphics.GLView;
  * 
  */
 public abstract class EngineActivity extends FragmentActivity {
-	
+
 	private Engine engine;
 	private Game game;
 	private boolean prepared;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		setWindowFlags();
-		
+
 		setContentView(getContentViewID());
 		final GLView glView = (GLView) findViewById(getGLViewID());
-		
+
 		// Creamos el juego y lo lanzamos
 		engine = createEngine(glView);
 		game = engine.getGame();
 		engine.startGame();
-		
-		// GLView.getWidth() y GLView.getHeight() devuelven 0 hasta que la View no se muestra en pantalla, por lo que tenemos que esperar a
-		// que la View se renderice para poder inicializar el juego y acceder al ancho y alto de la pantalla
+
+		// GLView.getWidth() y GLView.getHeight() devuelven 0 hasta que la View no se muestra en pantalla, por lo que
+		// tenemos que esperar a que la View se renderice para poder inicializar el juego y acceder al ancho y alto de
+		// la pantalla
 		glView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-			
+
 			@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 			@SuppressWarnings("deprecation")
 			@Override
@@ -61,7 +62,7 @@ public abstract class EngineActivity extends FragmentActivity {
 			}
 		});
 	}
-	
+
 	@Override
 	public void onPause() {
 		super.onPause();
@@ -69,7 +70,7 @@ public abstract class EngineActivity extends FragmentActivity {
 			engine.onPause();
 		}
 	}
-	
+
 	@Override
 	public void onResume() {
 		super.onResume();
@@ -77,7 +78,7 @@ public abstract class EngineActivity extends FragmentActivity {
 			engine.onResume();
 		}
 	}
-	
+
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
@@ -85,14 +86,14 @@ public abstract class EngineActivity extends FragmentActivity {
 			engine.onDestroy();
 		}
 	}
-	
+
 	@Override
 	public void onBackPressed() {
 		if (engine != null) {
 			engine.onBackPressed();
 		}
 	}
-	
+
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
@@ -100,7 +101,7 @@ public abstract class EngineActivity extends FragmentActivity {
 			onConfigurationChanged();
 		}
 	}
-	
+
 	/**
 	 * Se llama desde onConfigurationChanged(Configuration) si el engine ya ha sido inicializado.
 	 */
@@ -108,7 +109,7 @@ public abstract class EngineActivity extends FragmentActivity {
 		setContentView(getContentViewID());
 		engine.setGLView((GLView) findViewById(getGLViewID()));
 	}
-	
+
 	/**
 	 * Asigna los flags al objeto Window.<br>
 	 * Este metodo se llama en {@link EngineActivity#onCreate(Bundle)}
@@ -118,7 +119,7 @@ public abstract class EngineActivity extends FragmentActivity {
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 	}
-	
+
 	/**
 	 * Devuelve el Engine
 	 * 
@@ -127,7 +128,7 @@ public abstract class EngineActivity extends FragmentActivity {
 	protected Engine getEngine() {
 		return engine;
 	}
-	
+
 	/**
 	 * Devuelve el juego
 	 * 
@@ -136,7 +137,7 @@ public abstract class EngineActivity extends FragmentActivity {
 	protected Game getGame() {
 		return game;
 	}
-	
+
 	/**
 	 * Crea un Engine con el Game que se vaya a representar en esta Activity y lo devuelve.<br>
 	 * Este metodo se llama en {@link EngineActivity#onCreate(Bundle)}
@@ -145,24 +146,24 @@ public abstract class EngineActivity extends FragmentActivity {
 	 * @return Engine que se va a utilizar en esta Activity
 	 */
 	public abstract Engine createEngine(GLView glView);
-	
+
 	/**
 	 * Devuelve el ID del layout que se utiliza en setContentView(int)
 	 * 
 	 * @return ID del layout
 	 */
 	public abstract int getContentViewID();
-	
+
 	/**
 	 * Devuelve el ID del GLView que se utiliza para representar el juego
 	 * 
 	 * @return ID del GLView
 	 */
 	public abstract int getGLViewID();
-	
+
 	/**
-	 * Devuelve la orientacion que debe tener la activity. Esta orientacion debe corresponderse con la orientacion definida en
-	 * AndroidManifest.xml
+	 * Devuelve la orientacion que debe tener la activity. Esta orientacion debe corresponderse con la orientacion
+	 * definida en AndroidManifest.xml
 	 * 
 	 * @return {@link Configuration#ORIENTATION_LANDSCAPE} o {@link Configuration#ORIENTATION_PORTRAIT}
 	 */
