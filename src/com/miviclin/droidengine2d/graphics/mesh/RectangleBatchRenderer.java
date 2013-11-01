@@ -210,7 +210,6 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 		GLES20.glBlendEquation(blendingOptions.getBlendEquationMode());
 
 		GLES20.glDrawElements(GLES20.GL_TRIANGLES, indexBuffer.limit(), GLES20.GL_UNSIGNED_SHORT, indexBuffer);
-		GLDebugger.getInstance().passiveCheckGLError();
 
 		if (BuildConfig.DEBUG) {
 			GLDebugger.getInstance().incrementNumDrawCallsFrame();
@@ -219,6 +218,8 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 		getCurrentBatchBlendingOptions().copy(getNextBatchBlendingOptions());
 		setForceDraw(false);
 		resetBatchSize();
+		
+		GLDebugger.getInstance().passiveCheckGLError();
 	}
 
 	/**

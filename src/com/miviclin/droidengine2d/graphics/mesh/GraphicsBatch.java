@@ -68,8 +68,8 @@ public abstract class GraphicsBatch<M extends Material> {
 		if (!inBeginEndPair) {
 			throw new RuntimeException("begin() must be called once before calling end()");
 		}
-		endDraw();
 		inBeginEndPair = false;
+		endDraw();
 	}
 
 	/**

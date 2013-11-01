@@ -224,8 +224,8 @@ public class Graphics {
 	 */
 	public void flush() {
 		if (inBeginEndPair && currentRenderer != null) {
-			currentRenderer.end();
 			inBeginEndPair = false;
+			currentRenderer.end();
 		}
 	}
 
