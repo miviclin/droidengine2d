@@ -13,12 +13,12 @@ import android.content.Context;
 public interface TextureAtlas {
 
 	/**
-	 * Carga el TextureAtlas desde un archivo XML
+	 * Carga el TextureAtlas desde un archivo
 	 * 
-	 * @param path Ruta del archivo XML
+	 * @param path Ruta del archivo
 	 * @param context Context
 	 */
-	public void loadFromXML(String path, Context context);
+	public void loadFromFile(String path, Context context);
 
 	/**
 	 * Devuelve la textura que define este TextureAtlas
