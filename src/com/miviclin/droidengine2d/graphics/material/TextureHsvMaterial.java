@@ -9,7 +9,7 @@ import com.miviclin.droidengine2d.graphics.texture.TextureRegion;
  * @author Miguel Vicente Linares
  * 
  */
-public class TextureHSVMaterial extends TransparentTextureMaterial {
+public class TextureHsvMaterial extends TransparentTextureMaterial {
 
 	private float hOffset;
 	private float sMulti;
@@ -20,7 +20,7 @@ public class TextureHSVMaterial extends TransparentTextureMaterial {
 	 * 
 	 * @param textureRegion TextureRegion (no puede ser null)
 	 */
-	public TextureHSVMaterial(TextureRegion textureRegion) {
+	public TextureHsvMaterial(TextureRegion textureRegion) {
 		this(textureRegion, 1.0f, 0.0f, 1.0f, 1.0f);
 	}
 
@@ -32,7 +32,7 @@ public class TextureHSVMaterial extends TransparentTextureMaterial {
 	 * @param sMulti Multiplicador de saturacion (valor entre 0.0f y 1.0f)
 	 * @param vMulti Multiplicador de brillo (valor entre 0.0f y 1.0f)
 	 */
-	public TextureHSVMaterial(TextureRegion textureRegion, float hOffset, float sMulti, float vMulti) {
+	public TextureHsvMaterial(TextureRegion textureRegion, float hOffset, float sMulti, float vMulti) {
 		this(textureRegion, 1.0f, hOffset, sMulti, vMulti);
 	}
 
@@ -45,7 +45,7 @@ public class TextureHSVMaterial extends TransparentTextureMaterial {
 	 * @param sMulti Multiplicador de saturacion (valor entre 0.0f y 1.0f)
 	 * @param vMulti Multiplicador de brillo (valor entre 0.0f y 1.0f)
 	 */
-	public TextureHSVMaterial(TextureRegion textureRegion, float opacity, float hOffset, float sMulti, float vMulti) {
+	public TextureHsvMaterial(TextureRegion textureRegion, float opacity, float hOffset, float sMulti, float vMulti) {
 		super(textureRegion, opacity);
 		checkH(hOffset);
 		checkS(sMulti);

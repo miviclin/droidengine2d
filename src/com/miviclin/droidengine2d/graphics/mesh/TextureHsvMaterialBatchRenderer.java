@@ -9,7 +9,7 @@ import android.content.Context;
 
 import com.miviclin.droidengine2d.graphics.Color;
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
-import com.miviclin.droidengine2d.graphics.material.TextureHSVMaterial;
+import com.miviclin.droidengine2d.graphics.material.TextureHsvMaterial;
 import com.miviclin.droidengine2d.graphics.shader.ShaderProgram;
 import com.miviclin.droidengine2d.graphics.shader.ShaderVars;
 import com.miviclin.droidengine2d.util.math.Vector2;
@@ -17,13 +17,13 @@ import com.miviclin.droidengine2d.util.math.Vector3;
 
 /**
  * Clase base de la que deben heredar los renderers de mallas que representen batches de figuras rectangulares cuyo
- * material sea TextureHSVMaterial
+ * material sea TextureHsvMaterial
  * 
  * @author Miguel Vicente Linares
  * 
- * @param <M> TextureHSVMaterial
+ * @param <M> TextureHsvMaterial
  */
-public class TextureHSVMaterialBatchRenderer<M extends TextureHSVMaterial> extends TextureMaterialBatchRendererBase<M> {
+public class TextureHsvMaterialBatchRenderer<M extends TextureHsvMaterial> extends TextureMaterialBatchRendererBase<M> {
 
 	private int vertexColorOffset;
 
@@ -32,7 +32,7 @@ public class TextureHSVMaterialBatchRenderer<M extends TextureHSVMaterial> exten
 	 * 
 	 * @param context Context en el que se ejecuta el juego
 	 */
-	public TextureHSVMaterialBatchRenderer(Context context) {
+	public TextureHsvMaterialBatchRenderer(Context context) {
 		super(9, context);
 		this.vertexColorOffset = 5;
 		setGeometry(new RectangleBatchGeometry(getBatchCapacity(), true, true));
@@ -164,7 +164,7 @@ public class TextureHSVMaterialBatchRenderer<M extends TextureHSVMaterial> exten
 	@Override
 	public void draw(Vector2 position, Vector2 scale, Vector2 origin, float rotation, Camera camera) {
 		checkInBeginEndPair();
-		TextureHSVMaterial material = getCurrentMaterial();
+		TextureHsvMaterial material = getCurrentMaterial();
 		setupSprite(material.getTextureRegion(), position, scale, origin, rotation, camera);
 		setupHSV(material.getHOffset(), material.getSMulti(), material.getVMulti());
 		incrementBatchSize();

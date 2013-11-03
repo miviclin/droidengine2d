@@ -10,14 +10,14 @@ import com.miviclin.droidengine2d.graphics.cameras.Camera;
 import com.miviclin.droidengine2d.graphics.material.ColorMaterial;
 import com.miviclin.droidengine2d.graphics.material.Material;
 import com.miviclin.droidengine2d.graphics.material.TextureColorMaterial;
-import com.miviclin.droidengine2d.graphics.material.TextureHSVMaterial;
+import com.miviclin.droidengine2d.graphics.material.TextureHsvMaterial;
 import com.miviclin.droidengine2d.graphics.material.TextureMaterial;
 import com.miviclin.droidengine2d.graphics.material.TransparentTextureMaterial;
 import com.miviclin.droidengine2d.graphics.mesh.ColorMaterialBatchRenderer;
 import com.miviclin.droidengine2d.graphics.mesh.GraphicsBatch;
 import com.miviclin.droidengine2d.graphics.mesh.RectangleBatchRenderer;
 import com.miviclin.droidengine2d.graphics.mesh.TextureColorMaterialBatchRenderer;
-import com.miviclin.droidengine2d.graphics.mesh.TextureHSVMaterialBatchRenderer;
+import com.miviclin.droidengine2d.graphics.mesh.TextureHsvMaterialBatchRenderer;
 import com.miviclin.droidengine2d.graphics.mesh.TextureMaterialBatchRenderer;
 import com.miviclin.droidengine2d.graphics.mesh.TransparentTextureMaterialBatchRenderer;
 import com.miviclin.droidengine2d.graphics.text.BitmapFont;
@@ -95,7 +95,7 @@ public class Graphics {
 		renderers.put(ColorMaterial.class, new ColorMaterialBatchRenderer<ColorMaterial>());
 		renderers.put(TextureMaterial.class, new TextureMaterialBatchRenderer<TextureMaterial>(context));
 		renderers.put(TextureColorMaterial.class, new TextureColorMaterialBatchRenderer<TextureColorMaterial>(context));
-		renderers.put(TextureHSVMaterial.class, new TextureHSVMaterialBatchRenderer<TextureHSVMaterial>(context));
+		renderers.put(TextureHsvMaterial.class, new TextureHsvMaterialBatchRenderer<TextureHsvMaterial>(context));
 		renderers.put(TransparentTextureMaterial.class,
 				new TransparentTextureMaterialBatchRenderer<TransparentTextureMaterial>(context));
 	}
