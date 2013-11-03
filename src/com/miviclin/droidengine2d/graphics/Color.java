@@ -81,6 +81,19 @@ public class Color {
 	}
 
 	/**
+	 * Asigna los valores RGBA especificados al color
+	 * 
+	 * @param r Valor entre 0.0f y 1.0f
+	 * @param g Valor entre 0.0f y 1.0f
+	 * @param b Valor entre 0.0f y 1.0f
+	 * @param a Valor entre 0.0f y 1.0f
+	 */
+	public void setRGBA(float r, float g, float b, float a) {
+		setRGB(r, g, b);
+		setA(a);
+	}
+
+	/**
 	 * Actualiza los valores HSV para que representen un color equivalente al que definen los valores RGB.
 	 */
 	private void convertRGBtoHSV() {
