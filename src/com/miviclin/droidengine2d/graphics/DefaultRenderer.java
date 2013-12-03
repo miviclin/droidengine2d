@@ -11,7 +11,7 @@ import com.miviclin.droidengine2d.Game;
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
 
 /**
- * DefaultRenderer
+ * Default renderer.
  * 
  * @author Miguel Vicente Linares
  * 
@@ -25,9 +25,9 @@ public class DefaultRenderer implements EngineRenderer {
 	private Graphics graphics;
 
 	/**
-	 * Crea un DefaultRenderer
+	 * Creates a new DefaultRenderer.
 	 * 
-	 * @param game Juego
+	 * @param game Game.
 	 */
 	public DefaultRenderer(Game game) {
 		this.game = game;

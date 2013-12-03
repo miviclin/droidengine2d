@@ -5,7 +5,7 @@ import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 
 /**
- * View sobre la que se representan los elementos del juego.
+ * View where the game is renderer with OpenGL.
  * 
  * @author Miguel Vicente Linares
  * 
@@ -13,18 +13,20 @@ import android.util.AttributeSet;
 public class GLView extends GLSurfaceView {
 
 	/**
-	 * Constructor
+	 * Standard View constructor. In order to render something, you must call {@link #setRenderer} to register a
+	 * renderer.
 	 * 
-	 * @param context Context en el que se ejecuta el juego
+	 * @param context Context.
 	 */
 	public GLView(Context context) {
 		super(context);
 	}
 
 	/**
-	 * Constructor
+	 * Standard View constructor. In order to render something, you must call {@link #setRenderer} to register a
+	 * renderer.
 	 * 
-	 * @param context Context en el que se ejecuta el juego
+	 * @param context Context.
 	 * @param attrs AttributeSet
 	 */
 	public GLView(Context context, AttributeSet attrs) {

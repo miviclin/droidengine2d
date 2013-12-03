@@ -26,7 +26,7 @@ import com.miviclin.droidengine2d.util.Transform;
 import com.miviclin.droidengine2d.util.math.Vector2;
 
 /**
- * Esta clase se encarga de renderizar graficos en pantalla
+ * The Graphics class allows rendering things on screen without needing to know how rendering in implemented internally.
  * 
  * @author Miguel Vicente Linares
  * 
@@ -45,10 +45,10 @@ public class Graphics {
 	private boolean inBeginEndPair;
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 * 
-	 * @param camera Camara
-	 * @param context Context
+	 * @param camera Camera.
+	 * @param context Context.
 	 */
 	public Graphics(Camera camera, Context context) {
 		this.tmpOrigin = new Vector2(0, 0);
@@ -63,8 +63,7 @@ public class Graphics {
 	}
 
 	/**
-	 * Metodo que inicializa el objeto graphics. Debe llamarse desde el hilo del renderer, que es el que tiene el
-	 * contexto de OpenGL.
+	 * Initializes the Graphics object. Must be called from the renderer thread.
 	 * 
 	 * @see Graphics#loadMaterialRenderers()
 	 */
@@ -78,9 +77,9 @@ public class Graphics {
 	}
 
 	/**
-	 * Carga los renderers de materiales en el mapa de renderers soportados.<br>
-	 * Este metodo se llama desde {@link Graphics#initialize()}.<br>
-	 * Se pueden agregar mas renderers soportados sobreescribiendo este metodo de la siguiente forma:
+	 * Loads all supported material renderers.<br>
+	 * This method is called from {@link Graphics#initialize()}.<br>
+	 * More supported renderers could be added overriding this method. For example:
 	 * 
 	 * <pre>
 	 * <code>{@literal @}Override
@@ -101,10 +100,10 @@ public class Graphics {
 	}
 
 	/**
-	 * Renderiza una figura rectangular
+	 * Renders a rectangular shape with the specified Material and Transform.
 	 * 
-	 * @param material Material
-	 * @param transform Transform de la figura a representar
+	 * @param material Material.
+	 * @param transform Transform.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public <M extends Material> void drawRect(M material, Transform transform) {
@@ -130,28 +129,28 @@ public class Graphics {
 	}
 
 	/**
-	 * Renderiza texto en pantalla
+	 * Renders text.
 	 * 
-	 * @param text Texto a mostrar
-	 * @param font Fuente
-	 * @param position Posicion de la esquina superior izquierda de la primera letra
-	 * @param fontSizePx Escala del texto en pixeles
-	 * @param color Color del texto
+	 * @param text Text to render.
+	 * @param font Font to be used.
+	 * @param position Position of the top-left corner of the first letter of the text.
+	 * @param fontSizePx Text scale in pixels.
+	 * @param color Text color.
 	 */
 	public void drawText(CharSequence text, BitmapFont font, Vector2 position, float fontSizePx, Color color) {
 		drawText(text, font, position, fontSizePx, null, 0.0f, color);
 	}
 
 	/**
-	 * Renderiza texto en pantalla
+	 * Renders text.
 	 * 
-	 * @param text Texto a mostrar
-	 * @param font Fuente
-	 * @param position Posicion de la esquina superior izquierda de la primera letra
-	 * @param fontSizePx Escala del texto en pixeles
-	 * @param rotationPoint Punto de rotacion (puede ser un punto externo al texto)
-	 * @param rotation Angulo de rotacion
-	 * @param color Color del texto
+	 * @param text Text to render.
+	 * @param font Font to be used.
+	 * @param position Position of the top-left corner of the first letter of the text.
+	 * @param fontSizePx Text scale in pixels.
+	 * @param rotationPoint Rotation point (anchor).
+	 * @param rotation Rotation angle.
+	 * @param color Text color.
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void drawText(CharSequence text, BitmapFont font, Vector2 position, float fontSizePx, Vector2 rotationPoint,
@@ -209,18 +208,17 @@ public class Graphics {
 	}
 
 	/**
-	 * Asigna el color especificado al color de fondo del GLView
+	 * Sets the background color of the GLView to the specified Color.
 	 * 
-	 * @param color Color
+	 * @param color Color.
 	 */
 	public void setBackgroundColor(Color color) {
 		GLES20.glClearColor(color.getR(), color.getG(), color.getB(), color.getA());
 	}
 
 	/**
-	 * Renderiza en pantalla los elementos que aun estan en el batch sin renderizar.<br>
-	 * Este metodo debe llamarse siempre al final de cada frame para asegurarse de que no queden elementos sin
-	 * renderizar.
+	 * Flushes the current material renderer, rendering the remaining elements.<br>
+	 * This method should be called once at the end of each frame to ensure that all elements are rendered.
 	 */
 	public void flush() {
 		if (inBeginEndPair && currentRenderer != null) {
@@ -230,12 +228,11 @@ public class Graphics {
 	}
 
 	/**
-	 * Comprueba si el renderer especificado es el seleccionado actualmente, y si no lo es, lo selecciona y lo prepara
-	 * para su uso.<br>
-	 * Si habia elementos sin renderizar en el renderer previamente seleccionado, los renderiza antes de seleccionar el
-	 * nuevo.
+	 * Checks if the specified renderer is the currently selected one. If it isn't, the specified rendered is now the
+	 * currently selected renderer and prepares it to be used. If the previously selected renderer has elements batched
+	 * for rendering, they are rendered before swapping renderers.
 	 * 
-	 * @param renderer RectangleBatchMesh
+	 * @param renderer RectangleBatchMesh.
 	 */
 	private void selectCurrentRenderer(RectangleBatchRenderer<?> renderer) {
 		if (!inBeginEndPair || currentRenderer != renderer) {
@@ -250,7 +247,7 @@ public class Graphics {
 	}
 
 	/**
-	 * Devuelve la camara
+	 * Returns the camera.
 	 * 
 	 * @return Camera
 	 */
@@ -259,7 +256,7 @@ public class Graphics {
 	}
 
 	/**
-	 * Devuelve el Context en el que se ejecuta el juego
+	 * Returns the Context where the game runs.
 	 * 
 	 * @return Context
 	 */
@@ -268,22 +265,23 @@ public class Graphics {
 	}
 
 	/**
-	 * Devuelve si aun hay elementos pendientes de ser renderizados en el batch que esta actualmente en uso
+	 * Returns true if there is one or more elements pending to be rendered in the currently selected renderer.
 	 * 
-	 * @return true si se ha llamado a {@link GraphicsBatch#begin()} , pero aun no se ha llamado a
-	 *         {@link GraphicsBatch#end()} en el batch seleccionado actualmente
+	 * @return true if {@link GraphicsBatch#begin()} has been called, but {@link GraphicsBatch#end()} has not been
+	 *         called yet on the currently selected renderer, false otherwise
 	 */
 	protected boolean isInBeginEndPair() {
 		return inBeginEndPair;
 	}
 
 	/**
-	 * Devuelve el mapa que almacena los renderers soportados actualmente.<br>
-	 * Para poder renderizar materials no soportados por defecto, hay que agregar una entrada a este mapa.<br>
-	 * La forma recomendada de agregar entradas al mapa es sobreescribiendo el metodo
+	 * Returns the map that stores the supported material renderers.<br>
+	 * In order for Graphics to be able to render a material that is not supported by default, a material renderer able
+	 * to render such material must be registered in this map.<br>
+	 * In order to add a new material renderer to the map returned by this method, the recommended way is overriding
 	 * {@link Graphics#loadMaterialRenderers()}.
 	 * 
-	 * @return Mapa que contiene los renderers soportados por este objeto Graphics indexados por Material
+	 * @return Map containing all material renderers supported by this Graphics object.
 	 */
 	protected HashMap<Class<? extends Material>, RectangleBatchRenderer<? extends Material>> getMaterialRenderers() {
 		return renderers;

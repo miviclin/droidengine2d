@@ -8,7 +8,7 @@ import android.opengl.GLSurfaceView;
 import com.miviclin.droidengine2d.EngineLock;
 
 /**
- * Responsable de relizar las llamadas a OpenGL para renderizar los elementos del juego.
+ * Manages the rendering of the game. GLRenderer runs on its own thread.
  * 
  * @author Miguel Vicente Linares
  * 
@@ -19,10 +19,10 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 	private EngineLock engineLock;
 
 	/**
-	 * Crea un GLRenderer
+	 * Creates a new GLRenderer.
 	 * 
-	 * @param engineRenderer EngineRenderer utilizado por el GLRenderer para renderizar el juego
-	 * @param engineLock Utilizado para sincronizar correctamente los hilos
+	 * @param engineRenderer EngineRenderer used to render the game.
+	 * @param engineLock EngineLock used to synchronize both threads.
 	 */
 	public GLRenderer(EngineRenderer engineRenderer, EngineLock engineLock) {
 		this.engineRenderer = engineRenderer;

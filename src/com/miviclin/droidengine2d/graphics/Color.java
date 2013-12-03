@@ -1,7 +1,7 @@
 package com.miviclin.droidengine2d.graphics;
 
 /**
- * Color
+ * Color.
  * 
  * @author Miguel Vicente Linares
  * 
@@ -18,24 +18,24 @@ public class Color {
 	private float v;
 
 	/**
-	 * Crea un color con los valores RGB especificados (Valores entre 0.0f y 1.0f). La componente A tendra el valor 1.0f
-	 * por defecto.
+	 * Creates a new Color with the specified RGB values (values between 0.0f and 1.0f). The A (alpha) component will
+	 * have tha value 1.0f by default.
 	 * 
-	 * @param r Red
-	 * @param g Green
-	 * @param b Blue
+	 * @param r Red.
+	 * @param g Green.
+	 * @param b Blue.
 	 */
 	public Color(float r, float g, float b) {
 		this(r, g, b, 1.0f);
 	}
 
 	/**
-	 * Crea un color con los valores RGBA especificados (Valores entre 0.0f y 1.0f)
+	 * Creates a new Color with the specified RGBA values (values between 0.0f and 1.0f).
 	 * 
-	 * @param r Red
-	 * @param g Green
-	 * @param b Blue
-	 * @param a Alpha
+	 * @param r Red.
+	 * @param g Green.
+	 * @param b Blue.
+	 * @param a Alpha.
 	 */
 	public Color(float r, float g, float b, float a) {
 		if (r < 0 || r > 1 || g < 0 || g > 1 || b < 0 || b > 1 || a < 0 || a > 1) {
@@ -49,9 +49,10 @@ public class Color {
 	}
 
 	/**
-	 * Copia los valores del color especificado en este Color
+	 * Overwrites this Color with the specified one.<br>
+	 * This Color will be a copy of the specified Color.
 	 * 
-	 * @param color Color a copiar
+	 * @param color Color to copy.
 	 */
 	public void set(Color color) {
 		this.r = color.r;
@@ -64,11 +65,11 @@ public class Color {
 	}
 
 	/**
-	 * Asigna los valores RGB especificados al color
+	 * Sets the specified RGB values of this Color.
 	 * 
-	 * @param r Valor entre 0.0f y 1.0f
-	 * @param g Valor entre 0.0f y 1.0f
-	 * @param b Valor entre 0.0f y 1.0f
+	 * @param r Value between 0.0f and 1.0f.
+	 * @param g Value between 0.0f and 1.0f.
+	 * @param b Value between 0.0f and 1.0f.
 	 */
 	public void setRGB(float r, float g, float b) {
 		if (r < 0 || r > 1 || g < 0 || g > 1 || b < 0 || b > 1) {
@@ -81,12 +82,12 @@ public class Color {
 	}
 
 	/**
-	 * Asigna los valores RGBA especificados al color
+	 * Sets the specified RGBA values of this Color.
 	 * 
-	 * @param r Valor entre 0.0f y 1.0f
-	 * @param g Valor entre 0.0f y 1.0f
-	 * @param b Valor entre 0.0f y 1.0f
-	 * @param a Valor entre 0.0f y 1.0f
+	 * @param r Value between 0.0f and 1.0f.
+	 * @param g Value between 0.0f and 1.0f.
+	 * @param b Value between 0.0f and 1.0f.
+	 * @param a Value between 0.0f and 1.0f.
 	 */
 	public void setRGBA(float r, float g, float b, float a) {
 		setRGB(r, g, b);
@@ -94,7 +95,7 @@ public class Color {
 	}
 
 	/**
-	 * Actualiza los valores HSV para que representen un color equivalente al que definen los valores RGB.
+	 * Updates the HSV values of this Color so they represent the same color that the RGB values represent.
 	 */
 	private void convertRGBtoHSV() {
 		float max = Math.max(Math.max(r, g), b);
@@ -122,11 +123,11 @@ public class Color {
 	}
 
 	/**
-	 * Asigna los valores HSV especificados al color
+	 * Sets the specified HSV values of this Color.
 	 * 
-	 * @param h Valor entre 0.0f y 360.0f
-	 * @param s Valor entre 0.0f y 1.0f
-	 * @param v Valor entre 0.0f y 1.0f
+	 * @param h Value between 0.0f and 360.0f.
+	 * @param s Value between 0.0f and 1.0f.
+	 * @param v Value between 0.0f and 1.0f.
 	 */
 	public void setHSV(float h, float s, float v) {
 		if (h < 0 || h > 360) {
@@ -142,7 +143,7 @@ public class Color {
 	}
 
 	/**
-	 * Actualiza los valores RGB para que representen un color equivalente al que definen los valores HSV.
+	 * Updates the RGB values of this Color so they represent the same color that the HSV values represent.
 	 */
 	private void convertHSVtoRGB() {
 		if (s == 0.0) {
@@ -198,45 +199,45 @@ public class Color {
 	}
 
 	/**
-	 * Devuelve la componente R del color
+	 * Returns the R component (red) of this Color.
 	 * 
-	 * @return Valor entre 0.0f y 1.0f
+	 * @return Value between 0.0f and 1.0f
 	 */
 	public float getR() {
 		return r;
 	}
 
 	/**
-	 * Devuelve la componente G del color
+	 * Returns the G component (green) of this Color.
 	 * 
-	 * @return Valor entre 0.0f y 1.0f
+	 * @return Value between 0.0f and 1.0f
 	 */
 	public float getG() {
 		return g;
 	}
 
 	/**
-	 * Devuelve la componente B del color
+	 * Returns the B component (blue) of this Color.
 	 * 
-	 * @return Valor entre 0.0f y 1.0f
+	 * @return Value between 0.0f and 1.0f
 	 */
 	public float getB() {
 		return b;
 	}
 
 	/**
-	 * Devuelve la componente A del color
+	 * Returns the A component (alpha) of this Color.
 	 * 
-	 * @return Valor entre 0.0f y 1.0f
+	 * @return Value between 0.0f and 1.0f
 	 */
 	public float getA() {
 		return a;
 	}
 
 	/**
-	 * Asigna la componente A del color
+	 * Sets the A component (alpha) of this Color to the specified value.
 	 * 
-	 * @param a Valor entre 0.0f y 1.0f
+	 * @param a Value between 0.0f and 1.0f
 	 */
 	public void setA(float a) {
 		if (a < 0 || a > 1) {
@@ -246,27 +247,27 @@ public class Color {
 	}
 
 	/**
-	 * Devuelve el tono del color (componente H en el modelo HSV)
+	 * Returns the H component (hue) of this Color.
 	 * 
-	 * @return Valor entre 0.0f y 360.0f
+	 * @return Value between 0.0f and 360.0f
 	 */
 	public float getH() {
 		return h;
 	}
 
 	/**
-	 * Devuelve la saturacion del color (componente S en el modelo HSV)
+	 * Returns the S component (saturation) of this Color.
 	 * 
-	 * @return Valor entre 0.0f y 1.0f
+	 * @return Value between 0.0f and 1.0f
 	 */
 	public float getS() {
 		return s;
 	}
 
 	/**
-	 * Devuelve el brillo del color (componente V en el modelo HSV)
+	 * Returns the V component (brightness) of this Color.
 	 * 
-	 * @return Valor entre 0.0f y 1.0f
+	 * @return Value between 0.0f and 1.0f
 	 */
 	public float getV() {
 		return v;
