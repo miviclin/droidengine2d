@@ -3,7 +3,7 @@ package com.miviclin.droidengine2d.graphics.material;
 import android.opengl.GLES20;
 
 /**
- * Objeto que define las opciones de blending
+ * Blending options.
  * 
  * @author Miguel Vicente Linares
  * 
@@ -16,9 +16,9 @@ public class BlendingOptions {
 
 	/**
 	 * Constructor.<br>
-	 * El valor por defecto para sourceFactor es {@link GLES20#GL_SRC_ALPHA}<br>
-	 * El valor por defecto para destinationFactor es {@link GLES20#GL_ONE_MINUS_SRC_ALPHA}<br>
-	 * La ecuacion utilizada por defecto es {@link GLES20#GL_FUNC_ADD}
+	 * The default source factor is {@link GLES20#GL_SRC_ALPHA}.<br>
+	 * The default destination factor is {@link GLES20#GL_ONE_MINUS_SRC_ALPHA}.<br>
+	 * The default blending equation is {@link GLES20#GL_FUNC_ADD}.
 	 * 
 	 * @see GLES20#glBlendFunc(int, int)
 	 * @see GLES20#glBlendEquation(int)
@@ -29,7 +29,7 @@ public class BlendingOptions {
 
 	/**
 	 * Constructor.<br>
-	 * Valores aceptados para sourceFactor y destinationFactor: <br>
+	 * Supported values for source factor and destination factor:<br>
 	 * {@link GLES20#GL_ZERO}, {@link GLES20#GL_ONE}, {@link GLES20#GL_SRC_COLOR}, {@link GLES20#GL_ONE_MINUS_SRC_COLOR}
 	 * , {@link GLES20#GL_DST_COLOR}, {@link GLES20#GL_ONE_MINUS_DST_COLOR}, {@link GLES20#GL_SRC_ALPHA},
 	 * {@link GLES20#GL_ONE_MINUS_SRC_ALPHA}, {@link GLES20#GL_DST_ALPHA}, {@link GLES20#GL_ONE_MINUS_DST_ALPHA},
@@ -37,10 +37,10 @@ public class BlendingOptions {
 	 * {@link GLES20#GL_ONE_MINUS_CONSTANT_ALPHA}, {@link GLES20#GL_SRC_ALPHA_SATURATE}<br>
 	 * <br>
 	 * 
-	 * La ecuacion utilizada por defecto es {@link GLES20#GL_FUNC_ADD}
+	 * The default blending equation is {@link GLES20#GL_FUNC_ADD}
 	 * 
-	 * @param sourceFactor
-	 * @param destinationFactor
+	 * @param sourceFactor Source factor.
+	 * @param destinationFactor Destination factor.
 	 * 
 	 * @see GLES20#glBlendFunc(int, int)
 	 * @see GLES20#glBlendEquation(int)
@@ -51,7 +51,7 @@ public class BlendingOptions {
 
 	/**
 	 * Constructor.<br>
-	 * Valores aceptados para sourceFactor y destinationFactor: <br>
+	 * Supported values for source factor and destination factor:<br>
 	 * {@link GLES20#GL_ZERO}, {@link GLES20#GL_ONE}, {@link GLES20#GL_SRC_COLOR}, {@link GLES20#GL_ONE_MINUS_SRC_COLOR}
 	 * , {@link GLES20#GL_DST_COLOR}, {@link GLES20#GL_ONE_MINUS_DST_COLOR}, {@link GLES20#GL_SRC_ALPHA},
 	 * {@link GLES20#GL_ONE_MINUS_SRC_ALPHA}, {@link GLES20#GL_DST_ALPHA}, {@link GLES20#GL_ONE_MINUS_DST_ALPHA},
@@ -59,12 +59,12 @@ public class BlendingOptions {
 	 * {@link GLES20#GL_ONE_MINUS_CONSTANT_ALPHA}, {@link GLES20#GL_SRC_ALPHA_SATURATE}<br>
 	 * <br>
 	 * 
-	 * Valores aceptados para blendEquationMode:<br>
+	 * Supported values for the blending equation:<br>
 	 * {@link GLES20#GL_FUNC_ADD}, {@link GLES20#GL_FUNC_SUBTRACT}, {@link GLES20#GL_FUNC_REVERSE_SUBTRACT}.
 	 * 
-	 * @param sourceFactor
-	 * @param destinationFactor
-	 * @param blendEquationMode
+	 * @param sourceFactor Source factor.
+	 * @param destinationFactor Destination factor.
+	 * @param blendEquationMode Blending equation.
 	 * 
 	 * @see GLES20#glBlendFunc(int, int)
 	 * @see GLES20#glBlendEquation(int)
@@ -79,7 +79,7 @@ public class BlendingOptions {
 	}
 
 	/**
-	 * Devuelve el sFactor de la funcion de blending
+	 * Returns the source factor of the blending function.
 	 * 
 	 * @return source factor
 	 * 
@@ -90,15 +90,15 @@ public class BlendingOptions {
 	}
 
 	/**
-	 * Asigna el sFactor de la funcion de blending.<br>
-	 * Valores aceptados para sourceFactor: <br>
+	 * Sets the source factor of the blending function.<br>
+	 * Supported values for source factor:<br>
 	 * {@link GLES20#GL_ZERO}, {@link GLES20#GL_ONE}, {@link GLES20#GL_SRC_COLOR}, {@link GLES20#GL_ONE_MINUS_SRC_COLOR}
 	 * , {@link GLES20#GL_DST_COLOR}, {@link GLES20#GL_ONE_MINUS_DST_COLOR}, {@link GLES20#GL_SRC_ALPHA},
 	 * {@link GLES20#GL_ONE_MINUS_SRC_ALPHA}, {@link GLES20#GL_DST_ALPHA}, {@link GLES20#GL_ONE_MINUS_DST_ALPHA},
 	 * {@link GLES20#GL_CONSTANT_COLOR}, {@link GLES20#GL_ONE_MINUS_CONSTANT_COLOR}, {@link GLES20#GL_CONSTANT_ALPHA},
 	 * {@link GLES20#GL_ONE_MINUS_CONSTANT_ALPHA}, {@link GLES20#GL_SRC_ALPHA_SATURATE}
 	 * 
-	 * @param sourceFactor
+	 * @param sourceFactor Source factor.
 	 * 
 	 * @see GLES20#glBlendFunc(int, int)
 	 */
@@ -108,7 +108,7 @@ public class BlendingOptions {
 	}
 
 	/**
-	 * Devuelve el dFactor de la funcion de blending
+	 * Returns the destination factor of the blending function.
 	 * 
 	 * @return destination factor
 	 * 
@@ -119,15 +119,15 @@ public class BlendingOptions {
 	}
 
 	/**
-	 * Asigna el sFactor de la funcion de blending.<br>
-	 * Valores aceptados para destinationFactor: <br>
+	 * Sets the destination factor of the blending function.<br>
+	 * Supported values for source factor:<br>
 	 * {@link GLES20#GL_ZERO}, {@link GLES20#GL_ONE}, {@link GLES20#GL_SRC_COLOR}, {@link GLES20#GL_ONE_MINUS_SRC_COLOR}
 	 * , {@link GLES20#GL_DST_COLOR}, {@link GLES20#GL_ONE_MINUS_DST_COLOR}, {@link GLES20#GL_SRC_ALPHA},
 	 * {@link GLES20#GL_ONE_MINUS_SRC_ALPHA}, {@link GLES20#GL_DST_ALPHA}, {@link GLES20#GL_ONE_MINUS_DST_ALPHA},
 	 * {@link GLES20#GL_CONSTANT_COLOR}, {@link GLES20#GL_ONE_MINUS_CONSTANT_COLOR}, {@link GLES20#GL_CONSTANT_ALPHA},
 	 * {@link GLES20#GL_ONE_MINUS_CONSTANT_ALPHA}, {@link GLES20#GL_SRC_ALPHA_SATURATE}
 	 * 
-	 * @param destinationFactor
+	 * @param destinationFactor Destination factor.
 	 * 
 	 * @see GLES20#glBlendFunc(int, int)
 	 */
@@ -137,7 +137,7 @@ public class BlendingOptions {
 	}
 
 	/**
-	 * Devuelve el modo de blending (ecuacion utilizada)
+	 * Returns the blending equation.
 	 * 
 	 * @return {@link GLES20#GL_FUNC_ADD}, {@link GLES20#GL_FUNC_SUBTRACT} o {@link GLES20#GL_FUNC_REVERSE_SUBTRACT}
 	 * 
@@ -148,9 +148,9 @@ public class BlendingOptions {
 	}
 
 	/**
-	 * Asigna la ecuacion de blending utilizada
+	 * Sets the blending equation.
 	 * 
-	 * @param blendEquationMode {@link GLES20#GL_FUNC_ADD}, {@link GLES20#GL_FUNC_SUBTRACT} o
+	 * @param blendEquationMode {@link GLES20#GL_FUNC_ADD}, {@link GLES20#GL_FUNC_SUBTRACT} or
 	 *            {@link GLES20#GL_FUNC_REVERSE_SUBTRACT}
 	 * 
 	 * @see GLES20#glBlendEquation(int)
@@ -161,7 +161,7 @@ public class BlendingOptions {
 	}
 
 	/**
-	 * Copia el BlendingOptions especificado en este BlendingOptions
+	 * Copies the specified BlendingOptions into this BlendingOptions.
 	 * 
 	 * @param other BlendingOptions
 	 */
@@ -172,9 +172,9 @@ public class BlendingOptions {
 	}
 
 	/**
-	 * Comprueba si el factor especificado es un parametro valido para {@link GLES20#glBlendFunc(int, int)}
+	 * Checks if the specified factor is a valid param for {@link GLES20#glBlendFunc(int, int)}.
 	 * 
-	 * @param factor Valores aceptados: {@link GLES20#GL_ZERO}, {@link GLES20#GL_ONE}, {@link GLES20#GL_SRC_COLOR},
+	 * @param factor Supported factors: {@link GLES20#GL_ZERO}, {@link GLES20#GL_ONE}, {@link GLES20#GL_SRC_COLOR},
 	 *            {@link GLES20#GL_ONE_MINUS_SRC_COLOR}, {@link GLES20#GL_DST_COLOR},
 	 *            {@link GLES20#GL_ONE_MINUS_DST_COLOR}, {@link GLES20#GL_SRC_ALPHA},
 	 *            {@link GLES20#GL_ONE_MINUS_SRC_ALPHA}, {@link GLES20#GL_DST_ALPHA},
@@ -221,9 +221,9 @@ public class BlendingOptions {
 	}
 
 	/**
-	 * Comprueba si el mode especificado es un parametro valido para {@link GLES20#glBlendEquation(int)}
+	 * Checks if the specified blending equation is a valid param for {@link GLES20#glBlendEquation(int)}
 	 * 
-	 * @param mode Valores aceptados: {@link GLES20#GL_FUNC_ADD}, {@link GLES20#GL_FUNC_SUBTRACT},
+	 * @param mode Supported blending equations: {@link GLES20#GL_FUNC_ADD}, {@link GLES20#GL_FUNC_SUBTRACT},
 	 *            {@link GLES20#GL_FUNC_REVERSE_SUBTRACT}.
 	 */
 	private void checkValidBlendEquationMode(int mode) {

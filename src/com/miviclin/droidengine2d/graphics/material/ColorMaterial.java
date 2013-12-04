@@ -3,7 +3,7 @@ package com.miviclin.droidengine2d.graphics.material;
 import com.miviclin.droidengine2d.graphics.Color;
 
 /**
- * Material con color
+ * This Material has Color.
  * 
  * @author Miguel Vicente Linares
  * 
@@ -13,16 +13,17 @@ public class ColorMaterial extends Material {
 	private Color color;
 
 	/**
-	 * Constructor por defecto. Crea un ColorMaterial de color blanco.
+	 * Creates a ColorMaterial.<br>
+	 * The default color is white.
 	 */
 	public ColorMaterial() {
 		this(new Color(1, 1, 1));
 	}
 
 	/**
-	 * Constructor
+	 * Creates a ColorMaterial.
 	 * 
-	 * @param color Color (no puede ser null)
+	 * @param color Color (can not be null).
 	 */
 	public ColorMaterial(Color color) {
 		super();
@@ -33,7 +34,7 @@ public class ColorMaterial extends Material {
 	}
 
 	/**
-	 * Devuelve el color
+	 * Returns the Color of this material.
 	 * 
 	 * @return Color
 	 */

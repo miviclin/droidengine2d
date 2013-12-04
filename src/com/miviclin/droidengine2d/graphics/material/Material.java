@@ -1,7 +1,7 @@
 package com.miviclin.droidengine2d.graphics.material;
 
 /**
- * Clase base de la que deben heredar todos los materiales
+ * Base class for materials.
  * 
  * @author Miguel Vicente Linares
  * 
@@ -11,7 +11,7 @@ public abstract class Material {
 	private final BlendingOptions blendingOptions;
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 */
 	public Material() {
 		super();
@@ -19,7 +19,7 @@ public abstract class Material {
 	}
 
 	/**
-	 * Devuelve las opciones de blending
+	 * Returns the blending options of this material.
 	 * 
 	 * @return BlendingOptions
 	 */

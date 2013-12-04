@@ -4,7 +4,7 @@ import com.miviclin.droidengine2d.graphics.Color;
 import com.miviclin.droidengine2d.graphics.texture.TextureRegion;
 
 /**
- * Material con textura y color
+ * This Material has texture and color.
  * 
  * @author Miguel Vicente Linares
  * 
@@ -14,9 +14,9 @@ public class TextureColorMaterial extends TextureMaterial {
 	private Color color;
 
 	/**
-	 * Constructor
+	 * Creates a TextureColorMaterial.
 	 * 
-	 * @param color Color (no puede ser null)
+	 * @param color Color (can not be null).
 	 */
 	public TextureColorMaterial(TextureRegion textureRegion, Color color) {
 		super(textureRegion);
@@ -27,7 +27,7 @@ public class TextureColorMaterial extends TextureMaterial {
 	}
 
 	/**
-	 * Devuelve el color
+	 * Returns the Color of this material.
 	 * 
 	 * @return Color
 	 */
