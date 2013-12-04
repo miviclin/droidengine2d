@@ -14,8 +14,8 @@ import com.miviclin.droidengine2d.util.math.Vector2;
 import com.miviclin.droidengine2d.util.math.Vector3;
 
 /**
- * RectangleBatchRenderer que permite renderizar en una llamada hasta 32 RectangularShape con transformaciones
- * (traslacion, rotacion y escala) distintas.
+ * ColorMaterialBatchRenderer allows rendering batches of up to 32 rectangles with ColorMaterial in one draw call. Each
+ * rectangle has its own translation, rotation and scale.
  * 
  * @author Miguel Vicente Linares
  * 
@@ -26,7 +26,7 @@ public class ColorMaterialBatchRenderer<M extends ColorMaterial> extends Rectang
 	private int vertexColorOffset;
 
 	/**
-	 * Crea un PositionColorRectangularShapeBatch
+	 * Creates a new ColorMaterialBatchRenderer.
 	 */
 	public ColorMaterialBatchRenderer() {
 		super(7, 32);
@@ -132,8 +132,9 @@ public class ColorMaterialBatchRenderer<M extends ColorMaterial> extends Rectang
 	}
 
 	/**
-	 * Agrega la figura rectangular especificada al batch.<br>
-	 * En caso de que el batch estuviera lleno, se renderiza en 1 sola llamada y se vacia para agregar la nueva figura.
+	 * Adds the specified rectangle to this batch.<br>
+	 * If the batch was full, it will be rendered in one draw call and it will be left empty. Then, the specified
+	 * rectangle will be added to this batch.
 	 * 
 	 * @param material ColorMaterial
 	 * @param position Posicion
@@ -153,9 +154,9 @@ public class ColorMaterialBatchRenderer<M extends ColorMaterial> extends Rectang
 	}
 
 	/**
-	 * Actualiza los colores del rectangulo actual en la geometria de la malla del batch.
+	 * Sets the color of the vertices of the last rectangle added to this batch.
 	 * 
-	 * @param color Color que se asignara a los vertices del rectangulo actual
+	 * @param color Color.
 	 */
 	protected void setSpriteVerticesColorData(Color color) {
 		int i = getBatchSize() * 4;
@@ -171,7 +172,7 @@ public class ColorMaterialBatchRenderer<M extends ColorMaterial> extends Rectang
 	}
 
 	/**
-	 * Offset de la posicion en los datos de un vertice
+	 * Vertex position offset in the vertex buffer.
 	 * 
 	 * @return Offset
 	 */
@@ -180,7 +181,7 @@ public class ColorMaterialBatchRenderer<M extends ColorMaterial> extends Rectang
 	}
 
 	/**
-	 * Offset del color en los datos de un vertice
+	 * Color offset in the vertex buffer.
 	 * 
 	 * @return Offset
 	 */

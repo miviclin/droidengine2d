@@ -5,7 +5,7 @@ import com.miviclin.droidengine2d.graphics.material.Material;
 import com.miviclin.droidengine2d.graphics.shader.ShaderProgram;
 
 /**
- * Clase base para batches
+ * Base class for graphics batches.
  * 
  * @author Miguel Vicente Linares
  * 
@@ -23,9 +23,9 @@ public abstract class GraphicsBatch<M extends Material> {
 	private int batchCapacity;
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 * 
-	 * @param shaderProgram ShaderProgram
+	 * @param maxBatchSize Maximum size of this GraphicsBatch.
 	 */
 	public GraphicsBatch(int maxBatchSize) {
 		this.currentBatchBlendingOptions = new BlendingOptions();
@@ -38,12 +38,15 @@ public abstract class GraphicsBatch<M extends Material> {
 	}
 
 	/**
-	 * Inicializa el shader program.
+	 * Sets up the ShaderProgram.
 	 */
 	public abstract void setupShaderProgram();
 
 	/**
-	 * Prepara el batch para pintar.
+	 * Prepares this object for rendering.<br>
+	 * This method must be called before {@link #end()}.
+	 * 
+	 * @see #beginDraw()
 	 */
 	public final void begin() {
 		if (inBeginEndPair) {
@@ -54,15 +57,14 @@ public abstract class GraphicsBatch<M extends Material> {
 	}
 
 	/**
-	 * Prepara el batch para pintar.<br>
-	 * Este metodo se llama desde {@link #begin()}
+	 * Prepares this object for rendering.<br>
+	 * This method is called from {@link #begin()}.
 	 */
 	protected abstract void beginDraw();
 
 	/**
-	 * Renderiza todos los elementos que contenga el batch.<br>
-	 * Este metodo debe llamarse siempre al terminar de agregar todos los elementos al batch. Es necesario llamar antes
-	 * a {@link #begin()}
+	 * Renders all the remaining elements in this batch.<br>
+	 * This method must be called after {@link #begin()}.
 	 */
 	public final void end() {
 		if (!inBeginEndPair) {
@@ -73,24 +75,23 @@ public abstract class GraphicsBatch<M extends Material> {
 	}
 
 	/**
-	 * Renderiza todos los elementos que contenga el batch.<br>
-	 * Este metodo se llama desde {@link #end()}
+	 * Renders all the remaining elements in this batch.<br>
+	 * This method is called from {@link #end()}.
 	 */
 	protected abstract void endDraw();
 
 	/**
-	 * Devuelve si se ha llamado a {@link #begin()} pero aun no se ha llamado a {@link #end()}
+	 * Returns true if {@link #begin()} was called but {@link #end()} has not been called yet.
 	 * 
-	 * @return true si se ha llamado a {@link #begin()} pero aun no se ha llamado a {@link #end()}, false en caso
-	 *         contrario
+	 * @return true if {@link #begin()} was called but {@link #end()} has not been called yet, false otherwise.
 	 */
 	public boolean isInBeginEndPair() {
 		return inBeginEndPair;
 	}
 
 	/**
-	 * Si se ha llamado a {@link #begin()} pero aun no se ha llamado a {@link #end()} no hace nada. En caso contrario
-	 * lanza una excepcion.
+	 * Checks if {@link #begin()} was called but {@link #end()} has not been called yet. If the result is false, throws
+	 * an exception.
 	 */
 	public void checkInBeginEndPair() {
 		if (!inBeginEndPair) {
@@ -99,7 +100,7 @@ public abstract class GraphicsBatch<M extends Material> {
 	}
 
 	/**
-	 * Devuelve las opciones de blending que se deben usar para renderizar el batch actual
+	 * Returns the BlendingOptions that should be used to render the current batch.
 	 * 
 	 * @return BlendingOptions
 	 */
@@ -108,7 +109,7 @@ public abstract class GraphicsBatch<M extends Material> {
 	}
 
 	/**
-	 * Devuelve las opciones de blending que se deben usar para renderizar el siguiente batch
+	 * Returns the BlendingOptions that should be used to render the next batch.
 	 * 
 	 * @return BlendingOptions
 	 */
@@ -117,7 +118,7 @@ public abstract class GraphicsBatch<M extends Material> {
 	}
 
 	/**
-	 * Devuelve el ShaderProgram
+	 * Returns the ShaderProgram.
 	 * 
 	 * @return ShaderProgram
 	 */
@@ -126,7 +127,7 @@ public abstract class GraphicsBatch<M extends Material> {
 	}
 
 	/**
-	 * Devuelve el Material enlazado actualmente al GraphicsBatch
+	 * Returns the current material of this batch.
 	 * 
 	 * @return Material
 	 */
@@ -135,9 +136,9 @@ public abstract class GraphicsBatch<M extends Material> {
 	}
 
 	/**
-	 * Asigna el Material enlazado actualmente al GraphicsBatch
+	 * Sets the current material of this batch and updates the current and next BlendingOptions if needed.
 	 * 
-	 * @param material Material
+	 * @param material Material.
 	 */
 	public void setCurrentMaterial(M material) {
 		BlendingOptions nextBatchBlendingOptions = material.getBlendingOptions();
@@ -154,50 +155,51 @@ public abstract class GraphicsBatch<M extends Material> {
 	}
 
 	/**
-	 * Devuelve true si hay que forzar el renderizado de los elementos del batch
+	 * Returns if the forceDraw flag is set to true or false.
 	 * 
-	 * @return true si hay que renderizar, false en caso contrario
+	 * @return true or false
 	 */
 	public boolean isForceDraw() {
 		return forceDraw;
 	}
 
 	/**
-	 * Asigna si hay que forzar el renderizado de los elementos del batch
+	 * Sets the forceDraw flag. If set to true, it means that the current batch will be rendered even if there is still
+	 * room for more elements.
 	 * 
-	 * @param forceDraw true para forzar renderizado, false en caso contrario
+	 * @param forceDraw true to force rendering, false otherwise.
 	 */
 	protected void setForceDraw(boolean forceDraw) {
 		this.forceDraw = forceDraw;
 	}
 
 	/**
-	 * Devuelve el numero de sprites que hay en el batch
+	 * Returns the number of elements in this batch.
 	 * 
-	 * @return Numero de sprites en el batch
+	 * @return Number of elements in this batch.
 	 */
 	public int getBatchSize() {
 		return batchSize;
 	}
 
 	/**
-	 * Incrementa en 1 el numero de sprites que hay en el batch
+	 * Increments in 1 the number of elements of this batch.
 	 */
 	protected void incrementBatchSize() {
 		batchSize++;
 	}
 
 	/**
-	 * Reinicia a 0 el numero de sprites que hay en el batch
+	 * Resets to 0 the number of elements of this batch.
 	 */
 	protected void resetBatchSize() {
 		batchSize = 0;
 	}
 
 	/**
-	 * Devuelve el maximo numero de elementos que puede almacenar el batch antes de renderizar
+	 * Returns the capacity of this batch.
 	 * 
-	 * @return Maximo numero de elementos que puede almacenar el batch antes de renderizar
+	 * @return Max number of elements thar this batch is able to render in one draw call.
 	 */
 	public int getBatchCapacity() {
 		return batchCapacity;

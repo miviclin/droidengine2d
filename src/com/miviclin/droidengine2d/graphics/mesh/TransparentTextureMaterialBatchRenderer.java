@@ -16,8 +16,8 @@ import com.miviclin.droidengine2d.util.math.Vector2;
 import com.miviclin.droidengine2d.util.math.Vector3;
 
 /**
- * Clase base de la que deben heredar los renderers de mallas que representen batches de figuras rectangulares cuyo
- * material sea TransparentTextureMaterial
+ * TransparentTextureMaterialBatchRenderer allows rendering batches of up to 32 rectangles with
+ * TransparentTextureMaterial in one draw call. Each rectangle has its own translation, rotation and scale.
  * 
  * @author Miguel Vicente Linares
  * 
@@ -150,9 +150,9 @@ public class TransparentTextureMaterialBatchRenderer<M extends TransparentTextur
 	}
 
 	/**
-	 * Define la opacidad del siguiente sprite en el batch
+	 * Sets up the opacity of the vertices of the last rectangle added to this batch.
 	 * 
-	 * @param opacity Opacidad
+	 * @param opacity Opacity.
 	 */
 	private void setupOpacity(float opacity) {
 		int spriteOffset = getBatchSize() * 4;

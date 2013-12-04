@@ -16,8 +16,8 @@ import com.miviclin.droidengine2d.util.math.Vector2;
 import com.miviclin.droidengine2d.util.math.Vector3;
 
 /**
- * Clase base de la que deben heredar los renderers de mallas que representen batches de figuras rectangulares cuyo
- * material sea TextureHsvMaterial
+ * TextureHsvMaterialBatchRenderer allows rendering batches of up to 32 rectangles with TextureHsvMaterial in one draw
+ * call. Each rectangle has its own translation, rotation and scale.
  * 
  * @author Miguel Vicente Linares
  * 
@@ -28,9 +28,9 @@ public class TextureHsvMaterialBatchRenderer<M extends TextureHsvMaterial> exten
 	private int vertexColorOffset;
 
 	/**
-	 * Constructor
+	 * Creates a new TextureHsvMaterialBatchRenderer.
 	 * 
-	 * @param context Context en el que se ejecuta el juego
+	 * @param context Context.
 	 */
 	public TextureHsvMaterialBatchRenderer(Context context) {
 		super(9, context);
@@ -171,9 +171,11 @@ public class TextureHsvMaterialBatchRenderer<M extends TextureHsvMaterial> exten
 	}
 
 	/**
-	 * Define el color del siguiente sprite en el batch
+	 * Sets up the color of the vertices of the last rectangle added to this batch.
 	 * 
-	 * @param color Color
+	 * @param hOffset Hue offset.
+	 * @param sMulti Saturation multiplier.
+	 * @param vMulti Brightness multiplier.
 	 */
 	private void setupHSV(float hOffset, float sMulti, float vMulti) {
 		int spriteOffset = getBatchSize() * 4;
