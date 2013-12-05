@@ -1,7 +1,7 @@
 package com.miviclin.droidengine2d.graphics.shader;
 
 /**
- * Excepcion utilizada en ShaderProgram
+ * Exception thrown from ShaderProgram.
  * 
  * @author Miguel Vicente Linares
  * 
@@ -10,9 +10,9 @@ package com.miviclin.droidengine2d.graphics.shader;
 public class ShaderProgramException extends RuntimeException {
 
 	/**
-	 * Crea una ShaderProgramException
+	 * Creates a new ShaderProgramException.
 	 * 
-	 * @param message Mensaje de la excepcion
+	 * @param message Exception message.
 	 */
 	public ShaderProgramException(String message) {
 		super(message);
