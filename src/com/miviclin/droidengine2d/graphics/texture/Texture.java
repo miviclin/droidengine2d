@@ -9,7 +9,7 @@ import com.miviclin.droidengine2d.resources.AssetsLoader;
 import com.miviclin.droidengine2d.util.math.Vector2;
 
 /**
- * Texture representa una textura
+ * Texture.
  * 
  * @author Miguel Vicente Linares
  * 
@@ -27,10 +27,10 @@ public class Texture implements Comparable<Texture> {
 	private boolean loaded;
 
 	/**
-	 * Crea un Texture
+	 * Creates a new Texture.
 	 * 
-	 * @param context Context en el que se ejecuta el juego
-	 * @param path Ruta Ruta de la textura (ruta relativa a la carpeta de assets)
+	 * @param context Context.
+	 * @param path File path. Relative to the assets folder.
 	 */
 	public Texture(Context context, String path) {
 		Vector2 bitmapBounds = AssetsLoader.getBitmapBounds(context, path);
@@ -49,9 +49,9 @@ public class Texture implements Comparable<Texture> {
 	}
 
 	/**
-	 * Carga la textura y le asigna los filtros y el wrapmode
+	 * Loads the texture and sets filters and wrap mode.
 	 * 
-	 * @param context Context en el que se ejecuta el juego
+	 * @param context Context.
 	 */
 	public void loadTexture(Context context) {
 		Bitmap bitmap;
@@ -69,8 +69,9 @@ public class Texture implements Comparable<Texture> {
 	}
 
 	/**
-	 * Hace que OpenGL asigne un ID a la textura. Si ya tenia un ID asignado, es recomendable llamar a {@link #delete()}
-	 * antes de asignar un ID nuevo.
+	 * When this method is called, OpenGL will allocate memory for this texture and will generate a texture ID.<br>
+	 * If this texture had a previously generated ID, {@link #delete()} should be called on this texture before
+	 * generating a new one.
 	 */
 	protected void allocateTextureId() {
 		int[] textures = new int[1];
@@ -79,24 +80,24 @@ public class Texture implements Comparable<Texture> {
 	}
 
 	/**
-	 * Enlaza la textura al contexto de OpenGL
+	 * Binds this texture to the OpenGL context.
 	 */
 	public void bind() {
 		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
 	}
 
 	/**
-	 * Desenlaza la textura del contexto de OpenGL
+	 * Unbinds this texture to the OpenGL context.
 	 */
 	public void unBind() {
 		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
 	}
 
 	/**
-	 * Asigna los filtros a la textura
+	 * Sets the min and mag filters of this texture.
 	 * 
-	 * @param minFilter Min Filter
-	 * @param magFilter Mag Filter
+	 * @param minFilter Min. filter.
+	 * @param magFilter Mag. filter.
 	 */
 	public void setFilters(int minFilter, int magFilter) {
 		this.minFilter = minFilter;
@@ -106,10 +107,10 @@ public class Texture implements Comparable<Texture> {
 	}
 
 	/**
-	 * Asigna el wrapmode a la textura
+	 * Sets the wrapmode of this texture.
 	 * 
-	 * @param wrapS Wrap S
-	 * @param wrapT Wrap T
+	 * @param wrapS Wrap S.
+	 * @param wrapT Wrap T.
 	 */
 	public void setWrapMode(int wrapS, int wrapT) {
 		this.wrapS = wrapS;
@@ -119,8 +120,8 @@ public class Texture implements Comparable<Texture> {
 	}
 
 	/**
-	 * Elimina la textura del contexto de OpenGL.<br>
-	 * Es recomendable llamar a este metodo para liberar recursos cuando la textura no se vaya a utilizar mas.
+	 * Removes this texture from the OpenGL context.<br>
+	 * This method should be called when the texture is not needed anymore, to release resources.
 	 */
 	public void delete() {
 		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
@@ -130,27 +131,28 @@ public class Texture implements Comparable<Texture> {
 	}
 
 	/**
-	 * Devuelve el ancho de la textura
+	 * Returns the width of this texture.
 	 * 
-	 * @return ancho de la textura
+	 * @return the width of this texture
 	 */
 	public int getWidth() {
 		return width;
 	}
 
 	/**
-	 * Devuelve el alto de la textura
+	 * Returns the height of this texture.
 	 * 
-	 * @return alto de la textura
+	 * @return the height of this texture
 	 */
 	public int getHeight() {
 		return height;
 	}
 
 	/**
-	 * Devuelve si la textura ya ha sido cargada
+	 * Returns true if the texture has been loaded.
 	 * 
-	 * @return true si la textura ha sido cargada, false en caso contrario
+	 * @return true if the texture has been loaded, false otherwise
+	 * @see #loadTexture(Context)
 	 */
 	public boolean isLoaded() {
 		return loaded;
