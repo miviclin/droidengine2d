@@ -12,7 +12,7 @@ import android.graphics.BitmapFactory;
 import com.miviclin.droidengine2d.util.math.Vector2;
 
 /**
- * Cargador de recursos. Clase de utilidad, no instanciable
+ * Utility class that can be used to load resources.
  * 
  * @author Miguel Vicente Linares
  * 
@@ -20,18 +20,17 @@ import com.miviclin.droidengine2d.util.math.Vector2;
 public class AssetsLoader {
 
 	/**
-	 * Constructor privado porque no tiene sentido instanciar un objeto de esta clase al ser una clase de utilidad cuyos
-	 * metodos son todos estaticos. Tambien impide crear subclases de esta clase.
+	 * Private constructor. This class should not be instantiable.
 	 */
 	private AssetsLoader() {
 
 	}
 
 	/**
-	 * Devuelve un InputStream para poder leer un asset
+	 * Returns an opened InputStream to read the specified asset.
 	 * 
-	 * @param context Context
-	 * @param path Ruta del asset, relativa a la carpeta de assets
+	 * @param context Context.
+	 * @param path File path. Relative to the assets folder.
 	 * @return InputStream
 	 * @throws IOException
 	 */
@@ -40,10 +39,10 @@ public class AssetsLoader {
 	}
 
 	/**
-	 * Devuelve un InputStream para poder leer un asset
+	 * Returns an opened InputStream to read the specified asset.
 	 * 
-	 * @param assetManager AssetManager de la aplicacion
-	 * @param path Ruta del asset, relativa a la carpeta de assets
+	 * @param assetManager AssetManager.
+	 * @param path File path. Relative to the assets folder.
 	 * @return InputStream
 	 * @throws IOException
 	 */
@@ -52,10 +51,10 @@ public class AssetsLoader {
 	}
 
 	/**
-	 * Carga un Bitmap de la carpeta de assets y lo devuelve
+	 * Loads a Bitmap from the assets folder.
 	 * 
-	 * @param context Context
-	 * @param path Ruta del bitmap, relativa a la carpeta de assets
+	 * @param context Context.
+	 * @param path File path. Relative to the assets folder.
 	 * @return Bitmap
 	 */
 	public static Bitmap loadBitmap(Context context, String path) {
@@ -79,10 +78,10 @@ public class AssetsLoader {
 	}
 
 	/**
-	 * Carga un Bitmap de la carpeta de assets y lo devuelve
+	 * Loads a Bitmap from the assets folder.
 	 * 
-	 * @param assetManager AssetManager de la aplicacion
-	 * @param path Ruta del bitmap, relativa a la carpeta de assets
+	 * @param assetManager AssetManager.
+	 * @param path File path. Relative to the assets folder.
 	 * @return Bitmap
 	 */
 	public static Bitmap loadBitmap(AssetManager assetManager, String path) {
@@ -106,12 +105,11 @@ public class AssetsLoader {
 	}
 
 	/**
-	 * Devuelve las dimensiones de un bitmap que se encuentre en la carpeta de assets.<br>
-	 * No carga el bitmap en memoria.
+	 * Returns the bounds of the specified Bitmap. This method does not load the Bitmap into memory.
 	 * 
-	 * @param context Context
-	 * @param path Ruta del bitmap, relativa a la carpeta de assets
-	 * @return Dimensiones del bitmap
+	 * @param context Context.
+	 * @param path File path. Relative to the assets folder.
+	 * @return Vector2 that contains the width and height of the specified Bitmap
 	 */
 	public static Vector2 getBitmapBounds(Context context, String path) {
 		InputStream in = null;
@@ -137,10 +135,10 @@ public class AssetsLoader {
 	}
 
 	/**
-	 * Devuelve un AssetFileDescriptor que se puede utilizar para leer el asset especificado
+	 * Returns an AssetFileDescriptor that can be used to read the specified asset.
 	 * 
-	 * @param context Context
-	 * @param path Ruta del asset, relativa a la carpeta de assets
+	 * @param context Context.
+	 * @param path File path. Relative to the assets folder.
 	 * @return AssetFileDescriptor
 	 */
 	public static AssetFileDescriptor getAssetFileDescriptor(Context context, String path) {
