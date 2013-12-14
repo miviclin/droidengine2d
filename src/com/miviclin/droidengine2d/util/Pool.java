@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Pool de objetos.<br>
- * Permite reutilizar objetos previamente creados.
+ * Object Pool.
  * 
  * @author Miguel Vicente Linares
  * 
@@ -16,25 +15,26 @@ public class Pool<T> {
 	private ArrayList<T> elements;
 
 	/**
-	 * Crea un nuevo Pool con una capacidad inicial por defecto de 16 elementos
+	 * Creates a new Pool with ititial capacity for 16 elements.
 	 */
 	public Pool() {
 		this(16);
 	}
 
 	/**
-	 * Crea un nuevo Pool
+	 * Creates a new Pool.
 	 * 
-	 * @param initialCapacity Capacidad inicial
+	 * @param initialCapacity Initial capacity.
 	 */
 	public Pool(int initialCapacity) {
 		this.elements = new ArrayList<T>(initialCapacity);
 	}
 
 	/**
-	 * Devuelve un elemento almacenado o null en caso de que no hubiera elementos almacenados
+	 * Retuns an element from this Pool or null if the Pool was empty.<br>
+	 * The returned element is removed from this Pool.
 	 * 
-	 * @return Elemento almacenado o null si no hay elementos en el Pool
+	 * @return an element from this Pool or null if the Pool was empty
 	 */
 	public T get() {
 		if (elements.size() > 0) {
@@ -44,9 +44,9 @@ public class Pool<T> {
 	}
 
 	/**
-	 * Inserta un elemento en el Pool
+	 * Adds the specified element to this Pool.
 	 * 
-	 * @param element Elemento a insertar
+	 * @param element Element to be added.
 	 */
 	public void put(T element) {
 		if (element instanceof Poolable) {
@@ -56,9 +56,9 @@ public class Pool<T> {
 	}
 
 	/**
-	 * Inserta una lista de elementos en el Pool
+	 * Adds the specified elements to this Pool.
 	 * 
-	 * @param elements Elementos a insertar
+	 * @param elements Elements to be added.
 	 */
 	public void put(List<T> elements) {
 		T element;
@@ -72,16 +72,16 @@ public class Pool<T> {
 	}
 
 	/**
-	 * Elimina todos los elementos del ObjectPool
+	 * Removes all elements from this Pool, leaving it empty.
 	 */
 	public void clear() {
 		elements.clear();
 	}
 
 	/**
-	 * Devuelve el numero de elementos almacenados
+	 * Returns the number of elements in this Pool.
 	 * 
-	 * @return Numero de elementos almacenados
+	 * @return Number of elements in this Pool
 	 */
 	public int size() {
 		return elements.size();

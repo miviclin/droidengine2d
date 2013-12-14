@@ -3,7 +3,7 @@ package com.miviclin.droidengine2d.util;
 import com.miviclin.droidengine2d.util.math.Vector2;
 
 /**
- * Clase que contiene informacion referente a la transformacion de un objeto: posicion, rotacion, escala...
+ * Transform. It has position, scale, rotation...
  * 
  * @author Miguel Vicente Linares
  * 
@@ -16,23 +16,23 @@ public class Transform {
 	private float rotation;
 
 	/**
-	 * Crea un objeto Transform con la posicion y escala especificadas.<br>
-	 * El origen es por defecto el punto (scale.getX() / 2, scale.getY() / 2).
+	 * Creates a new Transform with the specified position and scale.<br>
+	 * The default origin is (scale.getX() / 2, scale.getY() / 2).
 	 * 
-	 * @param position Posicion
-	 * @param scale Escala
+	 * @param position Position.
+	 * @param scale Scale.
 	 */
 	public Transform(Vector2 position, Vector2 scale) {
 		this(position, scale, new Vector2(scale.getX() / 2, scale.getY() / 2), 0.0f);
 	}
 
 	/**
-	 * Crea un objeto Transform con la posicion, escala, origen y rotacion especificada.
+	 * Creates a new Transform with the specified position, scale, origin and rotation.
 	 * 
-	 * @param position Posicion
-	 * @param scale Escala
-	 * @param origin Origen (Deberia ser un punto entre (0, 0) y (scale.getX(), scale.getY()))
-	 * @param rotation Rotacion
+	 * @param position Position.
+	 * @param scale Scale.
+	 * @param origin Origin (must be a point between (0, 0) and (scale.getX(), scale.getY())).
+	 * @param rotation Rotation angle.
 	 */
 	public Transform(Vector2 position, Vector2 scale, Vector2 origin, float rotation) {
 		super();
@@ -46,55 +46,55 @@ public class Transform {
 	}
 
 	/**
-	 * Devuelve el angulo de rotacion sobre el origen
+	 * Returns the rotation angle around the origin.
 	 * 
-	 * @return Angulo de rotacion
+	 * @return rotation angle
 	 */
 	public float getRotation() {
 		return rotation;
 	}
 
 	/**
-	 * Asigna el angulo de rotacion sobre el origen
+	 * Sets the rotation angle around the origin.
 	 * 
-	 * @param rotation Angulo de rotacion
+	 * @param rotation Rotation angle.
 	 */
 	public void setRotation(float rotation) {
 		this.rotation = rotation;
 	}
 
 	/**
-	 * Devuelve la posicion
+	 * Returns the position.
 	 * 
-	 * @return Posicion
+	 * @return position
 	 */
 	public Vector2 getPosition() {
 		return position;
 	}
 
 	/**
-	 * Devuelve la escala
+	 * Returns the scale.
 	 * 
-	 * @return Escala
+	 * @return scale
 	 */
 	public Vector2 getScale() {
 		return scale;
 	}
 
 	/**
-	 * Devuelve el origen
+	 * Returns the origin.
 	 * 
-	 * @return Origen
+	 * @return origin
 	 */
 	public Vector2 getOrigin() {
 		return origin;
 	}
 
 	/**
-	 * Comprueba si el vector especificado es null y si lo es lanza una excepcion
+	 * Checks if the specified Vector2 is not null. If it is null, throws an exception.
 	 * 
-	 * @param vector Vector2
-	 * @param variableName Nombre de la variable para mostrarlo en el mensaje de la excepcion
+	 * @param vector Vector2.
+	 * @param variableName Name of the Vector2 variable. This name will be used in the message of the exception.
 	 */
 	private void checkNotNull(Vector2 vector, String variableName) {
 		if (vector == null) {
