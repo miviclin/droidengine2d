@@ -3,7 +3,7 @@ package com.miviclin.droidengine2d.util.math;
 import android.opengl.Matrix;
 
 /**
- * Representa una matriz de 4x4.
+ * 4x4 matrix.
  * 
  * @author Miguel Vicente Linares
  * 
@@ -32,7 +32,8 @@ public class Matrix4 {
 	private float[] tmpVector = new float[4];
 
 	/**
-	 * Constructor
+	 * Creates a new Matrix4.<br>
+	 * The default value is the identity matrix.
 	 */
 	public Matrix4() {
 		this.values[M00] = 1.0f;
@@ -42,8 +43,7 @@ public class Matrix4 {
 	}
 
 	/**
-	 * Devuelve el array de valores que componen la matriz. Se puede acceder a ellos individualmente mediante los
-	 * indices:<br>
+	 * Returns the backing array with the values of the matrix. The following indices can be used to access each value:<br>
 	 * {@link #M00}, {@link #M01}, {@link #M02}, {@link #M03}<br>
 	 * {@link #M10}, {@link #M11}, {@link #M12}, {@link #M13}<br>
 	 * {@link #M20}, {@link #M21}, {@link #M22}, {@link #M23}<br>
@@ -56,11 +56,10 @@ public class Matrix4 {
 	}
 
 	/**
-	 * Asigna el array especificado como representacion interna de la matriz.<br>
-	 * El array debe ser de 16 elementos.
+	 * Replaces the backing array of values of this matrix with the specified array.
 	 * 
-	 * @param values Nuevos valores
-	 * @return Referencia a esta matriz, para poder encadenar operaciones
+	 * @param values New array of values (this array must have 16 elements).
+	 * @return this Matrix4
 	 */
 	public Matrix4 set(float[] values) {
 		if (values.length != 16) {
@@ -71,25 +70,22 @@ public class Matrix4 {
 	}
 
 	/**
-	 * Sustituye los elementos de la matriz por los 16 primeros elementos del array especificado<br>
-	 * El array debe ser de 16 elementos.<br>
-	 * Este metodo es equivalente a llamar a {@code setValues(values, 0)}
+	 * Replaces the values of this matrix with the first 16 values of the specified array.<br>
+	 * Calling this method has the same effect as calling {@code setValues(values, 0)}.
 	 * 
-	 * @param values Nuevos valores
-	 * @return Referencia a esta matriz, para poder encadenar operaciones
+	 * @param values Array where the new values are located.
+	 * @return this Matrix4
 	 */
 	public Matrix4 setValues(float[] values) {
 		return setValues(values, 0);
 	}
 
 	/**
-	 * Sustituye los elementos de la matriz por 16 elementos del array especificado, siendo el primer elemento el
-	 * situado en el indice "offset"<br>
-	 * El array debe ser de 16 elementos.
+	 * Replaces the values of this matrix with 16 values of the specified array. The specified offset is where
 	 * 
-	 * @param values Nuevos valores
-	 * @param offset Posicion del primer elemento a copiar
-	 * @return Referencia a esta matriz, para poder encadenar operaciones
+	 * @param values Array where the new values are located.
+	 * @param offset Position of the first element to be copied into the array of values of this Matrix4.
+	 * @return this Matrix4
 	 */
 	public Matrix4 setValues(float[] values, int offset) {
 		if ((values.length - offset) < 16) {
@@ -100,9 +96,9 @@ public class Matrix4 {
 	}
 
 	/**
-	 * Convierte la matriz en la matriz identidad.
+	 * Sets this matrix to the identity matrix.
 	 * 
-	 * @return Referencia a esta matriz, para poder encadenar operaciones
+	 * @return this Matrix4
 	 */
 	public Matrix4 setIdentity() {
 		values[M00] = 1.0f;
@@ -125,18 +121,18 @@ public class Matrix4 {
 	}
 
 	/**
-	 * Invierte la matriz
+	 * Inverts this matrix.
 	 * 
-	 * @return true si la matriz se puede invertir, false en caso contrario
+	 * @return true if the matrix could be inverted, false otherwise
 	 */
 	public boolean invert() {
 		return Matrix.invertM(values, 0, values, 0);
 	}
 
 	/**
-	 * Transpone la matriz
+	 * Transposes this matrix.
 	 * 
-	 * @return Referencia a esta matriz, para poder encadenar operaciones
+	 * @return this Matrix4
 	 */
 	public Matrix4 transpose() {
 		float m01 = values[M10];
@@ -168,12 +164,11 @@ public class Matrix4 {
 	}
 
 	/**
-	 * Multiplica la matriz por la matriz especificada (16 valores del array comenzando por la posicion offset) y
-	 * sobreescribe esta matriz con el resultado de la multiplicacion.
+	 * Multiplies this matrix by the specified matrix. The result is stored in this Matrix4.
 	 * 
-	 * @param matrix Matriz representada en formato array
-	 * @param offset Indice del array en el que se encuentra el primer valor
-	 * @return Referencia a esta matriz, para poder encadenar operaciones
+	 * @param matrix 4x4 matrix.
+	 * @param offset Offset of the first element of the matrix in the array of values.
+	 * @return this Matrix4
 	 */
 	public Matrix4 multiplyM(float[] matrix, int offset) {
 		float[] aux;
@@ -188,10 +183,10 @@ public class Matrix4 {
 	}
 
 	/**
-	 * Multiplica la matriz por la matriz especificada y sobreescribe esta matriz con el resultado de la multiplicacion.
+	 * Multiplies this matrix by the specified matrix. The result is stored in this Matrix4.
 	 * 
-	 * @param matrix Matriz
-	 * @return Referencia a esta matriz, para poder encadenar operaciones
+	 * @param matrix Matrix4.
+	 * @return this Matrix4
 	 */
 	public Matrix4 multiplyM(Matrix4 matrix) {
 		float[] aux;
@@ -203,13 +198,13 @@ public class Matrix4 {
 	}
 
 	/**
-	 * Multiplica la matriz por el vector especificado y sobreescribe esta matriz con el resultado de la multiplicacion.
+	 * Multiplies this matrix by the specified vector. The result is stored in this Matrix4.
 	 * 
-	 * @param x Coordenada x del vector
-	 * @param y Coordenada y del vector
-	 * @param z Coordenada z del vector
-	 * @param w Coordenada w del vector
-	 * @return Referencia a esta matriz, para poder encadenar operaciones
+	 * @param x X coordinate of the vector.
+	 * @param y Y coordinate of the vector.
+	 * @param z Z coordinate of the vector.
+	 * @param w W coordinate of the vector.
+	 * @return this Matrix4
 	 */
 	public Matrix4 multiplyV(float x, float y, float z, float w) {
 		float[] aux;
@@ -225,11 +220,11 @@ public class Matrix4 {
 	}
 
 	/**
-	 * Multiplica la matriz por el vector especificado y sobreescribe esta matriz con el resultado de la multiplicacion.
+	 * Multiplies this matrix by the specified vector. The result is stored in this Matrix4.
 	 * 
-	 * @param vector Vector en formato array
-	 * @param offset Indice del primer elemento del vector en el array
-	 * @return Referencia a esta matriz, para poder encadenar operaciones
+	 * @param vector This array contains the values of the vector.
+	 * @param offset Offset of the first element of the vector in the array.
+	 * @return this Matrix4
 	 */
 	public Matrix4 multiplyV(float[] vector, int offset) {
 		float[] aux;
@@ -244,12 +239,12 @@ public class Matrix4 {
 	}
 
 	/**
-	 * Translada la matriz
+	 * Translates this matrix.
 	 * 
-	 * @param x Translacion en el eje X
-	 * @param y Translacion en el eje Y
-	 * @param z Translacion en el eje Z
-	 * @return Referencia a esta matriz, para poder encadenar operaciones
+	 * @param x Translation in the X axis.
+	 * @param y Translation in the Y axis.
+	 * @param z Translation in the Z axis.
+	 * @return this Matrix4
 	 */
 	public Matrix4 translate(float x, float y, float z) {
 		Matrix.translateM(values, 0, x, y, z);
@@ -257,10 +252,10 @@ public class Matrix4 {
 	}
 
 	/**
-	 * Translada la matriz
+	 * Translates this matrix.
 	 * 
-	 * @param translation Translacion a aplicar
-	 * @return Referencia a esta matriz, para poder encadenar operaciones
+	 * @param translation Translation.
+	 * @return this Matrix4
 	 */
 	public Matrix4 translate(Vector3 translation) {
 		Matrix.translateM(values, 0, translation.getX(), translation.getY(), translation.getZ());
@@ -268,12 +263,12 @@ public class Matrix4 {
 	}
 
 	/**
-	 * Escala la matriz
+	 * Scales this matrix.
 	 * 
-	 * @param x Escala en el eje X
-	 * @param y Escala en el eje Y
-	 * @param z Escala en el eje Z
-	 * @return Referencia a esta matriz, para poder encadenar operaciones
+	 * @param x Scale in the X axis.
+	 * @param y Scale in the Y axis.
+	 * @param z Scale in the Z axis.
+	 * @return this Matrix4
 	 */
 	public Matrix4 scale(float x, float y, float z) {
 		Matrix.scaleM(values, 0, x, y, z);
@@ -281,10 +276,10 @@ public class Matrix4 {
 	}
 
 	/**
-	 * Escala la matriz
+	 * Scales this matrix.
 	 * 
-	 * @param scaleFactor Escala a aplicar
-	 * @return Referencia a esta matriz, para poder encadenar operaciones
+	 * @param scaleFactor Scale.
+	 * @return this Matrix4
 	 */
 	public Matrix4 scale(Vector3 scaleFactor) {
 		Matrix.translateM(values, 0, scaleFactor.getX(), scaleFactor.getY(), scaleFactor.getZ());
@@ -292,13 +287,13 @@ public class Matrix4 {
 	}
 
 	/**
-	 * Rota la matriz
+	 * Rotates this matrix.
 	 * 
-	 * @param angle Angulo de rotacion, en grados
-	 * @param x Escala de rotacion en el eje X
-	 * @param y Escala de rotacion en el eje y
-	 * @param z Escala de rotacion en el eje Z
-	 * @return Referencia a esta matriz, para poder encadenar operaciones
+	 * @param angle Rotation angle, in degrees.
+	 * @param x Scale factor in the X axis.
+	 * @param y Scale factor in the Y axis.
+	 * @param z Scale factor in the Z axis.
+	 * @return this Matrix4
 	 */
 	public Matrix4 rotate(float angle, float x, float y, float z) {
 		MatrixFix.rotateM(values, 0, angle, x, y, z);
@@ -306,11 +301,11 @@ public class Matrix4 {
 	}
 
 	/**
-	 * Rota la matriz
+	 * Rotates this matrix.
 	 * 
-	 * @param angle Angulo de rotacion, en grados
-	 * @param scaleFactor Escala de rotacion alrededor de los 3 ejes
-	 * @return Referencia a esta matriz, para poder encadenar operaciones
+	 * @param angle Rotation angle, in degrees.
+	 * @param scaleFactor Scale factor.
+	 * @return this Matrix4
 	 */
 	public Matrix4 rotate(float angle, Vector3 scaleFactor) {
 		MatrixFix.rotateM(values, 0, angle, scaleFactor.getX(), scaleFactor.getY(), scaleFactor.getZ());
@@ -318,19 +313,18 @@ public class Matrix4 {
 	}
 
 	/**
-	 * Define una transformacion en terminos de punto en el que se encuentra el ojo, centro de vista (punto hacia el que
-	 * mira el ojo) y up vector (vector que define la direccion del sistema de coordenadas).
+	 * Defines a viewing transformation in terms of an eye point, a center of view, and an up vector.
 	 * 
-	 * @param eyeX Coordenada X del ojo
-	 * @param eyeY Coordenada Y del ojo
-	 * @param eyeZ Coordenada Z del ojo
-	 * @param centerX Coordenada X del centro de vista
-	 * @param centerY Coordenada Y del centro de vista
-	 * @param centerZ Coordenada Z del centro de vista
-	 * @param upX Coordenada X del up vector
-	 * @param upY Coordenada Y del up vector
-	 * @param upZ Coordenada Z del up vector
-	 * @return Referencia a esta matriz, para poder encadenar operaciones
+	 * @param eyeX Coordinate X of the eye vector.
+	 * @param eyeY Coordinate Y of the eye vector.
+	 * @param eyeZ Coordinate Z of the eye vector.
+	 * @param centerX Coordinate X of the center vector.
+	 * @param centerY Coordinate Y of the center vector.
+	 * @param centerZ Coordinate Z of the center vector.
+	 * @param upX Coordinate X of the up vector.
+	 * @param upY Coordinate Y of the up vector.
+	 * @param upZ Coordinate Z of the up vector.
+	 * @return this Matrix4
 	 */
 	public Matrix4 setLookAt(float eyeX, float eyeY, float eyeZ, float centerX, float centerY, float centerZ,
 			float upX, float upY, float upZ) {
@@ -340,13 +334,12 @@ public class Matrix4 {
 	}
 
 	/**
-	 * Define una transformacion en terminos de punto en el que se encuentra el ojo, centro de vista (punto hacia el que
-	 * mira el ojo) y up vector (vector que define la direccion del sistema de coordenadas).
+	 * Defines a viewing transformation in terms of an eye point, a center of view, and an up vector.
 	 * 
-	 * @param eye ojo
-	 * @param center centro de vista
-	 * @param up up vector
-	 * @return Referencia a esta matriz, para poder encadenar operaciones
+	 * @param eye Eye vector.
+	 * @param center Center vector.
+	 * @param up Up vector.
+	 * @return this Matrix4
 	 */
 	public Matrix4 setLookAt(Vector3 eye, Vector3 center, Vector3 up) {
 		Matrix.setLookAtM(values, 0,
@@ -358,15 +351,15 @@ public class Matrix4 {
 	}
 
 	/**
-	 * Convierte la matriz en una matriz de proyeccion ortografica.
+	 * Converts this matrix to an orthographic projection matrix.
 	 * 
-	 * @param left Limite izquierdo
-	 * @param right Limite derecho
-	 * @param bottom Limite inferior
-	 * @param top Limite superior
-	 * @param near Limite mas cercano al ojo
-	 * @param far Limite mas lejano al ojo
-	 * @return Referencia a esta matriz, para poder encadenar operaciones
+	 * @param left Left limit.
+	 * @param right Right limit.
+	 * @param bottom Bottom limit.
+	 * @param top Top limit.
+	 * @param near Near limit.
+	 * @param far Far limit.
+	 * @return this Matrix4
 	 */
 	public Matrix4 setOrtho(float left, float right, float bottom, float top, float near, float far) {
 		if (left == right) {
@@ -383,15 +376,15 @@ public class Matrix4 {
 	}
 
 	/**
-	 * Convierte la matriz en una matriz de proyeccion con perspectiva.
+	 * Defines a projection matrix in terms of six clip planes.
 	 * 
-	 * @param left Limite izquierdo
-	 * @param right Limite derecho
-	 * @param bottom Limite inferior
-	 * @param top Limite superior
-	 * @param near Limite mas cercano al ojo
-	 * @param far Limite mas lejano al ojo
-	 * @return Referencia a esta matriz, para poder encadenar operaciones
+	 * @param left Left limit.
+	 * @param right Right limit.
+	 * @param bottom Bottom limit.
+	 * @param top Top limit.
+	 * @param near Near limit.
+	 * @param far Far limit.
+	 * @return this Matrix4
 	 */
 	public Matrix4 setFrustum(float left, float right, float bottom, float top, float near, float far) {
 		if (left == right) {
