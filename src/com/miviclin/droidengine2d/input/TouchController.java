@@ -2,10 +2,8 @@ package com.miviclin.droidengine2d.input;
 
 import android.view.MotionEvent;
 
-import com.miviclin.droidengine2d.scene.Scene;
-
 /**
- * Controlador de eventos Touch
+ * TouchController.
  * 
  * @author Miguel Vicente Linares
  * 
@@ -17,7 +15,7 @@ public class TouchController {
 	private TouchListener touchListener;
 
 	/**
-	 * Constructor
+	 * Creates a new TouchController.
 	 */
 	public TouchController() {
 		this.touchDetected = false;
@@ -26,10 +24,10 @@ public class TouchController {
 	}
 
 	/**
-	 * Asigna un MotionEvent al TouchController. Este MotionEvent sera el que se le pase a
+	 * Sets the MotionEvent of this TouchController. The MotionEvent will be later used when this TouchController calls
 	 * {@link TouchListener#onTouch(MotionEvent)}.
 	 * 
-	 * @param motionEvent MotionEvent
+	 * @param motionEvent MotionEvent.
 	 */
 	public void setMotionEvent(MotionEvent motionEvent) {
 		this.motionEvent = motionEvent;
@@ -39,18 +37,18 @@ public class TouchController {
 	}
 
 	/**
-	 * Asigna un {@link TouchListener} al TouchController
+	 * Sets the {@link TouchListener} of this TouchController.
 	 * 
-	 * @param touchListener TouchListener
+	 * @param touchListener TouchListener.
 	 */
 	public void setTouchListener(TouchListener touchListener) {
 		this.touchListener = touchListener;
 	}
 
 	/**
-	 * Procesa el touch.<br>
-	 * Este metodo deberia ser llamado desde {@link Scene#update(float)} para que en caso de que haya un evento de
-	 * touch, ejecute {@link TouchListener#onTouch(MotionEvent)}
+	 * Processes touch input.<br>
+	 * This method should be called when the game updates, before the update is processed. If a touch event has
+	 * happened, this method will call {@link TouchListener#onTouch(MotionEvent)}.
 	 */
 	public void processTouchInput() {
 		if ((touchListener != null) && touchDetected) {

@@ -19,8 +19,9 @@ import com.miviclin.droidengine2d.graphics.shader.ShaderProgram;
 import com.miviclin.droidengine2d.util.math.Vector2;
 
 /**
- * Clase base de la que deben heredar los renderers de mallas que representen batches de figuras rectangulares.<br>
- * Permite renderizar en una llamada hasta 32 sprites con transformaciones (traslacion, rotacion y escala) distintas.
+ * Base class for all batch renderers that render rectangles.<br>
+ * Allows rendering a batch of rectangles, each rectangle having its own translation, rotation and scale, in one draw
+ * call.
  * 
  * @author Miguel Vicente Linares
  * 
@@ -37,10 +38,10 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 	private RectangleBatchGeometry geometry;
 
 	/**
-	 * Crea un PositionTextureSpriteBatch
+	 * Creates a new RectangleBatchRenderer.
 	 * 
-	 * @param verticesDataStride Stride de los datos de los vertices
-	 * @param shaderProgram ShaderProgram
+	 * @param verticesDataStride Data stride of the vertices.
+	 * @param shaderProgram ShaderProgram.
 	 */
 	public RectangleBatchRenderer(int verticesDataStride, int batchCapacity) {
 		super(batchCapacity);
@@ -65,7 +66,7 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 	}
 
 	/**
-	 * Inicializa. Llamar tras crear el objeto.
+	 * Initializes this batch renderer.
 	 */
 	public void initialize() {
 		setupIndices();
@@ -89,24 +90,25 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 	}
 
 	/**
-	 * Vacia el vertex buffer y copia los datos de la geometria al buffer. Llamar a {@link #setVertexBufferLimit()}
-	 * despues de este metodo.
+	 * Removes all elements of the vertex buffer and then copies the current geometry to the vertex buffer.<br>
+	 * After this method is called, {@link #setVertexBufferLimit()} must be called.
 	 * 
-	 * @param batchSize Numero de elementos del batch que se copiaran
+	 * @param batchSize Number of elements of the current batch to be copied to the vertex buffer.
 	 */
 	protected abstract void copyGeometryToVertexBuffer(int batchSize);
 
 	/**
-	 * Asigna el limite del vertex buffer. Llamar a este metodo despues de {@link #copyGeometryToVertexBuffer()}
+	 * Sets the limit of the vertex buffer.<br>
+	 * This method must be called after {@link #copyGeometryToVertexBuffer()} is called.
 	 * 
-	 * @param batchSize Numero de elementos del batch que se copiaran
+	 * @param batchSize Number of elements of the current batch copied to the vertex buffer.
 	 */
 	protected void setVertexBufferLimit(int batchSize) {
 		vertexBuffer.position(batchSize * verticesDataStride * 4).flip();
 	}
 
 	/**
-	 * Copia los datos de la geometria al buffer
+	 * Copies the indices of the geometry to the index buffer.
 	 */
 	protected void copyIndicesToIndexBuffer() {
 		int numIndices = getBatchCapacity() * 6;
@@ -117,7 +119,7 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 	}
 
 	/**
-	 * Inicializa el array de indices de los vertices que definen la geometria de la malla de sprites
+	 * Sets up the array of indices of the geometry of the mesh used to render this batch.
 	 */
 	protected void setupIndices() {
 		int numIndices = getBatchCapacity() * 6;
@@ -132,29 +134,24 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 	}
 
 	/**
-	 * Inicializa el array de vertices que definen la geometria de la malla del batch.<br>
-	 * El orden de inicializacion de los vertices debe ser:<br>
-	 * 1. Bottom-left<br>
-	 * 2. Bottom-right<br>
-	 * 3. Top-right<br>
-	 * 4. Top-left
+	 * Sets up the vertices of the geometry of the mesh used to render this batch.<br>
+	 * The vertices of each rectangle must be defined in the following order:<br>
+	 * 1. Bottom-left.<br>
+	 * 2. Bottom-right.<br>
+	 * 3. Top-right.<br>
+	 * 4. Top-left.
 	 */
 	protected abstract void setupVerticesData();
 
 	/**
-	 * Transforma la figura situada en el indice (mvpIndex) especificado con los datos especificados.<br>
-	 * Para que este metodo funcione como se espera, el orden de inicializacion de los vertices debe ser:<br>
-	 * 1. Bottom-left<br>
-	 * 2. Bottom-right<br>
-	 * 3. Top-right<br>
-	 * 4. Top-left
+	 * Transforms the rectangle located at the specified index of the batch.
 	 * 
-	 * @param index Indice de la figura a actualizar
-	 * @param position Posicion
-	 * @param scale Escala
-	 * @param origin Origen de la figura (debe ser un valor entre 0.0 y 1.0)
-	 * @param rotation Angulo de rotacion sobre el centro
-	 * @param camera Camara
+	 * @param index Index where the rectangle whose transform we want to update is located.
+	 * @param position Position.
+	 * @param scale Scale.
+	 * @param origin Origin of the rectangle (value between 0.0f and 1.0f).
+	 * @param rotation Rotation angle around the origin.
+	 * @param camera Camera.
 	 * 
 	 * @see RectangleBatchRenderer#setupVerticesData()
 	 */
@@ -181,14 +178,14 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 	}
 
 	/**
-	 * Prepara los datos de la geometria para ser enviados a los shaders
+	 * Prepares the geometry to be sent to the shader program.
 	 * 
-	 * @param batchSize Numero de elementos en el batch
+	 * @param batchSize Number of elements in the batch.
 	 */
 	protected abstract void setupVertexShaderVariables(int batchSize);
 
 	/**
-	 * Prepara el batch para ser renderizado
+	 * Prepares the batch to be rendered.
 	 */
 	protected void prepareDrawBatch() {
 		int batchSize = getBatchSize();
@@ -200,7 +197,7 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 	}
 
 	/**
-	 * Renderiza todos los sprites del batch en 1 sola llamada
+	 * Renders all the elements that are currently in this batch in one draw call.
 	 */
 	protected void drawBatch() {
 		prepareDrawBatch();
@@ -218,24 +215,25 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 		getCurrentBatchBlendingOptions().copy(getNextBatchBlendingOptions());
 		setForceDraw(false);
 		resetBatchSize();
-		
+
 		GLDebugger.getInstance().passiveCheckGLError();
 	}
 
 	/**
-	 * Agrega el Sprite al batch.<br>
-	 * En caso de que el batch estuviera lleno, se renderiza en 1 sola llamada y se vacia para agregar el nuevo sprite.
+	 * Adds a rectangle to this batch.<br>
+	 * If the batch was full, it will be rendered in one draw call and it will be left empty. Then, the specified
+	 * rectangle will be added to this batch.
 	 * 
-	 * @param position Posicion
-	 * @param scale Escala
-	 * @param origin Origen de la figura (debe ser un valor entre 0.0 y 1.0)
-	 * @param rotation Angulo de rotacion sobre el centro
-	 * @param camera Camara
+	 * @param position Position.
+	 * @param scale Scale.
+	 * @param origin Origin of the rectangle (value between 0.0f and 1.0f).
+	 * @param rotation Rotation angle around the origin.
+	 * @param camera Camera.
 	 */
 	public abstract void draw(Vector2 position, Vector2 scale, Vector2 origin, float rotation, Camera camera);
 
 	/**
-	 * Devuelve el stride
+	 * Returns the stride of the data of the vertices of this batch.
 	 * 
 	 * @return stride
 	 */
@@ -244,7 +242,7 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 	}
 
 	/**
-	 * Stride de los datos de los vertices en bytes
+	 * Returns the stride of the data of the vertices of this batch in bytes.
 	 * 
 	 * @return Stride
 	 */
@@ -253,7 +251,7 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 	}
 
 	/**
-	 * Asigna el stride del buffer que contiene los datos de los vertices
+	 * Sets the stride of the data of the vertices of this batch.
 	 * 
 	 * @param verticesDataStride stride
 	 */
@@ -262,7 +260,7 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 	}
 
 	/**
-	 * Devuelve el index buffer
+	 * Returns the index buffer of this batch.
 	 * 
 	 * @return index buffer
 	 */
@@ -271,7 +269,7 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 	}
 
 	/**
-	 * Devuelve el vertex buffer
+	 * Returns the vertex buffer of this batch.
 	 * 
 	 * @return vertex buffer
 	 */
@@ -280,7 +278,7 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 	}
 
 	/**
-	 * Devuelve el MVP index buffer
+	 * Returns the MVP index buffer of this batch.
 	 * 
 	 * @return MVP index buffer
 	 */
@@ -289,7 +287,7 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 	}
 
 	/**
-	 * Devuelve la geometria
+	 * Returns the Geometry of this batch of this batch.
 	 * 
 	 * @return Geometry
 	 */
@@ -298,9 +296,9 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 	}
 
 	/**
-	 * Asigna la geometria
+	 * Sets the Geometry of this batch of this batch.
 	 * 
-	 * @param geometry RectangleBatchGeometry
+	 * @param geometry RectangleBatchGeometry.
 	 */
 	public void setGeometry(RectangleBatchGeometry geometry) {
 		this.geometry = geometry;

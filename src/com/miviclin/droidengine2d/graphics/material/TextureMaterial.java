@@ -3,7 +3,7 @@ package com.miviclin.droidengine2d.graphics.material;
 import com.miviclin.droidengine2d.graphics.texture.TextureRegion;
 
 /**
- * Material que solo tiene una textura
+ * This Material has texture.
  * 
  * @author Miguel Vicente Linares
  * 
@@ -13,9 +13,9 @@ public class TextureMaterial extends Material {
 	private TextureRegion textureRegion;
 
 	/**
-	 * Constructor
+	 * Creates a TextureMaterial.
 	 * 
-	 * @param textureRegion TextureRegion (no puede ser null)
+	 * @param textureRegion TextureRegion.
 	 */
 	public TextureMaterial(TextureRegion textureRegion) {
 		super();
@@ -23,7 +23,7 @@ public class TextureMaterial extends Material {
 	}
 
 	/**
-	 * Devuelve el TextureRegion
+	 * Returns the TextureRegion of this material.
 	 * 
 	 * @return TextureRegion
 	 */
@@ -32,9 +32,9 @@ public class TextureMaterial extends Material {
 	}
 
 	/**
-	 * Asigna un TextureRegion. No puede ser null.
+	 * Sets the TextureRegion of this material.
 	 * 
-	 * @param textureRegion Nuevo TextureRegion
+	 * @param textureRegion TextureRegion.
 	 */
 	public void setTextureRegion(TextureRegion textureRegion) {
 		this.textureRegion = textureRegion;

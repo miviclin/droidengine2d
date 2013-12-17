@@ -1,7 +1,7 @@
 package com.miviclin.droidengine2d.graphics.shader;
 
 /**
- * Esta clase contiene constantes que se utilizan para definir las variables de los shaders.
+ * Constants for the names of the most used variables in the GLSL code of the default shaders.
  * 
  * @author Miguel Vicente Linares
  * 

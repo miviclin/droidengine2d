@@ -1,8 +1,7 @@
 package com.miviclin.droidengine2d.graphics;
 
 /**
- * Excepcion que se lanza cuando el Material que se pretende utilizar no esta registrado en el objeto Graphics del
- * engine
+ * This exception should be thrown if the Graphics object does not support a material that is tried to render.
  * 
  * @author Miguel Vicente Linares
  * 

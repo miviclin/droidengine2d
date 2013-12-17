@@ -3,7 +3,7 @@ package com.miviclin.droidengine2d.graphics.animation;
 import java.util.ArrayList;
 
 /**
- * Animacion
+ * Animation.
  * 
  * @author Miguel Vicente Linares
  * 
@@ -25,60 +25,58 @@ public class Animation {
 	private State state;
 
 	/**
-	 * Crea una animacion con capacidad inicial de 10 frames y con repeticion activada, de forma que cuando se complete
-	 * el primer ciclo, volvera a repetirse todo el ciclo de la animacion.
+	 * Creates a new Animation with initial capacity for 10 frames and loop mode enabled by default.
 	 */
 	public Animation() {
 		this(10, true);
 	}
 
 	/**
-	 * Crea una animacion con capaidad inicial para 10 frames.
+	 * Creates a new Animation with initial capacity for 10 frames by default.
 	 * 
-	 * @param loop Indica si se repetira el ciclo de la animacion o no
+	 * @param loopMode If enabled, the animation will loop forever, otherwise, it will not loop.
 	 */
-	public Animation(boolean loop) {
-		this(10, loop);
+	public Animation(boolean loopMode) {
+		this(10, loopMode);
 	}
 
 	/**
-	 * Crea una animacion
+	 * Creates a new Animation.
 	 * 
-	 * @param initialCapacity Numero minimo de frames que se pueden agregar antes de que se redimensione la estructura
-	 *            de datos
-	 * @param repeat Indica si se repetira el ciclo de la animacion o no
+	 * @param initialCapacity Number of frames that can be added before resizing the array of frames.
+	 * @param loopMode If true, the animation will loop, otherwise it won't.
 	 */
-	public Animation(int initialCapacity, boolean repeat) {
+	public Animation(int initialCapacity, boolean loopMode) {
 		this.listeners = new ArrayList<AnimationStateListener>();
 		this.frames = new ArrayList<AnimationFrame>(initialCapacity);
 		this.currentFrameIndex = 0;
 		this.elapsedTime = 0;
-		this.loopModeEnabled = repeat;
+		this.loopModeEnabled = loopMode;
 		this.state = State.INITIALIZED;
 	}
 
 	/**
-	 * Agrega un frame a la animacion
+	 * Adds a frame to this Animation.
 	 * 
-	 * @param frame Nuevo frame, se agregara al final de la lista de frames
+	 * @param frame AnimationFrame to be added.
 	 */
 	public void addFrame(AnimationFrame frame) {
 		frames.add(frame);
 	}
 
 	/**
-	 * Devuelve todos los frames de la animacion
+	 * Returns all the AnimationFrames of this Animation.
 	 * 
-	 * @return Frames de la animacion
+	 * @return AnimationFrames
 	 */
 	public ArrayList<AnimationFrame> getFrames() {
 		return frames;
 	}
 
 	/**
-	 * Devuelve el frame actual
+	 * Returns the current frame of this Animation.
 	 * 
-	 * @return AnimationFrame o null si la lista de frames esta vacia
+	 * @return AnimationFrame or null if this Animation does not contain any frame.
 	 */
 	public AnimationFrame getCurrentFrame() {
 		if (frames.size() > 0) {
@@ -88,10 +86,10 @@ public class Animation {
 	}
 
 	/**
-	 * Actualiza la animacion y devuelve el frame actual
+	 * Updates this Animation and returns the current AnimationFrame.
 	 * 
-	 * @param delta Tiempo transcurrido desde la ultima actualizacion
-	 * @return AnimationFrame o null si la lista de frames esta vacia
+	 * @param delta Elapsed time since the last update.
+	 * @return AnimationFrame or null if this Animation does not contain any frame.
 	 */
 	public AnimationFrame update(float delta) {
 		if (state == State.INITIALIZED) {
@@ -122,7 +120,7 @@ public class Animation {
 	}
 
 	/**
-	 * Reinicia la animacion. No vacia la lista de frames.
+	 * Resets the state of this Animation. The list of AnimationFrames will not be reset.
 	 */
 	public void reset() {
 		currentFrameIndex = 0;
@@ -131,7 +129,7 @@ public class Animation {
 	}
 
 	/**
-	 * Vacia la lista de frames y reinicia la configuracion
+	 * Removes all the AnimationFrames of this Animation and resets it.
 	 */
 	public void clear() {
 		currentFrameIndex = 0;
@@ -141,18 +139,18 @@ public class Animation {
 	}
 
 	/**
-	 * Devuelve si la repeticion esta activada
+	 * Returns true if the loop mode is enabled.
 	 * 
-	 * @return true si se repetite el ciclo de la animacion, false en caso contrario
+	 * @return true if the loop mode is enabled, false otherwise
 	 */
 	public boolean isLoopModeEnabled() {
 		return loopModeEnabled;
 	}
 
 	/**
-	 * Asigna si se repite el ciclo de la animacion o no
+	 * Enables or disables the loop mode.
 	 * 
-	 * @param loopMode Indica si se repetira el ciclo de la animacion o no
+	 * @param loopMode true to enable the loop mode, false to disable it.
 	 */
 	public void setLoopModeEnabled(boolean loopMode) {
 		this.loopModeEnabled = loopMode;
@@ -163,7 +161,8 @@ public class Animation {
 	}
 
 	/**
-	 * Si la animacion no ha terminado, la pausa. Se puede reanudar con {@link #resume()}
+	 * Pauses this Animation if it has not finished (if loop mode is enabled, the Animation is never considered
+	 * finished).
 	 */
 	public void pause() {
 		if (state != State.FINISHED) {
@@ -173,7 +172,7 @@ public class Animation {
 	}
 
 	/**
-	 * Si la animacion esta pausada, la reanuda. Se puede reanudar con {@link #pause()}
+	 * Resumed this Animation if it was paused.
 	 */
 	public void resume() {
 		if (state == State.PAUSED) {
@@ -183,55 +182,55 @@ public class Animation {
 	}
 
 	/**
-	 * Devuelve si la animacion se esta ejecutando (esta pausada ni ha terminado)
+	 * Returns true if this Animation is running, and false if it is paused or finished.
 	 * 
-	 * @return true si la animacion esta ejecutandose, false en caso contrario
+	 * @return true if this Animation is running, false otherwise
 	 */
 	public boolean isRunning() {
 		return state == State.RUNNING;
 	}
 
 	/**
-	 * Devuelve si la animacion esta pausada
+	 * Returns true if this Animation is paused.
 	 * 
-	 * @return true si la animacion esta pausada, false en caso contrario
+	 * @return true if this Animation is paused, false otherwise
 	 */
 	public boolean isPaused() {
 		return state == State.PAUSED;
 	}
 
 	/**
-	 * Devuelve si la animacion ha terminado.<br>
-	 * Si la repeticion esta activada, devolvera siempre true, puesto que la animacion no termina nunca.
+	 * Returns true if this Animation is finished.<br>
+	 * If loop mode is enabled, an Animation is never considered finished.
 	 * 
-	 * @return true si la animacion ha terminado, false en caso contrario
+	 * @return true if this Animation is finished, false otherwise
 	 */
 	public boolean isFinished() {
 		return state == State.FINISHED;
 	}
 
 	/**
-	 * Agrega un {@link AnimationStateListener} a la lista de listeners
+	 * Registers an {@link AnimationStateListener} in this Animation.
 	 * 
-	 * @param listener listener a agregar
+	 * @param listener AnimationStateListener
 	 */
 	public void addAnimationStateListener(AnimationStateListener listener) {
 		listeners.add(listener);
 	}
 
 	/**
-	 * Elimina un {@link AnimationStateListener} de la lista de listeners
+	 * Removes the specified {@link AnimationStateListener} from the list of listeners of this animation.
 	 * 
-	 * @param listener listener a eliminar
-	 * @return true si se ha eliminado de la lista, false en caso de que no estuviera en la lista
+	 * @param listener AnimationStateListener
+	 * @return true if the specified listener was removed, false otherwise
 	 */
 	public boolean removeAnimationStateListener(AnimationStateListener listener) {
 		return listeners.remove(listener);
 	}
 
 	/**
-	 * Notifica a todos los listeners que la animacion ha comenzado.<br>
-	 * Llama a {@link AnimationStateListener#onAnimationStarted(Animation)}
+	 * Notifies all AnimationStateListeners that this Animation has started.<br>
+	 * Calls {@link AnimationStateListener#onAnimationStarted(Animation)} in every registered listener.
 	 */
 	protected void notifyAnimationStarted() {
 		for (int i = 0; i < listeners.size(); i++) {
@@ -240,8 +239,8 @@ public class Animation {
 	}
 
 	/**
-	 * Notifica a todos los listeners que la animacion ha sido pausada.<br>
-	 * Llama a {@link AnimationStateListener#onAnimationStarted(Animation)}
+	 * Notifies all AnimationStateListeners that this Animation has been paused.<br>
+	 * Calls {@link AnimationStateListener#onAnimationPaused(Animation)} in every registered listener.
 	 */
 	protected void notifyAnimationPaused() {
 		for (int i = 0; i < listeners.size(); i++) {
@@ -250,8 +249,8 @@ public class Animation {
 	}
 
 	/**
-	 * Notifica a todos los listeners que la animacion ha sido reanudada tras haber sido pausada previamente.<br>
-	 * Llama a {@link AnimationStateListener#onAnimationStarted(Animation)}
+	 * Notifies all AnimationStateListeners that this Animation has been resumed.<br>
+	 * Calls {@link AnimationStateListener#onAnimationResumed(Animation)} in every registered listener.
 	 */
 	protected void notifyAnimationResumed() {
 		for (int i = 0; i < listeners.size(); i++) {
@@ -260,8 +259,8 @@ public class Animation {
 	}
 
 	/**
-	 * Notifica a todos los listeners que la animacion ha pasado de un frame a otro.<br>
-	 * Llama a {@link AnimationStateListener#onAnimationFrameChanged(Animation)}
+	 * Notifies all AnimationStateListeners that the AnimationFrame has changed.<br>
+	 * Calls {@link AnimationStateListener#onAnimationFrameChanged(Animation)} in every registered listener.
 	 */
 	protected void notifyAnimationFrameChanged() {
 		for (int i = 0; i < listeners.size(); i++) {
@@ -270,8 +269,8 @@ public class Animation {
 	}
 
 	/**
-	 * Notifica a todos los listeners que la animacion ha completado un loop.<br>
-	 * Llama a {@link AnimationStateListener#onAnimationLoopFinished(Animation)}
+	 * Notifies all AnimationStateListeners that this Animation has looped.<br>
+	 * Calls {@link AnimationStateListener#onAnimationLoopFinished(Animation)} in every registered listener.
 	 */
 	protected void notifyAnimationLoopFinished() {
 		for (int i = 0; i < listeners.size(); i++) {
@@ -280,9 +279,9 @@ public class Animation {
 	}
 
 	/**
-	 * Notifica a todos los listeners que la animacion ha terminado. Si el modo loop esta activado, la animacion no
-	 * termina nunca, por lo que este metodo no deberia ser llamado en dicho caso.<br>
-	 * Llama a {@link AnimationStateListener#onAnimationFinished(Animation)}
+	 * Notifies all AnimationStateListeners that this Animation has finished. If the loop mode is enabled, the Animation
+	 * never finishes, so this method will never be called.<br>
+	 * Calls {@link AnimationStateListener#onAnimationFinished(Animation)} in every registered listener.
 	 */
 	protected void notifyAnimationFinished() {
 		for (int i = 0; i < listeners.size(); i++) {

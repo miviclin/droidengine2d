@@ -3,8 +3,7 @@ package com.miviclin.droidengine2d;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * EngineLock se utiliza para controlar la sincronizacion entre el hilo de actualizacion del juego y el hilo de
- * renderizado.
+ * EngineLock is used to synchronize the game thread and the rendering thread.
  * 
  * @author Miguel Vicente Linares
  * 
@@ -15,7 +14,7 @@ public class EngineLock {
 	public final Object lock;
 
 	/**
-	 * Crea un EngineLock
+	 * Creates an EngineLock.
 	 */
 	public EngineLock() {
 		this.allowUpdate = new AtomicBoolean();

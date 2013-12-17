@@ -5,7 +5,7 @@ import android.util.SparseIntArray;
 import com.miviclin.droidengine2d.graphics.texture.TextureRegion;
 
 /**
- * Representa un caracter de una fuente
+ * Character of a {@link Font}.
  * 
  * @author Miguel Vicente Linares
  * 
@@ -27,16 +27,17 @@ public class FontChar {
 	private SparseIntArray kernings;
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 * 
-	 * @param id ID del caracter
-	 * @param textureRegion TextureRegion del caracter en el atlas de la fuente
-	 * @param xOffset Offset en el eje X que deberia aplicarse al renderizar el caracter
-	 * @param yOffset Offset en el eje Y que deberia aplicarse al renderizar el caracter
-	 * @param xAdvance Offset en el eje X que deberia aplicarse para renderizar el siguiente caracter
-	 * @param channel Canal de color de la textura en el que se encuentra la letra. Utilizar {@link FontChar#CHANNEL_R},
-	 *            {@link FontChar#CHANNEL_G}, {@link FontChar#CHANNEL_B}, {@link FontChar#CHANNEL_A},
-	 *            {@link FontChar#CHANNEL_RGBA}
+	 * @param id ID.
+	 * @param textureRegion TextureRegion.
+	 * @param xOffset Offset in the X axis in pixels that should be applied when rendering this character.
+	 * @param yOffset Offset in the Y axis in pixels that should be applied when rendering this character.
+	 * @param xAdvance Offset in the X axis in pixels that should be applied when rendering the next character after
+	 *            this one.
+	 * @param channel Color channel of the letter in the texture. Use {@link FontChar#CHANNEL_R},
+	 *            {@link FontChar#CHANNEL_G}, {@link FontChar#CHANNEL_B}, {@link FontChar#CHANNEL_A}, or
+	 *            {@link FontChar#CHANNEL_RGBA}.
 	 */
 	public FontChar(int id, TextureRegion textureRegion, int xOffset, int yOffset, int xAdvance, int channel) {
 		super();
@@ -50,7 +51,7 @@ public class FontChar {
 	}
 
 	/**
-	 * Devuelve el ID del caracter
+	 * Returns the ID of this character.
 	 * 
 	 * @return ID
 	 */
@@ -59,7 +60,7 @@ public class FontChar {
 	}
 
 	/**
-	 * Devuelve el TextureRegion del caracter
+	 * Returns the TextureRegion of this character.
 	 * 
 	 * @return TextureRegion
 	 */
@@ -68,47 +69,49 @@ public class FontChar {
 	}
 
 	/**
-	 * Devuelve el offset en el eje X que deberia aplicarse al renderizar el caracter, en pixels
+	 * Returns the offset in the X axis in pixels that should be applied when rendering this character.
 	 * 
-	 * @return Offset en el eje X
+	 * @return offset
 	 */
 	public int getxOffset() {
 		return xOffset;
 	}
 
 	/**
-	 * Devuelve el offset en el eje Y que deberia aplicarse al renderizar el caracter, en pixels
+	 * Returns the offset in the Y axis in pixels that should be applied when rendering this character.
 	 * 
-	 * @return Offset en el eje Y
+	 * @return offset
 	 */
 	public int getyOffset() {
 		return yOffset;
 	}
 
 	/**
-	 * Devuelve el offset en el eje X que deberia aplicarse para renderizar el siguiente caracter, en pixels
+	 * Returns the offset in the X axis in pixels that should be applied when rendering the next character after this
+	 * one.
 	 * 
-	 * @return Offset hasta el siguiente caracter
+	 * @return offset
 	 */
 	public int getxAdvance() {
 		return xAdvance;
 	}
 
 	/**
-	 * Devuelve el canal de color de la textura en el que se encuentra el caracter: {@link FontChar#CHANNEL_R},
-	 * {@link FontChar#CHANNEL_G}, {@link FontChar#CHANNEL_B}, {@link FontChar#CHANNEL_A}, {@link FontChar#CHANNEL_RGBA}
+	 * Returns the color channel of the letter in the texture: {@link FontChar#CHANNEL_R}, {@link FontChar#CHANNEL_G},
+	 * {@link FontChar#CHANNEL_B}, {@link FontChar#CHANNEL_A}, or {@link FontChar#CHANNEL_RGBA}.
 	 * 
-	 * @return Canal de color de la textura en el que se encuentra representado el caracter
+	 * @return color channel of the letter
 	 */
 	public int getChannel() {
 		return channel;
 	}
 
 	/**
-	 * Devuelve el mapa cuya clave es el ID de otro caracter y el valor mapeado es el offset que debe haber desde dicho
-	 * caracter a este
+	 * Returns the map of kernings of this character.<br>
+	 * The key of this map is the ID of other character, and the mapped value is the offset that should be applied
+	 * between that character and this one.
 	 * 
-	 * @return Mapa de kernings
+	 * @return map of kernings of this character
 	 */
 	public SparseIntArray getKernings() {
 		return kernings;

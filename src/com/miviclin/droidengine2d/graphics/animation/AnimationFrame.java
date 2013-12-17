@@ -3,7 +3,7 @@ package com.miviclin.droidengine2d.graphics.animation;
 import com.miviclin.droidengine2d.graphics.texture.TextureRegion;
 
 /**
- * Representa un frame de animacion
+ * Animation frame.
  * 
  * @author Miguel Vicente Linares
  * 
@@ -14,10 +14,10 @@ public class AnimationFrame {
 	private TextureRegion textureRegion;
 
 	/**
-	 * Crea un AnimationFrame
+	 * Creates a new AnimationFrame.
 	 * 
-	 * @param delay Tiempo minimo que se mostrara este frame antes de actualizar al siguiente
-	 * @param textureRegion TextureRegion que se mostrara en este frame
+	 * @param delay Minimum time this frame will be displayed.
+	 * @param textureRegion TextureRegion.
 	 */
 	public AnimationFrame(float delay, TextureRegion textureRegion) {
 		super();
@@ -26,36 +26,36 @@ public class AnimationFrame {
 	}
 
 	/**
-	 * Devuelve el tiempo minimo que se mostrara este frame antes de actualizar al siguiente
+	 * Returns the minimum time this frame will be displayed.
 	 * 
-	 * @return tiempo que se mostrara este frame antes de actualizar al siguiente
+	 * @return minimum time this frame will be displayed
 	 */
 	public float getDelay() {
 		return delay;
 	}
 
 	/**
-	 * Asigna el tiempo minimo que se mostrara este frame antes de actualizar al siguiente
+	 * Sets the minimum time this frame will be displayed.
 	 * 
-	 * @param delay Nuevo valor
+	 * @param delay Minimum time this frame will be displayed.
 	 */
 	public void setDelay(float delay) {
 		this.delay = delay;
 	}
 
 	/**
-	 * Devuelve el TextureRegion que se mostrara en este frame
+	 * Returns the TextureRegion associated to this AnimationFrame.
 	 * 
-	 * @return TextureRegion que se mostrara en este frame
+	 * @return TextureRegion
 	 */
 	public TextureRegion getTextureRegion() {
 		return textureRegion;
 	}
 
 	/**
-	 * Asigna el TextureRegion que se mostrara en este frame
+	 * Sets the TextureRegion associated to this AnimationFrame.
 	 * 
-	 * @param textureRegion Nuevo TextureRegion
+	 * @param textureRegion TextureRegion.
 	 */
 	public void setTextureRegion(TextureRegion textureRegion) {
 		this.textureRegion = textureRegion;

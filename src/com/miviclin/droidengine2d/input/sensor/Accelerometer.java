@@ -8,7 +8,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
 /**
- * Clase que toma datos del acelerometro
+ * Accelerometer.
  * 
  * @author Miguel Vicente Linares
  * 
@@ -20,19 +20,19 @@ public class Accelerometer implements SensorEventListener {
 	private SensorManager sensorManager;
 
 	/**
-	 * Crea el objeto y empieza a registrar valores.
+	 * Creates an Accelerometer and starts registering values.
 	 * 
-	 * @param activity Activity
+	 * @param activity Activity.
 	 */
 	public Accelerometer(Activity activity) {
 		this(0.2f, activity);
 	}
 
 	/**
-	 * Crea el objeto y empieza a registrar valores.
+	 * Creates an Accelerometer and starts registering values.
 	 * 
-	 * @param lowPassFilterAttenuation Coeficiente de atenuacion del filtro a paso bajo
-	 * @param activity Activity
+	 * @param lowPassFilterAttenuation Low pass filter attenuation value.
+	 * @param activity Activity.
 	 */
 	public Accelerometer(float lowPassFilterAttenuation, Activity activity) {
 		this.lowPassFilterAttenuation = lowPassFilterAttenuation;
@@ -55,7 +55,7 @@ public class Accelerometer implements SensorEventListener {
 	}
 
 	/**
-	 * Comienza a registrar valores del sensor
+	 * Starts listening the accelerometer.
 	 */
 	public void startListening() {
 		Sensor accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -63,32 +63,32 @@ public class Accelerometer implements SensorEventListener {
 	}
 
 	/**
-	 * Para de registrar valores del sensor
+	 * Stops listening the accelerometer.
 	 */
 	public void stopListening() {
 		sensorManager.unregisterListener(this);
 	}
 
 	/**
-	 * Devuelve el coeficiente de atenuacion del filtro a paso bajo
+	 * Returns the attenuation value of the low pass filter.
 	 * 
-	 * @return Coeficiente de atenuacion del filtro a paso bajo
+	 * @return the attenuation value of the low pass filter
 	 */
 	public float getLowPassFilterAttenuation() {
 		return lowPassFilterAttenuation;
 	}
 
 	/**
-	 * Asigna el coeficiente de atenuacion del filtro a paso bajo
+	 * Sets the attenuation value of the low pass filter
 	 * 
-	 * @param lowPassFilterAttenuation Nuevo valor
+	 * @param lowPassFilterAttenuation New value.
 	 */
 	public void setLowPassFilterAttenuation(float lowPassFilterAttenuation) {
 		this.lowPassFilterAttenuation = lowPassFilterAttenuation;
 	}
 
 	/**
-	 * Devuelve la componente X del acelerometro
+	 * Returns the X component of the vector read from the accelerometer.
 	 * 
 	 * @return X
 	 */
@@ -97,7 +97,7 @@ public class Accelerometer implements SensorEventListener {
 	}
 
 	/**
-	 * Devuelve la componente Y del acelerometro
+	 * Returns the Y component of the vector read from the accelerometer.
 	 * 
 	 * @return Y
 	 */
@@ -106,7 +106,7 @@ public class Accelerometer implements SensorEventListener {
 	}
 
 	/**
-	 * Devuelve la componente Z del acelerometro
+	 * Returns the Z component of the vector read from the accelerometer.
 	 * 
 	 * @return Z
 	 */

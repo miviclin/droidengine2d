@@ -6,7 +6,7 @@ import com.miviclin.droidengine2d.util.math.Matrix4;
 import com.miviclin.droidengine2d.util.math.MatrixFix;
 
 /**
- * Clase que contiene varios metodos para aplicar transformaciones sobre matrices
+ * Utility methods to transform matrices.
  * 
  * @author Miguel Vicente Linares
  * 
@@ -14,16 +14,16 @@ import com.miviclin.droidengine2d.util.math.MatrixFix;
 public class TransformUtilities {
 
 	/**
-	 * Aplica las siguientes transformaciones sobre una matriz:<br>
-	 * - Translacion<br>
-	 * - Escala
+	 * Applies the following transformations to the specified matrix:<br>
+	 * - Translation.<br>
+	 * - Scale.
 	 * 
-	 * @param matrix matriz de 4x4 en formato array
-	 * @param offset indice del array en el que esta el primer elemento de la matriz
-	 * @param tx Translacion en el eje X
-	 * @param ty Translacion en el eje Y
-	 * @param sx Escala en el eje X
-	 * @param sy Escala en el eje Y
+	 * @param matrix 4x4 matrix.
+	 * @param offset Index of the array where the first element of the matrix is located.
+	 * @param tx Translation in the X axis.
+	 * @param ty Translation in the Y axis.
+	 * @param sx Scale in the X axis.
+	 * @param sy Scale in the Y axis.
 	 */
 	public static void transform2D(float[] matrix, int offset, float tx, float ty, float sx, float sy) {
 		float x = tx + sx / 2;
@@ -34,18 +34,18 @@ public class TransformUtilities {
 	}
 
 	/**
-	 * Aplica las siguientes transformaciones sobre una matriz:<br>
-	 * - Translacion<br>
-	 * - Rotacion alrededor del centro<br>
-	 * - Escala
+	 * Applies the following transformations to the specified matrix:<br>
+	 * - Translation.<br>
+	 * - Rotation around the origin.<br>
+	 * - Scale.
 	 * 
-	 * @param matrix matriz de 4x4 en formato array
-	 * @param offset indice del array en el que esta el primer elemento de la matriz
-	 * @param tx Translacion en el eje X
-	 * @param ty Translacion en el eje Y
-	 * @param rotationAroundCenter Angulo de rotacion alrededor del centro (calculado a partir de la escala / 2)
-	 * @param sx Escala en el eje X
-	 * @param sy Escala en el eje Y
+	 * @param matrix 4x4 matrix.
+	 * @param offset Index of the array where the first element of the matrix is located.
+	 * @param tx Translation in the X axis.
+	 * @param ty Translation in the Y axis.
+	 * @param rotationAroundCenter Rotation angle around the origin (scale / 2).
+	 * @param sx Scale in the X axis.
+	 * @param sy Scale in the Y axis.
 	 */
 	public static void transform2D(float[] matrix, int offset, float tx, float ty, float rotationAroundCenter,
 			float sx, float sy) {
@@ -59,20 +59,20 @@ public class TransformUtilities {
 	}
 
 	/**
-	 * Aplica las siguientes transformaciones sobre una matriz:<br>
-	 * - Translacion<br>
-	 * - Rotacion alrededor de un punto externo<br>
-	 * - Escala
+	 * Applies the following transformations to the specified matrix:<br>
+	 * - Translation.<br>
+	 * - Rotation around the origin.<br>
+	 * - Scale.
 	 * 
-	 * @param matrix matriz de 4x4 en formato array
-	 * @param offset indice del array en el que esta el primer elemento de la matriz
-	 * @param tx Translacion en el eje X
-	 * @param ty Translacion en el eje Y
-	 * @param ox Coordenada X del punto externo de rotacion
-	 * @param oy Coordenada Y del punto externo de rotacion
-	 * @param rotationAroundPoint Angulo de rotacion alrededor del punto especificado
-	 * @param sx Escala en el eje X
-	 * @param sy Escala en el eje Y
+	 * @param matrix 4x4 matrix.
+	 * @param offset Index of the array where the first element of the matrix is located.
+	 * @param tx Translation in the X axis.
+	 * @param ty Translation in the Y axis.
+	 * @param ox X coordinate of the rotation point (origin).
+	 * @param oy Y coordinate of the rotation point (origin).
+	 * @param rotationAroundCenter Rotation angle around the origin (scale / 2).
+	 * @param sx Scale in the X axis.
+	 * @param sy Scale in the Y axis.
 	 */
 	public static void transform2D(float[] matrix, int offset, float tx, float ty, float ox, float oy,
 			float rotationAroundPoint, float sx, float sy) {
@@ -90,22 +90,22 @@ public class TransformUtilities {
 	}
 
 	/**
-	 * Aplica las siguientes transformaciones sobre una matriz:<br>
-	 * - Translacion<br>
-	 * - Rotacion alrededor de un punto externo<br>
-	 * - Rotacion alrededor del centro<br>
-	 * - Escala
+	 * Applies the following transformations to the specified matrix:<br>
+	 * - Translation.<br>
+	 * - Rotation around an external point.<br>
+	 * - Rotation around the origin.<br>
+	 * - Scale.
 	 * 
-	 * @param matrix matriz de 4x4 en formato array
-	 * @param offset indice del array en el que esta el primer elemento de la matriz
-	 * @param tx Translacion en el eje X
-	 * @param ty Translacion en el eje Y
-	 * @param ox Coordenada X del punto externo de rotacion
-	 * @param oy Coordenada Y del punto externo de rotacion
-	 * @param rotationAroundPoint Angulo de rotacion alrededor del punto especificado
-	 * @param rotationAroundCenter Angulo de rotacion alrededor del centro (calculado a partir de la escala / 2)
-	 * @param sx Escala en el eje X
-	 * @param sy Escala en el eje Y
+	 * @param matrix 4x4 matrix.
+	 * @param offset Index of the array where the first element of the matrix is located.
+	 * @param tx Translation in the X axis.
+	 * @param ty Translation in the Y axis.
+	 * @param ox X coordinate of the rotation point.
+	 * @param oy Y coordinate of the rotation point.
+	 * @param rotationAroundPoint Rotation angle around the specified point.
+	 * @param rotationAroundCenter Rotation angle around the center (scale / 2)
+	 * @param sx Scale in the X axis.
+	 * @param sy Scale in the Y axis.
 	 */
 	public static void transform2D(float[] matrix, int offset, float tx, float ty, float ox, float oy,
 			float rotationAroundPoint, float rotationAroundCenter, float sx, float sy) {
@@ -124,15 +124,15 @@ public class TransformUtilities {
 	}
 
 	/**
-	 * Aplica las siguientes transformaciones sobre una matriz:<br>
-	 * - Translacion<br>
-	 * - Escala
+	 * Applies the following transformations to the specified matrix:<br>
+	 * - Translation.<br>
+	 * - Scale.
 	 * 
-	 * @param matrix matriz de 4x4
-	 * @param tx Translacion en el eje X
-	 * @param ty Translacion en el eje Y
-	 * @param sx Escala en el eje X
-	 * @param sy Escala en el eje Y
+	 * @param matrix 4x4 matrix.
+	 * @param tx Translation in the X axis.
+	 * @param ty Translation in the Y axis.
+	 * @param sx Scale in the X axis.
+	 * @param sy Scale in the Y axis.
 	 */
 	public static void transform2D(Matrix4 matrix, float tx, float ty, float sx, float sy) {
 		matrix.setIdentity();
@@ -141,17 +141,17 @@ public class TransformUtilities {
 	}
 
 	/**
-	 * Aplica las siguientes transformaciones sobre una matriz:<br>
-	 * - Translacion<br>
-	 * - Rotacion alrededor del centro<br>
-	 * - Escala
+	 * Applies the following transformations to the specified matrix:<br>
+	 * - Translation.<br>
+	 * - Rotation around the origin.<br>
+	 * - Scale.
 	 * 
-	 * @param matrix matriz de 4x4
-	 * @param tx Translacion en el eje X
-	 * @param ty Translacion en el eje Y
-	 * @param rotationAroundCenter Angulo de rotacion alrededor del centro (calculado a partir de la escala / 2)
-	 * @param sx Escala en el eje X
-	 * @param sy Escala en el eje Y
+	 * @param matrix 4x4 matrix.
+	 * @param tx Translation in the X axis.
+	 * @param ty Translation in the Y axis.
+	 * @param rotationAroundCenter Rotation angle around the origin (scale / 2).
+	 * @param sx Scale in the X axis.
+	 * @param sy Scale in the Y axis.
 	 */
 	public static void transform2D(Matrix4 matrix, float tx, float ty, float rotationAroundCenter, float sx, float sy) {
 		matrix.setIdentity();
@@ -161,19 +161,19 @@ public class TransformUtilities {
 	}
 
 	/**
-	 * Aplica las siguientes transformaciones sobre una matriz:<br>
-	 * - Translacion<br>
-	 * - Rotacion alrededor de un punto externo<br>
-	 * - Escala
+	 * Applies the following transformations to the specified matrix:<br>
+	 * - Translation.<br>
+	 * - Rotation around the origin.<br>
+	 * - Scale.
 	 * 
-	 * @param matrix matriz de 4x4
-	 * @param tx Translacion en el eje X
-	 * @param ty Translacion en el eje Y
-	 * @param ox Coordenada X del punto externo de rotacion
-	 * @param oy Coordenada Y del punto externo de rotacion
-	 * @param rotationAroundPoint Angulo de rotacion alrededor del punto especificado
-	 * @param sx Escala en el eje X
-	 * @param sy Escala en el eje Y
+	 * @param matrix 4x4 matrix.
+	 * @param tx Translation in the X axis.
+	 * @param ty Translation in the Y axis.
+	 * @param ox X coordinate of the rotation point (origin).
+	 * @param oy Y coordinate of the rotation point (origin).
+	 * @param rotationAroundCenter Rotation angle around the origin (scale / 2).
+	 * @param sx Scale in the X axis.
+	 * @param sy Scale in the Y axis.
 	 */
 	public static void transform2D(Matrix4 matrix, float tx, float ty, float ox, float oy, float rotationAroundPoint,
 			float sx, float sy) {
@@ -189,21 +189,21 @@ public class TransformUtilities {
 	}
 
 	/**
-	 * Aplica las siguientes transformaciones sobre una matriz:<br>
-	 * - Translacion<br>
-	 * - Rotacion alrededor de un punto externo<br>
-	 * - Rotacion alrededor del centro<br>
-	 * - Escala
+	 * Applies the following transformations to the specified matrix:<br>
+	 * - Translation.<br>
+	 * - Rotation around an external point.<br>
+	 * - Rotation around the origin.<br>
+	 * - Scale.
 	 * 
-	 * @param matrix matriz de 4x4
-	 * @param tx Translacion en el eje X
-	 * @param ty Translacion en el eje Y
-	 * @param ox Coordenada X del punto externo de rotacion
-	 * @param oy Coordenada Y del punto externo de rotacion
-	 * @param rotationAroundPoint Angulo de rotacion alrededor del punto especificado
-	 * @param rotationAroundCenter Angulo de rotacion alrededor del centro (calculado a partir de la escala / 2)
-	 * @param sx Escala en el eje X
-	 * @param sy Escala en el eje Y
+	 * @param matrix 4x4 matrix.
+	 * @param tx Translation in the X axis.
+	 * @param ty Translation in the Y axis.
+	 * @param ox X coordinate of the rotation point.
+	 * @param oy Y coordinate of the rotation point.
+	 * @param rotationAroundPoint Rotation angle around the specified point.
+	 * @param rotationAroundCenter Rotation angle around the center (scale / 2)
+	 * @param sx Scale in the X axis.
+	 * @param sy Scale in the Y axis.
 	 */
 	public static void transform2D(Matrix4 matrix, float tx, float ty, float ox, float oy, float rotationAroundPoint,
 			float rotationAroundCenter, float sx, float sy) {

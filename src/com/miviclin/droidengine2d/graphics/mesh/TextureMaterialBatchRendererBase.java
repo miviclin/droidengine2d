@@ -9,8 +9,7 @@ import com.miviclin.droidengine2d.graphics.texture.TextureRegion;
 import com.miviclin.droidengine2d.util.math.Vector2;
 
 /**
- * Clase base de la que deben heredar los renderers de mallas que representen batches de figuras rectangulares cuyo
- * material sea TextureMaterial
+ * Base class for TextureMaterial batch renderers.
  * 
  * @author Miguel Vicente Linares
  * 
@@ -25,11 +24,11 @@ public abstract class TextureMaterialBatchRendererBase<M extends Material> exten
 	private boolean requestTextureBind;
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 * 
-	 * @param verticesDataStride Stride de los datos de los vertices
-	 * @param context Context en el que se ejecuta el juego
-	 * @param shaderProgram Shader Program
+	 * @param verticesDataStride Data stride of the vertices.
+	 * @param context Context.
+	 * @param shaderProgram ShaderProgram.
 	 */
 	public TextureMaterialBatchRendererBase(int verticesDataStride, Context context) {
 		super(verticesDataStride, 32);
@@ -46,15 +45,16 @@ public abstract class TextureMaterialBatchRendererBase<M extends Material> exten
 	}
 
 	/**
-	 * Agrega el Sprite al batch.<br>
-	 * En caso de que el batch estuviera lleno, se renderiza en 1 sola llamada y se vacia para agregar el nuevo sprite.
+	 * Adds a sprite to this batch.<br>
+	 * If the batch was full, it will be rendered in one draw call and it will be left empty. Then, the specified
+	 * rectangle will be added to this batch.
 	 * 
-	 * @param textureRegion TextureRegion
-	 * @param position Posicion
-	 * @param scale Escala
-	 * @param origin Origen de la figura (debe ser un valor entre 0.0 y 1.0)
-	 * @param rotation Angulo de rotacion sobre el centro
-	 * @param camera Camara
+	 * @param textureRegion TextureRegion.
+	 * @param position Position.
+	 * @param scale Scale.
+	 * @param origin Origin of the rectangle (value between 0.0f and 1.0f).
+	 * @param rotation Rotation angle around the origin.
+	 * @param camera Camera.
 	 */
 	protected void setupSprite(TextureRegion textureRegion, Vector2 position, Vector2 scale, Vector2 origin,
 			float rotation, Camera camera) {
@@ -69,10 +69,10 @@ public abstract class TextureMaterialBatchRendererBase<M extends Material> exten
 	}
 
 	/**
-	 * Comprueba si la textura es distinta a la textura seleccionada actualmente
+	 * Checks if the specified TextureRegion's Texture is different from the currently selected Texture.
 	 * 
-	 * @param textureRegion TextureRegion cuya textura se va a comprobar
-	 * @return true si la textura ha cambiado, false en caso contrario
+	 * @param textureRegion TextureRegion.
+	 * @return true if the Texture is different, false otherwise.
 	 */
 	protected boolean checkTextureChanged(TextureRegion textureRegion) {
 		boolean textureChanged = false;
@@ -85,10 +85,12 @@ public abstract class TextureMaterialBatchRendererBase<M extends Material> exten
 	}
 
 	/**
-	 * Prepara la textura. La recarga y enlaza si es necesario.
+	 * Sets up the texture.<br>
+	 * The texture is reloaded and bound if needed.
 	 * 
-	 * @param newTexture Proxima textura que se pretende utilizar
-	 * @param textureChanged Indica si es necesario reenlazar la textura
+	 * @param newTexture Texture.
+	 * @param textureChanged If true, the current texture will be replaced by the new one, otherwise it might be
+	 *            replaced but it is not guaranteed.
 	 */
 	protected void setupTexture(Texture newTexture, boolean textureChanged) {
 		if (textureChanged || requestTextureBind) {
@@ -104,9 +106,9 @@ public abstract class TextureMaterialBatchRendererBase<M extends Material> exten
 	}
 
 	/**
-	 * Actualiza las coordenadas UV del sprite en la geometria de la malla del batch.
+	 * Sets the UV coordinates of the vertices of the last rectangle added to this batch.
 	 * 
-	 * @param textureRegion TextureRegion que se va a renderizar
+	 * @param textureRegion TextureRegion that will be used for the last rectangle added.
 	 */
 	protected void setupUVCoords(TextureRegion textureRegion) {
 		int i = getBatchSize() * 4;
@@ -122,7 +124,7 @@ public abstract class TextureMaterialBatchRendererBase<M extends Material> exten
 	}
 
 	/**
-	 * Offset de la posicion en los datos de un vertice
+	 * Vertex position offset in the vertex buffer.
 	 * 
 	 * @return Offset
 	 */
@@ -131,7 +133,7 @@ public abstract class TextureMaterialBatchRendererBase<M extends Material> exten
 	}
 
 	/**
-	 * Offset de las coordenadas UV en los datos de un vertice
+	 * Offset of the UV coordinates in the vertex buffer.
 	 * 
 	 * @return Offset
 	 */

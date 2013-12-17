@@ -3,7 +3,8 @@ package com.miviclin.droidengine2d.util;
 import java.util.Arrays;
 
 /**
- * Array es una estructura de datos cuya funcionalidad es similar a la funcionalidad basica del ArrayList
+ * Array is a data structure similar to {@link java.util.ArrayList}.<br>
+ * The main difference is that it is possible to specify the way it is resized.
  * 
  * @author Miguel Vicente Linares
  * 
@@ -16,27 +17,26 @@ public class Array<T> {
 	private int capacityIncrement;
 
 	/**
-	 * Crea un Array
+	 * Creates a new Array.
 	 */
 	public Array() {
 		this(16);
 	}
 
 	/**
-	 * Crea un Array
+	 * Creates a new Array.
 	 * 
-	 * @param initialCapacity capacidad inicial del Array
+	 * @param initialCapacity Initial capacity.
 	 */
 	public Array(int initialCapacity) {
 		this(initialCapacity, 16);
 	}
 
 	/**
-	 * Crea un Array
+	 * Creates a new Array.
 	 * 
-	 * @param initialCapacity capacidad inicial del Array
-	 * @param capacityIncrement Cuando el Array se llene, se incrementara su capacidad en el numero de elementos
-	 *            especificado en este parametro
+	 * @param initialCapacity Initial capacity.
+	 * @param capacityIncrement When the Array is full, it will resized incrementing its capacity using this value.
 	 */
 	public Array(int initialCapacity, int capacityIncrement) {
 		this.objects = new Object[initialCapacity];
@@ -45,9 +45,9 @@ public class Array<T> {
 	}
 
 	/**
-	 * Agrega un objeto al final del Array. Si el Array esta lleno, se redimensionara automaticamente.
+	 * Appends the specified object to the end of this Array.
 	 * 
-	 * @param object Objeto que se va a agregar al Array
+	 * @param object Object to be added.
 	 */
 	public void add(T object) {
 		if (size == objects.length) {
@@ -57,11 +57,11 @@ public class Array<T> {
 	}
 
 	/**
-	 * Agrega un objeto en la posicion especificada del Array. El elemento se inserta justo delante del elemento que
-	 * hubiera inicialmente en la posicion especificada. Si el Array esta lleno, se redimensionara automaticamente.
+	 * Inserts the specified object at the specified position in this Array. Shifts the element currently at that
+	 * position (if any) and any subsequent elements to the right (adds one to their indices).
 	 * 
-	 * @param index Indice en el que se insertara el objeto
-	 * @param object Objeto que se va a agregar al Array
+	 * @param index Position.
+	 * @param object Object to be added.
 	 */
 	public void add(int index, T object) {
 		if (index < 0 || index > size) {
@@ -80,9 +80,10 @@ public class Array<T> {
 	}
 
 	/**
-	 * Asegura que el Array tenga la capacidad suficiente como para almacenar el numero de elementos especificado
+	 * Increases the capacity of this Array instance, if necessary, to ensure that it can hold at least the number of
+	 * elements specified by the capacity argument.
 	 * 
-	 * @param capacity Capacidad que se quiere garantizar que tenga el Array
+	 * @param capacity Minimum capacity.
 	 */
 	public void ensureCapacity(int capacity) {
 		if (objects.length < capacity) {
@@ -93,10 +94,10 @@ public class Array<T> {
 	}
 
 	/**
-	 * Devuelve el objeto que se encuentra en la posicion especficada del Array.
+	 * Returns the object at the specified position of this Array
 	 * 
-	 * @param index Posicion del Array cuyo elemento se quiere obtener
-	 * @return Objeto almacenado en la posicion especificada o null si no habia ninguno
+	 * @param index Position.
+	 * @return Object at the specified position or null.
 	 */
 	public T get(int index) {
 		if (index < 0 || index >= size) {
@@ -108,7 +109,7 @@ public class Array<T> {
 	}
 
 	/**
-	 * Elimina todos los elementos del Array, dejandolo vacio.
+	 * Removes all of the elements from this Array. The Array will be empty after this call returns.
 	 */
 	public void clear() {
 		if (size != 0) {
@@ -118,10 +119,10 @@ public class Array<T> {
 	}
 
 	/**
-	 * Comprueba si el objeto especificado se encuentra en el Array (utilizando el metodo equals(Object))
+	 * Returns true if this list contains the specified object.
 	 * 
-	 * @param object Objeto que se quiere buscar
-	 * @return true si el Array contiene al objeto especificado, false en caso contrario
+	 * @param object Object to be compared with the objects in the Array.
+	 * @return true if this Array contains the specified object, false otherwise.
 	 */
 	public boolean contains(Object object) {
 		for (int i = 0; i < size; i++) {
@@ -133,10 +134,10 @@ public class Array<T> {
 	}
 
 	/**
-	 * Devuelve el indice en el que se encuentra el objeto especificado
+	 * Returns the index of the first occurrence of the specified objact in this Array.
 	 * 
-	 * @param object Objeto que se quiere buscar
-	 * @return indice en el que se encuentra, o -1 si no se encuentra
+	 * @param object Object.
+	 * @return index or -1 if not found
 	 */
 	public int indexOf(Object object) {
 		for (int i = 0; i < size; i++) {
@@ -148,10 +149,10 @@ public class Array<T> {
 	}
 
 	/**
-	 * Elimina el elemento situado en el indice especificado del Array y lo devuelve
+	 * Removes the object at the specified position in this Array.
 	 * 
-	 * @param index Indice cuyo elemento se quiere eliminar
-	 * @return Elemento eliminado
+	 * @param index Index of the object to be removed.
+	 * @return Removed element or null
 	 */
 	public T remove(int index) {
 		if (index < 0 || index >= size) {
@@ -165,10 +166,10 @@ public class Array<T> {
 	}
 
 	/**
-	 * Elimina el objeto especificado del Array
+	 * Removes the first occurrence of the specified object from this Array.
 	 * 
-	 * @param object Objeto que se quiere eliminar
-	 * @return true si se ha eliminado un objeto, false en caso contrario
+	 * @param object Object to remove.
+	 * @return true if the objact was removed, false otherwise
 	 */
 	public boolean remove(Object object) {
 		for (int i = 0; i < size; i++) {
@@ -182,12 +183,11 @@ public class Array<T> {
 	}
 
 	/**
-	 * Inserta el elemento especificado en la posicion especificada del Array. Sustituye el elemento que hubiera
-	 * previamente en dicha posicion.
+	 * Replaces the object at the specified position in this Array with the specified object.
 	 * 
-	 * @param index Indice en el que se quiere insertar el objeto
-	 * @param object Objeto que se va a insertar
-	 * @return Objeto que hubiera en la posicion especificada del Array
+	 * @param index Index of the object to replace.
+	 * @param object Object to be stored at the specified position.
+	 * @return object previously at the specified position
 	 */
 	public T set(int index, T object) {
 		if (index < 0 || index >= size) {
@@ -200,9 +200,9 @@ public class Array<T> {
 	}
 
 	/**
-	 * Devuelve el numero de elementos del Array
+	 * Returns the number of objects in this Array
 	 * 
-	 * @return numero de elementos que contiene el Array
+	 * @return number of objects in this Array
 	 */
 	public int size() {
 		return size;

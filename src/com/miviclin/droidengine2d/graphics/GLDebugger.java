@@ -6,7 +6,8 @@ import android.opengl.GLU;
 import android.util.Log;
 
 /**
- * Clase que proporciona una forma de obtener mensajes de error de OpenGL en caso de que se produzca un error.
+ * OpenGL debugger.<br>
+ * Allows getting error messages from OpenGL errors, logging the number of draw calls, etc.
  * 
  * @author Miguel Vicente Linares
  * 
@@ -23,7 +24,7 @@ public final class GLDebugger {
 	private int logFlags;
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 */
 	private GLDebugger() {
 		this.debugModeEnabled = false;
@@ -32,7 +33,7 @@ public final class GLDebugger {
 	}
 
 	/**
-	 * Devuelve la instancia de GLDebugger
+	 * Returns the instance of GLDebugger.
 	 * 
 	 * @return GLDebugger
 	 */
@@ -44,20 +45,20 @@ public final class GLDebugger {
 	}
 
 	/**
-	 * Asigna los flags de logging. Utilizar {@link GLDebugger#FLAG_NO_LOGGING} para desactivar el logging
+	 * Sets logging flags. Use {@link GLDebugger#FLAG_NO_LOGGING} to disable logging.
 	 * 
-	 * @param flags Flags
+	 * @param flags Logging flags.
 	 */
 	public void setLoggingFlags(int flags) {
 		this.logFlags = flags;
 	}
 
 	/**
-	 * Comprueba si se ha producido un error en alguna funcion de OpenGL llamada previamente.<br>
-	 * Si el modo debug esta desactivado, este metodo no hace nada a menos que se detecte un fallo al llamar a
-	 * {@link GLDebugger#checkGLError()}
+	 * Checks if any OpenGL erros occurred before calling this method.<br>
+	 * If the debug mode is disabled, this method will not do anything.
 	 * 
-	 * @throws GLException Si se detecta un error
+	 * @throws GLException If an error is detected.
+	 * @see GLDebugger#checkGLError()
 	 */
 	public void passiveCheckGLError() {
 		int errorCode;
@@ -69,11 +70,11 @@ public final class GLDebugger {
 	}
 
 	/**
-	 * Comprueba si se ha producido un error en alguna funcion de OpenGL llamada previamente.<br>
-	 * Si se detecta un error, se activara el modo debug, de forma que las llamadas a {@link #passiveCheckGLError()}
-	 * comprobaran tambien si se ha producido error y podran lanzar
+	 * Checks if any OpenGL erros occurred before calling this method.<br>
+	 * If an error is detected, the debug mode will be enabled, so {@link #passiveCheckGLError()} calls will also check
+	 * for errors, making it easier to find the error source.
 	 * 
-	 * @throws GLException Si se detecta un error
+	 * @throws GLException If an error is detected.
 	 */
 	public void checkGLError() {
 		int errorCode;
@@ -93,9 +94,10 @@ public final class GLDebugger {
 	}
 
 	/**
-	 * Lanza una excepcion con el codigo de error especificado y un mensaje de descripcion de dicho error
+	 * Throws a GLException with the specified error code. The exception will also contain the error message associated
+	 * with the specified error code.
 	 * 
-	 * @param errorCode Codigo de error
+	 * @param errorCode Error code.
 	 * @throws GLException
 	 */
 	private static void throwGLException(int errorCode) {
@@ -103,10 +105,10 @@ public final class GLDebugger {
 	}
 
 	/**
-	 * Devuelve la descripcion de un error de OpenGL
+	 * Returns the error message associated with the specified error code.
 	 * 
-	 * @param error Codigo del error
-	 * @return Descripcion del error
+	 * @param error Error code.
+	 * @return Error message.
 	 */
 	private static String getErrorString(int error) {
 		String errorString = GLU.gluErrorString(error);
@@ -117,33 +119,36 @@ public final class GLDebugger {
 	}
 
 	/**
-	 * Devuelve el numero de llamadas a draw realizadas.<br>
-	 * Para que el numero devuelto sea correcto, es necesario haber llamado a {@link #incrementNumDrawCallsFrame()} tras
-	 * cada llamada realizada y {@link #resetNumDrawCallsFrame()} al final de cada frame
+	 * Returns the number of registered draw calls.<br>
+	 * In order to register a draw call, {@link #incrementNumDrawCallsFrame()} should be called after the draw call is
+	 * executed.<br>
+	 * Also {@link #resetNumDrawCallsFrame()} should be called at the end of each frame.
 	 * 
-	 * @return Numero de llamadas a draw
+	 * @return Number of registered draw calls per frame.
 	 */
 	public int getNumDrawCallsFrame() {
 		return numDrawCallsFrame;
 	}
 
 	/**
-	 * Incrementa el contador de llamadas a draw
+	 * Increments the number of registered draw calls.<br>
+	 * This method should be called after each draw call in order to register it.
 	 */
 	public void incrementNumDrawCallsFrame() {
 		numDrawCallsFrame++;
 	}
 
 	/**
-	 * Reinicia el contador de llamadas a draw
+	 * Resets the number of registered draw calls.<br>
+	 * This method should be called at the end of each frame.
 	 */
 	public void resetNumDrawCallsFrame() {
 		numDrawCallsFrame = 0;
 	}
 
 	/**
-	 * Muestra un mensaje en el log con el numero de llamadas a draw realizadas hasta el momento. Solo se mostrara si el
-	 * flag {@link GLDebugger#FLAG_LOG_NUM_DRAW_CALLS_FRAME} esta activo
+	 * Logs the number of registered draw calls. If the flag {@link GLDebugger#FLAG_LOG_NUM_DRAW_CALLS_FRAME} is
+	 * disabled, this method does not do anything.
 	 * 
 	 * @see #getNumDrawCallsFrame()
 	 */

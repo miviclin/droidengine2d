@@ -8,7 +8,7 @@ import com.miviclin.droidengine2d.util.math.Matrix4;
 import com.miviclin.droidengine2d.util.math.Vector2;
 
 /**
- * Define la geometria basica de una malla que representa un batch de figuras rectangulares
+ * This class defines the geometry of the mesh used to render a batch of rectangles.
  * 
  * @author Miguel Vicente Linares
  * 
@@ -22,12 +22,11 @@ public class RectangleBatchGeometry extends Geometry {
 	private Matrix4 modelMatrix;
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 * 
-	 * @param batchCapacity Numero maximo de elementos que se puede almacenar en el batch
-	 * @param usesColors true si el batch incluye colores en las definiciones de los vertices, false en caso contrario
-	 * @param usesTexturesUV true si el batch incluye coordenadas UV de texturas en las definiciones de los vertices,
-	 *            false en caso contrario
+	 * @param batchCapacity Max number of elements of the batch.
+	 * @param usesColors true if the geometry stores colors, false otherwise.
+	 * @param usesTexturesUV true if the geometry stores texture coordinates, false otherwise.
 	 */
 	public RectangleBatchGeometry(int batchCapacity, boolean usesColors, boolean usesTexturesUV) {
 		super(batchCapacity * 4, batchCapacity * 6, usesColors, usesTexturesUV);
@@ -39,7 +38,7 @@ public class RectangleBatchGeometry extends Geometry {
 	}
 
 	/**
-	 * Inicializa el array de indices que permiten acceder a las matrices MVP en el vertex shader.
+	 * Initializes the array of indices of the array of MVP matrices. This array is used in the vertex shader.
 	 */
 	private void setupMVPIndices() {
 		float value = 0.0f;
@@ -52,13 +51,13 @@ public class RectangleBatchGeometry extends Geometry {
 	}
 
 	/**
-	 * Transforma la matriz MVP del indice especificado
+	 * Transforms the MVP matrix located at the specified index with the especified position, scale and rotation.
 	 * 
-	 * @param batchIndex Indice de la matriz sobre la que se aplicaran las transformaciones
-	 * @param position Posicion
-	 * @param scale Escala
-	 * @param rotation Angulo de rotacion sobre el centro
-	 * @param camera Camara
+	 * @param batchIndex Index of the array of MVP matrices where the matrix is located.
+	 * @param position Position.
+	 * @param scale Scale.
+	 * @param rotation Rotation angle around the origin.
+	 * @param camera Camera.
 	 */
 	public void updateMVPMatrix(int batchIndex, Vector2 position, Vector2 scale, float rotation, Camera camera) {
 		int mvpOffset;
@@ -76,27 +75,28 @@ public class RectangleBatchGeometry extends Geometry {
 	}
 
 	/**
-	 * Devuelve el array de indices de las matrices MVP
+	 * Returns the array of indices of the array of MVP matrices.
 	 * 
-	 * @return Array de indices de matrices MVP
+	 * @return Array of indices of the array of MVP matrices.
 	 */
 	public float[] getMvpIndices() {
 		return mvpIndices;
 	}
 
 	/**
-	 * Asigna el array de indices de las matrices MVP
+	 * Sets the array of indices of the array of MVP matrices.
 	 * 
-	 * @param mvpIndices Nuevo array de indices
+	 * @param mvpIndices New array of indices.
 	 */
 	public void setMvpIndices(float[] mvpIndices) {
 		this.mvpIndices = mvpIndices;
 	}
 
 	/**
-	 * Devuelve las matrices MVP, todas almacenadas en el mismo array. Cada 16 elementos es una matriz.
+	 * Returns the array of MVP matrices. All matrices are stored in the same array. Each block of 16 numbers is a 4x4
+	 * matrix.
 	 * 
-	 * @return Array que contiene las matrices MVP
+	 * @return Array of MVP matrices
 	 */
 	public float[] getMvpMatrices() {
 		return mvpMatrices;

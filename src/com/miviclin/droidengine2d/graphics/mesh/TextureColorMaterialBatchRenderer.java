@@ -16,8 +16,8 @@ import com.miviclin.droidengine2d.util.math.Vector2;
 import com.miviclin.droidengine2d.util.math.Vector3;
 
 /**
- * Clase base de la que deben heredar los renderers de mallas que representen batches de figuras rectangulares cuyo
- * material sea TextureColorMaterial
+ * TextureColorMaterialBatchRenderer allows rendering batches of up to 32 rectangles with TextureColorMaterial in one
+ * draw call. Each rectangle has its own translation, rotation and scale.
  * 
  * @author Miguel Vicente Linares
  * 
@@ -29,9 +29,9 @@ public class TextureColorMaterialBatchRenderer<M extends TextureColorMaterial> e
 	private int vertexColorOffset;
 
 	/**
-	 * Constructor
+	 * Creates a new TextureColorMaterialBatchRenderer.
 	 * 
-	 * @param context Context en el que se ejecuta el juego
+	 * @param context Context.
 	 */
 	public TextureColorMaterialBatchRenderer(Context context) {
 		super(9, context);
@@ -152,9 +152,9 @@ public class TextureColorMaterialBatchRenderer<M extends TextureColorMaterial> e
 	}
 
 	/**
-	 * Define el color del siguiente sprite en el batch
+	 * Sets up the color of the vertices of the last rectangle added to this batch.
 	 * 
-	 * @param color Color
+	 * @param color Color.
 	 */
 	private void setupColor(Color color) {
 		int spriteOffset = getBatchSize() * 4;

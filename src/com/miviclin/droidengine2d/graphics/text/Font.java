@@ -6,7 +6,7 @@ import android.util.SparseArray;
 import com.miviclin.droidengine2d.graphics.texture.Texture;
 
 /**
- * Interfaz que define una fuente
+ * Font interface.
  * 
  * @author Miguel Vicente Linares
  * 
@@ -14,49 +14,50 @@ import com.miviclin.droidengine2d.graphics.texture.Texture;
 public interface Font {
 
 	/**
-	 * Carga la fuente desde un archivo XML
+	 * Loads this font's data from an XML file.
 	 * 
-	 * @param path Ruta del archivo XML
-	 * @param context Context
+	 * @param path File path.
+	 * @param context Context.
 	 */
 	public void loadFromXML(String path, Context context);
 
 	/**
-	 * Devuelve el caracter especificado
+	 * Returns the specified character of this font.
 	 * 
-	 * @param id ID de la letra
-	 * @return FontChar o null en caso de que no exista un caracter con el ID especificado
-	 * @throws UndefinedCharacterException Si el caracter especificado no esta definido para esta fuente
+	 * @param id ID of the character.
+	 * @return FontChar
+	 * @throws UndefinedCharacterException If the specified character is not defined.
 	 */
 	public FontChar getCharacter(int id);
 
 	/**
-	 * Elimina todas las referencias y libera recursos.<br>
-	 * Este metodo se puede llamar cuando esta Font deje de ser necesario, para liberar recursos.
+	 * Removes all characters from this font.<br>
+	 * This method could be called when the font is not needed anymore.
 	 */
 	public void clear();
 
 	/**
-	 * Devuelve las texturas que contienen los caracteres de la fuente indexadas por id de pagina
+	 * Returns the textures that contain the characters of this font, indexed by page ID.
 	 * 
 	 * @return Texturas
 	 */
 	public SparseArray<Texture> getTexturePages();
 
 	/**
-	 * Calcula el ancho de una linea de texto en pixels
+	 * Measures the width in pixels of the specified line of text if it was rendered at the specified size in pixels
+	 * using this font.
 	 * 
-	 * @param line Linea de texto
-	 * @param fontSizePx Tamano de la fuente en pixels
-	 * @return Ancho de la linea de texto en pixels
+	 * @param line Line of text.
+	 * @param fontSizePx Font size in pixels.
+	 * @return measured width
 	 */
 	public float measureLineWidth(String line, float fontSizePx);
 
 	/**
-	 * Calcula el alto de una linea de texto en pixels
+	 * Measures the height of a line of text if it was rendered at the specified size in pixels using this font.
 	 * 
-	 * @param fontSizePx Tamano de la fuente en pixels
-	 * @return Alto de la linea de texto en pixels
+	 * @param fontSizePx Font size in pixels.
+	 * @return measured height
 	 */
 	public float measureLineHeight(float fontSizePx);
 }

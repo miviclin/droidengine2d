@@ -3,7 +3,7 @@ package com.miviclin.droidengine2d.graphics.material;
 import com.miviclin.droidengine2d.graphics.texture.TextureRegion;
 
 /**
- * Material que tiene una textura y permite variar la opacidad
+ * This material has texture and variable opacity.
  * 
  * @author Miguel Vicente Linares
  * 
@@ -13,19 +13,19 @@ public class TransparentTextureMaterial extends TextureMaterial {
 	private float opacity;
 
 	/**
-	 * Constructor
+	 * Creates a TransparentTextureMaterial.
 	 * 
-	 * @param textureRegion TextureRegion (no puede ser null)
+	 * @param textureRegion TextureRegion.
 	 */
 	public TransparentTextureMaterial(TextureRegion textureRegion) {
 		this(textureRegion, 1.0f);
 	}
 
 	/**
-	 * Constructor
+	 * Creates a TransparentTextureMaterial.
 	 * 
-	 * @param textureRegion TextureRegion (no puede ser null)
-	 * @param opacity Opacidad (valor entre 0.0f y 1.0f)
+	 * @param textureRegion TextureRegion.
+	 * @param opacity Opacity (value between 0.0f and 1.0f).
 	 */
 	public TransparentTextureMaterial(TextureRegion textureRegion, float opacity) {
 		super(textureRegion);
@@ -34,18 +34,18 @@ public class TransparentTextureMaterial extends TextureMaterial {
 	}
 
 	/**
-	 * Devuelve la opacidad
+	 * Returns the opacity of this material.
 	 * 
-	 * @return Opacidad (valor entre 0.0f y 1.0f)
+	 * @return Opacity (value between 0.0f and 1.0f)
 	 */
 	public float getOpacity() {
 		return opacity;
 	}
 
 	/**
-	 * Asigna la opacidad
+	 * Sets the opacity of this material.
 	 * 
-	 * @param opacity Valor entre 0.0f y 1.0f
+	 * @param opacity (value between 0.0f and 1.0f).
 	 */
 	public void setOpacity(float opacity) {
 		checkOpacity(opacity);
@@ -53,9 +53,9 @@ public class TransparentTextureMaterial extends TextureMaterial {
 	}
 
 	/**
-	 * Comprueba que la opacidad sea un valor entre 0.0f y 1.0f y lanza una excepcion en caso contrario
+	 * Checks that the specified opacity is a value between 0.0f and 1.0f and throws an exception in case it isn't.
 	 * 
-	 * @param opacity Opacidad
+	 * @param opacity (value between 0.0f and 1.0f)
 	 */
 	private void checkOpacity(float opacity) {
 		if (opacity < 0 || opacity > 1) {

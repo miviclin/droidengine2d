@@ -15,8 +15,8 @@ import com.miviclin.droidengine2d.util.math.Vector2;
 import com.miviclin.droidengine2d.util.math.Vector3;
 
 /**
- * Clase base de la que deben heredar los renderers de mallas que representen batches de figuras rectangulares cuyo
- * material sea TextureMaterial
+ * TextureMaterialBatchRenderer allows rendering batches of up to 32 rectangles with TextureMaterial in one draw call.
+ * Each rectangle has its own translation, rotation and scale.
  * 
  * @author Miguel Vicente Linares
  * 
@@ -25,9 +25,9 @@ import com.miviclin.droidengine2d.util.math.Vector3;
 public class TextureMaterialBatchRenderer<M extends TextureMaterial> extends TextureMaterialBatchRendererBase<M> {
 
 	/**
-	 * Constructor
+	 * Creates a new TextureMaterialBatchRenderer.
 	 * 
-	 * @param context Context en el que se ejecuta el juego
+	 * @param context Context.
 	 */
 	public TextureMaterialBatchRenderer(Context context) {
 		super(5, context);

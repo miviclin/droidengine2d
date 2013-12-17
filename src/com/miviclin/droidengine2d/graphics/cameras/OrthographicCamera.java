@@ -1,7 +1,7 @@
 package com.miviclin.droidengine2d.graphics.cameras;
 
 /**
- * Camara con proyeccion ortografica
+ * Orthographic projection camera.
  * 
  * @author Miguel Vicente Linares
  * 
@@ -9,7 +9,7 @@ package com.miviclin.droidengine2d.graphics.cameras;
 public class OrthographicCamera extends Camera {
 
 	/**
-	 * Crea una nueva OrthographicCamera
+	 * Creates a new OrthographicCamera.
 	 */
 	public OrthographicCamera() {
 		getEye().set(0.0f, 0.0f, 5.0f);

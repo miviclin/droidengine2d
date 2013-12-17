@@ -3,8 +3,8 @@ package com.miviclin.droidengine2d.graphics.material;
 import com.miviclin.droidengine2d.graphics.texture.TextureRegion;
 
 /**
- * Material que tiene una textura y permite variar la opacidad. Tambien se permite variar el tono de la textura y se
- * puede reducir la saturacion y el brillo.
+ * This material has texture and HSV color.<br>
+ * The hue of the texture can be changed. Saturation and brightness can be reduced. And opacity can also be adjusted.
  * 
  * @author Miguel Vicente Linares
  * 
@@ -16,34 +16,34 @@ public class TextureHsvMaterial extends TransparentTextureMaterial {
 	private float vMulti;
 
 	/**
-	 * Constructor
+	 * Creates a TextureHsvMaterial.
 	 * 
-	 * @param textureRegion TextureRegion (no puede ser null)
+	 * @param textureRegion TextureRegion.
 	 */
 	public TextureHsvMaterial(TextureRegion textureRegion) {
 		this(textureRegion, 1.0f, 0.0f, 1.0f, 1.0f);
 	}
 
 	/**
-	 * Constructor
+	 * Creates a TextureHsvMaterial.
 	 * 
-	 * @param textureRegion TextureRegion (no puede ser null)
-	 * @param hOffset Offset de tono (valor entre 0.0f y 360.0f)
-	 * @param sMulti Multiplicador de saturacion (valor entre 0.0f y 1.0f)
-	 * @param vMulti Multiplicador de brillo (valor entre 0.0f y 1.0f)
+	 * @param textureRegion TextureRegion.
+	 * @param hOffset Hue offset (value between 0.0f and 360.0f).
+	 * @param sMulti Saturation multiplier (value between 0.0f and 1.0f).
+	 * @param vMulti Brightness multiplier (value between 0.0f and 1.0f).
 	 */
 	public TextureHsvMaterial(TextureRegion textureRegion, float hOffset, float sMulti, float vMulti) {
 		this(textureRegion, 1.0f, hOffset, sMulti, vMulti);
 	}
 
 	/**
-	 * Constructor
+	 * Creates a TextureHsvMaterial.
 	 * 
-	 * @param textureRegion TextureRegion (no puede ser null)
-	 * @param opacity Opacidad (valor entre 0.0f y 1.0f)
-	 * @param hOffset Offset de tono (valor entre 0.0f y 360.0f)
-	 * @param sMulti Multiplicador de saturacion (valor entre 0.0f y 1.0f)
-	 * @param vMulti Multiplicador de brillo (valor entre 0.0f y 1.0f)
+	 * @param textureRegion TextureRegion.
+	 * @param opacity (value between 0.0f and 1.0f).
+	 * @param hOffset Hue offset (value between 0.0f and 360.0f).
+	 * @param sMulti Saturation multiplier (value between 0.0f and 1.0f).
+	 * @param vMulti Brightness multiplier (value between 0.0f and 1.0f).
 	 */
 	public TextureHsvMaterial(TextureRegion textureRegion, float opacity, float hOffset, float sMulti, float vMulti) {
 		super(textureRegion, opacity);
@@ -56,18 +56,18 @@ public class TextureHsvMaterial extends TransparentTextureMaterial {
 	}
 
 	/**
-	 * Devuelve el offset del valor H (tono)
+	 * Returns the hue offset.
 	 * 
-	 * @return valor entre 0.0f y 360.0f
+	 * @return value between 0.0f and 360.0f
 	 */
 	public float getHOffset() {
 		return hOffset;
 	}
 
 	/**
-	 * Asigna el offset del valor H (tono)
+	 * Sets the hue offset.
 	 * 
-	 * @param hOffset valor entre 0.0f y 360.0f
+	 * @param hOffset Value between 0.0f and 360.0f.
 	 */
 	public void setHOffset(float hOffset) {
 		checkH(hOffset);
@@ -75,18 +75,18 @@ public class TextureHsvMaterial extends TransparentTextureMaterial {
 	}
 
 	/**
-	 * Devuelve el multiplicador del valor S (saturacion)
+	 * Returns the saturation multiplier.
 	 * 
-	 * @return valor entre 0.0f y 1.0f
+	 * @return value between 0.0f and 1.0f
 	 */
 	public float getSMulti() {
 		return sMulti;
 	}
 
 	/**
-	 * Asigna el multiplicador del valor S (saturacion)
+	 * Sets the saturation multiplier.
 	 * 
-	 * @param sMulti valor entre 0.0f y 1.0f
+	 * @param sMulti Value between 0.0f and 1.0f.
 	 */
 	public void setSMulti(float sMulti) {
 		checkS(sMulti);
@@ -94,18 +94,18 @@ public class TextureHsvMaterial extends TransparentTextureMaterial {
 	}
 
 	/**
-	 * Devuelve el multiplicador del valor V (brillo)
+	 * Returns the brightness multiplier.
 	 * 
-	 * @return valor entre 0.0f y 1.0f
+	 * @return value between 0.0f and 1.0f
 	 */
 	public float getVMulti() {
 		return vMulti;
 	}
 
 	/**
-	 * Asigna el multiplicador del valor V (brillo)
+	 * Sets the brightness multiplier.
 	 * 
-	 * @param vMulti valor entre 0.0f y 1.0f
+	 * @param vMulti Value between 0.0f and 1.0f.
 	 */
 	public void setVMulti(float vMulti) {
 		checkV(vMulti);
@@ -113,7 +113,7 @@ public class TextureHsvMaterial extends TransparentTextureMaterial {
 	}
 
 	/**
-	 * Comprueba que hOffset sea un valor entre 0.0f y 360.0f y lanza una excepcion en caso contrario
+	 * Checks that hOffset is a value between 0.0f and 360.0f and throws an exception in case it isn't.
 	 * 
 	 * @param hOffset
 	 */
@@ -124,7 +124,7 @@ public class TextureHsvMaterial extends TransparentTextureMaterial {
 	}
 
 	/**
-	 * Comprueba que sMulti sea un valor entre 0.0f y 1.0f y lanza una excepcion en caso contrario
+	 * Checks that sMulti is a value between 0.0f and 1.0f and throws an exception in case it isn't.
 	 * 
 	 * @param sMulti
 	 */
@@ -135,7 +135,7 @@ public class TextureHsvMaterial extends TransparentTextureMaterial {
 	}
 
 	/**
-	 * Comprueba que vMulti sea un valor entre 0.0f y 1.0f y lanza una excepcion en caso contrario
+	 * Checks that vMulti is a value between 0.0f and 1.0f and throws an exception in case it isn't.
 	 * 
 	 * @param vMulti
 	 */

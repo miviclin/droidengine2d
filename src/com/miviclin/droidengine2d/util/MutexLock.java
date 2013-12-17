@@ -1,7 +1,7 @@
 package com.miviclin.droidengine2d.util;
 
 /**
- * MutexLock actua como un semaforo binario.
+ * MutexLock acts as a binary semaphore.
  * 
  * @author Miguel Vicente Linares
  * 
@@ -12,7 +12,7 @@ public class MutexLock {
 	private boolean notified;
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 */
 	public MutexLock() {
 		this.lock = new Object();
@@ -20,7 +20,7 @@ public class MutexLock {
 	}
 
 	/**
-	 * Bloquea el lock
+	 * Locks the lock.
 	 */
 	public void lock() {
 		synchronized (lock) {
@@ -35,7 +35,7 @@ public class MutexLock {
 	}
 
 	/**
-	 * Desbloquea el lock
+	 * Unlocks the lock.
 	 */
 	public void unlock() {
 		synchronized (lock) {

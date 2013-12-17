@@ -5,7 +5,7 @@ import java.util.Map;
 import android.content.Context;
 
 /**
- * TextureAtlas
+ * TextureAtlas.
  * 
  * @author Miguel Vicente Linares
  * 
@@ -13,37 +13,37 @@ import android.content.Context;
 public interface TextureAtlas {
 
 	/**
-	 * Carga el TextureAtlas desde un archivo
+	 * Loads the textureatlas from the specified file.
 	 * 
-	 * @param path Ruta del archivo
-	 * @param context Context
+	 * @param path File path.
+	 * @param context Context.
 	 */
 	public void loadFromFile(String path, Context context);
 
 	/**
-	 * Devuelve la textura que define este TextureAtlas
+	 * Returns the source texture of this TextureAtlas.
 	 * 
 	 * @return Texture
 	 */
 	public Texture getSourceTexture();
 
 	/**
-	 * Devuelve la region especificada de este TextureAtlas
+	 * Returns the specified TextureRegion of this TextureAtlas.
 	 * 
-	 * @param name Nombre que identifica a la region
-	 * @return TextureRegion o null en caso de que no exista una TextureRegion con el nombre especificado
+	 * @param name Name of the TextureRegion.
+	 * @return TextureRegion or null if this TextureAtlas does not contain any TextureRegion with the specified name.
 	 */
 	public TextureRegion getTextureRegion(String name);
 
 	/**
-	 * Elimina todas las referencias a las TextureRegions del TextureAtlas y la referencia a la textura principal.<br>
-	 * Este metodo se puede llamar cuando este TextureAtlas deje de ser necesario, para liberar recursos.
+	 * Removes all TextureRegions from this TextureAtlas.<br>
+	 * This method should be called when this TextureAtlas is not needed anymore, to release resources.
 	 */
 	public void clearAtlas();
 
 	/**
-	 * Devuelve el mapa de TextureRegions que contiene todos los TextureRegion del TextureAtlas indexados por su
-	 * correspondiente clave
+	 * Returns the map of TextureRegions of this TextureAtlas.<br>
+	 * The TextureRegions are indexed by name.
 	 * 
 	 * @return {@code Map<String, TextureRegion}
 	 */
