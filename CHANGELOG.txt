@@ -2,152 +2,153 @@
 v0.6.0 (2013-08-07)
 ------------------------------------------------------------------------
 
-Cambios:
+Changes:
 
-  - Refactorizados los ShaderPrograms.
+  - Refactored all ShaderPrograms.
   
-  - Refactorizados los SpriteBatches.
+  - Refactored all SpriteBatches.
 
-  - Agregado shader y spritebatch para renderizar batches de sprites con
-    textura y opacidad.
+  - Added a new shader and a new spritebatch that allows rendering
+    batches of sprites with texture and opacity.
 
-  - Agregado shader y spritebatch para renderizar batches de sprites con
-    textura y color RGBA.
+  - Added a new shader and a new spritebatch that allows rendering
+    batches of sprites with texture and RGBA color.
 
-  - Agregado shader y spritebatch para renderizar batches de rectangulos
-    con color.
+  - Added a new shader and a new spritebatch that allows rendering
+    batches of rectangles with color.
 
-  - Agregado shader y spritebatch para renderizar batches de sprites con
-    textura a la que se le puede modificar el tono, reducir la
-    saturacion y reducir el brillo.
+  - Added a new shader and a new spritebatch that allows rendering
+    batches of sprites with texture. It is possible to alter the hue,
+    reduce the saturation and reduce the brightness of the texture.
 
-  - Agregada la clase Graphics que simplifica la forma de renderizar
-    elementos en pantalla.
+  - Added the Graphics class, which makes drawing things on screen
+    easier.
 
-  - Se permite cambiar el valor del filtro a paso bajo de Accelerometer.
+  - Allowed changing the value of the low pass filter in Accelerometer.
 
 
 ------------------------------------------------------------------------
 v0.5.0 (2013-05-17)
 ------------------------------------------------------------------------
 
-Cambios:
+Changes:
 
-  - Agregada AndroidEngineActivity, que encapsula la inicializacion y
-    gestion del ciclo de vida del Engine.
+  - Added AndroidEngineActivity. It encapsulates the life cycle of the
+    Engine.
 
-  - Agregada la clase Accelerometer, que permite leer valores del
-    acelerometro del dispositivo.
+  - Added Accelerometer, this class allows reading values from the
+    accelerometer of the device.
 
-  - Agregadas Scenes para representar las distintas pantallas del juego.
+  - Added Scenes in order to manage each screen, menu, level, etc of
+    the game.
 
-  - Movido TouchController y KeyController a com.miviclin.droidengine2d.
+  - Moved TouchController and KeyController to
+    com.miviclin.droidengine2d.
 
-  - Agregada a GLDebugger una forma pasiva de comprobar errores que
-    mejora el rendimiento.
+  - Added passive error checking capabilities to GLDebugger to improve
+    performance.
 
-  - Desactivado el depth test en DefaultRenderer.
+  - Disabled depth test in DefaultRenderer.
 
-  - Agregados metodos estaticos de utilidad a Vector2 y Vector3.
+  - Added some static utility methods to Vector2 and Vector3.
 
-  - Renombrado DynamicSpriteBatchShaderProgram a
+  - Renamed DynamicSpriteBatchShaderProgram to
     PositionTextureBatchShaderProgram.
 
 
-Bugs corregidos:
+Bug fixes:
 
-  - Corregido un bug al obtener la frecuencia de refresco de la
-    pantalla.
+  - Fixed bug when getting the display refresh rate.
 
-  - Corregido un bug que provocaba que no se cargaran bien las texturas.
+  - Fixed bug that prevented some textures to be loaded.
 
 
 ------------------------------------------------------------------------
 v0.4.0 (2013-04-01)
 ------------------------------------------------------------------------
 
-Cambios:
+Changes:
 
-  - Cambiada la forma de gestionar los eventos desde el juego.
+  - Changed the way how events are handled in the game.
 
-  - Agregada la posibilidad de interceptar el boton back.
+  - Allowed intercepting back button presses.
 
-  - Cambiado el color de fondo de DefaultRenderer a negro.
+  - Changed the background color of DefaultRenderer to black.
 
-  - Agregado AnimationStateListener y cambios menores en Animacion.
+  - Added AnimationStateListener and minor changes to Animation.
 
-  - Agregada la posibilidad de comporbar si un archivo es compatible con
-    MusicManager.
+  - Added some methods to MusicManager in order to allow checking if an
+    specified file is playable.
 
-  - Agregada a Game la posibilidad de especificar el GLView.
+  - Allowed setting the GLView of the Game manually.
 
-  - Engine se construye utilizando EngineBuilder.
+  - Added EngineBuilder to create the Engine.
 
-  - El TextureManager gestiona los TextureRegions.
+  - TextureRegions are managed by the TextureManager.
 
-  - Activado back face culling en DefaultRenderer.
+  - Enabled back face culling in DefaultRenderer.
 
 
-Bugs corregidos:
+Bug fixes:
 
-  - Corregido un bug al actualizar animaciones con 1 solo frame.
+  - Fixed bug when updating 1-frame animations.
 
-  - Corregido un bug que permitia llamar a DynamicSpriteBatch.draw() sin
-    haber llamado a DynamicSpriteBatch.begin().
+  - Fixed bug that allowed calling DynamicSpriteBatch.draw() before
+    calling DynamicSpriteBatch.begin().
 
-  - Corregido un bug en la codificacion de Game y EngineLock. Se ha
-    cambiado la codificacion de ambos archivos a UTF-8 sin BOM.
+  - Fixed the file encoding of Game.java and EngineLock.java. Both files
+    are now encoded in UTF-8 without BOM.
 
-  - Corregido un bug en Sprite.setPosition(Point2D). Ahora el valor se
-    asigna correctamente.
+  - Fixed bug in Sprite.setPosition(Point2D). This method works as
+    expected now.
 
-  - Corregido un bug que permitia que se destruyera el hilo del juego
-    antes de liberar todos los recursos.
+  - Fixed bug that allowed the game thread to be destroyed before
+    releasing all resources.
 
-  - Corregido un bug que provocaba que detectOpenGLES20() siempre
-    devolviera false en el emulador de Android.
+  - Fixed bug that makes detectOpenGLES20() always return false if the
+    game is running on the Android Emulator.
 
-  - Corregido un bug relacionado con la liberacion de recursos. Ahora
-    los recursos se liberan siempre en onDestroy().
+  - Fixed bug that prevented some resources to be released. All
+    resources are now released in onDestroy().
 
 
 ------------------------------------------------------------------------
 v0.3.0 (2013-03-06)
 ------------------------------------------------------------------------
 
-Cambios:
+Changes:
 
-  - Agregada la posibilidad de utilizar un renderer personalizado.
+  - Allowed using a custom renderer.
   
-  - Movido el contenido de com.miviclin.droidengine2d.engine a
+  - Moved the content of com.miviclin.droidengine2d.engine to
     com.miviclin.droidengine2d.
 
-  - Corregida la documentacion de Engine.
+  - Fixed javadoc in Engine.
 
 
 ------------------------------------------------------------------------
 v0.2.0 (2013-03-05)
 ------------------------------------------------------------------------
 
-Cambios:
+Changes:
 
-  - Agregada la posibilidad de crear animaciones.
+  - Allowed creating animations.
 
-  - Eliminada la posibilidad de crear Sprites sin TextureRegion.
+  - Creating Sprites without TextureRegion is not allowed.
   
-  - Renombrado GLTexture a Texture.
+  - Renamed GLTexture to Texture.
   
-  - Renombrado GLTextureManager a TextureManager.
+  - Renamed GLTextureManager to TextureManager.
   
-  - Movido TransformUtilities a com.miviclin.droidengine2d.util.
+  - Moved TransformUtilities to com.miviclin.droidengine2d.util.
   
-  - Agregada la posibilidad de ponerle nombre al juego.
+  - Added a name attribute to Game.
 
 
 ------------------------------------------------------------------------
 v0.1.0 (2013-03-03)
 ------------------------------------------------------------------------
 
-Primera version.
+First release.
 
 
