@@ -1,7 +1,7 @@
 package com.miviclin.droidengine2d.util.time;
 
 /**
- * Constantes de tiempo
+ * Time constants.
  * 
  * @author Miguel Vicente Linares
  * 
