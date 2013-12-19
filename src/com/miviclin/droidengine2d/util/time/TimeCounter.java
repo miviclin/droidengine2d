@@ -3,37 +3,38 @@ package com.miviclin.droidengine2d.util.time;
 import java.util.Locale;
 
 /**
- * Contador de tiempo
+ * Time counter.
  * 
  * @author Miguel Vicente Linares
  * 
  */
 public class TimeCounter {
-	
+
 	private long milliseconds;
 	private long start;
 	private boolean started;
-	
+
 	/**
-	 * Crea un contador de tiempo inicializado a 0
+	 * Creates a new TimeCounter.
 	 */
 	public TimeCounter() {
 		milliseconds = 0;
 		start = System.currentTimeMillis();
 		started = false;
 	}
-	
+
 	/**
-	 * Reinicia el contador
+	 * Resets this counter.
 	 */
 	public void reset() {
 		milliseconds = 0;
 		start = System.currentTimeMillis();
 		started = false;
 	}
-	
+
 	/**
-	 * Actualiza el contador
+	 * Updates this counter.<br>
+	 * Updates the elapsed time by adding the time elapsed since the last update.
 	 */
 	public void update() {
 		if (!started) {
@@ -43,52 +44,52 @@ public class TimeCounter {
 			milliseconds = System.currentTimeMillis() - start;
 		}
 	}
-	
+
 	/**
-	 * Devuelve el tiempo almacenado en el contador, en milisegundos.
+	 * Returns the time accumulated in this counter, in milliseconds.
 	 * 
-	 * @return tiempo en milisegundos
+	 * @return time elapsed, in milliseconds
 	 */
 	public long getMilliseconds() {
 		return milliseconds;
 	}
-	
+
 	/**
-	 * Devuelve el tiempo almacenado en el contador, en segundos.
+	 * Returns the time accumulated in this counter, in seconds.
 	 * 
-	 * @return tiempo en segundos
+	 * @return time elapsed, in seconds
 	 */
 	public long getSeconds() {
 		return milliseconds / TimeConstants.MILLISECONDS_PER_SECOND;
 	}
-	
+
 	/**
-	 * Devuelve el tiempo almacenado en el contador, en minutos.
+	 * Returns the time accumulated in this counter, in minutes.
 	 * 
-	 * @return tiempo en minutos
+	 * @return time elapsed, in minutes
 	 */
 	public long getMinutes() {
 		return milliseconds / TimeConstants.MILLISECONDS_PER_MINUTE;
 	}
-	
+
 	/**
-	 * Devuelve el tiempo almacenado en el contador, en horas.
+	 * Returns the time accumulated in this counter, in hours.
 	 * 
-	 * @return tiempo en horas
+	 * @return time elapsed, in hours
 	 */
 	public long getHours() {
 		return milliseconds / TimeConstants.MILLISECONDS_PER_HOUR;
 	}
-	
+
 	/**
-	 * Devuelve el tiempo almacenado en el contador, en dias.
+	 * Returns the time accumulated in this counter, in days.
 	 * 
-	 * @return tiempo en dias
+	 * @return time elapsed, in days
 	 */
 	public long getDays() {
 		return milliseconds / TimeConstants.MILLISECONDS_PER_DAY;
 	}
-	
+
 	@Override
 	public String toString() {
 		long days = getDays();
@@ -98,5 +99,5 @@ public class TimeCounter {
 		long milliseconds = this.milliseconds % TimeConstants.MILLISECONDS_PER_SECOND;
 		return String.format(Locale.US, "%02d:%02d:%02d:%02d.%03d", days, hours, minutes, seconds, milliseconds);
 	}
-	
+
 }

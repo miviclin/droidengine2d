@@ -13,19 +13,19 @@ import android.view.WindowManager;
 import com.miviclin.droidengine2d.BuildConfig;
 
 /**
- * Clase de utilidad que contiene metodos que simplifican tareas relacionadas con las Activities.
+ * ActivityUtilities.
  * 
  * @author Miguel Vicente Linares
  * 
  */
 public class ActivityUtilities {
-	
+
 	/**
-	 * Detecta si el dispositivo soporta OpenGL ES 2.0.<br>
-	 * NOTA: Si el dispositivo es un emulador de android, se asume que soporta OpenGL ES 2.0 por lo que devolvera siempre true.
+	 * Checks if the device supports OpenGL ES 2.0.<br>
+	 * NOTE: If the app is running on the Android emulator, this method returns always true.
 	 * 
-	 * @param activity Activity sobre la que opera este metodo
-	 * @return true si lo soporta, false en caso contrario
+	 * @param activity Activity.
+	 * @return true if OpenGL ES 2.0 is supported, false otherwise
 	 */
 	public static boolean detectOpenGLES20(Activity activity) {
 		ActivityManager am = (ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE);
@@ -37,61 +37,60 @@ public class ActivityUtilities {
 		}
 		return (info.reqGlEsVersion >= 0x20000);
 	}
-	
+
 	/**
-	 * Cambia la orientacion de la Activity a PORTRAIT. Es posible que la Activity se reinicie al llamar a este metodo.
+	 * Changes the orientation of the Activity to PORTRAIT.
 	 * 
-	 * @param activity Activity sobre la que opera este metodo
+	 * @param activity Activity.
 	 */
 	public static void setOrientationToPortrait(Activity activity) {
 		activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 	}
-	
+
 	/**
-	 * Cambia la orientacion de la Activity a LANDSCAPE. Es posible que la Activity se reinicie al llamar a este metodo.
+	 * Changes the orientation of the Activity to LANDSCAPE.
 	 * 
-	 * @param activity Activity sobre la que opera este metodo
+	 * @param activity Activity.
 	 */
 	public static void setOrientationToLandscape(Activity activity) {
 		activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 	}
-	
+
 	/**
-	 * Oculta el titulo de la Activity
+	 * Hides the title of the Activity.
 	 * 
-	 * @param activity Activity sobre la que opera este metodo
+	 * @param activity Activity.
 	 */
 	public static void hideTitle(Activity activity) {
 		activity.requestWindowFeature(Window.FEATURE_NO_TITLE);
 	}
-	
+
 	/**
-	 * Configura la Activity para que ocupe toda la pantalla, ocultando la barra de notificaciones, etc
+	 * Sets the Activity to full screen.
 	 * 
-	 * @param activity Activity sobre la que opera este metodo
+	 * @param activity Activity.
 	 */
 	public static void setToFullscreen(Activity activity) {
 		activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
 	}
-	
+
 	/**
-	 * Configura la Activity para que mientras sea visible, la pantalla se mantenga encendida
+	 * Sets the Activity to keep the screen on as long as it is visible to the user.
 	 * 
-	 * @param activity Activity sobre la que opera este metodo
+	 * @param activity Activity.
 	 */
 	public static void keepScreenOn(Activity activity) {
 		activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 	}
-	
+
 	/**
-	 * Sugiere que mientras la Activity sea visible, los botones hardware de control de volumen del dispositivo puedan controlar el volumen
-	 * del stream de musica
+	 * Sets the Activity to allow the hardware buttons to control the volume of music playback.
 	 * 
-	 * @param activity Activity sobre la que opera este metodo
+	 * @param activity Activity.
 	 */
 	public static void controlMusicPlayBackStream(Activity activity) {
 		activity.setVolumeControlStream(AudioManager.STREAM_MUSIC);
 	}
-	
+
 }

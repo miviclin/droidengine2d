@@ -1,53 +1,54 @@
 package com.miviclin.droidengine2d.graphics.animation;
 
 /**
- * Interfaz que define algunos metodos que se llaman cuando el estado de la Animation cambia
+ * Animation state listener.
  * 
  * @author Miguel Vicente Linares
  * @see Animation
  */
 public interface AnimationStateListener {
-	
+
 	/**
-	 * Callback que se llama cuando empieza la animacion
+	 * This callback is called when the Animation starts.
 	 * 
-	 * @param animation Animation que llama a este metodo
+	 * @param animation Animation that calls this method.
 	 */
 	public void onAnimationStarted(Animation animation);
-	
+
 	/**
-	 * Callback que se llama cuando se pausa la animacion
+	 * This callback is called when the Animation is paused.
 	 * 
-	 * @param animation Animation que llama a este metodo
+	 * @param animation Animation that calls this method.
 	 */
 	public void onAnimationPaused(Animation animation);
-	
+
 	/**
-	 * Callback que se llama cuando se reanuda la la animacion tras haber sido pausada previamente
+	 * This callback is called when the Animation is resumed.
 	 * 
-	 * @param animation Animation que llama a este metodo
+	 * @param animation Animation that calls this method.
 	 */
 	public void onAnimationResumed(Animation animation);
-	
+
 	/**
-	 * Callback que se llama cada vez que la Animation pasa de un AnimationFrame a otro
+	 * This callback is called when the current frame of the Animation changes.
 	 * 
-	 * @param animation Animation que llama a este metodo
+	 * @param animation Animation that calls this method.
 	 */
 	public void onAnimationFrameChanged(Animation animation);
-	
+
 	/**
-	 * Callback que se llama cada vez que la Animation termina un loop
+	 * This callback is called when the Animation loops.
 	 * 
-	 * @param animation Animation que llama a este metodo
+	 * @param animation Animation that calls this method.
 	 */
 	public void onAnimationLoopFinished(Animation animation);
-	
+
 	/**
-	 * Callback que se llama cuando la Animation termina (solo se llamara en caso de que la Animation tenga el modo loop desactivado)
+	 * This callback is called when the Animation finishes.<br>
+	 * If the loop mode is enabled, the Animation never finishes.
 	 * 
-	 * @param animation Animation que llama a este metodo
+	 * @param animation Animation that calls this method.
 	 */
 	public void onAnimationFinished(Animation animation);
-	
+
 }

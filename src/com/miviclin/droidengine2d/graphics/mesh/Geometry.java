@@ -6,13 +6,13 @@ import com.miviclin.droidengine2d.util.math.Vector2;
 import com.miviclin.droidengine2d.util.math.Vector3;
 
 /**
- * Clase que define la geometria de un objeto grafico: vertices e informacion de los vertices
+ * This class defines the Geometry of a mesh of vertices.
  * 
  * @author Miguel Vicente Linares
  * 
  */
 public class Geometry {
-	
+
 	private Array<Vector3> vertices;
 	private Array<Short> indices;
 	private Array<Color> colors;
@@ -21,14 +21,14 @@ public class Geometry {
 	private boolean updateIndices;
 	private boolean updateColors;
 	private boolean updateTexturesUV;
-	
+
 	/**
-	 * Crea un objeto Geometry
+	 * Creates a new Geometry.
 	 * 
-	 * @param numVertices Numero de vertices para el que se reservara memoria
-	 * @param numIndices Numero de indices (representan el orden en que se pintaran los vertices) para el que se reservara memoria
-	 * @param usesColors Indica si la geometria contiene informacion del color de los vertices
-	 * @param usesTexturesUV Indica si la geometria contiene informacion de coordenadas de texturas de los vertices
+	 * @param numVertices Number of vertices.
+	 * @param numIndices Number of indices (the indices are used to render the vertices in the specified order).
+	 * @param usesColors true if the geometry stores colors, false otherwise.
+	 * @param usesTexturesUV true if the geometry stores texture coordinates, false otherwise.
 	 */
 	public Geometry(int numVertices, int numIndices, boolean usesColors, boolean usesTexturesUV) {
 		this.vertices = new Array<Vector3>(numVertices);
@@ -40,77 +40,77 @@ public class Geometry {
 		this.updateColors = false;
 		this.updateTexturesUV = false;
 	}
-	
+
 	/**
-	 * Agrega un vertice
+	 * Adds a vertex position to this Geometry.
 	 * 
-	 * @param position Posicion del vertice
+	 * @param position Vertex position.
 	 */
 	public void addVertex(Vector3 position) {
 		vertices.add(position);
 	}
-	
+
 	/**
-	 * Devuelve el vertice situado en el indice especificado del Array de vertices
+	 * Returns the vertex position located at the specified index of the array of vertices.
 	 * 
-	 * @param index Indice del vertice
-	 * @return Coordenadas del vertice
+	 * @param index Index.
+	 * @return Vertex position
 	 */
 	public Vector3 getVertex(int index) {
 		return vertices.get(index);
 	}
-	
+
 	/**
-	 * Devuelve el numero de vertices definidos en esta geometria
+	 * Returns the number of vertices of this Geometry.
 	 * 
-	 * @return Numero de vertices
+	 * @return Number of vertices
 	 */
 	public int getNumVertices() {
 		return vertices.size();
 	}
-	
+
 	/**
-	 * Agrega un indice a la geometria
+	 * Adds an index to this Geometry.
 	 * 
-	 * @param index Indice a agregar
+	 * @param index Index.
 	 */
 	public void addIndex(short index) {
 		indices.add(index);
 	}
-	
+
 	/**
-	 * Devuelve el indice situado en el indice especificado del Array de indices
+	 * Returns the index located at the specified index of the array of indices.
 	 * 
-	 * @param index Indice (posicion en el array) del indice que se quiere obtener
-	 * @return Indice
+	 * @param index Index (of the array of indices) where the index we want to get is located.
+	 * @return Index
 	 */
 	public short getIndex(int index) {
 		return indices.get(index);
 	}
-	
+
 	/**
-	 * Devuelve el numero de indices definidos en esta geometria
+	 * Returns the number of indices of this Geometry.
 	 * 
-	 * @return Numero de indices
+	 * @return Number of indices
 	 */
 	public int getNumIndices() {
 		return indices.size();
 	}
-	
+
 	/**
-	 * Agrega un color a la geometria. El color ira asociado al vertice que se encuentre en el mismo indice.
+	 * Adds a Color to this Geometry. The color will be associated to the vertex position located at the same index.
 	 * 
-	 * @param color Color
+	 * @param color Color.
 	 */
 	public void addColor(Color color) {
 		colors.add(color);
 	}
-	
+
 	/**
-	 * Devuelve el color situado en el indice especificado del Array de colores
+	 * Returns the Color located at the specified index of the array of colors.
 	 * 
-	 * @param index Indice del vertice al que va asociado el color
-	 * @return Coloro null si esta {@link Geometry} no contiene informacion de color
+	 * @param index Index.
+	 * @return Color or null if this Geometry does not contain color information.
 	 */
 	public Color getColor(int index) {
 		if (colors == null) {
@@ -118,11 +118,12 @@ public class Geometry {
 		}
 		return colors.get(index);
 	}
-	
+
 	/**
-	 * Devuelve el numero de colores definidos en esta geometria (si la geometria utiliza colores, deberia haber 1 color por cada vertice)
+	 * Returns the number of colors of this Geometry. If this Geometry uses colors, there should be one color per
+	 * defined vertex.
 	 * 
-	 * @return Numero de colores, o -1 si no usa colores
+	 * @return Number of colors, or -1 if this Geometry does not use colors.
 	 */
 	public int getNumColors() {
 		if (colors == null) {
@@ -130,21 +131,22 @@ public class Geometry {
 		}
 		return colors.size();
 	}
-	
+
 	/**
-	 * Agrega unas coordenadas de textura a la geometria. Las coordenadas UV iran asociadas al vertice que se encuentre en el mismo indice.
+	 * Adds a pair of texture UV coordinates to this Geometry. The pair of texture UV coordinates will be associated to
+	 * the vertex position located at the same index.
 	 * 
-	 * @param textureUV Coordenadas UV de la textura asociada al vertice
+	 * @param textureUV Texture UV coordinates.
 	 */
 	public void addTextureUV(Vector2 textureUV) {
 		texturesUV.add(textureUV);
 	}
-	
+
 	/**
-	 * Devuelve las coordenadas de textura situadas en el indice especificado del Array de coordenadas UV
+	 * Returns the texture UV coordinates located at the specified index of the array of texture UV coordinates.
 	 * 
-	 * @param index Indice del vertice al que van asociadas las coordenadas UV
-	 * @return Color RGB o null si esta {@link Geometry} no contiene informacion de color
+	 * @param index Index.
+	 * @return Texture UV coordinates or null if this Geometry does not contain texture information.
 	 */
 	public Vector2 getTextureUV(int index) {
 		if (texturesUV == null) {
@@ -152,12 +154,12 @@ public class Geometry {
 		}
 		return texturesUV.get(index);
 	}
-	
+
 	/**
-	 * Devuelve el numero de coordenadas UV definidas en esta geometria (si la geometria utiliza texturas, deberia haber 1 coordenadas UV
-	 * por cada vertice)
+	 * Returns the number of texture UV coordinates of this Geometry. If this Geometry uses texture UV coordinates,
+	 * there should be one texture UV coordinate pair per defined vertex.
 	 * 
-	 * @return Numero de coordenadas UV, o -1 si no usa texturas
+	 * @return Number of texture UV coordinates, or -1 if this Geometry does not use texture UV coordinates.
 	 */
 	public int getNumTexturesUV() {
 		if (texturesUV == null) {
@@ -165,105 +167,105 @@ public class Geometry {
 		}
 		return texturesUV.size();
 	}
-	
+
 	/**
-	 * Devuelve si se ha solicitado actualizar los vertices
+	 * Returns true if update vertices is set.
 	 * 
-	 * @return true si se ha solicitado actualizar, false en caso contrario
+	 * @return true/false
 	 */
 	public boolean isUpdateVerticesSet() {
 		return updateVertices;
 	}
-	
+
 	/**
-	 * Asigna si se necesita actualizar los vertices o no
+	 * Sets update vertices.
 	 * 
-	 * @param updateVertices true para actualizar, false en caso contrario
+	 * @param updateVertices true/false
 	 */
 	protected void setUpdateVertices(boolean updateVertices) {
 		this.updateVertices = updateVertices;
 	}
-	
+
 	/**
-	 * Solicita actualizar los vertices
+	 * Sets update vertices to true.
 	 */
 	public void updateVertices() {
 		updateVertices = true;
 	}
-	
+
 	/**
-	 * Devuelve si se ha solicitado actualizar los indices
+	 * Returns true if update indices is set.
 	 * 
-	 * @return true si se ha solicitado actualizar, false en caso contrario
+	 * @return true/false
 	 */
 	public boolean isUpdateIndicesSet() {
 		return updateIndices;
 	}
-	
+
 	/**
-	 * Asigna si se necesita actualizar los indices o no
+	 * Sets update indices.
 	 * 
-	 * @param updateIndices true para actualizar, false en caso contrario
+	 * @param updateIndices true/false
 	 */
 	protected void setUpdateIndices(boolean updateIndices) {
 		this.updateIndices = updateIndices;
 	}
-	
+
 	/**
-	 * Solicita actualizar los indices
+	 * Sets update indices.
 	 */
 	public void updateIndices() {
 		updateIndices = true;
 	}
-	
+
 	/**
-	 * Devuelve si se ha solicitado actualizar los colores
+	 * Returns true if update colors is set.
 	 * 
-	 * @return true si se ha solicitado actualizar, false en caso contrario
+	 * @return true/false
 	 */
 	public boolean isUpdateColorsSet() {
 		return updateColors;
 	}
-	
+
 	/**
-	 * Asigna si se necesita actualizar los colores o no
+	 * Sets update color.
 	 * 
-	 * @param updateColors true para actualizar, false en caso contrario
+	 * @param updateColors true/false
 	 */
 	protected void setUpdateColors(boolean updateColors) {
 		this.updateColors = updateColors;
 	}
-	
+
 	/**
-	 * Solicita actualizar los colores
+	 * Sets update colors to true.
 	 */
 	public void updateColors() {
 		updateColors = true;
 	}
-	
+
 	/**
-	 * Devuelve si se ha solicitado actualizar las coordenadas UV de las texturas
+	 * Returns true if update textures is set.
 	 * 
-	 * @return true si se ha solicitado actualizar, false en caso contrario
+	 * @return true/false
 	 */
 	public boolean isUpdateTexturesUVSet() {
 		return updateTexturesUV;
 	}
-	
+
 	/**
-	 * Asigna si se necesita actualizar las coordenadas UV de las texturas o no
+	 * Sets update textures.
 	 * 
-	 * @param updateTexturesUV true para actualizar, false en caso contrario
+	 * @param updateTexturesUV true/false
 	 */
 	protected void setUpdateTexturesUV(boolean updateTexturesUV) {
 		this.updateTexturesUV = updateTexturesUV;
 	}
-	
+
 	/**
-	 * Solicita actualizar las coordenadas UV de las texturas
+	 * Sets update textures to true.
 	 */
 	public void updateTexturesUV() {
 		updateTexturesUV = true;
 	}
-	
+
 }

@@ -2,26 +2,22 @@ package com.miviclin.droidengine2d.input;
 
 import android.view.KeyEvent;
 
-import com.miviclin.droidengine2d.KeyController;
-import com.miviclin.droidengine2d.TouchController;
-
 /**
- * Interfaz que se utiliza para los eventos Key
+ * Key event listener.
  * 
  * @author Miguel Vicente Linares
  * 
  */
 public interface KeyListener {
-	
+
 	/**
-	 * Metodo que contiene la logica que debe procesarse al recibir un evento Key.<br>
-	 * Se llama cuando se hace una llamada a {@link KeyController#processKeyInput()}.<br>
-	 * Este metodo no deberia se llamado de forma manual, sino a traves de {@link TouchController#processKeyInput()}
+	 * This method is called from {@link KeyController#processKeyInput()} when a key event happens.<br>
+	 * It should not be called manually.
 	 * 
-	 * @param keyCode Codigo que identifica la tecla fisica pulsada
-	 * @param event KeyEvent que contiene la informacion del evento
-	 * @return true si se ha consumido el evento, false en caso contrario
+	 * @param keyCode Key code.
+	 * @param event KeyEvent.
+	 * @return true if the event was consumed, false otherwise
 	 */
 	public boolean onKey(int keyCode, KeyEvent event);
-	
+
 }

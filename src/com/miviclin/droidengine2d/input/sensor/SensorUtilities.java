@@ -1,20 +1,21 @@
 package com.miviclin.droidengine2d.input.sensor;
 
 /**
- * Utilidades para trabajar con los sensores
+ * SensorUtilities.
  * 
  * @author Miguel Vicente Linares
  * 
  */
 public class SensorUtilities {
-	
+
 	/**
-	 * Aplica un filtro a paso bajo para atenuar los valores de input en funcion a los valores de output y alpha
+	 * Applies a low pass filter to the specified vector in order to attenuate the input values using the output values
+	 * and alpha.
 	 * 
-	 * @param input Valores que queremos atenuar. No puede ser null
-	 * @param output Valores que se utilizaran para atenuar los valores de input. No puede ser null
-	 * @param length Numero de valores a atenuar
-	 * @param alpha Coeficiente de atenuacion. Valor entre 0 y 1
+	 * @param input Input values (can not be null).
+	 * @param output Output values (can not be null). These values will be modified by the filter.
+	 * @param length Number of values to attenuate.
+	 * @param alpha Attenuation coefficient (value between 0.0f and 1.0f).
 	 */
 	public static void lowPassFilter(float[] input, float[] output, int length, float alpha) {
 		if (input == null) {
@@ -33,5 +34,5 @@ public class SensorUtilities {
 			output[i] += (alpha * (input[i] - output[i]));
 		}
 	}
-	
+
 }

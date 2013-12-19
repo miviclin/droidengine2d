@@ -6,18 +6,18 @@ import android.opengl.GLES20;
 import android.opengl.GLUtils;
 
 import com.miviclin.droidengine2d.resources.AssetsLoader;
-import com.miviclin.droidengine2d.util.Dimensions2D;
+import com.miviclin.droidengine2d.util.math.Vector2;
 
 /**
- * Texture representa una textura
+ * Texture.
  * 
  * @author Miguel Vicente Linares
  * 
  */
 public class Texture implements Comparable<Texture> {
-	
+
 	private String path;
-	private int textureID;
+	private int textureId;
 	private int minFilter;
 	private int magFilter;
 	private int wrapS;
@@ -25,37 +25,37 @@ public class Texture implements Comparable<Texture> {
 	private int width;
 	private int height;
 	private boolean loaded;
-	
+
 	/**
-	 * Crea un Texture
+	 * Creates a new Texture.
 	 * 
-	 * @param context Context en el que se ejecuta el juego
-	 * @param path Ruta Ruta de la textura (ruta relativa a la carpeta de assets)
+	 * @param context Context.
+	 * @param path File path. Relative to the assets folder.
 	 */
 	public Texture(Context context, String path) {
-		Dimensions2D bitmapBounds = AssetsLoader.getBitmapBounds(context, path);
+		Vector2 bitmapBounds = AssetsLoader.getBitmapBounds(context, path);
 		this.path = path;
-		this.textureID = -1;
+		this.textureId = -1;
 		this.minFilter = GLES20.GL_LINEAR;
 		this.magFilter = GLES20.GL_LINEAR;
 		this.wrapS = GLES20.GL_REPEAT;
 		this.wrapT = GLES20.GL_REPEAT;
-		this.width = (int) bitmapBounds.getWidth();
-		this.height = (int) bitmapBounds.getHeight();
+		this.width = (int) bitmapBounds.getX();
+		this.height = (int) bitmapBounds.getY();
 		if (width <= 0 || height <= 0) {
 			throw new IllegalArgumentException("An error occurred while loading the texture");
 		}
 		this.loaded = false;
 	}
-	
+
 	/**
-	 * Carga la textura y le asigna los filtros y el wrapmode
+	 * Loads the texture and sets filters and wrap mode.
 	 * 
-	 * @param context Context en el que se ejecuta el juego
+	 * @param context Context.
 	 */
 	public void loadTexture(Context context) {
 		Bitmap bitmap;
-		allocateTextureID();
+		allocateTextureId();
 		bind();
 		setFilters(minFilter, magFilter);
 		setWrapMode(wrapS, wrapT);
@@ -67,36 +67,37 @@ public class Texture implements Comparable<Texture> {
 		bitmap.recycle();
 		loaded = true;
 	}
-	
+
 	/**
-	 * Hace que OpenGL asigne un ID a la textura. Si ya tenia un ID asignado, es recomendable llamar a {@link #delete()} antes de asignar un
-	 * ID nuevo.
+	 * When this method is called, OpenGL will allocate memory for this texture and will generate a texture ID.<br>
+	 * If this texture had a previously generated ID, {@link #delete()} should be called on this texture before
+	 * generating a new one.
 	 */
-	protected void allocateTextureID() {
+	protected void allocateTextureId() {
 		int[] textures = new int[1];
 		GLES20.glGenTextures(1, textures, 0);
-		textureID = textures[0];
+		textureId = textures[0];
 	}
-	
+
 	/**
-	 * Enlaza la textura al contexto de OpenGL
+	 * Binds this texture to the OpenGL context.
 	 */
 	public void bind() {
-		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureID);
+		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
 	}
-	
+
 	/**
-	 * Desenlaza la textura del contexto de OpenGL
+	 * Unbinds this texture to the OpenGL context.
 	 */
 	public void unBind() {
 		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
 	}
-	
+
 	/**
-	 * Asigna los filtros a la textura
+	 * Sets the min and mag filters of this texture.
 	 * 
-	 * @param minFilter Min Filter
-	 * @param magFilter Mag Filter
+	 * @param minFilter Min. filter.
+	 * @param magFilter Mag. filter.
 	 */
 	public void setFilters(int minFilter, int magFilter) {
 		this.minFilter = minFilter;
@@ -104,12 +105,12 @@ public class Texture implements Comparable<Texture> {
 		GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, minFilter);
 		GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, magFilter);
 	}
-	
+
 	/**
-	 * Asigna el wrapmode a la textura
+	 * Sets the wrapmode of this texture.
 	 * 
-	 * @param wrapS Wrap S
-	 * @param wrapT Wrap T
+	 * @param wrapS Wrap S.
+	 * @param wrapT Wrap T.
 	 */
 	public void setWrapMode(int wrapS, int wrapT) {
 		this.wrapS = wrapS;
@@ -117,50 +118,51 @@ public class Texture implements Comparable<Texture> {
 		GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, wrapS);
 		GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, wrapT);
 	}
-	
+
 	/**
-	 * Elimina la textura del contexto de OpenGL.<br>
-	 * Es recomendable llamar a este metodo para liberar recursos cuando la textura no se vaya a utilizar mas.
+	 * Removes this texture from the OpenGL context.<br>
+	 * This method should be called when the texture is not needed anymore, to release resources.
 	 */
 	public void delete() {
-		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureID);
+		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
 		int[] textures = new int[1];
-		textures[0] = textureID;
+		textures[0] = textureId;
 		GLES20.glDeleteTextures(1, textures, 0);
 	}
-	
+
 	/**
-	 * Devuelve el ancho de la textura
+	 * Returns the width of this texture.
 	 * 
-	 * @return ancho de la textura
+	 * @return the width of this texture
 	 */
 	public int getWidth() {
 		return width;
 	}
-	
+
 	/**
-	 * Devuelve el alto de la textura
+	 * Returns the height of this texture.
 	 * 
-	 * @return alto de la textura
+	 * @return the height of this texture
 	 */
 	public int getHeight() {
 		return height;
 	}
-	
+
 	/**
-	 * Devuelve si la textura ya ha sido cargada
+	 * Returns true if the texture has been loaded.
 	 * 
-	 * @return true si la textura ha sido cargada, false en caso contrario
+	 * @return true if the texture has been loaded, false otherwise
+	 * @see #loadTexture(Context)
 	 */
 	public boolean isLoaded() {
 		return loaded;
 	}
-	
+
 	@Override
 	public int compareTo(Texture texture) {
 		return path.compareTo(texture.path);
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -170,13 +172,13 @@ public class Texture implements Comparable<Texture> {
 		result = prime * result + magFilter;
 		result = prime * result + minFilter;
 		result = prime * result + ((path == null) ? 0 : path.hashCode());
-		result = prime * result + textureID;
+		result = prime * result + textureId;
 		result = prime * result + width;
 		result = prime * result + wrapS;
 		result = prime * result + wrapT;
 		return result;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -199,7 +201,7 @@ public class Texture implements Comparable<Texture> {
 				return false;
 		} else if (!path.equals(other.path))
 			return false;
-		if (textureID != other.textureID)
+		if (textureId != other.textureId)
 			return false;
 		if (width != other.width)
 			return false;
@@ -209,10 +211,10 @@ public class Texture implements Comparable<Texture> {
 			return false;
 		return true;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "" + path;
 	}
-	
+
 }

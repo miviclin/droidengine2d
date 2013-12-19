@@ -1,25 +1,22 @@
-package com.miviclin.droidengine2d;
+package com.miviclin.droidengine2d.input;
 
 import android.view.KeyEvent;
 
-import com.miviclin.droidengine2d.input.KeyListener;
-import com.miviclin.droidengine2d.scene.Scene;
-
 /**
- * Controlador de eventos Key
+ * KeyController.
  * 
  * @author Miguel Vicente Linares
  * 
  */
 public class KeyController {
-	
+
 	private volatile boolean keyDetected;
 	private volatile int keyCode;
 	private volatile KeyEvent keyEvent;
 	private KeyListener keyListener;
-	
+
 	/**
-	 * Constructor
+	 * Creates a new KeyController.
 	 */
 	public KeyController() {
 		this.keyDetected = false;
@@ -27,34 +24,35 @@ public class KeyController {
 		this.keyEvent = null;
 		this.keyListener = null;
 	}
-	
+
 	/**
-	 * Asigna un KeyEvent al KeyController. Este KeyEvent sera el que se le pase a {@link KeyListener#onKey(int, KeyEvent)}.
+	 * Sets the KeyEvent of this KeyController. The KeyEvent will be later used when this KeyController calls
+	 * {@link KeyListener#onKey(int, KeyEvent)}.
 	 * 
-	 * @param keyCode Codigo de tecla
-	 * @param keyEvent KeyEvent
+	 * @param keyCode Key code.
+	 * @param keyEvent KeyEvent.
 	 */
-	void setKeyEvent(int keyCode, KeyEvent keyEvent) {
+	public void setKeyEvent(int keyCode, KeyEvent keyEvent) {
 		this.keyCode = keyCode;
 		this.keyEvent = keyEvent;
 		if (keyEvent != null) {
 			keyDetected = true;
 		}
 	}
-	
+
 	/**
-	 * Asigna un {@link KeyListener} al KeyController
+	 * Sets the {@link KeyListener} of this KeyController.
 	 * 
-	 * @param keyListener KeyListener
+	 * @param keyListener KeyListener.
 	 */
 	public void setKeyListener(KeyListener keyListener) {
 		this.keyListener = keyListener;
 	}
-	
+
 	/**
-	 * Procesa el evento de tecla.<br>
-	 * Este metodo deberia ser llamado desde {@link Scene#update(float)} para que en caso de que haya un evento de tecla, ejecute
-	 * {@link KeyListener#onKey(int, KeyEvent)}
+	 * Processes key input.<br>
+	 * This method should be called when the game updates, before the update is processed. If a key event has happened,
+	 * this method will call {@link KeyListener#onKey(int, KeyEvent)}.
 	 */
 	public void processKeyInput() {
 		if ((keyListener != null) && keyDetected) {
@@ -62,5 +60,5 @@ public class KeyController {
 		}
 		keyDetected = false;
 	}
-	
+
 }

@@ -1,334 +1,290 @@
 package com.miviclin.droidengine2d.graphics;
 
+import java.util.HashMap;
+import java.util.Map.Entry;
+
 import android.content.Context;
+import android.opengl.GLES20;
 
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
-import com.miviclin.droidengine2d.graphics.mesh.PositionColorRectangularShapeBatch;
-import com.miviclin.droidengine2d.graphics.mesh.PositionTextureColorSpriteBatch;
-import com.miviclin.droidengine2d.graphics.mesh.PositionTextureHSVColorSpriteBatch;
-import com.miviclin.droidengine2d.graphics.mesh.PositionTextureOpacitySpriteBatch;
-import com.miviclin.droidengine2d.graphics.mesh.PositionTextureSpriteBatch;
-import com.miviclin.droidengine2d.graphics.shape.RectangularShape;
-import com.miviclin.droidengine2d.graphics.shape.Sprite;
-import com.miviclin.droidengine2d.graphics.texture.TextureRegion;
-import com.miviclin.droidengine2d.util.Dimensions2D;
+import com.miviclin.droidengine2d.graphics.material.ColorMaterial;
+import com.miviclin.droidengine2d.graphics.material.Material;
+import com.miviclin.droidengine2d.graphics.material.TextureColorMaterial;
+import com.miviclin.droidengine2d.graphics.material.TextureHsvMaterial;
+import com.miviclin.droidengine2d.graphics.material.TextureMaterial;
+import com.miviclin.droidengine2d.graphics.material.TransparentTextureMaterial;
+import com.miviclin.droidengine2d.graphics.mesh.ColorMaterialBatchRenderer;
+import com.miviclin.droidengine2d.graphics.mesh.GraphicsBatch;
+import com.miviclin.droidengine2d.graphics.mesh.RectangleBatchRenderer;
+import com.miviclin.droidengine2d.graphics.mesh.TextureColorMaterialBatchRenderer;
+import com.miviclin.droidengine2d.graphics.mesh.TextureHsvMaterialBatchRenderer;
+import com.miviclin.droidengine2d.graphics.mesh.TextureMaterialBatchRenderer;
+import com.miviclin.droidengine2d.graphics.mesh.TransparentTextureMaterialBatchRenderer;
+import com.miviclin.droidengine2d.graphics.text.BitmapFont;
+import com.miviclin.droidengine2d.graphics.text.FontChar;
+import com.miviclin.droidengine2d.util.Transform;
 import com.miviclin.droidengine2d.util.math.Vector2;
 
 /**
- * Esta clase se encarga de renderizar graficos en pantalla
+ * The Graphics class allows rendering things on screen without needing to know how rendering in implemented internally.
  * 
  * @author Miguel Vicente Linares
  * 
  */
 public class Graphics {
-	
+
+	private final Vector2 tmpOrigin;
+	private final Vector2 tmpScale;
+	private final Vector2 tmpPosition;
+	private final TextureColorMaterial tmpTextureColorMaterial;
+
 	private Camera camera;
-	private ShapeBatch currentShapeBatch;
-	private PositionColorRectangularShapeBatch positionColorRB;
-	private PositionTextureSpriteBatch positionTextureSB;
-	private PositionTextureOpacitySpriteBatch positionTextureOpacitySB;
-	private PositionTextureColorSpriteBatch positionTextureColorSB;
-	private PositionTextureHSVColorSpriteBatch positionTextureHSVColorSB;
-	private Sprite tempSprite;
-	private RectangularShape tempRectangularShape;
-	private Color tempColor;
+	private Context context;
+	private RectangleBatchRenderer<? extends Material> currentRenderer;
+	private HashMap<Class<? extends Material>, RectangleBatchRenderer<? extends Material>> renderers;
 	private boolean inBeginEndPair;
-	
+
 	/**
-	 * Constructor
+	 * Constructor.
 	 * 
-	 * @param camera Camara
-	 * @param context Context
+	 * @param camera Camera.
+	 * @param context Context.
 	 */
 	public Graphics(Camera camera, Context context) {
+		this.tmpOrigin = new Vector2(0, 0);
+		this.tmpScale = new Vector2(1, 1);
+		this.tmpPosition = new Vector2(0, 0);
+		this.tmpTextureColorMaterial = new TextureColorMaterial(null, new Color(0, 0, 0));
 		this.camera = camera;
-		this.currentShapeBatch = null;
-		this.positionColorRB = new PositionColorRectangularShapeBatch();
-		this.positionTextureSB = new PositionTextureSpriteBatch(context);
-		this.positionTextureOpacitySB = new PositionTextureOpacitySpriteBatch(context);
-		this.positionTextureColorSB = new PositionTextureColorSpriteBatch(context);
-		this.positionTextureHSVColorSB = new PositionTextureHSVColorSpriteBatch(context);
-		this.tempSprite = null;
-		this.tempRectangularShape = null;
-		this.tempColor = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+		this.context = context;
+		this.currentRenderer = null;
+		this.renderers = new HashMap<Class<? extends Material>, RectangleBatchRenderer<? extends Material>>();
 		this.inBeginEndPair = false;
 	}
-	
+
 	/**
-	 * Metodo que inicializa el objeto graphics. Debe llamarse desde el hilo del renderer, que es el que tiene el contexto de OpenGL
+	 * Initializes the Graphics object. Must be called from the renderer thread.
+	 * 
+	 * @see Graphics#loadMaterialRenderers()
 	 */
 	public void initialize() {
-		positionColorRB.getShaderProgram().link();
-		positionColorRB.initialize();
-		
-		positionTextureSB.getShaderProgram().link();
-		positionTextureSB.initialize();
-		
-		positionTextureOpacitySB.getShaderProgram().link();
-		positionTextureOpacitySB.initialize();
-		
-		positionTextureColorSB.getShaderProgram().link();
-		positionTextureColorSB.initialize();
-		
-		positionTextureHSVColorSB.getShaderProgram().link();
-		positionTextureHSVColorSB.initialize();
-	}
-	
-	/**
-	 * Renderiza un rectangulo en pantalla
-	 * 
-	 * @param color Color del rectangulo
-	 * @param position Posicion en la que se renderizara
-	 * @param dimensions Dimensiones del sprite
-	 */
-	public void drawRect(Color color, Vector2 position, Dimensions2D dimensions) {
-		drawRect(color, position, dimensions, 0.0f, null, 0.0f);
-	}
-	
-	/**
-	 * Renderiza un rectangulo en pantalla
-	 * 
-	 * @param color Color del rectangulo
-	 * @param position Posicion en la que se renderizara
-	 * @param dimensions Dimensiones del sprite
-	 * @param rotation Angulo de rotacion del sprite con respecto a su centro
-	 */
-	public void drawRect(Color color, Vector2 position, Dimensions2D dimensions, float rotation) {
-		drawRect(color, position, dimensions, rotation, null, 0.0f);
-	}
-	
-	/**
-	 * Renderiza un rectangulo en pantalla
-	 * 
-	 * @param color Color del rectangulo
-	 * @param position Posicion en la que se renderizara
-	 * @param dimensions Dimensiones del sprite
-	 * @param rotation Angulo de rotacion del sprite con respecto a su centro
-	 * @param externalCenter Centro externo de rotacion
-	 * @param externalRotation Angulo de rotacion sobre el centro externo de rotacion
-	 */
-	public void drawRect(Color color, Vector2 position, Dimensions2D dimensions, float rotation, Vector2 externalCenter, float externalRotation) {
-		selectCurrentShapeBatch(positionColorRB);
-		setupTempRectangularShape(color, position, dimensions, rotation, externalCenter, externalRotation);
-		positionColorRB.draw(tempRectangularShape, camera);
-	}
-	
-	/**
-	 * Renderiza un sprite en pantalla
-	 * 
-	 * @param textureRegion TextureRegion a renderizar
-	 * @param position Posicion en la que se renderizara
-	 * @param dimensions Dimensiones del sprite
-	 */
-	public void drawSprite(TextureRegion textureRegion, Vector2 position, Dimensions2D dimensions) {
-		drawSprite(textureRegion, position, dimensions, 0.0f, null, 0.0f);
-	}
-	
-	/**
-	 * Renderiza un sprite en pantalla
-	 * 
-	 * @param textureRegion TextureRegion a renderizar
-	 * @param position Posicion en la que se renderizara
-	 * @param dimensions Dimensiones del sprite
-	 * @param rotation Angulo de rotacion del sprite con respecto a su centro
-	 */
-	public void drawSprite(TextureRegion textureRegion, Vector2 position, Dimensions2D dimensions, float rotation) {
-		drawSprite(textureRegion, position, dimensions, rotation, null, 0.0f);
-	}
-	
-	/**
-	 * Renderiza un sprite en pantalla
-	 * 
-	 * @param textureRegion TextureRegion a renderizar
-	 * @param position Posicion en la que se renderizara
-	 * @param dimensions Dimensiones del sprite
-	 * @param rotation Angulo de rotacion del sprite con respecto a su centro
-	 * @param externalCenter Centro externo de rotacion
-	 * @param externalRotation Angulo de rotacion sobre el centro externo de rotacion
-	 */
-	public void drawSprite(TextureRegion textureRegion, Vector2 position, Dimensions2D dimensions, float rotation, Vector2 externalCenter, float externalRotation) {
-		selectCurrentShapeBatch(positionTextureSB);
-		setupTempSprite(textureRegion, null, position, dimensions, rotation, externalCenter, externalRotation);
-		positionTextureSB.draw(tempSprite, camera);
-	}
-	
-	/**
-	 * Renderiza un sprite en pantalla
-	 * 
-	 * @param textureRegion TextureRegion a renderizar
-	 * @param opacity Opacidad del sprite
-	 * @param position Posicion en la que se renderizara
-	 * @param dimensions Dimensiones del sprite
-	 */
-	public void drawSprite(TextureRegion textureRegion, float opacity, Vector2 position, Dimensions2D dimensions) {
-		drawSprite(textureRegion, opacity, position, dimensions, 0.0f, null, 0.0f);
-	}
-	
-	/**
-	 * Renderiza un sprite en pantalla
-	 * 
-	 * @param textureRegion TextureRegion a renderizar
-	 * @param opacity Opacidad del sprite
-	 * @param position Posicion en la que se renderizara
-	 * @param dimensions Dimensiones del sprite
-	 * @param rotation Angulo de rotacion del sprite con respecto a su centro
-	 */
-	public void drawSprite(TextureRegion textureRegion, float opacity, Vector2 position, Dimensions2D dimensions, float rotation) {
-		drawSprite(textureRegion, opacity, position, dimensions, rotation, null, 0.0f);
-	}
-	
-	/**
-	 * Renderiza un sprite en pantalla
-	 * 
-	 * @param textureRegion TextureRegion a renderizar
-	 * @param opacity Opacidad del sprite
-	 * @param position Posicion en la que se renderizara
-	 * @param dimensions Dimensiones del sprite
-	 * @param rotation Angulo de rotacion del sprite con respecto a su centro
-	 * @param externalCenter Centro externo de rotacion
-	 * @param externalRotation Angulo de rotacion sobre el centro externo de rotacion
-	 */
-	public void drawSprite(TextureRegion textureRegion, float opacity, Vector2 position, Dimensions2D dimensions, float rotation, Vector2 externalCenter, float externalRotation) {
-		selectCurrentShapeBatch(positionTextureOpacitySB);
-		setupTempSprite(textureRegion, null, position, dimensions, rotation, externalCenter, externalRotation);
-		tempSprite.getColor().setA(opacity);
-		positionTextureOpacitySB.draw(tempSprite, camera);
-	}
-	
-	/**
-	 * Renderiza un sprite en pantalla
-	 * 
-	 * @param textureRegion TextureRegion a renderizar
-	 * @param color Color del sprite
-	 * @param hsv Indica si se utilizan las componentes RGB o HSV del color
-	 * @param position Posicion en la que se renderizara
-	 * @param dimensions Dimensiones del sprite
-	 */
-	public void drawSprite(TextureRegion textureRegion, Color color, boolean hsv, Vector2 position, Dimensions2D dimensions) {
-		drawSprite(textureRegion, color, hsv, position, dimensions, 0.0f, null, 0.0f);
-	}
-	
-	/**
-	 * Renderiza un sprite en pantalla
-	 * 
-	 * @param textureRegion TextureRegion a renderizar
-	 * @param color Color del sprite
-	 * @param hsv Indica si se utilizan las componentes RGB o HSV del color
-	 * @param position Posicion en la que se renderizara
-	 * @param dimensions Dimensiones del sprite
-	 * @param rotation Angulo de rotacion del sprite con respecto a su centro
-	 */
-	public void drawSprite(TextureRegion textureRegion, Color color, boolean hsv, Vector2 position, Dimensions2D dimensions, float rotation) {
-		drawSprite(textureRegion, color, hsv, position, dimensions, rotation, null, 0.0f);
-	}
-	
-	/**
-	 * Renderiza un sprite en pantalla
-	 * 
-	 * @param textureRegion TextureRegion a renderizar
-	 * @param color Color del sprite
-	 * @param hsv Indica si se utilizan las componentes RGB o HSV del color
-	 * @param position Posicion en la que se renderizara
-	 * @param dimensions Dimensiones del sprite
-	 * @param rotation Angulo de rotacion del sprite con respecto a su centro
-	 * @param externalCenter Centro externo de rotacion
-	 * @param externalRotation Angulo de rotacion sobre el centro externo de rotacion
-	 */
-	public void drawSprite(TextureRegion textureRegion, Color color, boolean hsv, Vector2 position, Dimensions2D dimensions, float rotation, Vector2 externalCenter, float externalRotation) {
-		SpriteBatch spriteBatch = (hsv) ? positionTextureHSVColorSB : positionTextureColorSB;
-		selectCurrentShapeBatch(spriteBatch);
-		setupTempSprite(textureRegion, color, position, dimensions, rotation, externalCenter, externalRotation);
-		spriteBatch.draw(tempSprite, camera);
-	}
-	
-	/**
-	 * Renderiza en pantalla los elementos que aun estan en el batch sin renderizar.<br>
-	 * Este metodo debe llamarse siempre al final de cada frame para asegurarse de que no queden elementos sin renderizar.
-	 */
-	public void flush() {
-		if (inBeginEndPair && currentShapeBatch != null) {
-			currentShapeBatch.end();
-			inBeginEndPair = false;
+		loadMaterialRenderers();
+		for (Entry<Class<? extends Material>, RectangleBatchRenderer<? extends Material>> entry : renderers.entrySet()) {
+			entry.getValue().setupShaderProgram();
+			entry.getValue().getShaderProgram().compileAndLink();
+			entry.getValue().initialize();
 		}
 	}
-	
+
 	/**
-	 * Comprueba si el shapebatch especificado es el seleccionado actualmente, y si no lo es, lo selecciona y lo prepara para su uso.
+	 * Loads all supported material renderers.<br>
+	 * This method is called from {@link Graphics#initialize()}.<br>
+	 * More supported renderers could be added overriding this method. For example:
 	 * 
-	 * @param shapeBatch ShapeBatch
+	 * <pre>
+	 * <code>{@literal @}Override
+	 * protected void loadMaterialRenderers() {
+	 *     super.loadMaterialRenderers();
+	 *     getMaterialRenderers().put(TextureColorMaterial.class, new TextureColorMaterialBatchRenderer{@code<TextureColorMaterial>}(getContext()));
+	 * }
+	 * </code>
+	 * </pre>
 	 */
-	private void selectCurrentShapeBatch(ShapeBatch shapeBatch) {
-		if (!inBeginEndPair || currentShapeBatch != shapeBatch) {
+	protected void loadMaterialRenderers() {
+		renderers.put(ColorMaterial.class, new ColorMaterialBatchRenderer<ColorMaterial>());
+		renderers.put(TextureMaterial.class, new TextureMaterialBatchRenderer<TextureMaterial>(context));
+		renderers.put(TextureColorMaterial.class, new TextureColorMaterialBatchRenderer<TextureColorMaterial>(context));
+		renderers.put(TextureHsvMaterial.class, new TextureHsvMaterialBatchRenderer<TextureHsvMaterial>(context));
+		renderers.put(TransparentTextureMaterial.class,
+				new TransparentTextureMaterialBatchRenderer<TransparentTextureMaterial>(context));
+	}
+
+	/**
+	 * Renders a rectangular shape with the specified Material and Transform.
+	 * 
+	 * @param material Material.
+	 * @param transform Transform.
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public <M extends Material> void drawRect(M material, Transform transform) {
+		RectangleBatchRenderer batchRenderer = renderers.get(material.getClass());
+		if (batchRenderer == null) {
+			throw new UnsupportedMaterialException();
+		}
+
+		Vector2 scale = transform.getScale();
+		if (scale.getX() < 1 || scale.getY() < 1) {
+			throw new IllegalArgumentException("The scale of the transform has to be at least (1, 1)");
+		}
+
+		Vector2 origin = transform.getOrigin();
+		if (origin.getX() < 0 || origin.getX() > scale.getX() || origin.getY() < 0 || origin.getY() > scale.getY()) {
+			throw new IllegalArgumentException("" +
+					"The origin of the transform must be between (0, 0) and (scale.getX(), scale.getY()");
+		}
+		Vector2.divide(tmpOrigin, origin, scale);
+		selectCurrentRenderer(batchRenderer);
+		batchRenderer.setCurrentMaterial(material);
+		batchRenderer.draw(transform.getPosition(), scale, tmpOrigin, transform.getRotation(), camera);
+	}
+
+	/**
+	 * Renders text.
+	 * 
+	 * @param text Text to render.
+	 * @param font Font to be used.
+	 * @param position Position of the top-left corner of the first letter of the text.
+	 * @param fontSizePx Text scale in pixels.
+	 * @param color Text color.
+	 */
+	public void drawText(CharSequence text, BitmapFont font, Vector2 position, float fontSizePx, Color color) {
+		drawText(text, font, position, fontSizePx, null, 0.0f, color);
+	}
+
+	/**
+	 * Renders text.
+	 * 
+	 * @param text Text to render.
+	 * @param font Font to be used.
+	 * @param position Position of the top-left corner of the first letter of the text.
+	 * @param fontSizePx Text scale in pixels.
+	 * @param rotationPoint Rotation point (anchor).
+	 * @param rotation Rotation angle.
+	 * @param color Text color.
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public void drawText(CharSequence text, BitmapFont font, Vector2 position, float fontSizePx, Vector2 rotationPoint,
+			float rotation, Color color) {
+
+		RectangleBatchRenderer batchRenderer = renderers.get(TextureColorMaterial.class);
+		if (batchRenderer == null) {
+			throw new UnsupportedMaterialException();
+		}
+		if (fontSizePx < 1 || fontSizePx < 1) {
+			throw new IllegalArgumentException("fontSizePx has to be at least 1");
+		}
+		selectCurrentRenderer(batchRenderer);
+		batchRenderer.setCurrentMaterial(tmpTextureColorMaterial);
+		tmpTextureColorMaterial.getColor().set(color);
+		tmpOrigin.set(0, 1);
+
+		int textLength = text.length();
+		float scaleRatio = fontSizePx / font.getSize();
+		float posX = position.getX();
+		float posY = position.getY();
+
+		FontChar currentChar;
+		FontChar lastChar = null;
+		float cosR, sinR;
+		for (int i = 0; i < textLength; i++) {
+			currentChar = font.getCharacter((int) text.charAt(i));
+			if (lastChar != null) {
+				posX += lastChar.getKernings().get(currentChar.getId()) * scaleRatio;
+			}
+			posX += currentChar.getxOffset() * scaleRatio;
+			posY = position.getY() - currentChar.getyOffset() * scaleRatio;
+			tmpScale.setX(currentChar.getTextureRegion().getWidth() * scaleRatio);
+			tmpScale.setY(currentChar.getTextureRegion().getHeight() * scaleRatio);
+
+			if (rotation != 0 && rotationPoint != null) {
+				cosR = (float) Math.cos(Math.toRadians(rotation));
+				sinR = (float) Math.sin(Math.toRadians(rotation));
+
+				tmpPosition.setX(((posX - rotationPoint.getX()) * cosR - (posY - rotationPoint.getY()) * sinR)
+						+ rotationPoint.getX());
+
+				tmpPosition.setY(((posY - rotationPoint.getY()) * cosR + (posX - rotationPoint.getX()) * sinR)
+						+ rotationPoint.getY());
+
+			} else {
+				tmpPosition.set(posX, posY);
+			}
+
+			tmpTextureColorMaterial.setTextureRegion(currentChar.getTextureRegion());
+			batchRenderer.draw(tmpPosition, tmpScale, tmpOrigin, (rotationPoint != null) ? rotation : 0.0f, camera);
+			posX += currentChar.getxAdvance() * scaleRatio;
+			lastChar = currentChar;
+		}
+	}
+
+	/**
+	 * Sets the background color of the GLView to the specified Color.
+	 * 
+	 * @param color Color.
+	 */
+	public void setBackgroundColor(Color color) {
+		GLES20.glClearColor(color.getR(), color.getG(), color.getB(), color.getA());
+	}
+
+	/**
+	 * Flushes the current material renderer, rendering the remaining elements.<br>
+	 * This method should be called once at the end of each frame to ensure that all elements are rendered.
+	 */
+	public void flush() {
+		if (inBeginEndPair && currentRenderer != null) {
+			inBeginEndPair = false;
+			currentRenderer.end();
+		}
+	}
+
+	/**
+	 * Checks if the specified renderer is the currently selected one. If it isn't, the specified rendered is now the
+	 * currently selected renderer and prepares it to be used. If the previously selected renderer has elements batched
+	 * for rendering, they are rendered before swapping renderers.
+	 * 
+	 * @param renderer RectangleBatchMesh.
+	 */
+	private void selectCurrentRenderer(RectangleBatchRenderer<?> renderer) {
+		if (!inBeginEndPair || currentRenderer != renderer) {
 			if (inBeginEndPair) {
-				currentShapeBatch.end();
+				currentRenderer.end();
 				inBeginEndPair = false;
 			}
-			currentShapeBatch = shapeBatch;
-			currentShapeBatch.begin();
+			currentRenderer = renderer;
+			currentRenderer.begin();
 			inBeginEndPair = true;
 		}
 	}
-	
+
 	/**
-	 * Configura el Sprite temporal, que se pasara al SpriteBatch actualmente seleccionado, con los datos especificados
+	 * Returns the camera.
 	 * 
-	 * @param textureRegion TextureRegion
-	 * @param color Color
-	 * @param position Posicion
-	 * @param dimensions Dimensiones
-	 * @param rotation Angulo de rotacion sobre el centro del sprite
-	 * @param externalCenter Centro externo de rotacion
-	 * @param externalRotation Angulo de rotacion sobre el centro externo de rotacion
+	 * @return Camera
 	 */
-	private void setupTempSprite(TextureRegion textureRegion, Color color, Vector2 position, Dimensions2D dimensions, float rotation, Vector2 externalCenter, float externalRotation) {
-		if (tempSprite == null) {
-			tempSprite = new Sprite(position.getX(), position.getY(), dimensions.getWidth(), dimensions.getHeight(), textureRegion);
-		}
-		tempSprite.setTextureRegion(textureRegion);
-		tempSprite.getPosition().set(position);
-		tempSprite.getDimensions().set(dimensions);
-		tempSprite.getCenter().set(dimensions.getWidth() / 2, dimensions.getHeight() / 2);
-		tempSprite.setRotation(rotation);
-		if (externalCenter == null) {
-			tempSprite.setRotationAroundExternalPoint(0.0f, 0.0f, 0.0f);
-		} else {
-			tempSprite.setRotationAroundExternalPoint(externalRotation, externalCenter);
-		}
-		if (color != null) {
-			tempSprite.getColor().set(color);
-		} else {
-			tempSprite.getColor().set(tempColor);
-		}
+	protected Camera getCamera() {
+		return camera;
 	}
-	
+
 	/**
-	 * Configura el RectangularShape temporal, que se pasara al RectangularShapeBatch actualmente seleccionado, con los datos especificados
+	 * Returns the Context where the game runs.
 	 * 
-	 * @param color Color
-	 * @param position Posicion
-	 * @param dimensions Dimensiones
-	 * @param rotation Angulo de rotacion sobre el centro del RectangularShape
-	 * @param externalCenter Centro externo de rotacion
-	 * @param externalRotation Angulo de rotacion sobre el centro externo de rotacion
+	 * @return Context
 	 */
-	private void setupTempRectangularShape(Color color, Vector2 position, Dimensions2D dimensions, float rotation, Vector2 externalCenter, float externalRotation) {
-		if (tempRectangularShape == null) {
-			tempRectangularShape = new RectangularShape(position.getX(), position.getY(), dimensions.getWidth(), dimensions.getHeight());
-		}
-		tempRectangularShape.getPosition().set(position);
-		tempRectangularShape.getDimensions().set(dimensions);
-		tempRectangularShape.getCenter().set(dimensions.getWidth() / 2, dimensions.getHeight() / 2);
-		tempRectangularShape.setRotation(rotation);
-		if (externalCenter == null) {
-			tempRectangularShape.setRotationAroundExternalPoint(0.0f, 0.0f, 0.0f);
-		} else {
-			tempRectangularShape.setRotationAroundExternalPoint(externalRotation, externalCenter);
-		}
-		if (color != null) {
-			tempRectangularShape.getColor().set(color);
-		} else {
-			tempRectangularShape.getColor().set(tempColor);
-		}
+	protected Context getContext() {
+		return context;
 	}
-	
+
+	/**
+	 * Returns true if there is one or more elements pending to be rendered in the currently selected renderer.
+	 * 
+	 * @return true if {@link GraphicsBatch#begin()} has been called, but {@link GraphicsBatch#end()} has not been
+	 *         called yet on the currently selected renderer, false otherwise
+	 */
+	protected boolean isInBeginEndPair() {
+		return inBeginEndPair;
+	}
+
+	/**
+	 * Returns the map that stores the supported material renderers.<br>
+	 * In order for Graphics to be able to render a material that is not supported by default, a material renderer able
+	 * to render such material must be registered in this map.<br>
+	 * In order to add a new material renderer to the map returned by this method, the recommended way is overriding
+	 * {@link Graphics#loadMaterialRenderers()}.
+	 * 
+	 * @return Map containing all material renderers supported by this Graphics object.
+	 */
+	protected HashMap<Class<? extends Material>, RectangleBatchRenderer<? extends Material>> getMaterialRenderers() {
+		return renderers;
+	}
+
 }

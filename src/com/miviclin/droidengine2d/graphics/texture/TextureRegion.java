@@ -1,12 +1,12 @@
 package com.miviclin.droidengine2d.graphics.texture;
 
 /**
- * TextureRegion representa una region dentro de una textura.
+ * TextureRegion is a region of a texture.
  * 
  * @author Miguel Vicente Linares
  * 
  */
-public class TextureRegion { // TODO: revisar el calculo de U y V (restar medio texel?)
+public class TextureRegion {
 
 	private final Texture texture;
 	private float u1;
@@ -17,15 +17,15 @@ public class TextureRegion { // TODO: revisar el calculo de U y V (restar medio 
 	private float y;
 	private float width;
 	private float height;
-	
+
 	/**
-	 * Crea un nuevo TextureRegion
+	 * Creates a new TextureRegion.
 	 * 
-	 * @param texture Textura a la que pertenece la region
-	 * @param x Posicion de la region en el eje X, relativo a la esquina superior izquierda de la textura (en pixeles)
-	 * @param y Posicion de la region en el eje Y, relativo a la esquina superior izquierda de la textura (en pixeles)
-	 * @param width Ancho de la region
-	 * @param height Alto de la region
+	 * @param texture Texture this TextureRegion belongs to.
+	 * @param x Position of this region in the X axis in pixels. Relative to the top-left corner of the texture.
+	 * @param y Position of this region in the Y axis in pixels. Relative to the top-left corner of the texture.
+	 * @param width Width of this region.
+	 * @param height Height of this region.
 	 */
 	public TextureRegion(Texture texture, float x, float y, float width, float height) {
 		if (texture == null) {
@@ -37,11 +37,11 @@ public class TextureRegion { // TODO: revisar el calculo de U y V (restar medio 
 		setX(x);
 		setY(y);
 	}
-	
+
 	/**
-	 * Invierte la coordenada U de la region
+	 * Flips the U coordinate of this TextureRegion.
 	 * 
-	 * @return Devuelve este TextureRegion para poder encadenar llamadas a metodos
+	 * @return Returns this TextureRegion
 	 */
 	public TextureRegion flipX() {
 		float u = u1;
@@ -49,11 +49,11 @@ public class TextureRegion { // TODO: revisar el calculo de U y V (restar medio 
 		u2 = u;
 		return this;
 	}
-	
+
 	/**
-	 * Invierte la coordenada V de la region
+	 * Flips the V coordinate of this TextureRegion.
 	 * 
-	 * @return Devuelve este TextureRegion para poder encadenar llamadas a metodos
+	 * @return Returns this TextureRegion
 	 */
 	public TextureRegion flipY() {
 		float v = v1;
@@ -61,65 +61,65 @@ public class TextureRegion { // TODO: revisar el calculo de U y V (restar medio 
 		v2 = v;
 		return this;
 	}
-	
+
 	/**
-	 * Devuelve la textura a la que pertenece esta region
+	 * Returns the Texture this TextureRegion belongs to.
 	 * 
 	 * @return Texture
 	 */
 	public final Texture getTexture() {
 		return texture;
 	}
-	
+
 	/**
-	 * Devuelve la coordenada U1 de la region. [0..1]
+	 * Returns the U1 coordinate of this TextureRegion.
 	 * 
-	 * @return U1
+	 * @return U1 (value between 0.0f and 1.0f).
 	 */
 	public float getU1() {
 		return u1;
 	}
-	
+
 	/**
-	 * Devuelve la coordenada V1 de la region. [0..1]
+	 * Returns the V1 coordinate of this TextureRegion.
 	 * 
-	 * @return V1
+	 * @return V1 (value between 0.0f and 1.0f).
 	 */
 	public float getV1() {
 		return v1;
 	}
-	
+
 	/**
-	 * Devuelve la coordenada U2 de la region. [0..1]
+	 * Returns the U2 coordinate of this TextureRegion.
 	 * 
-	 * @return U2
+	 * @return U2 (value between 0.0f and 1.0f).
 	 */
 	public float getU2() {
 		return u2;
 	}
-	
+
 	/**
-	 * Devuelve la coordenada V2 de la region. [0..1]
+	 * Returns the V2 coordinate of this TextureRegion.
 	 * 
-	 * @return V2
+	 * @return V2 (value between 0.0f and 1.0f).
 	 */
 	public float getV2() {
 		return v2;
 	}
-	
+
 	/**
-	 * Devuelve la posicion en el eje X de la region con respecto a la esquina superior izquierda de la textura, en pixeles
+	 * Returns the position of this region in the X axis in pixels. Relative to the top-left corner of the texture.
 	 * 
-	 * @return posicion en el eje X
+	 * @return x
 	 */
 	public final float getX() {
 		return x;
 	}
-	
+
 	/**
-	 * Asigna la posicion en el eje X de la region con respecto a la esquina superior izquierda de la textura, en pixeles
+	 * Sets the position of this region in the X axis in pixels. Relative to the top-left corner of the texture.
 	 * 
-	 * @param x Nueva posicion en el eje X
+	 * @param x New value.
 	 */
 	public final void setX(float x) {
 		if (x < 0) {
@@ -132,20 +132,20 @@ public class TextureRegion { // TODO: revisar el calculo de U y V (restar medio 
 		this.u2 = (x + width) / texture.getWidth();
 		this.x = x;
 	}
-	
+
 	/**
-	 * Devuelve la posicion en el eje Y de la region con respecto a la esquina superior izquierda de la textura, en pixeles
+	 * Returns the position of this region in the Y axis in pixels. Relative to the top-left corner of the texture.
 	 * 
-	 * @return posicion en el eje Y
+	 * @return y
 	 */
 	public final float getY() {
 		return y;
 	}
-	
+
 	/**
-	 * Asigna la posicion en el eje Y de la region con respecto a la esquina superior izquierda de la textura, en pixeles
+	 * Sets the position of this region in the Y axis in pixels. Relative to the top-left corner of the texture.
 	 * 
-	 * @param y Nueva posicion en el eje Y
+	 * @param y New value.
 	 */
 	public final void setY(float y) {
 		if (y < 0) {
@@ -158,20 +158,20 @@ public class TextureRegion { // TODO: revisar el calculo de U y V (restar medio 
 		this.v2 = (y + height) / texture.getHeight();
 		this.y = y;
 	}
-	
+
 	/**
-	 * Devuelve el ancho de la region, en pixeles
+	 * Returns the width of this TextureRegion, in pixels.
 	 * 
-	 * @return ancho de la region
+	 * @return the width of this TextureRegion
 	 */
 	public final float getWidth() {
 		return width;
 	}
-	
+
 	/**
-	 * Asigna el ancho de la region, en pixeles
+	 * Sets the width of this TextureRegion, in pixels.
 	 * 
-	 * @param width Nuevo ancho
+	 * @param width New value.
 	 */
 	public final void setWidth(float width) {
 		if (width <= 0) {
@@ -179,20 +179,20 @@ public class TextureRegion { // TODO: revisar el calculo de U y V (restar medio 
 		}
 		this.width = width;
 	}
-	
+
 	/**
-	 * Devuelve el alto de la region, en pixeles
+	 * Returns the height of this TextureRegion, in pixels.
 	 * 
-	 * @return alto de la region
+	 * @return the height of this TextureRegion
 	 */
 	public final float getHeight() {
 		return height;
 	}
-	
+
 	/**
-	 * Asigna el alto de la region, en pixeles
+	 * Sets the height of this TextureRegion, in pixels.
 	 * 
-	 * @param height Nuevo alto
+	 * @param height New value.
 	 */
 	public final void setHeight(float height) {
 		if (height <= 0) {

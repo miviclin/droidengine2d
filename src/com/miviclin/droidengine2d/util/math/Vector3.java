@@ -1,19 +1,19 @@
 package com.miviclin.droidengine2d.util.math;
 
 /**
- * Vector tridimensional.
+ * 3D Vector.
  * 
  * @author Miguel Vicente Linares
  * 
  */
 public class Vector3 {
-	
+
 	private float x;
 	private float y;
 	private float z;
-	
+
 	/**
-	 * Constructor
+	 * Creates a new Vector3.
 	 * 
 	 * @param x
 	 * @param y
@@ -24,14 +24,14 @@ public class Vector3 {
 		this.y = y;
 		this.z = z;
 	}
-	
+
 	/**
-	 * Asigna los valores especificados al vector
+	 * Sets the specified values to this Vector3.
 	 * 
 	 * @param x
 	 * @param y
 	 * @param z
-	 * @return Referencia al propio vector para poder encadenar operaciones
+	 * @return this Vector3
 	 */
 	public final Vector3 set(float x, float y, float z) {
 		this.x = x;
@@ -39,12 +39,12 @@ public class Vector3 {
 		this.z = z;
 		return this;
 	}
-	
+
 	/**
-	 * Asigna los valores del vector especificado a este vector
+	 * Sets the specified values to this Vector3.
 	 * 
-	 * @param vector Vector3 cuyos valores sobreescribiran a los valores de x, y, z de este vector
-	 * @return Referencia al propio vector para poder encadenar operaciones
+	 * @param vector Vector3 whose values will be copied to this Vector3.
+	 * @return this Vector3
 	 */
 	public final Vector3 set(Vector3 vector) {
 		this.x = vector.x;
@@ -52,24 +52,24 @@ public class Vector3 {
 		this.z = vector.z;
 		return this;
 	}
-	
+
 	/**
-	 * Copia el vector especificado en output
+	 * Copies the specified vector into the output vector.
 	 * 
-	 * @param output Resultado de la operacion
-	 * @param vector Vector cuyas coordenadas se quieren copiar en output
+	 * @param output Output vector.
+	 * @param vector Vector whose coordinates will be copied into the output vector.
 	 */
-	public final static void copy(Vector3 output, Vector3 vector) {
+	public static final void copy(Vector3 output, Vector3 vector) {
 		output.x = vector.x;
 		output.y = vector.y;
 		output.z = vector.z;
 	}
-	
+
 	/**
-	 * Suma a todas las coordenadas del vector el escalar especificado
+	 * Adds the specified scalar to both coordinates of this vector.
 	 * 
-	 * @param scalar Valor que se sumara a las 3 coordenadas del vector
-	 * @return Referencia al propio vector para poder encadenar operaciones
+	 * @param scalar Scalar.
+	 * @return this Vector3
 	 */
 	public final Vector3 add(float scalar) {
 		this.x += scalar;
@@ -77,27 +77,27 @@ public class Vector3 {
 		this.z += scalar;
 		return this;
 	}
-	
+
 	/**
-	 * Suma vector + scalar y almacena el resultado en output
+	 * Adds the specified scalar to both coordinates of the specified vector and stores the result in the output vector.
 	 * 
-	 * @param output Resultado de la operacion
-	 * @param vector Vector original
-	 * @param escalar Valor que se sumara a ambas coordenadas
+	 * @param output Output vector.
+	 * @param vector Vector.
+	 * @param escalar Scalar.
 	 */
-	public final static void add(Vector3 output, Vector3 vector, float scalar) {
+	public static final void add(Vector3 output, Vector3 vector, float scalar) {
 		output.x = vector.x + scalar;
 		output.y = vector.y + scalar;
 		output.z = vector.z + scalar;
 	}
-	
+
 	/**
-	 * Suma los valores especificados a las 3 coordenadas del vector
+	 * Adds the specified vector to this vector.
 	 * 
-	 * @param x Valor que se sumara a la coordenada X
-	 * @param y Valor que se sumara a la coordenada Y
-	 * @param z Valor que se sumara a la coordenada Z
-	 * @return Referencia al propio vector para poder encadenar operaciones
+	 * @param x Value to be added to the X coordinate of this vector.
+	 * @param y Value to be added to the Y coordinate of this vector.
+	 * @param z Value to be added to the Z coordinate of this vector.
+	 * @return this Vector3
 	 */
 	public final Vector3 add(float x, float y, float z) {
 		this.x += x;
@@ -105,12 +105,12 @@ public class Vector3 {
 		this.z += z;
 		return this;
 	}
-	
+
 	/**
-	 * Suma el vector especificado a este vector
+	 * Adds the specified vector to this vector.
 	 * 
-	 * @param vector
-	 * @return Referencia al propio vector para poder encadenar operaciones
+	 * @param vector Vector to be added to this vector.
+	 * @return this Vector3
 	 */
 	public final Vector3 add(Vector3 vector) {
 		this.x += vector.x;
@@ -118,25 +118,25 @@ public class Vector3 {
 		this.z += vector.z;
 		return this;
 	}
-	
+
 	/**
-	 * Suma v1 + v2 y almacena el resultado en output
+	 * Adds v2 to v1 and stores the result in the output vector.
 	 * 
-	 * @param output Resultado de la operacion
-	 * @param v1 Operando 1
-	 * @param v2 Operando 2
+	 * @param output Result.
+	 * @param v1 Vector 1.
+	 * @param v2 Vector 2.
 	 */
-	public final static void add(Vector3 output, Vector3 v1, Vector3 v2) {
+	public static final void add(Vector3 output, Vector3 v1, Vector3 v2) {
 		output.x = v1.x + v2.x;
 		output.y = v1.y + v2.y;
 		output.z = v1.z + v2.z;
 	}
-	
+
 	/**
-	 * Resta a todas las coordenadas del vector el escalar especificado
+	 * Substracts the specified scalar from all coordinates of this vector.
 	 * 
-	 * @param scalar Valor que se restara a las 3 coordenadas del vector
-	 * @return Referencia al propio vector para poder encadenar operaciones
+	 * @param scalar Scalar.
+	 * @return this Vector3
 	 */
 	public final Vector3 subtract(float scalar) {
 		this.x -= scalar;
@@ -144,27 +144,28 @@ public class Vector3 {
 		this.z -= scalar;
 		return this;
 	}
-	
+
 	/**
-	 * Resta vector - scalar y almacena el resultado en output
+	 * Substracts the specified scalar from all coordinates of the specified vector and stores the result in the output
+	 * vector.
 	 * 
-	 * @param output Resultado de la operacion
-	 * @param vector Vector original
-	 * @param escalar Valor que se restara a ambas coordenadas
+	 * @param output Result.
+	 * @param vector Vector.
+	 * @param scalar Scalar.
 	 */
-	public final static void subtract(Vector3 output, Vector3 vector, float scalar) {
+	public static final void subtract(Vector3 output, Vector3 vector, float scalar) {
 		output.x = vector.x - scalar;
 		output.y = vector.y - scalar;
 		output.z = vector.z - scalar;
 	}
-	
+
 	/**
-	 * Resta los valores especificados a las 3 coordenadas del vector
+	 * Substracts the specified vector from all coordinates of this vector.
 	 * 
-	 * @param x Valor que se restara a la coordenada X
-	 * @param y Valor que se restara a la coordenada Y
-	 * @param z Valor que se restara a la coordenada Z
-	 * @return Referencia al propio vector para poder encadenar operaciones
+	 * @param x Value to be substracted from the X coordinate of this vector.
+	 * @param y Value to be substracted from the Y coordinate of this vector.
+	 * @param z Value to be substracted from the Z coordinate of this vector.
+	 * @return this Vector3
 	 */
 	public final Vector3 subtract(float x, float y, float z) {
 		this.x -= x;
@@ -172,12 +173,12 @@ public class Vector3 {
 		this.z -= z;
 		return this;
 	}
-	
+
 	/**
-	 * Resta el vector especificado a este vector
+	 * Substracts the specified vector from this vector.
 	 * 
-	 * @param vector
-	 * @return Referencia al propio vector para poder encadenar operaciones
+	 * @param vector Vector to be substracted from this vector.
+	 * @return this Vector3
 	 */
 	public final Vector3 subtract(Vector3 vector) {
 		this.x -= vector.x;
@@ -185,25 +186,25 @@ public class Vector3 {
 		this.z -= vector.z;
 		return this;
 	}
-	
+
 	/**
-	 * Resta v1 - v2 y almacena el resultado en output
+	 * Substracts v2 from v1 and stores the result in the output vector.
 	 * 
-	 * @param output Resultado de la operacion
-	 * @param v1 Operando 1
-	 * @param v2 Operando 2
+	 * @param output Result.
+	 * @param v1 Vector 1.
+	 * @param v2 Vector 2.
 	 */
-	public final static void subtract(Vector3 output, Vector3 v1, Vector3 v2) {
+	public static final void subtract(Vector3 output, Vector3 v1, Vector3 v2) {
 		output.x = v1.x - v2.x;
 		output.y = v1.y - v2.y;
 		output.z = v1.z - v2.z;
 	}
-	
+
 	/**
-	 * Multiplica las 3 coordenadas del vector por el escalar especificado
+	 * Multiplies this vector by the specified scalar.
 	 * 
-	 * @param scalar Valor por el cual se multiplicaran las 3 coordenadas del vector
-	 * @return Referencia al propio vector para poder encadenar operaciones
+	 * @param scalar Scalar.
+	 * @return this Vector3
 	 */
 	public final Vector3 multiply(float scalar) {
 		this.x *= scalar;
@@ -211,27 +212,27 @@ public class Vector3 {
 		this.z *= scalar;
 		return this;
 	}
-	
+
 	/**
-	 * Multiplica vector * scalar y almacena el resultado en output
+	 * Multiplies the specified vector by the specified scalar and stores the result in the output vector.
 	 * 
-	 * @param output Resultado de la operacion
-	 * @param vector Vector original
-	 * @param escalar Valor por el que se multiplicaran ambas coordenadas
+	 * @param output Result.
+	 * @param vector Vector.
+	 * @param scalar Scalar.
 	 */
-	public final static void multiply(Vector3 output, Vector3 vector, float scalar) {
+	public static final void multiply(Vector3 output, Vector3 vector, float scalar) {
 		output.x = vector.x * scalar;
 		output.y = vector.y * scalar;
 		output.z = vector.z * scalar;
 	}
-	
+
 	/**
-	 * Multiplica las 3 coordenadas del vector por los valores especificados
+	 * Multiplies this vector by the specified vector.
 	 * 
-	 * @param x Valor por el cual se multiplicara la coordenada X
-	 * @param y Valor por el cual se multiplicara la coordenada Y
-	 * @param z Valor por el cual se multiplicara la coordenada Z
-	 * @return Referencia al propio vector para poder encadenar operaciones
+	 * @param x The X coordinate of this vector will be multiplied by this value.
+	 * @param y The Y coordinate of this vector will be multiplied by this value.
+	 * @param z The Z coordinate of this vector will be multiplied by this value.
+	 * @return this Vector2
 	 */
 	public final Vector3 multiply(float x, float y, float z) {
 		this.x *= x;
@@ -239,12 +240,12 @@ public class Vector3 {
 		this.z *= z;
 		return this;
 	}
-	
+
 	/**
-	 * Multiplica el vector especificado por este vector (coordenada a coordenada)
+	 * Multiplies this vector by the specified vector.
 	 * 
-	 * @param vector Las coordenadas del vector seran multiplicadas por la coordenadas de el vector especificado
-	 * @return Referencia al propio vector para poder encadenar operaciones
+	 * @param vector Vector.
+	 * @return this Vector3
 	 */
 	public final Vector3 multiply(Vector3 vector) {
 		this.x *= vector.x;
@@ -252,25 +253,25 @@ public class Vector3 {
 		this.z *= vector.z;
 		return this;
 	}
-	
+
 	/**
-	 * Multiplica v1 * v2 y almacena el resultado en output
+	 * Multiplies v1 by v2 and stores the result in the output vector.
 	 * 
-	 * @param output Resultado de la operacion
-	 * @param v1 Operando 1
-	 * @param v2 Operando 2
+	 * @param output Result.
+	 * @param v1 Vector 1.
+	 * @param v2 Vector 2.
 	 */
-	public final static void multiply(Vector3 output, Vector3 v1, Vector3 v2) {
+	public static final void multiply(Vector3 output, Vector3 v1, Vector3 v2) {
 		output.x = v1.x * v2.x;
 		output.y = v1.y * v2.y;
 		output.z = v1.z * v2.z;
 	}
-	
+
 	/**
-	 * Divide las 3 coordenadas del vector por el escalar especificado
+	 * Divides this vector by the specified scalar.
 	 * 
-	 * @param scalar Valor por el cual se dividiran las 3 coordenadas del vector
-	 * @return Referencia al propio vector para poder encadenar operaciones
+	 * @param scalar Scalar.
+	 * @return this Vector3
 	 */
 	public final Vector3 divide(float scalar) {
 		this.x /= scalar;
@@ -278,27 +279,27 @@ public class Vector3 {
 		this.z /= scalar;
 		return this;
 	}
-	
+
 	/**
-	 * Divide vector / scalar y almacena el resultado en output
+	 * Divides the specified vector by the specified scalar and stores the result in the output vector.
 	 * 
 	 * @param output Resultado de la operacion
 	 * @param vector Vector original
-	 * @param escalar Valor por el que se dividiran ambas coordenadas
+	 * @param scalar Scalar.
 	 */
-	public final static void divide(Vector3 output, Vector3 vector, float scalar) {
+	public static final void divide(Vector3 output, Vector3 vector, float scalar) {
 		output.x = vector.x / scalar;
 		output.y = vector.y / scalar;
 		output.z = vector.z / scalar;
 	}
-	
+
 	/**
-	 * Divide las 3 coordenadas del vector por los valores especificados
+	 * Divides this vector by the specified vector.
 	 * 
-	 * @param x Valor por el cual se dividira la coordenada X
-	 * @param y Valor por el cual se dividira la coordenada Y
-	 * @param z Valor por el cual se dividira la coordenada Z
-	 * @return Referencia al propio vector para poder encadenar operaciones
+	 * @param x The X coordinate of this vector will be divided by this value.
+	 * @param y The Y coordinate of this vector will be multiplied by this value.
+	 * @param z The Z coordinate of this vector will be multiplied by this value.
+	 * @return this Vector3
 	 */
 	public final Vector3 divide(float x, float y, float z) {
 		this.x /= x;
@@ -306,12 +307,12 @@ public class Vector3 {
 		this.z /= z;
 		return this;
 	}
-	
+
 	/**
-	 * Divide este vector por el vector especificado (coordenada a coordenada)
+	 * Divides this vector by the specified vector.
 	 * 
-	 * @param vector Las coordenadas del vector seran divididas por la coordenadas de el vector especificado
-	 * @return Referencia al propio vector para poder encadenar operaciones
+	 * @param vector Vector.
+	 * @return this Vector3
 	 */
 	public final Vector3 divide(Vector3 vector) {
 		this.x /= vector.x;
@@ -319,27 +320,27 @@ public class Vector3 {
 		this.z /= vector.z;
 		return this;
 	}
-	
+
 	/**
-	 * Divide v1 / v2 y almacena el resultado en output
+	 * Divides v1 by the v2 and stores the result in the output vector.
 	 * 
-	 * @param output Resultado de la operacion
-	 * @param v1 Operando 1
-	 * @param v2 Operando 2
+	 * @param output Result.
+	 * @param v1 Vector 1.
+	 * @param v2 Vector 2.
 	 */
-	public final static void divide(Vector3 output, Vector3 v1, Vector3 v2) {
+	public static final void divide(Vector3 output, Vector3 v1, Vector3 v2) {
 		output.x = v1.x / v2.x;
 		output.y = v1.y / v2.y;
 		output.z = v1.z / v2.z;
 	}
-	
+
 	/**
-	 * Realiza el producto en cruz de este vector por el vector definido por las 3 coordenadas especificadas.
+	 * Performs the cross product of this vector and the specified vector and stores the result in this vector.
 	 * 
-	 * @param x Coordenada X
-	 * @param y Coordenada Y
-	 * @param z Coordenada Z
-	 * @return Referencia al propio vector para poder encadenar operaciones
+	 * @param x X coordinate of the specified vector.
+	 * @param y Y coordinate of the specified vector.
+	 * @param z Z coordinate of the specified vector.
+	 * @return this Vector3
 	 */
 	public final Vector3 crossProduct(float x, float y, float z) {
 		this.x = this.y * z - this.z * y;
@@ -347,12 +348,12 @@ public class Vector3 {
 		this.z = this.x * y - this.y * x;
 		return this;
 	}
-	
+
 	/**
-	 * Realiza el producto en cruz de este vector por el vector especificado
+	 * Performs the cross product of this vector and the specified vector and stores the result in this vector.
 	 * 
-	 * @param vector
-	 * @return Referencia al propio vector para poder encadenar operaciones
+	 * @param vector Vector
+	 * @return this Vector3
 	 */
 	public final Vector3 crossProduct(Vector3 vector) {
 		this.x = y * vector.z - z * vector.y;
@@ -360,76 +361,76 @@ public class Vector3 {
 		this.z = x * vector.y - y * vector.x;
 		return this;
 	}
-	
+
 	/**
-	 * Realiza el producto en cruz de v1 y v2 y almacena el resultado en output
+	 * Performs the cross product of this vector and the specified vector and stores the result in the output vector.
 	 * 
-	 * @param output Resultado de la operacion
-	 * @param v2 Operando 1
-	 * @param v2 Operando 2
+	 * @param output Result.
+	 * @param v1 Vector 1.
+	 * @param v2 Vector 2.
 	 */
-	public final static void crossProduct(Vector3 output, Vector3 v1, Vector3 v2) {
+	public static final void crossProduct(Vector3 output, Vector3 v1, Vector3 v2) {
 		output.x = v1.y * v2.z - v1.z * v2.y;
 		output.y = v1.z * v2.x - v1.x * v2.z;
 		output.z = v1.x * v2.y - v1.y * v2.x;
 	}
-	
+
 	/**
-	 * Realiza el producto escalar de este vector por el vector definido por las 3 coordenadas especificadas
+	 * Performs the dot product of this vector and the specified vector and stores the result in this vector.
 	 * 
-	 * @param x Coordenada X
-	 * @param y Coordenada Y
-	 * @param z Coordenada Z
-	 * @return Referencia al propio vector para poder encadenar operaciones
+	 * @param x X coordinate of the specified vector.
+	 * @param y Y coordinate of the specified vector.
+	 * @param z Z coordinate of the specified vector.
+	 * @return dot product of v1 and v2
 	 */
 	public final float dotProduct(float x, float y, float z) {
 		return this.x * x + this.y * y + this.z * z;
 	}
-	
+
 	/**
-	 * Realiza el producto escalar de este vector por el vector especificado
+	 * Performs the dot product of this vector and the specified vector and stores the result in this vector.
 	 * 
-	 * @param vector
-	 * @return Referencia al propio vector para poder encadenar operaciones
+	 * @param vector Vector.
+	 * @return dot product of v1 and v2
 	 */
 	public final float dotProduct(Vector3 vector) {
 		return x * vector.x + y * vector.y + z * vector.z;
 	}
-	
+
 	/**
-	 * Realiza el producto escalar de v1 y v2
+	 * Performs the dot product of v1 and v2.
 	 * 
-	 * @param v1 Operando 1
-	 * @param v2 Operando 2
-	 * @return Producto escalar de v1 y v2
+	 * @param v1 Vector 1.
+	 * @param v2 Vector 2.
+	 * @return dot product of v1 and v2
 	 */
-	public final static float dotProduct(Vector3 v1, Vector3 v2) {
+	public static final float dotProduct(Vector3 v1, Vector3 v2) {
 		return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
 	}
-	
+
 	/**
-	 * Calcula el modulo del vector
+	 * Calculates the length of this vector.
 	 * 
-	 * @return Modulo de este vector
+	 * @return length of this vector
 	 */
 	public final float length() {
 		return (float) Math.sqrt(x * x + y * y + z * z);
 	}
-	
+
 	/**
-	 * Calcula el modulo del vector especificado
+	 * Calculates the length of the specified vector.
 	 * 
-	 * @param vector
-	 * @return Modulo del vector
+	 * @param vector Vector.
+	 * @return length of the specified vector
 	 */
-	public final static float length(Vector3 vector) {
+	public static final float length(Vector3 vector) {
 		return (float) Math.sqrt(vector.x * vector.x + vector.y * vector.y + vector.z * vector.z);
 	}
-	
+
 	/**
-	 * Normaliza este vector
+	 * Normalizes this vector.
 	 * 
-	 * @return Referencia al propio vector para poder encadenar operaciones
+	 * @return this Vector3
 	 */
 	public final Vector3 normalize() {
 		float length = (float) Math.sqrt(x * x + y * y + z * z);
@@ -438,14 +439,14 @@ public class Vector3 {
 		}
 		return this.divide(length);
 	}
-	
+
 	/**
-	 * Normaliza el vector especificado y almacena las coordenadas del vector normalizado en output
+	 * Normalizes the specified vector and stores the result in the output vector.
 	 * 
-	 * @param output Vector normalizado
-	 * @param vector Vector sin normalizar
+	 * @param output Result.
+	 * @param vector Vector.
 	 */
-	public final static void normalize(Vector3 output, Vector3 vector) {
+	public static final void normalize(Vector3 output, Vector3 vector) {
 		float length = Vector3.length(vector);
 		if (length == 0) {
 			Vector3.copy(output, vector);
@@ -453,11 +454,11 @@ public class Vector3 {
 		}
 		Vector3.copy(output, vector.divide(length));
 	}
-	
+
 	/**
-	 * Convierte las coordenadas de este vector a valor absoluto
+	 * Converts the coordinates of this vector to their absolute values.
 	 * 
-	 * @return Referencia al propio vector para poder encadenar operaciones
+	 * @return this Vector3
 	 */
 	public final Vector3 abs() {
 		this.x = Math.abs(this.x);
@@ -465,76 +466,77 @@ public class Vector3 {
 		this.z = Math.abs(this.z);
 		return this;
 	}
-	
+
 	/**
-	 * Convierte las coordenadas de vector a valor absoluto y las almacena en output
+	 * Converts the coordinates of the specified vector to their absolute values and stores the result in the output
+	 * vector.
 	 * 
-	 * @param output Vector con las coordenadas de vector en valor absoluto
-	 * @param vector Vector especificado
+	 * @param output Result.
+	 * @param vector Vector.
 	 */
-	public final static void abs(Vector3 output, Vector3 vector) {
+	public static final void abs(Vector3 output, Vector3 vector) {
 		output.x = Math.abs(vector.x);
 		output.y = Math.abs(vector.y);
 		output.z = Math.abs(vector.z);
 	}
-	
+
 	/**
-	 * Devuelve la coordenada X de este vector
+	 * Returns the X coordinate of this vector.
 	 * 
 	 * @return X
 	 */
 	public final float getX() {
 		return x;
 	}
-	
+
 	/**
-	 * Asigna el valor de la coordenada X de este vector
+	 * Sets the value of the X coordinate of this vector.
 	 * 
-	 * @param x Nuevo valor
+	 * @param x New value.
 	 */
 	public final void setX(float x) {
 		this.x = x;
 	}
-	
+
 	/**
-	 * Devuelve la coordenada Y de este vector
+	 * Returns the Y coordinate of this vector.
 	 * 
 	 * @return Y
 	 */
 	public final float getY() {
 		return y;
 	}
-	
+
 	/**
-	 * Asigna el valor de la coordenada Y de este vector
+	 * Sets the value of the Y coordinate of this vector.
 	 * 
-	 * @param y Nuevo valor
+	 * @param y New value.
 	 */
 	public final void setY(float y) {
 		this.y = y;
 	}
-	
+
 	/**
-	 * Devuelve la coordenada Z de este vector
+	 * Returns the Z coordinate of this vector.
 	 * 
 	 * @return Z
 	 */
 	public final float getZ() {
 		return z;
 	}
-	
+
 	/**
-	 * Asigna el valor de la coordenada Z de este vector
+	 * Sets the value of the Z coordinate of this vector.
 	 * 
-	 * @param z Nuevo valor
+	 * @param z New value.
 	 */
 	public final void setZ(float z) {
 		this.z = z;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "(" + x + ", " + y + ", " + z + ")";
 	}
-	
+
 }

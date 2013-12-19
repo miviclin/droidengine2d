@@ -7,130 +7,142 @@ import com.miviclin.droidengine2d.Game;
 import com.miviclin.droidengine2d.graphics.Graphics;
 
 /**
- * Gestor de Scenes
+ * SceneManager.
  * 
  * @author Miguel Vicente Linares
  * 
  */
 public class SceneManager {
-	
+
 	private HashMap<String, Scene> scenes;
 	private Scene activeScene;
-	
+
 	/**
-	 * Constructor
+	 * Constructor.
 	 */
 	public SceneManager() {
 		this(16);
 	}
-	
+
 	/**
-	 * Constructor
+	 * Constructor.
 	 * 
-	 * @param initialCapacity Capacidad minima inicial antes de redimensionar la estructura de datos
+	 * @param initialCapacity Initial capacity for Scenes. If this capacity is reached, the data structure that holds
+	 *            the Scenes will be resized automatically.
 	 */
 	public SceneManager(int initialCapacity) {
 		this.scenes = new HashMap<String, Scene>((int) ((initialCapacity / 0.75f) + 1));
 		this.activeScene = null;
 	}
-	
+
 	/**
-	 * Registra una Scene en el SceneManager identificada por el sceneID especificado.<br>
-	 * Si ya habia una Scene registrada con el mismo sceneID, se sustituira la que habia antes por la nueva.
+	 * Registers an Scene in this SceneManager using the specified sceneId.<br>
+	 * If an Scene with the specified sceneId was previously registered in this SceneManager, it will be replaced by the
+	 * new one.<br>
+	 * The active Scene will not change.
 	 * 
-	 * @param sceneID Identificador que permite obtener la Scene
-	 * @param scene Scene a agregar. No puede ser null
+	 * @param sceneId Identifier of the Scene. It can be used to get the Scene from this SceneManager later.
+	 * @param scene Scene (can not be null).
 	 */
-	public void registerScene(String sceneID, Scene scene) {
-		registerScene(sceneID, scene, false);
+	public void registerScene(String sceneId, Scene scene) {
+		registerScene(sceneId, scene, false);
 	}
-	
+
 	/**
-	 * Registra una Scene en el SceneManager identificada por el sceneID especificado.<br>
-	 * Si ya habia una Scene registrada con el mismo sceneID, se sustituira la que habia antes por la nueva.
+	 * Registers an Scene in this SceneManager using the specified sceneId.<br>
+	 * If an Scene with the specified sceneId was previously registered in this SceneManager, it will be replaced by the
+	 * new one.
 	 * 
-	 * @param sceneID Identificador que permite obtener la Scene
-	 * @param scene Scene a agregar. No puede ser null
-	 * @param activate Indica si esta Scene pasara a ser la Scene activa
+	 * @param sceneId Identifier of the Scene. It can be used to get the Scene from this SceneManager later.
+	 * @param scene Scene (can not be null).
+	 * @param activate true to make the Scene the active Scene of this SceneManager.
 	 */
-	public void registerScene(String sceneID, Scene scene, boolean activate) {
+	public void registerScene(String sceneId, Scene scene, boolean activate) {
 		if (scene == null) {
 			throw new IllegalArgumentException("The Scene can not be null");
 		}
-		scenes.put(sceneID, scene);
+		scenes.put(sceneId, scene);
 		scene.onRegister();
 		if (activate) {
-			setActiveScene(sceneID);
+			setActiveScene(sceneId);
 		}
 	}
-	
+
 	/**
-	 * Elimina la Scene asociada al identificador especificado. Si no habia ninguna Scene registrada con este identificador no hace nada.
+	 * Unregisters the specified Scene from this SceneManager.<br>
+	 * If an Scene was registered with the specified sceneId, {@link Scene#dispose()} is called on the Scene before it
+	 * is removed from this SceneManager.
 	 * 
-	 * @param sceneID Identificador de la Scene a eliminar
-	 * @return Scene eliminada o null
+	 * @param sceneId Identifier of the Scene.
+	 * @return Removed Scene or null
 	 */
-	public Scene unregisterScene(String sceneID) {
-		return scenes.remove(sceneID);
+	public Scene unregisterScene(String sceneId) {
+		Scene removedScene = scenes.remove(sceneId);
+		if (removedScene != null) {
+			removedScene.dispose();
+		}
+		return removedScene;
 	}
-	
+
 	/**
-	 * Devuelve la Scene asociada al identificador especificado. Si no habia ninguna Scene registrada con este identificador devuelve null.
+	 * Returns the Scene associated with the specified sceneId.
 	 * 
-	 * @param sceneID Identificador de la Scene a devolver
-	 * @return Scene asociada al ID especificado o null
+	 * @param sceneId Identifier of the Scene.
+	 * @return Scene or null
 	 */
-	public Scene getScene(String sceneID) {
-		return scenes.get(sceneID);
+	public Scene getScene(String sceneId) {
+		return scenes.get(sceneId);
 	}
-	
+
 	/**
-	 * Devuelve la Scene activa del juego.<br>
-	 * Si no se ha asignado previamente una Scene devolvera null
+	 * Returns the active Scene of this SceneManager.
 	 * 
-	 * @return Scene actual o null
+	 * @return Scene or null
 	 */
 	public Scene getActiveScene() {
 		return activeScene;
 	}
-	
+
 	/**
-	 * Asigna la Scene que estara activa en el juego a partir del ID especificado.<br>
-	 * Si no habia ninguna Scene registrada con este identificador se asignara null.
+	 * Sets the active Scene of this SceneManager.<br>
+	 * The Scene must have been previously registered with the specified sceneId.
 	 * 
-	 * @param sceneID Identificador de la Scene que queremos asignar como Scene activa
+	 * @param sceneId Identifier of the Scene we want to set as the active Scene.
 	 */
-	public void setActiveScene(String sceneID) {
+	public void setActiveScene(String sceneId) {
 		if (activeScene != null) {
 			activeScene.onDeactivation();
 		}
-		this.activeScene = scenes.get(sceneID);
+		this.activeScene = scenes.get(sceneId);
 		if (activeScene != null) {
 			activeScene.onActivation();
 		}
 	}
-	
+
 	/**
-	 * Llamado cuando el juego se va a background. Llama a {@link Scene#onPause()} en la Scene activa
+	 * This method is called when the engine is paused, usually when the activity goes to background.<br>
+	 * Calls {@link Scene#onPause()} on the active Scene.
 	 */
 	public void pause() {
 		if (activeScene != null) {
 			activeScene.onPause();
 		}
 	}
-	
+
 	/**
-	 * Llamado cuando el juego vuelve de background. Llama a {@link Scene#onResume()} en la Scene activa
+	 * This method is called when the engine is resumed, usually when the activity comes to foreground.<br>
+	 * Calls {@link Scene#onResume()} on the active Scene.
 	 */
 	public void resume() {
 		if (activeScene != null) {
 			activeScene.onResume();
 		}
 	}
-	
+
 	/**
-	 * Libera los recursos de todas las Scenes registradas en el SceneManager. Llama a {@link Scene#dispose()} en todas las Scenes.<br>
-	 * El SceneManager quedara vacio.
+	 * Calls {@link Scene#dispose()} on all Scenes registered in this SceneManager and removes them from the
+	 * SceneManager.<br>
+	 * This SceneManager will be left empty.
 	 */
 	public void dispose() {
 		for (Map.Entry<String, Scene> entry : scenes.entrySet()) {
@@ -139,28 +151,29 @@ public class SceneManager {
 		}
 		scenes.clear();
 	}
-	
+
 	/**
-	 * Actualiza los elementos de la Scene activa.<br>
-	 * Este metodo se llama desde {@link Game#update(float)}
+	 * Calls {@link Scene#update(float)} on the active Scene .<br>
+	 * This method is called from {@link Game#update(float)}.
 	 * 
-	 * @param delta Tiempo transcurrido, en milisegundos, desde la ultima actualizacion.
+	 * @param delta Elapsed time, in milliseconds, since the last update.
 	 */
 	public void update(float delta) {
 		if (activeScene != null) {
 			activeScene.update(delta);
 		}
 	}
-	
+
 	/**
-	 * Renderiza los elementos de la Scene activa de forma que puedan verse en pantalla.<br>
-	 * Este metodo se llama desde {@link Game#draw(Graphics)}<br>
-	 * Este metodo se ejecuta en el hilo del GLRenderer tras ejecutar {@link SceneManager#update(float)} en el GameThread
+	 * Calls {@link Scene#draw(Graphics)} on the active Scene.<br>
+	 * This method is called from {@link Game#draw(Graphics)}.<br>
+	 * This method is called from the redering thread after {@link SceneManager#update(float)} has been executed in the
+	 * game thread.
 	 */
 	public void draw(Graphics graphics) {
 		if (activeScene != null) {
 			activeScene.draw(graphics);
 		}
 	}
-	
+
 }

@@ -11,46 +11,47 @@ import android.media.MediaPlayer.OnCompletionListener;
 import com.miviclin.droidengine2d.resources.AssetsLoader;
 
 /**
- * Permite reproducir musica de fondo.
+ * Manages background music streaming.
  * 
  * @author Miguel Vicente Linares
  * 
  */
 public class MusicManager implements OnCompletionListener {
-	
-	private MediaPlayer mediaPlayer;
+
+	private MediaPlayer player;
 	private boolean prepared;
 	private boolean loaded;
 	private float volume;
-	
+
 	/**
-	 * Constructor
+	 * Creates a new MusicManager.
 	 */
 	public MusicManager() {
-		this.mediaPlayer = null;
+		this.player = null;
 		this.prepared = false;
 		this.loaded = false;
 		this.volume = -1.0f;
 	}
-	
+
 	/**
-	 * Carga una cancion a partir de una ruta y la prepara para reproducir. Por defecto se activa la opcion de 'loop'
+	 * Loads music from the specified file and prepares the MediaPlayer for playing it. Looping is enabled by default.
 	 * 
-	 * @param context
-	 * @param nombreArchivo Ruta relativa a la carpeta de assets
+	 * @param context Context.
+	 * @param path File path.
 	 */
 	public void loadMusic(Context context, String path) {
 		loadMusic(context, path, AudioManager.STREAM_MUSIC);
 	}
-	
+
 	/**
-	 * Carga una cancion a partir de una ruta y la prepara para reproducir. Por defecto se activa la opcion de 'loop'
+	 * Loads music from the specified file and prepares the MediaPlayer for playing it. Looping is enabled by default.
 	 * 
-	 * @param context
-	 * @param nombreArchivo Ruta relativa a la carpeta de assets
-	 * @param streamType Tipo de stream de audio. Utilizar {@link AudioManager#STREAM_ALARM}, {@link AudioManager#STREAM_DTMF},
-	 *            {@link AudioManager#STREAM_MUSIC}, {@link AudioManager#STREAM_NOTIFICATION}, {@link AudioManager#STREAM_RING},
-	 *            {@link AudioManager#STREAM_SYSTEM}, o {@link AudioManager#STREAM_VOICE_CALL}
+	 * @param context Context.
+	 * @param path File path.
+	 * @param streamType The type of the audio stream. Use {@link AudioManager#STREAM_ALARM},
+	 *            {@link AudioManager#STREAM_DTMF}, {@link AudioManager#STREAM_MUSIC},
+	 *            {@link AudioManager#STREAM_NOTIFICATION}, {@link AudioManager#STREAM_RING},
+	 *            {@link AudioManager#STREAM_SYSTEM}, or {@link AudioManager#STREAM_VOICE_CALL}.
 	 */
 	public void loadMusic(Context context, String path, int streamType) {
 		if (path.matches("[a-z]+://.+")) {
@@ -59,93 +60,100 @@ public class MusicManager implements OnCompletionListener {
 			loadMusicFromAssets(context, path, streamType);
 		}
 	}
-	
+
 	/**
-	 * Carga una cancion a partir de una ruta y la prepara para reproducir. Por defecto se activa la opcion de 'loop'
+	 * Loads music from the specified external file and prepares the MediaPlayer for playing it. Looping is enabled by
+	 * default.
 	 * 
-	 * @param nombreArchivo Ruta relativa a la carpeta de assets
+	 * @param path External file path.
 	 */
 	public void loadExternalMusic(String path) {
 		loadExternalMusic(path, AudioManager.STREAM_MUSIC);
 	}
-	
+
 	/**
-	 * Carga una cancion a partir de una ruta y la prepara para reproducir. Por defecto se activa la opcion de 'loop'
+	 * Loads music from the specified external file and prepares the MediaPlayer for playing it. Looping is enabled by
+	 * default.
 	 * 
-	 * @param nombreArchivo Ruta relativa a la carpeta de assets
-	 * @param streamType Tipo de stream de audio. Utilizar {@link AudioManager#STREAM_ALARM}, {@link AudioManager#STREAM_DTMF},
-	 *            {@link AudioManager#STREAM_MUSIC}, {@link AudioManager#STREAM_NOTIFICATION}, {@link AudioManager#STREAM_RING},
-	 *            {@link AudioManager#STREAM_SYSTEM}, o {@link AudioManager#STREAM_VOICE_CALL}
+	 * @param path External file path.
+	 * @param streamType The type of the audio stream. Use {@link AudioManager#STREAM_ALARM},
+	 *            {@link AudioManager#STREAM_DTMF}, {@link AudioManager#STREAM_MUSIC},
+	 *            {@link AudioManager#STREAM_NOTIFICATION}, {@link AudioManager#STREAM_RING},
+	 *            {@link AudioManager#STREAM_SYSTEM}, or {@link AudioManager#STREAM_VOICE_CALL}
 	 */
 	public void loadExternalMusic(String path, int streamType) {
-		mediaPlayer = new MediaPlayer();
+		player = new MediaPlayer();
 		try {
-			mediaPlayer.setDataSource(path);
-			mediaPlayer.setAudioStreamType(streamType);
-			mediaPlayer.prepare();
+			player.setDataSource(path);
+			player.setAudioStreamType(streamType);
+			player.prepare();
 			prepared = true;
-			mediaPlayer.setLooping(true);
+			player.setLooping(true);
 			loaded = true;
 			setVolume(1.0f);
 		} catch (Exception e) {
-			mediaPlayer = null;
+			player = null;
 			prepared = false;
 			throw new RuntimeException(e.getMessage() + "");
 		}
 	}
-	
+
 	/**
-	 * Carga una cancion a partir de un asset y la prepara para reproducir. Por defecto se activa la opcion de 'loop'
+	 * Loads music from the specified asset file and prepares the MediaPlayer for playing it. Looping is enabled by
+	 * default.
 	 * 
-	 * @param context Context
-	 * @param path Ruta relativa a la carpeta de assets
+	 * @param context Context.
+	 * @param path File path. Relative to the assets folder.
 	 */
 	public void loadMusicFromAssets(Context context, String path) {
 		loadMusicFromAssets(context, path, AudioManager.STREAM_MUSIC);
 	}
-	
+
 	/**
-	 * Carga una cancion a partir de un asset y la prepara para reproducir. Por defecto se activa la opcion de 'loop'
+	 * Loads music from the specified asset file and prepares the MediaPlayer for playing it. Looping is enabled by
+	 * default.
 	 * 
-	 * @param context Context
-	 * @param path Ruta relativa a la carpeta de assets
-	 * @param streamType Tipo de stream de audio. Utilizar {@link AudioManager#STREAM_ALARM}, {@link AudioManager#STREAM_DTMF},
-	 *            {@link AudioManager#STREAM_MUSIC}, {@link AudioManager#STREAM_NOTIFICATION}, {@link AudioManager#STREAM_RING},
-	 *            {@link AudioManager#STREAM_SYSTEM}, o {@link AudioManager#STREAM_VOICE_CALL}
+	 * @param context Context.
+	 * @param path path File path. Relative to the assets folder.
+	 * @param streamType The type of the audio stream. Use {@link AudioManager#STREAM_ALARM},
+	 *            {@link AudioManager#STREAM_DTMF}, {@link AudioManager#STREAM_MUSIC},
+	 *            {@link AudioManager#STREAM_NOTIFICATION}, {@link AudioManager#STREAM_RING},
+	 *            {@link AudioManager#STREAM_SYSTEM}, or {@link AudioManager#STREAM_VOICE_CALL}
 	 */
 	public void loadMusicFromAssets(Context context, String path, int streamType) {
 		AssetFileDescriptor descriptor = AssetsLoader.getAssetFileDescriptor(context, path);
-		mediaPlayer = new MediaPlayer();
+		player = new MediaPlayer();
 		try {
-			mediaPlayer.setDataSource(descriptor.getFileDescriptor(), descriptor.getStartOffset(), descriptor.getLength());
+			player.setDataSource(descriptor.getFileDescriptor(), descriptor.getStartOffset(), descriptor.getLength());
 			descriptor.close();
-			mediaPlayer.setAudioStreamType(streamType);
-			mediaPlayer.prepare();
+			player.setAudioStreamType(streamType);
+			player.prepare();
 			prepared = true;
-			mediaPlayer.setLooping(true);
+			player.setLooping(true);
 			loaded = true;
 			setVolume(1.0f);
 		} catch (Exception e) {
-			mediaPlayer = null;
+			player = null;
 			prepared = false;
 			throw new RuntimeException(e.getMessage() + "");
 		}
 	}
-	
+
 	/**
-	 * Reproduce la cancion cargada. Si no habia ninguna cancion cargada, no hace nada
+	 * Plays the previously loaded song.<br>
+	 * If there is not any song loaded, this method does nothing.
 	 */
 	public void play() {
 		if (loaded) {
-			if (mediaPlayer.isPlaying()) {
+			if (player.isPlaying()) {
 				return;
 			}
 			try {
 				synchronized (this) {
 					if (!prepared) {
-						mediaPlayer.prepare();
+						player.prepare();
 					}
-					mediaPlayer.start();
+					player.start();
 				}
 			} catch (IllegalStateException e) {
 				e.printStackTrace();
@@ -154,115 +162,116 @@ public class MusicManager implements OnCompletionListener {
 			}
 		}
 	}
-	
+
 	/**
-	 * Pausa la reproduccion
+	 * Pauses the music playback.
 	 */
 	public void pause() {
 		if (loaded) {
-			if (mediaPlayer.isPlaying()) {
-				mediaPlayer.pause();
+			if (player.isPlaying()) {
+				player.pause();
 			}
 		}
 	}
-	
+
 	/**
-	 * Para la reproduccion
+	 * Stops the music playback.
 	 */
 	public void stop() {
 		if (loaded) {
-			mediaPlayer.stop();
+			player.stop();
 			synchronized (this) {
 				prepared = false;
 			}
 		}
 	}
-	
+
 	/**
-	 * Comprueba si se esta reproduciendo una cancion
+	 * Returns true if there is a song being played.
 	 * 
-	 * @return true/false
+	 * @return true if a song is being played, false otherwise
 	 */
 	public boolean isPlaying() {
-		return mediaPlayer.isPlaying();
+		return player.isPlaying();
 	}
-	
+
 	/**
-	 * Comprueba si el reproductor esta parado
+	 * Returns true if the playback is stopped.
 	 * 
-	 * @return true/false
+	 * @return true if the playback is stopped, false otherwise
 	 */
 	public boolean isStopped() {
 		return !prepared;
 	}
-	
+
 	/**
-	 * Para el reproductor y libera los recursos que estuviera usando. Esta funcion deberia ser llamada cuando no se vaya a utilizar mas el
-	 * reproductor.
+	 * Releases resources.
 	 */
 	public void release() {
 		if (loaded) {
-			if (mediaPlayer.isPlaying())
-				mediaPlayer.stop();
-			mediaPlayer.release();
+			if (player.isPlaying()) {
+				player.stop();
+			}
+			player.release();
 		}
 	}
-	
+
 	/**
-	 * Comprueba si la reproduccion esta en modo 'loop'
+	 * Returns true if looping is enabled.
 	 * 
-	 * @return true/false
+	 * @return true if looping is enabled, false otherwise
 	 */
 	public boolean isLooping() {
-		return mediaPlayer.isLooping();
+		return player.isLooping();
 	}
-	
+
 	/**
-	 * Asigna el modo de reproduccion 'loop'
+	 * Enables or disables looping.
 	 * 
-	 * @param loop true/false
+	 * @param looping true to enable looping, false to disable it
 	 */
-	public void setLooping(boolean loop) {
-		mediaPlayer.setLooping(loop);
+	public void setLooping(boolean looping) {
+		player.setLooping(looping);
 	}
-	
+
 	/**
-	 * Devuelve el volumen de reproduccion
+	 * Returns the volume of the song being played. If there is no song loaded, this method will return -1.
 	 * 
-	 * @return volume Volumen. Valor entre 0.0f y 1.0f
+	 * @return Value between 0.0f and 1.0f. Or -1 if there is no song loaded.
 	 */
 	public float getVolume() {
-		if (mediaPlayer != null) {
-			return volume;			
+		if (player != null) {
+			return volume;
 		}
 		return -1;
 	}
-	
+
 	/**
-	 * Asigna el volumen de reproduccion
+	 * Sets the volume of the loaded song.
 	 * 
-	 * @param volume Volumen. Valor entre 0.0f y 1.0f
+	 * @param volume Volume. Value between 0.0f and 1.0f.
 	 */
 	public void setVolume(float volume) {
-		if (mediaPlayer != null) {
+		if (player != null) {
 			this.volume = volume;
-			mediaPlayer.setVolume(volume, volume);			
+			player.setVolume(volume, volume);
 		}
 	}
-	
+
 	@Override
 	public void onCompletion(MediaPlayer player) {
 		synchronized (this) {
 			prepared = false;
 		}
 	}
-	
+
 	/**
-	 * Comprueba si MusicManager es capaz de reproducir el archivo especificado
+	 * Checks if MusicManager supports playing the specified file without loading it.
 	 * 
-	 * @param context Context
-	 * @param ruta Ruta del archivo
-	 * @return true si lo soporta, false en caso contrario (o si la ruta especificada no es valida)
+	 * @param context Context.
+	 * @param ruta File path.
+	 * @return true if the file can be played with MusicManager, false otherwise. If the specified path is not a valid
+	 *         path, this method returns false.
 	 */
 	public static boolean checkFileCompatibility(Context context, String ruta) {
 		AssetFileDescriptor descriptor;
@@ -287,5 +296,5 @@ public class MusicManager implements OnCompletionListener {
 		mp.release();
 		return true;
 	}
-	
+
 }

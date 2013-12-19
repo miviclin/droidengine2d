@@ -1,46 +1,46 @@
 package com.miviclin.droidengine2d.util;
 
 /**
- * Clase que contiene constantes que definen el numero de bytes de cada tipo base
+ * This class contains constants that define the size of each primitive data type, in bytes.
  * 
  * @author Miguel Vicente Linares
  * 
  */
 public final class PrimitiveTypeSize {
-	
+
 	/**
-	 * Numero de bytes que ocupa un byte
+	 * Size of byte, in bytes.
 	 */
-	public final static int SIZE_OF_BYTE = 1;
-	
+	public static final int SIZE_OF_BYTE = 1;
+
 	/**
-	 * Numero de bytes que ocupa un char
+	 * Size of char, in bytes.
 	 */
-	public final static int SIZE_OF_CHAR = 2;
-	
+	public static final int SIZE_OF_CHAR = 2;
+
 	/**
-	 * Numero de bytes que ocupa un short
+	 * Size of short, in bytes.
 	 */
-	public final static int SIZE_OF_SHORT = 2;
-	
+	public static final int SIZE_OF_SHORT = 2;
+
 	/**
-	 * Numero de bytes que ocupa un int
+	 * Size of int, in bytes.
 	 */
-	public final static int SIZE_OF_INT = 4;
-	
+	public static final int SIZE_OF_INT = 4;
+
 	/**
-	 * Numero de bytes que ocupa un long
+	 * Size of long, in bytes.
 	 */
-	public final static int SIZE_OF_LONG = 8;
-	
+	public static final int SIZE_OF_LONG = 8;
+
 	/**
-	 * Numero de bytes que ocupa un float
+	 * Size of float, in bytes.
 	 */
-	public final static int SIZE_OF_FLOAT = 4;
-	
+	public static final int SIZE_OF_FLOAT = 4;
+
 	/**
-	 * Numero de bytes que ocupa un double
+	 * Size of double, in bytes.
 	 */
-	public final static int SIZE_OF_DOUBLE = 8;
-	
+	public static final int SIZE_OF_DOUBLE = 8;
+
 }

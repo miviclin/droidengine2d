@@ -1,98 +1,97 @@
 package com.miviclin.droidengine2d.graphics.cameras;
 
-import com.miviclin.droidengine2d.util.Dimensions2D;
 import com.miviclin.droidengine2d.util.math.Matrix4;
+import com.miviclin.droidengine2d.util.math.Vector2;
 import com.miviclin.droidengine2d.util.math.Vector3;
 
 /**
- * Contiene las matrices VIEW Y PROJECTION y es la clase base para los distintos tipos de camara.
+ * Base class for cameras.<br>
+ * Contains the view and projection matrices.
  * 
  * @author Miguel Vicente Linares
  * 
  */
 public abstract class Camera {
-	
-	public final Matrix4 viewMatrix = new Matrix4();
-	public final Matrix4 projectionMatrix = new Matrix4();
-	
-	protected final Vector3 eye = new Vector3(0.0f, 0.0f, 5.0f);
-	protected final Vector3 center = new Vector3(0.0f, 0.0f, 0.0f);
-	protected final Vector3 up = new Vector3(0.0f, 1.0f, 0.0f);
-	
-	private final Dimensions2D viewportDimensions = new Dimensions2D(1.0f, 1.0f);
-	
+
+	private final Vector2 viewportDimensions = new Vector2(1.0f, 1.0f);
+	private final Matrix4 viewMatrix = new Matrix4();
+	private final Matrix4 projectionMatrix = new Matrix4();
+	private final Vector3 eye = new Vector3(0.0f, 0.0f, 5.0f);
+	private final Vector3 center = new Vector3(0.0f, 0.0f, 0.0f);
+	private final Vector3 up = new Vector3(0.0f, 1.0f, 0.0f);
+
 	private float near = 1.0f;
 	private float far = 10.0f;
-	
+
 	/**
-	 * Constructor
+	 * Constructor.
 	 */
 	public Camera() {
 		super();
 	}
-	
+
 	/**
-	 * Translada la posicion del ojo.<br>
-	 * Los cambios no seran visibles hasta que no se llame a {@link #update()}
+	 * Translates de eye vector.<br>
+	 * Changes will not be visible untill {@link #update()} is called.
 	 * 
-	 * @param x valor en pixeles que se le suma en el eje X a la posicion actual
-	 * @param y valor en pixeles que se le suma en el eje Y a la posicion actual
-	 * @param z valor en pixeles que se le suma en el eje Z a la posicion actual
+	 * @param x Value, in pixels, that will be added to the current X.
+	 * @param y Value, in pixels, that will be added to the current Y.
+	 * @param z Value, in pixels, that will be added to the current Z.
 	 */
 	public void translate(float x, float y, float z) {
 		eye.add(x, y, z);
 	}
-	
+
 	/**
-	 * Devuelve el ancho del viewport en pixeles
+	 * Returns the width of the viewport in pixels.
 	 * 
-	 * @return ancho del viewport
+	 * @return the width of the viewport in pixels
 	 */
 	public final float getViewportWidth() {
-		return viewportDimensions.getWidth();
+		return viewportDimensions.getX();
 	}
-	
+
 	/**
-	 * Asigna el ancho del viewport en pixeles<br>
-	 * Los cambios no seran visibles hasta que no se llame a {@link #update()}
+	 * Sets the width of the viewport.<br>
+	 * Changes will not be visible untill {@link #update()} is called.
 	 * 
-	 * @param viewportWidth Nuevo valor para el ancho del viewport
+	 * @param viewportWidth New width, in pixels.
 	 */
 	public final void setViewportWidth(float viewportWidth) {
 		if (viewportWidth <= 0) {
 			throw new IllegalArgumentException("The viewport width must be greater than 0");
 		}
-		this.viewportDimensions.setWidth(viewportWidth);
+		this.viewportDimensions.setX(viewportWidth);
 	}
-	
+
 	/**
-	 * Devuelve el alto del viewport en pixeles
+	 * Returns the height of the viewport in pixels.
 	 * 
-	 * @return alto del viewport
+	 * @return the height of the viewport in pixels
 	 */
 	public final float getViewportHeight() {
-		return viewportDimensions.getHeight();
+		return viewportDimensions.getY();
 	}
-	
+
 	/**
-	 * Asigna el alto del viewport en pixeles<br>
-	 * Los cambios no seran visibles hasta que no se llame a {@link #update()}
+	 * Sets the height of the viewport.<br>
+	 * Changes will not be visible untill {@link #update()} is called.
 	 * 
-	 * @param viewportHeight Nuevo valor para el alto del viewport
+	 * @param viewportHeight New height, in pixels.
 	 */
 	public final void setViewportHeight(float viewportHeight) {
 		if (viewportHeight <= 0) {
 			throw new IllegalArgumentException("The viewport height must be greater than 0");
 		}
-		this.viewportDimensions.setHeight(viewportHeight);
+		this.viewportDimensions.setY(viewportHeight);
 	}
-	
+
 	/**
-	 * Asigna las dimensiones del viewport en pixeles<br>
-	 * Los cambios no seran visibles hasta que no se llame a {@link #update()}
+	 * Sets the dimensions of the viewport.<br>
+	 * Changes will not be visible untill {@link #update()} is called.
 	 * 
-	 * @param viewportWidth Nuevo valor para el alto del viewport
-	 * @param viewportHeight Nuevo valor para el alto del viewport
+	 * @param viewportWidth New width, in pixels.
+	 * @param viewportHeight New height, in pixels.
 	 */
 	public final void setViewportDimensions(float viewportWidth, float viewportHeight) {
 		if (viewportWidth <= 0) {
@@ -101,51 +100,96 @@ public abstract class Camera {
 		if (viewportHeight <= 0) {
 			throw new IllegalArgumentException("The viewport height must be greater than 0");
 		}
-		this.viewportDimensions.setWidth(viewportWidth);
-		this.viewportDimensions.setHeight(viewportHeight);
+		this.viewportDimensions.setX(viewportWidth);
+		this.viewportDimensions.setY(viewportHeight);
 	}
-	
+
 	/**
-	 * Devuelve el valor de near
+	 * Returns the view matrix.
+	 * 
+	 * @return View matrix.
+	 */
+	public Matrix4 getViewMatrix() {
+		return viewMatrix;
+	}
+
+	/**
+	 * Returns the projection matrix.
+	 * 
+	 * @return Projection matrix.
+	 */
+	public Matrix4 getProjectionMatrix() {
+		return projectionMatrix;
+	}
+
+	/**
+	 * Returns the eye vector (camera position).
+	 * 
+	 * @return Vector3
+	 */
+	public Vector3 getEye() {
+		return eye;
+	}
+
+	/**
+	 * Returns the center vector (where the camera is looking at).
+	 * 
+	 * @return Vector3
+	 */
+	public Vector3 getCenter() {
+		return center;
+	}
+
+	/**
+	 * Returns the up vector (the up vector of the camera).
+	 * 
+	 * @return Vector3
+	 */
+	public Vector3 getUp() {
+		return up;
+	}
+
+	/**
+	 * Returns the distance from the camera to the front of the viewing volume.
 	 * 
 	 * @return near
 	 */
 	public final float getNear() {
 		return near;
 	}
-	
+
 	/**
-	 * Asigna el valor de near<br>
-	 * Los cambios no seran visibles hasta que no se llame a {@link #update()}
+	 * Sets the distance from the camera to the front of the viewing volume.<br>
+	 * Changes will not be visible untill {@link #update()} is called.
 	 * 
-	 * @param near Nuevo valor
+	 * @param near New near value.
 	 */
 	public final void setNear(float near) {
 		this.near = near;
 	}
-	
+
 	/**
-	 * Devuelve el valor de far
+	 * Returns the distance from the camera to the back of the viewing volume.
 	 * 
 	 * @return far
 	 */
 	public final float getFar() {
 		return far;
 	}
-	
+
 	/**
-	 * Asigna el valor de far<br>
-	 * Los cambios no seran visibles hasta que no se llame a {@link #update()}
+	 * Sets the distance from the camera to the back of the viewing volume.<br>
+	 * Changes will not be visible untill {@link #update()} is called.
 	 * 
-	 * @param far Nuevo valor de far
+	 * @param near New far value.
 	 */
 	public final void setFar(float far) {
 		this.far = far;
 	}
-	
+
 	/**
-	 * Actualiza las matrices VIEW y PROJECTION con la configuracion actual de la camara.
+	 * Updates the view and projection matrices with the current camera configuration.
 	 */
 	public abstract void update();
-	
+
 }

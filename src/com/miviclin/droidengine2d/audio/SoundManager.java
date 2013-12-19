@@ -10,112 +10,113 @@ import android.media.SoundPool;
 import com.miviclin.droidengine2d.resources.AssetsLoader;
 
 /**
- * Permite cargar sonidos en memoria y reproducirlos.
+ * Manages sounds and allows playing them.<br>
+ * All sounds will be loaded in memory.
  * 
  * @author Miguel Vicente Linares
  * 
  */
 public class SoundManager {
-	
+
 	private SoundPool soundPool;
-	private HashMap<String, IDWrapper> soundMap;
-	
+	private HashMap<String, IdWrapper> soundMap;
+
 	/**
-	 * Constructor.
+	 * Creates a SoundManager.
 	 * 
-	 * @param maxStreams Maximo de sonidos que se permite reproducir simultaneamente
-	 * @param initialCapacity Numero de sonidos que se planea almacenar. Nota: si la capacidad inicial seleccionada es menor que la cantidad
-	 *            de sonidos que realmente se va a almacenar, la coleccion se redimensionara en tiempo de ejecucion.
+	 * @param maxStreams Max number of sounds that can be played at the same time.
+	 * @param initialCapacity Initial capacity of the sound pool. It will be resized if more sounds are loaded after the
+	 *            specified capacity is reached.
 	 */
 	public SoundManager(int maxStreams, int initialCapacity) {
 		this.soundPool = new SoundPool(maxStreams, AudioManager.STREAM_MUSIC, 0);
-		this.soundMap = new HashMap<String, IDWrapper>((int) ((initialCapacity / 0.75) + 1));
+		this.soundMap = new HashMap<String, IdWrapper>((int) ((initialCapacity / 0.75) + 1));
 	}
-	
+
 	/**
-	 * Carga un sonido en la coleccion de sonidos
+	 * Loads a sound from the specified file. The sound will be stored in memory.
 	 * 
-	 * @param context Context
-	 * @param path Ruta del sonido, relativa a la carpeta de assets
+	 * @param context Context.
+	 * @param path File path. Relative to the assets folder.
 	 */
 	public void loadSound(Context context, String path) {
-		int soundID;
+		int soundId;
 		AssetFileDescriptor descriptor = AssetsLoader.getAssetFileDescriptor(context, path);
 		if (soundPool != null) {
-			soundID = soundPool.load(descriptor, 1);
+			soundId = soundPool.load(descriptor, 1);
 		} else {
 			throw new IllegalStateException("reset(...) must be called before loadSound(...)");
 		}
-		soundMap.put(path, new IDWrapper(soundID));
+		soundMap.put(path, new IdWrapper(soundId));
 	}
-	
+
 	/**
-	 * Libera un sonido que ya no se va a utilizar mas
+	 * Releases a sound that is not going to be used anymore.
 	 * 
-	 * @param path Ruta del sonido, relativa a la carpeta de assets
+	 * @param path File path. Relative to the assets folder. This is the path that was specified when the sound was
+	 *            loaded.
 	 */
 	public void releaseSound(String path) {
-		IDWrapper soundID = soundMap.get(path);
-		if (soundID != null) {
-			soundPool.unload(soundID.getID());
+		IdWrapper soundId = soundMap.get(path);
+		if (soundId != null) {
+			soundPool.unload(soundId.getId());
 			soundMap.remove(path);
 		}
 	}
-	
+
 	/**
-	 * Libera todos los sonidos almacenados y demas recursos utilizados por este objeto. Esta funcion deberia llamarse cuando no vamos a
-	 * reproducir mas sonidos.
+	 * Releases all sounds and resources. This method should be called when the SoundManager is not needed anymore.
 	 */
 	public void release() {
 		soundPool.release();
 		soundPool = null;
 		soundMap.clear();
 	}
-	
+
 	/**
-	 * Libera los recursos (llama a la funcion {@link #release()}) y reinicia este GestorSonidos con los parametros especificados.
+	 * Releases all resources (calls {@link #release()}) and resets this SoundManager with the specified parameters.
 	 * 
-	 * @param maxStreams Maximo de sonidos que se permite reproducir simultaneamente
-	 * @param capacity Numero de sonidos que se planea almacenar. Nota: si la capacidad inicial seleccionada es menor que la cantidad de
-	 *            sonidos que realmente se va a almacenar, la coleccion se redimensionara en tiempo de ejecucion.
+	 * @param maxStreams Max number of sounds that can be played at the same time.
+	 * @param initialCapacity Initial capacity of the sound pool. It will be resized if more sounds are loaded after the
+	 *            specified capacity is reached.
 	 */
 	public void reset(int maxStreams, int capacity) {
 		release();
 		this.soundPool = new SoundPool(maxStreams, AudioManager.STREAM_MUSIC, 0);
-		this.soundMap = new HashMap<String, IDWrapper>((int) ((capacity / 0.75) + 1));
+		this.soundMap = new HashMap<String, IdWrapper>((int) ((capacity / 0.75) + 1));
 	}
-	
+
 	/**
-	 * Reproduce el sonido especificado.<br>
-	 * El sonido debe haber sido cargado previamente mediante {@link #loadSound(Context, String)}
+	 * Plays the specified sound.<br>
+	 * The spefied sound must have been previously loaded with {@link #loadSound(Context, String)}.
 	 * 
-	 * @param path Ruta del sonido, relativa a la carpeta de assets
+	 * @param path File path. Relative to the assets folder. This is the path that was specified when the sound was
+	 *            loaded.
 	 */
 	public void playSound(String path) {
-		IDWrapper soundID = soundMap.get(path);
-		if (soundID != null) {
-			soundPool.play(soundID.getID(), 1, 1, 0, 0, 1);
+		IdWrapper soundId = soundMap.get(path);
+		if (soundId != null) {
+			soundPool.play(soundId.getId(), 1, 1, 0, 0, 1);
 		}
 	}
-	
+
 	/**
-	 * Actua como wrapper para el ID del sonido, para poder insertar IDs en el HashMap de sonidos, ya que este no permite insertar tipos
-	 * primitivos. Utilizamos esta clase en lugar de Integer para ahorrar un poco de memoria.
+	 * IDWrapper.
 	 * 
 	 * @author Miguel Vicente Linares
 	 * 
 	 */
-	private static class IDWrapper {
-		
+	private static class IdWrapper {
+
 		private int id;
-		
-		public IDWrapper(int id) {
+
+		public IdWrapper(int id) {
 			this.id = id;
 		}
-		
-		public int getID() {
+
+		public int getId() {
 			return id;
 		}
 	}
-	
+
 }
