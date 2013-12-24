@@ -29,8 +29,8 @@ public abstract class EngineActivity extends FragmentActivity {
 
 		setWindowFlags();
 
-		setContentView(getContentViewID());
-		final GLView glView = (GLView) findViewById(getGLViewID());
+		setContentView(getContentViewId());
+		final GLView glView = (GLView) findViewById(getGLViewId());
 
 		engine = createEngine(glView);
 		game = engine.getGame();
@@ -104,8 +104,8 @@ public abstract class EngineActivity extends FragmentActivity {
 	 * This method is called from {@link #onConfigurationChanged(Configuration)} if the Engine has been initialized.
 	 */
 	public void onConfigurationChanged() {
-		setContentView(getContentViewID());
-		engine.setGLView((GLView) findViewById(getGLViewID()));
+		setContentView(getContentViewId());
+		engine.setGLView((GLView) findViewById(getGLViewId()));
 	}
 
 	/**
@@ -152,14 +152,14 @@ public abstract class EngineActivity extends FragmentActivity {
 	 * 
 	 * @return Content View ID
 	 */
-	public abstract int getContentViewID();
+	public abstract int getContentViewId();
 
 	/**
 	 * Returns the ID of the GLView (defined in the layout xml file) where the game will be rendered.
 	 * 
 	 * @return GLView ID
 	 */
-	public abstract int getGLViewID();
+	public abstract int getGLViewId();
 
 	/**
 	 * Returns the orientation of the activity.<br>
