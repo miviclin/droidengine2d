@@ -19,7 +19,7 @@ import com.miviclin.droidengine2d.resources.AssetsLoader;
 public class SoundManager {
 
 	private SoundPool soundPool;
-	private HashMap<String, IdWrapper> soundMap;
+	private HashMap<String, Integer> soundMap;
 
 	/**
 	 * Creates a SoundManager.
@@ -30,7 +30,7 @@ public class SoundManager {
 	 */
 	public SoundManager(int maxStreams, int initialCapacity) {
 		this.soundPool = new SoundPool(maxStreams, AudioManager.STREAM_MUSIC, 0);
-		this.soundMap = new HashMap<String, IdWrapper>((int) ((initialCapacity / 0.75) + 1));
+		this.soundMap = new HashMap<String, Integer>((int) ((initialCapacity / 0.75) + 1));
 	}
 
 	/**
@@ -40,14 +40,13 @@ public class SoundManager {
 	 * @param path File path. Relative to the assets folder.
 	 */
 	public void loadSound(Context context, String path) {
-		int soundId;
 		AssetFileDescriptor descriptor = AssetsLoader.getAssetFileDescriptor(context, path);
 		if (soundPool != null) {
-			soundId = soundPool.load(descriptor, 1);
+			int soundId = soundPool.load(descriptor, 1);
+			soundMap.put(path, soundId);
 		} else {
 			throw new IllegalStateException("reset(...) must be called before loadSound(...)");
 		}
-		soundMap.put(path, new IdWrapper(soundId));
 	}
 
 	/**
@@ -57,9 +56,9 @@ public class SoundManager {
 	 *            loaded.
 	 */
 	public void releaseSound(String path) {
-		IdWrapper soundId = soundMap.get(path);
+		Integer soundId = soundMap.get(path);
 		if (soundId != null) {
-			soundPool.unload(soundId.getId());
+			soundPool.unload(soundId);
 			soundMap.remove(path);
 		}
 	}
@@ -83,7 +82,7 @@ public class SoundManager {
 	public void reset(int maxStreams, int capacity) {
 		release();
 		this.soundPool = new SoundPool(maxStreams, AudioManager.STREAM_MUSIC, 0);
-		this.soundMap = new HashMap<String, IdWrapper>((int) ((capacity / 0.75) + 1));
+		this.soundMap = new HashMap<String, Integer>((int) ((capacity / 0.75) + 1));
 	}
 
 	/**
@@ -94,28 +93,9 @@ public class SoundManager {
 	 *            loaded.
 	 */
 	public void playSound(String path) {
-		IdWrapper soundId = soundMap.get(path);
+		Integer soundId = soundMap.get(path);
 		if (soundId != null) {
-			soundPool.play(soundId.getId(), 1, 1, 0, 0, 1);
-		}
-	}
-
-	/**
-	 * IDWrapper.
-	 * 
-	 * @author Miguel Vicente Linares
-	 * 
-	 */
-	private static class IdWrapper {
-
-		private int id;
-
-		public IdWrapper(int id) {
-			this.id = id;
-		}
-
-		public int getId() {
-			return id;
+			soundPool.play(soundId, 1, 1, 0, 0, 1);
 		}
 	}
 
