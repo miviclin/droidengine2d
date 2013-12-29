@@ -68,11 +68,12 @@ public class AssetsLoader {
 		} catch (IOException e) {
 			throw new RuntimeException("Unable to load '" + path + "'", e);
 		} finally {
-			if (in != null)
+			if (in != null) {
 				try {
 					in.close();
 				} catch (IOException e) {
 				}
+			}
 		}
 		return bitmap;
 	}
@@ -95,11 +96,12 @@ public class AssetsLoader {
 		} catch (IOException e) {
 			throw new RuntimeException("Unable to load '" + path + "'", e);
 		} finally {
-			if (in != null)
+			if (in != null) {
 				try {
 					in.close();
 				} catch (IOException e) {
 				}
+			}
 		}
 		return bitmap;
 	}
@@ -125,11 +127,12 @@ public class AssetsLoader {
 		} catch (IOException e) {
 			throw new RuntimeException("Unable to load '" + path + "'", e);
 		} finally {
-			if (in != null)
+			if (in != null) {
 				try {
 					in.close();
 				} catch (IOException e) {
 				}
+			}
 		}
 		return new Vector2(width, height);
 	}
