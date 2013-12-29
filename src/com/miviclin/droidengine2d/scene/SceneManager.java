@@ -149,6 +149,7 @@ public class SceneManager {
 			entry.getValue().dispose();
 			entry.setValue(null);
 		}
+		activeScene = null;
 		scenes.clear();
 	}
 
