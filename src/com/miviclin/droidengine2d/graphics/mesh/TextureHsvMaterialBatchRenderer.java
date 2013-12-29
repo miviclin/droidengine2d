@@ -165,7 +165,7 @@ public class TextureHsvMaterialBatchRenderer<M extends TextureHsvMaterial> exten
 	public void draw(Vector2 position, Vector2 scale, Vector2 origin, float rotation, Camera camera) {
 		checkInBeginEndPair();
 		TextureHsvMaterial material = getCurrentMaterial();
-		setupSprite(material.getTextureRegion(), position, scale, origin, rotation, camera);
+		setupTexturedRectangle(material.getTextureRegion(), position, scale, origin, rotation, camera);
 		setupHSV(material.getHOffset(), material.getSMulti(), material.getVMulti());
 		incrementBatchSize();
 	}

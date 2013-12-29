@@ -146,7 +146,7 @@ public class TextureColorMaterialBatchRenderer<M extends TextureColorMaterial> e
 	public void draw(Vector2 position, Vector2 scale, Vector2 origin, float rotation, Camera camera) {
 		checkInBeginEndPair();
 		TextureColorMaterial material = getCurrentMaterial();
-		setupSprite(material.getTextureRegion(), position, scale, origin, rotation, camera);
+		setupTexturedRectangle(material.getTextureRegion(), position, scale, origin, rotation, camera);
 		setupColor(material.getColor());
 		incrementBatchSize();
 	}

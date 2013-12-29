@@ -10,7 +10,7 @@ import com.miviclin.droidengine2d.graphics.shader.ShaderProgram;
  * @author Miguel Vicente Linares
  * 
  */
-public abstract class GraphicsBatch<M extends Material> {
+public abstract class GraphicsBatchRenderer<M extends Material> {
 
 	private final BlendingOptions currentBatchBlendingOptions;
 	private final BlendingOptions nextBatchBlendingOptions;
@@ -27,7 +27,7 @@ public abstract class GraphicsBatch<M extends Material> {
 	 * 
 	 * @param maxBatchSize Maximum size of this GraphicsBatch.
 	 */
-	public GraphicsBatch(int maxBatchSize) {
+	public GraphicsBatchRenderer(int maxBatchSize) {
 		this.currentBatchBlendingOptions = new BlendingOptions();
 		this.nextBatchBlendingOptions = new BlendingOptions();
 		this.inBeginEndPair = false;

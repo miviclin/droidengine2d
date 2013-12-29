@@ -144,7 +144,7 @@ public class TransparentTextureMaterialBatchRenderer<M extends TransparentTextur
 	public void draw(Vector2 position, Vector2 scale, Vector2 origin, float rotation, Camera camera) {
 		checkInBeginEndPair();
 		TransparentTextureMaterial material = getCurrentMaterial();
-		setupSprite(material.getTextureRegion(), position, scale, origin, rotation, camera);
+		setupTexturedRectangle(material.getTextureRegion(), position, scale, origin, rotation, camera);
 		setupOpacity(material.getOpacity());
 		incrementBatchSize();
 	}

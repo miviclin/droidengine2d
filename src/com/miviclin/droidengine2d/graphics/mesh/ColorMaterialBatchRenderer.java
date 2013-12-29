@@ -127,7 +127,7 @@ public class ColorMaterialBatchRenderer<M extends ColorMaterial> extends Rectang
 	public void draw(Vector2 position, Vector2 scale, Vector2 origin, float rotation, Camera camera) {
 		checkInBeginEndPair();
 		ColorMaterial material = getCurrentMaterial();
-		setupRectangularShape(material, position, scale, origin, rotation, camera);
+		setupColoredRectangle(material, position, scale, origin, rotation, camera);
 		incrementBatchSize();
 	}
 
@@ -143,7 +143,7 @@ public class ColorMaterialBatchRenderer<M extends ColorMaterial> extends Rectang
 	 * @param rotation Angulo de rotacion sobre el centro
 	 * @param camera Camara
 	 */
-	protected void setupRectangularShape(ColorMaterial material, Vector2 position, Vector2 scale, Vector2 origin,
+	protected void setupColoredRectangle(ColorMaterial material, Vector2 position, Vector2 scale, Vector2 origin,
 			float rotation, Camera camera) {
 
 		if ((getBatchSize() > 0) && (getBatchSize() == getBatchCapacity() || isForceDraw())) {
