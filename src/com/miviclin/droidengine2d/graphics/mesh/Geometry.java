@@ -17,10 +17,6 @@ public class Geometry {
 	private Array<Short> indices;
 	private Array<Color> colors;
 	private Array<Vector2> texturesUV;
-	private boolean updateVertices;
-	private boolean updateIndices;
-	private boolean updateColors;
-	private boolean updateTexturesUV;
 
 	/**
 	 * Creates a new Geometry.
@@ -35,10 +31,6 @@ public class Geometry {
 		this.indices = new Array<Short>(numIndices);
 		this.colors = (usesColors) ? new Array<Color>(numVertices) : null;
 		this.texturesUV = (usesTexturesUV) ? new Array<Vector2>(numVertices) : null;
-		this.updateVertices = false;
-		this.updateIndices = false;
-		this.updateColors = false;
-		this.updateTexturesUV = false;
 	}
 
 	/**
@@ -166,106 +158,6 @@ public class Geometry {
 			return -1;
 		}
 		return texturesUV.size();
-	}
-
-	/**
-	 * Returns true if update vertices is set.
-	 * 
-	 * @return true/false
-	 */
-	public boolean isUpdateVerticesSet() {
-		return updateVertices;
-	}
-
-	/**
-	 * Sets update vertices.
-	 * 
-	 * @param updateVertices true/false
-	 */
-	protected void setUpdateVertices(boolean updateVertices) {
-		this.updateVertices = updateVertices;
-	}
-
-	/**
-	 * Sets update vertices to true.
-	 */
-	public void updateVertices() {
-		updateVertices = true;
-	}
-
-	/**
-	 * Returns true if update indices is set.
-	 * 
-	 * @return true/false
-	 */
-	public boolean isUpdateIndicesSet() {
-		return updateIndices;
-	}
-
-	/**
-	 * Sets update indices.
-	 * 
-	 * @param updateIndices true/false
-	 */
-	protected void setUpdateIndices(boolean updateIndices) {
-		this.updateIndices = updateIndices;
-	}
-
-	/**
-	 * Sets update indices.
-	 */
-	public void updateIndices() {
-		updateIndices = true;
-	}
-
-	/**
-	 * Returns true if update colors is set.
-	 * 
-	 * @return true/false
-	 */
-	public boolean isUpdateColorsSet() {
-		return updateColors;
-	}
-
-	/**
-	 * Sets update color.
-	 * 
-	 * @param updateColors true/false
-	 */
-	protected void setUpdateColors(boolean updateColors) {
-		this.updateColors = updateColors;
-	}
-
-	/**
-	 * Sets update colors to true.
-	 */
-	public void updateColors() {
-		updateColors = true;
-	}
-
-	/**
-	 * Returns true if update textures is set.
-	 * 
-	 * @return true/false
-	 */
-	public boolean isUpdateTexturesUVSet() {
-		return updateTexturesUV;
-	}
-
-	/**
-	 * Sets update textures.
-	 * 
-	 * @param updateTexturesUV true/false
-	 */
-	protected void setUpdateTexturesUV(boolean updateTexturesUV) {
-		this.updateTexturesUV = updateTexturesUV;
-	}
-
-	/**
-	 * Sets update textures to true.
-	 */
-	public void updateTexturesUV() {
-		updateTexturesUV = true;
 	}
 
 }
