@@ -31,12 +31,6 @@ public interface Font {
 	public FontChar getCharacter(int id);
 
 	/**
-	 * Removes all characters from this font.<br>
-	 * This method could be called when the font is not needed anymore.
-	 */
-	public void clear();
-
-	/**
 	 * Returns the textures that contain the characters of this font, indexed by page ID.
 	 * 
 	 * @return Texturas

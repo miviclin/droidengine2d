@@ -191,11 +191,6 @@ public class BitmapFont implements Font {
 	}
 
 	@Override
-	public void clear() {
-		characters.clear();
-	}
-
-	@Override
 	public SparseArray<Texture> getTexturePages() {
 		return texturePages;
 	}
