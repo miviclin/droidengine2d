@@ -13,6 +13,7 @@ import com.miviclin.droidengine2d.graphics.material.TextureColorMaterial;
 import com.miviclin.droidengine2d.graphics.material.TextureHsvMaterial;
 import com.miviclin.droidengine2d.graphics.material.TextureMaterial;
 import com.miviclin.droidengine2d.graphics.material.TransparentTextureMaterial;
+import com.miviclin.droidengine2d.graphics.material.UnsupportedMaterialException;
 import com.miviclin.droidengine2d.graphics.mesh.ColorMaterialBatchRenderer;
 import com.miviclin.droidengine2d.graphics.mesh.GraphicsBatch;
 import com.miviclin.droidengine2d.graphics.mesh.RectangleBatchRenderer;
@@ -109,7 +110,7 @@ public class Graphics {
 	public <M extends Material> void drawRect(M material, Transform transform) {
 		RectangleBatchRenderer batchRenderer = renderers.get(material.getClass());
 		if (batchRenderer == null) {
-			throw new UnsupportedMaterialException();
+			throw new UnsupportedMaterialException(material.getClass());
 		}
 
 		Vector2 scale = transform.getScale();
@@ -158,7 +159,7 @@ public class Graphics {
 
 		RectangleBatchRenderer batchRenderer = renderers.get(TextureColorMaterial.class);
 		if (batchRenderer == null) {
-			throw new UnsupportedMaterialException();
+			throw new UnsupportedMaterialException(TextureColorMaterial.class);
 		}
 		if (fontSizePx < 1 || fontSizePx < 1) {
 			throw new IllegalArgumentException("fontSizePx has to be at least 1");
