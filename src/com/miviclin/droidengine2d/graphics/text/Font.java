@@ -14,12 +14,12 @@ import com.miviclin.droidengine2d.graphics.texture.Texture;
 public interface Font {
 
 	/**
-	 * Loads this font's data from an XML file.
+	 * Loads this font's data from the specified file.
 	 * 
 	 * @param path File path.
 	 * @param context Context.
 	 */
-	public void loadFromXML(String path, Context context);
+	public void loadFromFile(String path, Context context);
 
 	/**
 	 * Returns the specified character of this font.

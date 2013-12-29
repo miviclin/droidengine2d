@@ -67,14 +67,14 @@ public class BitmapFont implements Font {
 
 	/**
 	 * Creates a new {@link BitmapFont}.<br>
-	 * The font's data is not loaded after creation. It can be loaded with {@link #loadFromXML(String, Context)}.
+	 * The font's data is not loaded after creation. It can be loaded with {@link #loadFromFile(String, Context)}.
 	 */
 	public BitmapFont() {
 		super();
 	}
 
 	@Override
-	public void loadFromXML(String path, Context context) {
+	public void loadFromFile(String path, Context context) {
 		XmlPullParserFactory factory;
 		XmlPullParser xpp;
 		int eventType, index, pageId, kerningFirst, kerningSecond, kerningAmount;
