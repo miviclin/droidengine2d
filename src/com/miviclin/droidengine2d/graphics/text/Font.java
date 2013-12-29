@@ -14,12 +14,12 @@ import com.miviclin.droidengine2d.graphics.texture.Texture;
 public interface Font {
 
 	/**
-	 * Loads this font's data from an XML file.
+	 * Loads this font's data from the specified file.
 	 * 
 	 * @param path File path.
 	 * @param context Context.
 	 */
-	public void loadFromXML(String path, Context context);
+	public void loadFromFile(String path, Context context);
 
 	/**
 	 * Returns the specified character of this font.
@@ -29,12 +29,6 @@ public interface Font {
 	 * @throws UndefinedCharacterException If the specified character is not defined.
 	 */
 	public FontChar getCharacter(int id);
-
-	/**
-	 * Removes all characters from this font.<br>
-	 * This method could be called when the font is not needed anymore.
-	 */
-	public void clear();
 
 	/**
 	 * Returns the textures that contain the characters of this font, indexed by page ID.
