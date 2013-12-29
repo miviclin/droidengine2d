@@ -1,7 +1,6 @@
 package com.miviclin.droidengine2d.scene;
 
-import java.util.HashMap;
-import java.util.Map;
+import android.util.SparseArray;
 
 import com.miviclin.droidengine2d.Game;
 import com.miviclin.droidengine2d.graphics.Graphics;
@@ -14,7 +13,7 @@ import com.miviclin.droidengine2d.graphics.Graphics;
  */
 public class SceneManager {
 
-	private HashMap<String, Scene> scenes;
+	private SparseArray<Scene> scenes;
 	private Scene activeScene;
 
 	/**
@@ -31,7 +30,7 @@ public class SceneManager {
 	 *            the Scenes will be resized automatically.
 	 */
 	public SceneManager(int initialCapacity) {
-		this.scenes = new HashMap<String, Scene>((int) ((initialCapacity / 0.75f) + 1));
+		this.scenes = new SparseArray<Scene>(initialCapacity);
 		this.activeScene = null;
 	}
 
@@ -44,7 +43,7 @@ public class SceneManager {
 	 * @param sceneId Identifier of the Scene. It can be used to get the Scene from this SceneManager later.
 	 * @param scene Scene (can not be null).
 	 */
-	public void registerScene(String sceneId, Scene scene) {
+	public void registerScene(int sceneId, Scene scene) {
 		registerScene(sceneId, scene, false);
 	}
 
@@ -57,7 +56,7 @@ public class SceneManager {
 	 * @param scene Scene (can not be null).
 	 * @param activate true to make the Scene the active Scene of this SceneManager.
 	 */
-	public void registerScene(String sceneId, Scene scene, boolean activate) {
+	public void registerScene(int sceneId, Scene scene, boolean activate) {
 		if (scene == null) {
 			throw new IllegalArgumentException("The Scene can not be null");
 		}
@@ -76,12 +75,13 @@ public class SceneManager {
 	 * @param sceneId Identifier of the Scene.
 	 * @return Removed Scene or null
 	 */
-	public Scene unregisterScene(String sceneId) {
-		Scene removedScene = scenes.remove(sceneId);
-		if (removedScene != null) {
-			removedScene.dispose();
+	public Scene unregisterScene(int sceneId) {
+		Scene scene = scenes.get(sceneId);
+		if (scene != null) {
+			scene.dispose();
+			scenes.remove(sceneId);
 		}
-		return removedScene;
+		return scene;
 	}
 
 	/**
@@ -90,7 +90,7 @@ public class SceneManager {
 	 * @param sceneId Identifier of the Scene.
 	 * @return Scene or null
 	 */
-	public Scene getScene(String sceneId) {
+	public Scene getScene(int sceneId) {
 		return scenes.get(sceneId);
 	}
 
@@ -109,7 +109,7 @@ public class SceneManager {
 	 * 
 	 * @param sceneId Identifier of the Scene we want to set as the active Scene.
 	 */
-	public void setActiveScene(String sceneId) {
+	public void setActiveScene(int sceneId) {
 		if (activeScene != null) {
 			activeScene.onDeactivation();
 		}
@@ -145,12 +145,15 @@ public class SceneManager {
 	 * This SceneManager will be left empty.
 	 */
 	public void dispose() {
-		for (Map.Entry<String, Scene> entry : scenes.entrySet()) {
-			entry.getValue().dispose();
-			entry.setValue(null);
+		int numScenes = scenes.size();
+		for (int i = 0; i < numScenes; i++) {
+			Scene scene = scenes.valueAt(i);
+			if (scene != null) {
+				scene.dispose();
+			}
 		}
-		activeScene = null;
 		scenes.clear();
+		activeScene = null;
 	}
 
 	/**
