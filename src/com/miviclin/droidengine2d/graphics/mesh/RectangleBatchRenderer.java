@@ -27,7 +27,7 @@ import com.miviclin.droidengine2d.util.math.Vector2;
  * 
  * @param <M> Material
  */
-public abstract class RectangleBatchRenderer<M extends Material> extends GraphicsBatch<M> {
+public abstract class RectangleBatchRenderer<M extends Material> extends GraphicsBatchRenderer<M> {
 
 	private int verticesDataStride;
 

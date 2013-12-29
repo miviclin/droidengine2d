@@ -15,7 +15,7 @@ import com.miviclin.droidengine2d.graphics.material.TextureMaterial;
 import com.miviclin.droidengine2d.graphics.material.TransparentTextureMaterial;
 import com.miviclin.droidengine2d.graphics.material.UnsupportedMaterialException;
 import com.miviclin.droidengine2d.graphics.mesh.ColorMaterialBatchRenderer;
-import com.miviclin.droidengine2d.graphics.mesh.GraphicsBatch;
+import com.miviclin.droidengine2d.graphics.mesh.GraphicsBatchRenderer;
 import com.miviclin.droidengine2d.graphics.mesh.RectangleBatchRenderer;
 import com.miviclin.droidengine2d.graphics.mesh.TextureColorMaterialBatchRenderer;
 import com.miviclin.droidengine2d.graphics.mesh.TextureHsvMaterialBatchRenderer;
@@ -268,8 +268,8 @@ public class Graphics {
 	/**
 	 * Returns true if there is one or more elements pending to be rendered in the currently selected renderer.
 	 * 
-	 * @return true if {@link GraphicsBatch#begin()} has been called, but {@link GraphicsBatch#end()} has not been
-	 *         called yet on the currently selected renderer, false otherwise
+	 * @return true if {@link GraphicsBatchRenderer#begin()} has been called, but {@link GraphicsBatchRenderer#end()}
+	 *         has not been called yet on the currently selected renderer, false otherwise
 	 */
 	protected boolean isInBeginEndPair() {
 		return inBeginEndPair;
