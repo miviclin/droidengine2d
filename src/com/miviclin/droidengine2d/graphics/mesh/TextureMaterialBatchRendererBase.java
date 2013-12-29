@@ -45,7 +45,7 @@ public abstract class TextureMaterialBatchRendererBase<M extends Material> exten
 	}
 
 	/**
-	 * Adds a sprite to this batch.<br>
+	 * Adds a rectangle with texture to this batch.<br>
 	 * If the batch was full, it will be rendered in one draw call and it will be left empty. Then, the specified
 	 * rectangle will be added to this batch.
 	 * 
@@ -56,7 +56,7 @@ public abstract class TextureMaterialBatchRendererBase<M extends Material> exten
 	 * @param rotation Rotation angle around the origin.
 	 * @param camera Camera.
 	 */
-	protected void setupSprite(TextureRegion textureRegion, Vector2 position, Vector2 scale, Vector2 origin,
+	protected void setupTexturedRectangle(TextureRegion textureRegion, Vector2 position, Vector2 scale, Vector2 origin,
 			float rotation, Camera camera) {
 
 		boolean textureChanged = checkTextureChanged(textureRegion);

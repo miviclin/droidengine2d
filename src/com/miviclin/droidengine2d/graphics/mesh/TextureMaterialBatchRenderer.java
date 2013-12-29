@@ -123,7 +123,7 @@ public class TextureMaterialBatchRenderer<M extends TextureMaterial> extends Tex
 	public void draw(Vector2 position, Vector2 scale, Vector2 origin, float rotation, Camera camera) {
 		checkInBeginEndPair();
 		TextureMaterial material = getCurrentMaterial();
-		setupSprite(material.getTextureRegion(), position, scale, origin, rotation, camera);
+		setupTexturedRectangle(material.getTextureRegion(), position, scale, origin, rotation, camera);
 		incrementBatchSize();
 	}
 
