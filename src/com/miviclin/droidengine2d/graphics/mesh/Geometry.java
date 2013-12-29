@@ -1,7 +1,8 @@
 package com.miviclin.droidengine2d.graphics.mesh;
 
+import java.util.ArrayList;
+
 import com.miviclin.droidengine2d.graphics.Color;
-import com.miviclin.droidengine2d.util.Array;
 import com.miviclin.droidengine2d.util.math.Vector2;
 import com.miviclin.droidengine2d.util.math.Vector3;
 
@@ -13,10 +14,10 @@ import com.miviclin.droidengine2d.util.math.Vector3;
  */
 public class Geometry {
 
-	private Array<Vector3> vertices;
-	private Array<Short> indices;
-	private Array<Color> colors;
-	private Array<Vector2> texturesUV;
+	private ArrayList<Vector3> vertices;
+	private ArrayList<Short> indices;
+	private ArrayList<Color> colors;
+	private ArrayList<Vector2> texturesUV;
 
 	/**
 	 * Creates a new Geometry.
@@ -27,10 +28,10 @@ public class Geometry {
 	 * @param usesTexturesUV true if the geometry stores texture coordinates, false otherwise.
 	 */
 	public Geometry(int numVertices, int numIndices, boolean usesColors, boolean usesTexturesUV) {
-		this.vertices = new Array<Vector3>(numVertices);
-		this.indices = new Array<Short>(numIndices);
-		this.colors = (usesColors) ? new Array<Color>(numVertices) : null;
-		this.texturesUV = (usesTexturesUV) ? new Array<Vector2>(numVertices) : null;
+		this.vertices = new ArrayList<Vector3>(numVertices);
+		this.indices = new ArrayList<Short>(numIndices);
+		this.colors = (usesColors) ? new ArrayList<Color>(numVertices) : null;
+		this.texturesUV = (usesTexturesUV) ? new ArrayList<Vector2>(numVertices) : null;
 	}
 
 	/**
