@@ -69,7 +69,7 @@ public class SceneManager {
 
 	/**
 	 * Unregisters the specified Scene from this SceneManager.<br>
-	 * If an Scene was registered with the specified sceneId, {@link Scene#dispose()} is called on the Scene before it
+	 * If an Scene was registered with the specified sceneId, {@link Scene#onDispose()} is called on the Scene before it
 	 * is removed from this SceneManager.
 	 * 
 	 * @param sceneId Identifier of the Scene.
@@ -140,7 +140,7 @@ public class SceneManager {
 	}
 
 	/**
-	 * Calls {@link Scene#dispose()} on all Scenes registered in this SceneManager and removes them from the
+	 * Calls {@link Scene#onDispose()} on all Scenes registered in this SceneManager and removes them from the
 	 * SceneManager.<br>
 	 * This SceneManager will be left empty.
 	 */

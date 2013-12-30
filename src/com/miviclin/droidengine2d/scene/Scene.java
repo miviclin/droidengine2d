@@ -56,6 +56,15 @@ public abstract class Scene {
 	}
 
 	/**
+	 * Calls {@link #onDispose()} to dispose this Scene.<br>
+	 * This method is called automatically when this Scene is unregistered from the SceneManager calling
+	 * {@link SceneManager#unregisterScene(int)} or when {@link SceneManager#dispose()} is called.
+	 */
+	public final void dispose() {
+		onDispose();
+	}
+
+	/**
 	 * Updates this Scene.<br>
 	 * This method is called from {@link SceneManager#update(float)} if this Scene is registered in the SceneManager.
 	 * 
@@ -97,9 +106,8 @@ public abstract class Scene {
 	public abstract void onResume();
 
 	/**
-	 * Disposes this Scene. All resources should be released in this method.<br>
-	 * This method is called automatically when this Scene is unregistered from the SceneManager calling
-	 * {@link SceneManager#unregisterScene(String)} or when {@link SceneManager#dispose()} is called.
+	 * All resources should be released in this method.<br>
+	 * This method is called from {@link #dispose()}.
 	 */
-	public abstract void dispose();
+	public abstract void onDispose();
 }
