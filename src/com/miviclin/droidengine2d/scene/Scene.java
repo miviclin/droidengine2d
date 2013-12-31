@@ -81,7 +81,8 @@ public abstract class Scene {
 	public abstract void draw(Graphics g);
 
 	/**
-	 * This method is called when this Scene is registered in the {@link SceneManager}.
+	 * This method is called when this Scene is registered in the {@link SceneManager}.<br>
+	 * Any initialization should be performed here.
 	 */
 	public abstract void onRegister();
 
