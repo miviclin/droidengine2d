@@ -77,6 +77,10 @@ public class SceneManager {
 	 */
 	public Scene unregisterScene(int sceneId) {
 		Scene scene = scenes.get(sceneId);
+		if (scene == activeScene) {
+			scene.onDeactivation();
+			activeScene = null;
+		}
 		if (scene != null) {
 			scene.dispose();
 			scenes.remove(sceneId);
