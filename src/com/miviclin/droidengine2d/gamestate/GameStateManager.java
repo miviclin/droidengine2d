@@ -35,8 +35,8 @@ public class GameStateManager {
 	}
 
 	/**
-	 * Registers an GameState in this GameStateManager using the specified gameStateId.<br>
-	 * If an GameState with the specified gameStateId was previously registered in this GameStateManager, it will be
+	 * Registers a GameState in this GameStateManager using the specified gameStateId.<br>
+	 * If a GameState with the specified gameStateId was previously registered in this GameStateManager, it will be
 	 * replaced by the new one.<br>
 	 * The active GameState will not change.
 	 * 
@@ -49,8 +49,8 @@ public class GameStateManager {
 	}
 
 	/**
-	 * Registers an GameState in this GameStateManager using the specified gameStateId.<br>
-	 * If an GameState with the specified gameStateId was previously registered in this GameStateManager, it will be
+	 * Registers a GameState in this GameStateManager using the specified gameStateId.<br>
+	 * If a GameState with the specified gameStateId was previously registered in this GameStateManager, it will be
 	 * replaced by the new one.
 	 * 
 	 * @param gameStateId Identifier of the GameState. It can be used to get the GameState from this GameStateManager
@@ -71,7 +71,7 @@ public class GameStateManager {
 
 	/**
 	 * Unregisters the specified GameState from this GameStateManager.<br>
-	 * If an GameState was registered with the specified gameStateId, {@link GameState#onDispose()} is called on the
+	 * If a GameState was registered with the specified gameStateId, {@link GameState#onDispose()} is called on the
 	 * GameState before it is removed from this GameStateManager.
 	 * 
 	 * @param gameStateId Identifier of the GameState.
