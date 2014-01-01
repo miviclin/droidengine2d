@@ -7,13 +7,13 @@ import android.view.View;
 import android.view.View.OnKeyListener;
 import android.view.View.OnTouchListener;
 
+import com.miviclin.droidengine2d.gamestate.GameState;
+import com.miviclin.droidengine2d.gamestate.GameStateManager;
 import com.miviclin.droidengine2d.graphics.GLView;
 import com.miviclin.droidengine2d.graphics.Graphics;
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
 import com.miviclin.droidengine2d.graphics.cameras.OrthographicCamera;
 import com.miviclin.droidengine2d.graphics.texture.TextureManager;
-import com.miviclin.droidengine2d.scene.Scene;
-import com.miviclin.droidengine2d.scene.SceneManager;
 
 /**
  * Game.
@@ -26,7 +26,7 @@ public abstract class Game implements OnTouchListener, OnKeyListener {
 	private final String name;
 	private final Activity activity;
 	private final TextureManager textureManager;
-	private final SceneManager sceneManager;
+	private final GameStateManager gameStateManager;
 	private GLView glView;
 	private Camera camera;
 	private boolean prepared;
@@ -59,7 +59,7 @@ public abstract class Game implements OnTouchListener, OnKeyListener {
 		this.activity = activity;
 		this.glView = glView;
 		this.textureManager = new TextureManager(activity);
-		this.sceneManager = new SceneManager();
+		this.gameStateManager = new GameStateManager();
 		this.camera = new OrthographicCamera();
 		this.prepared = false;
 		this.initialized = false;
@@ -145,12 +145,12 @@ public abstract class Game implements OnTouchListener, OnKeyListener {
 	}
 
 	/**
-	 * Returns the SceneManager.
+	 * Returns the GameStateManager.
 	 * 
-	 * @return SceneManager
+	 * @return GameStateManager
 	 */
-	public SceneManager getSceneManager() {
-		return sceneManager;
+	public GameStateManager getGameStateManager() {
+		return gameStateManager;
 	}
 
 	/**
@@ -175,17 +175,17 @@ public abstract class Game implements OnTouchListener, OnKeyListener {
 	}
 
 	/**
-	 * Returns true if the Game object has been initialized and is ready to initialize the Scenes. This method will
+	 * Returns true if the Game object has been initialized and is ready to initialize the GameStates. This method will
 	 * return true after {@link #prepare()} has been called.
 	 * 
-	 * @return true if it is safe to initialize the Scenes
+	 * @return true if it is safe to initialize the GameStates
 	 */
 	public boolean isPrepared() {
 		return prepared;
 	}
 
 	/**
-	 * This method should be called when the Game object has been initialized and is ready to initialize the Scenes.
+	 * This method should be called when the Game object has been initialized and is ready to initialize the GameStates.
 	 * 
 	 * @see Game#isPrepared()
 	 */
@@ -232,7 +232,7 @@ public abstract class Game implements OnTouchListener, OnKeyListener {
 	/**
 	 * This method is called when a touch event is dispatched to the GLView if the touch listener is enabled.<br>
 	 * In order to enable the touch listener, {@link Game#enableTouchListener()} should be called.<br>
-	 * Sets the current scene's touch controller MotionEvent.
+	 * Sets the current GameState's touch controller MotionEvent.
 	 * 
 	 * @param v View.
 	 * @param event MotionEvent.
@@ -240,9 +240,9 @@ public abstract class Game implements OnTouchListener, OnKeyListener {
 	 */
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
-		Scene activeScene = getSceneManager().getActiveScene();
-		if (activeScene != null) {
-			activeScene.getTouchController().setMotionEvent(event);
+		GameState activeGameState = getGameStateManager().getActiveGameState();
+		if (activeGameState != null) {
+			activeGameState.getTouchController().setMotionEvent(event);
 		}
 		return true;
 	}
@@ -250,7 +250,7 @@ public abstract class Game implements OnTouchListener, OnKeyListener {
 	/**
 	 * This method is called when a key event is dispatched to the GLView if the key listener is enabled.<br>
 	 * In order to enable the touch listener, {@link Game#enableKeyListener()} should be called.<br>
-	 * Sets the current scene's key controller MotionEvent.
+	 * Sets the current GameState's key controller MotionEvent.
 	 * 
 	 * @param v View.
 	 * @param keyCode KeyCode.
@@ -259,9 +259,9 @@ public abstract class Game implements OnTouchListener, OnKeyListener {
 	 */
 	@Override
 	public boolean onKey(View v, int keyCode, KeyEvent event) {
-		Scene activeScene = getSceneManager().getActiveScene();
-		if (activeScene != null) {
-			activeScene.getKeyController().setKeyEvent(keyCode, event);
+		GameState activeGameState = getGameStateManager().getActiveGameState();
+		if (activeGameState != null) {
+			activeGameState.getKeyController().setKeyEvent(keyCode, event);
 		}
 		return true;
 	}
@@ -279,7 +279,7 @@ public abstract class Game implements OnTouchListener, OnKeyListener {
 	 */
 	public void onEnginePaused() {
 		if (initialized) {
-			sceneManager.pause();
+			gameStateManager.pause();
 		}
 	}
 
@@ -288,7 +288,7 @@ public abstract class Game implements OnTouchListener, OnKeyListener {
 	 */
 	public void onEngineResumed() {
 		if (initialized) {
-			sceneManager.resume();
+			gameStateManager.resume();
 		}
 	}
 
@@ -297,7 +297,7 @@ public abstract class Game implements OnTouchListener, OnKeyListener {
 	 */
 	public void onEngineDisposed() {
 		if (initialized) {
-			sceneManager.dispose();
+			gameStateManager.dispose();
 		}
 	}
 
@@ -309,7 +309,7 @@ public abstract class Game implements OnTouchListener, OnKeyListener {
 	 */
 	public void update(float delta) {
 		if (initialized) {
-			sceneManager.update(delta);
+			gameStateManager.update(delta);
 		}
 		if (!initialized && prepared) {
 			initialize();
@@ -325,7 +325,7 @@ public abstract class Game implements OnTouchListener, OnKeyListener {
 	 */
 	public void draw(Graphics graphics) {
 		if (initialized) {
-			sceneManager.draw(graphics);
+			gameStateManager.draw(graphics);
 		}
 	}
 
