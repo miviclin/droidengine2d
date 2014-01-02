@@ -5,7 +5,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 
 /**
- * AccelerometerValuesListener
+ * AccelerometerValuesListener.
  * 
  * @author Miguel Vicente Linares
  * 
