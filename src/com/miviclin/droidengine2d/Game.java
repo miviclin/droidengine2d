@@ -242,7 +242,7 @@ public abstract class Game implements OnTouchListener, OnKeyListener {
 	public boolean onTouch(View v, MotionEvent event) {
 		GameState activeGameState = getGameStateManager().getActiveGameState();
 		if (activeGameState != null) {
-			activeGameState.getTouchController().setMotionEvent(event);
+			activeGameState.getInputManager().getTouchController().setMotionEvent(event);
 		}
 		return true;
 	}
@@ -261,7 +261,7 @@ public abstract class Game implements OnTouchListener, OnKeyListener {
 	public boolean onKey(View v, int keyCode, KeyEvent event) {
 		GameState activeGameState = getGameStateManager().getActiveGameState();
 		if (activeGameState != null) {
-			activeGameState.getKeyController().setKeyEvent(keyCode, event);
+			activeGameState.getInputManager().getKeyController().setKeyEvent(keyCode, event);
 		}
 		return true;
 	}
