@@ -1,5 +1,9 @@
 package com.miviclin.droidengine2d.input;
 
+import android.app.Activity;
+
+import com.miviclin.droidengine2d.input.sensor.Accelerometer;
+
 /**
  * InputManager.
  * 
@@ -10,10 +14,12 @@ public class InputManager {
 
 	private TouchController touchController;
 	private KeyController keyController;
+	private Accelerometer accelerometer;
 
-	public InputManager() {
+	public InputManager(Activity activity) {
 		this.touchController = new TouchController();
 		this.keyController = new KeyController();
+		this.accelerometer = new Accelerometer(0.2f, activity, false);
 	}
 
 	/**
@@ -26,7 +32,7 @@ public class InputManager {
 	}
 
 	/**
-	 * Returns the TouchController of this GameState.
+	 * Returns the TouchController.
 	 * 
 	 * @return TouchController
 	 */
@@ -35,7 +41,7 @@ public class InputManager {
 	}
 
 	/**
-	 * Returns the KeyController of this GameState.
+	 * Returns the KeyController.
 	 * 
 	 * @return KeyController
 	 */
@@ -43,4 +49,12 @@ public class InputManager {
 		return keyController;
 	}
 
+	/**
+	 * Returns the Accelerometer.
+	 * 
+	 * @return Accelerometer
+	 */
+	public Accelerometer getAccelerometer() {
+		return accelerometer;
+	}
 }

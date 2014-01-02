@@ -22,7 +22,7 @@ public abstract class GameState {
 	 */
 	public GameState(Game game) {
 		this.game = game;
-		this.inputManager = new InputManager();
+		this.inputManager = new InputManager(game.getActivity());
 	}
 
 	/**
