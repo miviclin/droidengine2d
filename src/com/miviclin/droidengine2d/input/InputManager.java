@@ -24,7 +24,7 @@ public class InputManager {
 	}
 
 	/**
-	 * Processes all input.<br>
+	 * Processes touch and key input.<br>
 	 * This method should be called when the game updates, before the update is processed.
 	 */
 	public void processInput() {

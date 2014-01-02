@@ -15,10 +15,11 @@ import android.hardware.SensorManager;
 public class AccelerometerController {
 
 	private SensorManager sensorManager;
-	private SensorEventListener listener;
+	private AccelerometerValuesListener valuesListener;
+	private SensorEventListener customListener;
 
 	/**
-	 * Creates an AccelerometerController.
+	 * Creates an AccelerometerController with an AccelerometerValuesListener.
 	 * 
 	 * @param activity Activity.
 	 */
@@ -27,23 +28,25 @@ public class AccelerometerController {
 	}
 
 	/**
-	 * Creates an AccelerometerController with the specified listener.
+	 * Creates an AccelerometerController with an AccelerometerValuesListener and the specified listener.
 	 * 
 	 * @param activity Activity.
-	 * @param listener SensorEventListener.
+	 * @param customListener SensorEventListener.
 	 */
-	public AccelerometerController(Activity activity, SensorEventListener listener) {
+	public AccelerometerController(Activity activity, SensorEventListener customListener) {
 		this.sensorManager = (SensorManager) activity.getSystemService(Context.SENSOR_SERVICE);
-		this.listener = listener;
+		this.valuesListener = new AccelerometerValuesListener(0.2f);
+		this.customListener = customListener;
 	}
 
 	/**
 	 * Starts listening the accelerometer.
 	 */
 	public void startListening() {
-		if (listener != null) {
-			Sensor accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-			sensorManager.registerListener(listener, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
+		Sensor accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+		sensorManager.registerListener(valuesListener, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
+		if (customListener != null) {
+			sensorManager.registerListener(customListener, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
 		}
 	}
 
@@ -51,27 +54,37 @@ public class AccelerometerController {
 	 * Stops listening the accelerometer.
 	 */
 	public void stopListening() {
-		if (listener != null) {
-			sensorManager.unregisterListener(listener);
+		sensorManager.unregisterListener(valuesListener);
+		if (customListener != null) {
+			sensorManager.unregisterListener(customListener);
 		}
 	}
 
 	/**
-	 * Returns the listener.
+	 * Returns the AccelerometerValuesListener.
 	 * 
-	 * @return SensorEventListener
+	 * @return AccelerometerValuesListener
 	 */
-	public SensorEventListener getListener() {
-		return listener;
+	public AccelerometerValuesListener getValuesListener() {
+		return valuesListener;
 	}
 
 	/**
-	 * Sets the listener.
+	 * Returns the custom listener.
+	 * 
+	 * @return SensorEventListener
+	 */
+	public SensorEventListener getCustomListener() {
+		return customListener;
+	}
+
+	/**
+	 * Sets the custom listener.
 	 * 
 	 * @param listener SensorEventListener.
 	 */
-	public void setListener(SensorEventListener listener) {
-		this.listener = listener;
+	public void setCustomListener(SensorEventListener listener) {
+		this.customListener = listener;
 	}
 
 }
