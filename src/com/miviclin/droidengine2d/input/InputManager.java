@@ -24,7 +24,7 @@ public class InputManager {
 	 */
 	public InputManager(Activity activity) {
 		this.touchController = new TouchController();
-		this.keyController = new KeyController();
+		this.keyController = new KeyController(activity);
 		this.accelerometerController = new AccelerometerController(activity, new AccelerometerValuesListener(0.2f));
 	}
 

@@ -14,6 +14,7 @@ import com.miviclin.droidengine2d.graphics.Graphics;
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
 import com.miviclin.droidengine2d.graphics.cameras.OrthographicCamera;
 import com.miviclin.droidengine2d.graphics.texture.TextureManager;
+import com.miviclin.droidengine2d.input.KeyController;
 
 /**
  * Game.
@@ -268,10 +269,16 @@ public abstract class Game implements OnTouchListener, OnKeyListener {
 
 	/**
 	 * This method is called from {@link Engine#onBackPressed()}.<br>
-	 * Destroys the Activity where this Game is running.
+	 * Calls {@link KeyController#onBackPressed()} if the active GameState is not null. Finishes the current Activity
+	 * otherwise.
 	 */
 	public void onBackPressed() {
-		getActivity().finish();
+		GameState activeGameState = getGameStateManager().getActiveGameState();
+		if (activeGameState != null) {
+			activeGameState.getInputManager().getKeyController().onBackPressed();
+		} else {
+			activity.finish();
+		}
 	}
 
 	/**

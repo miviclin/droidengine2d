@@ -1,6 +1,9 @@
 package com.miviclin.droidengine2d.input;
 
+import android.app.Activity;
 import android.view.KeyEvent;
+
+import com.miviclin.droidengine2d.Game;
 
 /**
  * KeyController.
@@ -14,15 +17,19 @@ public class KeyController {
 	private volatile int keyCode;
 	private volatile KeyEvent keyEvent;
 	private KeyListener keyListener;
+	private boolean defaultOnBackPressedEnabled;
+	private Activity activity;
 
 	/**
 	 * Creates a new KeyController.
 	 */
-	public KeyController() {
+	public KeyController(Activity activity) {
 		this.keyDetected = false;
 		this.keyCode = -1;
 		this.keyEvent = null;
 		this.keyListener = null;
+		this.defaultOnBackPressedEnabled = true;
+		this.activity = activity;
 	}
 
 	/**
@@ -59,6 +66,30 @@ public class KeyController {
 			keyListener.onKey(keyCode, keyEvent);
 		}
 		keyDetected = false;
+	}
+
+	/**
+	 * Enables the default behavior of {@link #onBackPressed()}.
+	 */
+	public void enableDefaultOnBackPressed() {
+		this.defaultOnBackPressedEnabled = true;
+	}
+
+	/**
+	 * Disables the default behavior of {@link #onBackPressed()}.
+	 */
+	public void disableDefaultOnBackPressed() {
+		this.defaultOnBackPressedEnabled = false;
+	}
+
+	/**
+	 * This method is called from {@link Game#onBackPressed()}.<br>
+	 * The default implementation simply finishes the current activity.
+	 */
+	public void onBackPressed() {
+		if (defaultOnBackPressedEnabled) {
+			activity.finish();
+		}
 	}
 
 }
