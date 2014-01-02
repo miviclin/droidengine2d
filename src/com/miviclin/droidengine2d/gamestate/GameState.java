@@ -2,8 +2,7 @@ package com.miviclin.droidengine2d.gamestate;
 
 import com.miviclin.droidengine2d.Game;
 import com.miviclin.droidengine2d.graphics.Graphics;
-import com.miviclin.droidengine2d.input.KeyController;
-import com.miviclin.droidengine2d.input.TouchController;
+import com.miviclin.droidengine2d.input.InputManager;
 
 /**
  * GameState represents a level, menu, screen... of the game.
@@ -14,8 +13,7 @@ import com.miviclin.droidengine2d.input.TouchController;
 public abstract class GameState {
 
 	private final Game game;
-	private TouchController touchController;
-	private KeyController keyController;
+	private InputManager inputManager;
 
 	/**
 	 * Creates a new GameState.
@@ -24,8 +22,7 @@ public abstract class GameState {
 	 */
 	public GameState(Game game) {
 		this.game = game;
-		this.touchController = new TouchController();
-		this.keyController = new KeyController();
+		this.inputManager = new InputManager(game.getActivity());
 	}
 
 	/**
@@ -38,21 +35,12 @@ public abstract class GameState {
 	}
 
 	/**
-	 * Returns the TouchController of this GameState.
+	 * Returns the InputManager.
 	 * 
-	 * @return TouchController
+	 * @return InputManager
 	 */
-	public TouchController getTouchController() {
-		return touchController;
-	}
-
-	/**
-	 * Returns the KeyController of this GameState.
-	 * 
-	 * @return KeyController
-	 */
-	public KeyController getKeyController() {
-		return keyController;
+	public InputManager getInputManager() {
+		return inputManager;
 	}
 
 	/**
