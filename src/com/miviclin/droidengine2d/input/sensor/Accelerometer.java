@@ -39,8 +39,24 @@ public class Accelerometer implements SensorEventListener {
 		accelerometerValues = new float[3];
 		sensorManager = (SensorManager) activity.getSystemService(Context.SENSOR_SERVICE);
 
-		Sensor accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-		sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
+		startListeningAccelerometer();
+	}
+
+	/**
+	 * Creates an Accelerometer.
+	 * 
+	 * @param lowPassFilterAttenuation Low pass filter attenuation value.
+	 * @param activity Activity.
+	 * @param startListening True to start listening sensor changes.
+	 */
+	public Accelerometer(float lowPassFilterAttenuation, Activity activity, boolean startListening) {
+		this.lowPassFilterAttenuation = lowPassFilterAttenuation;
+		accelerometerValues = new float[3];
+		sensorManager = (SensorManager) activity.getSystemService(Context.SENSOR_SERVICE);
+
+		if (startListening) {
+			startListeningAccelerometer();
+		}
 	}
 
 	@Override
@@ -58,6 +74,13 @@ public class Accelerometer implements SensorEventListener {
 	 * Starts listening the accelerometer.
 	 */
 	public void startListening() {
+		startListeningAccelerometer();
+	}
+
+	/**
+	 * Starts listening the accelerometer. Internal implementation.
+	 */
+	private void startListeningAccelerometer() {
 		Sensor accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 		sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
 	}
