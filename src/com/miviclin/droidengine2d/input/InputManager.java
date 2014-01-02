@@ -17,6 +17,15 @@ public class InputManager {
 	}
 
 	/**
+	 * Processes all input.<br>
+	 * This method should be called when the game updates, before the update is processed.
+	 */
+	public void processInput() {
+		touchController.processTouchInput();
+		keyController.processKeyInput();
+	}
+
+	/**
 	 * Returns the TouchController of this GameState.
 	 * 
 	 * @return TouchController
