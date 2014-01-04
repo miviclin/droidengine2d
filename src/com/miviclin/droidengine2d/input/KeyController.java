@@ -17,7 +17,6 @@ public class KeyController {
 	private volatile int keyCode;
 	private volatile KeyEvent keyEvent;
 	private KeyListener keyListener;
-	private boolean defaultOnBackPressedEnabled;
 	private Activity activity;
 
 	/**
@@ -28,7 +27,6 @@ public class KeyController {
 		this.keyCode = -1;
 		this.keyEvent = null;
 		this.keyListener = null;
-		this.defaultOnBackPressedEnabled = true;
 		this.activity = activity;
 	}
 
@@ -63,23 +61,12 @@ public class KeyController {
 	 */
 	public void processKeyInput() {
 		if ((keyListener != null) && keyDetected) {
-			keyListener.onKey(keyCode, keyEvent);
+			boolean consumed = keyListener.onKey(keyCode, keyEvent);
+			if (!consumed && (keyCode == KeyEvent.KEYCODE_BACK)) {
+				onBackPressed();
+			}
 		}
 		keyDetected = false;
-	}
-
-	/**
-	 * Enables the default behavior of {@link #onBackPressed()}.
-	 */
-	public void enableDefaultOnBackPressed() {
-		this.defaultOnBackPressedEnabled = true;
-	}
-
-	/**
-	 * Disables the default behavior of {@link #onBackPressed()}.
-	 */
-	public void disableDefaultOnBackPressed() {
-		this.defaultOnBackPressedEnabled = false;
 	}
 
 	/**
@@ -87,9 +74,7 @@ public class KeyController {
 	 * The default implementation simply finishes the current activity.
 	 */
 	public void onBackPressed() {
-		if (defaultOnBackPressedEnabled) {
-			activity.finish();
-		}
+		activity.finish();
 	}
 
 }

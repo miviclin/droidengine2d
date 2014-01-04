@@ -130,7 +130,7 @@ public class Engine {
 	 * This method should be called from {@link Activity#onBackPressed()}
 	 */
 	public void onBackPressed() {
-		game.onBackPressed();
+		game.getGameInputManager().onBackPressed(game.getActivity());
 	}
 
 	/**

@@ -1,20 +1,14 @@
 package com.miviclin.droidengine2d;
 
 import android.app.Activity;
-import android.view.KeyEvent;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.View.OnKeyListener;
-import android.view.View.OnTouchListener;
 
-import com.miviclin.droidengine2d.gamestate.GameState;
-import com.miviclin.droidengine2d.gamestate.GameStateManager;
 import com.miviclin.droidengine2d.graphics.GLView;
 import com.miviclin.droidengine2d.graphics.Graphics;
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
 import com.miviclin.droidengine2d.graphics.cameras.OrthographicCamera;
 import com.miviclin.droidengine2d.graphics.texture.TextureManager;
-import com.miviclin.droidengine2d.input.KeyController;
+import com.miviclin.droidengine2d.input.GameInputManager;
+import com.miviclin.droidengine2d.screen.ScreenManager;
 
 /**
  * Game.
@@ -22,18 +16,17 @@ import com.miviclin.droidengine2d.input.KeyController;
  * @author Miguel Vicente Linares
  * 
  */
-public abstract class Game implements OnTouchListener, OnKeyListener {
+public abstract class Game {
 
 	private final String name;
 	private final Activity activity;
 	private final TextureManager textureManager;
-	private final GameStateManager gameStateManager;
+	private final ScreenManager screenManager;
+	private final GameInputManager gameInputManager;
 	private GLView glView;
 	private Camera camera;
 	private boolean prepared;
 	private volatile boolean initialized;
-	private boolean onTouchListener;
-	private boolean onKeyListener;
 
 	/**
 	 * Creates a Game with the specified name.
@@ -53,19 +46,30 @@ public abstract class Game implements OnTouchListener, OnKeyListener {
 	 * @param activity Activity where the Game runs
 	 */
 	public Game(String name, GLView glView, Activity activity) {
+		this(name, new GameInputManager(glView), activity);
+	}
+
+	/**
+	 * Creates a Game with the specified name and GLView.
+	 * 
+	 * @param name Name of the Game
+	 * @param gameInputManager GameInputManager. The Game will be redered in the GLView of this GameInputManager.
+	 * @param activity Activity where the Game runs
+	 */
+	public Game(String name, GameInputManager gameInputManager, Activity activity) {
 		if (activity == null) {
 			throw new IllegalArgumentException("The Activity can not be null");
 		}
 		this.name = name;
 		this.activity = activity;
-		this.glView = glView;
+		this.glView = gameInputManager.getGLView();
 		this.textureManager = new TextureManager(activity);
-		this.gameStateManager = new GameStateManager();
+		this.gameInputManager = gameInputManager;
+		this.screenManager = new ScreenManager();
+		this.screenManager.addOnScreenChangeListener(gameInputManager);
 		this.camera = new OrthographicCamera();
 		this.prepared = false;
 		this.initialized = false;
-		this.onTouchListener = false;
-		this.onKeyListener = false;
 	}
 
 	/**
@@ -87,24 +91,6 @@ public abstract class Game implements OnTouchListener, OnKeyListener {
 	}
 
 	/**
-	 * Returns the width of the View where the game is rendered.
-	 * 
-	 * @return width of the View where the game is rendered
-	 */
-	public int getGameViewWidth() {
-		return glView.getWidth();
-	}
-
-	/**
-	 * Returns the height of the View where the game is rendered.
-	 * 
-	 * @return height of the View where the game is rendered
-	 */
-	public int getGameViewHeight() {
-		return glView.getHeight();
-	}
-
-	/**
 	 * Returns the GLView where the game is rendered.<br>
 	 * This method is only visible to the famework because it is only needed to set up the GLView.
 	 * 
@@ -118,22 +104,11 @@ public abstract class Game implements OnTouchListener, OnKeyListener {
 	 * Sets a new GLView. All listeners in the old GLView will be linked to the new one.<br>
 	 * This method is only visible to the famework because it is only needed to set up the GLView.
 	 * 
-	 * @param nuevo GLView
+	 * @param glView GLView.
 	 */
 	void setGLView(GLView glView) {
-		boolean onTouchListener = this.onTouchListener;
-		boolean onKeyListener = this.onKeyListener;
-		if (this.glView != null) {
-			disableTouchListener();
-			disableKeyListener();
-		}
 		this.glView = glView;
-		if (onTouchListener) {
-			enableTouchListener();
-		}
-		if (onKeyListener) {
-			enableKeyListener();
-		}
+		gameInputManager.setGLView(glView);
 	}
 
 	/**
@@ -146,12 +121,21 @@ public abstract class Game implements OnTouchListener, OnKeyListener {
 	}
 
 	/**
-	 * Returns the GameStateManager.
+	 * Returns the ScreenManager.
 	 * 
-	 * @return GameStateManager
+	 * @return ScreenManager
 	 */
-	public GameStateManager getGameStateManager() {
-		return gameStateManager;
+	public ScreenManager getScreenManager() {
+		return screenManager;
+	}
+
+	/**
+	 * Returns the GameInputManager.
+	 * 
+	 * @return GameInputManager
+	 */
+	public GameInputManager getGameInputManager() {
+		return gameInputManager;
 	}
 
 	/**
@@ -176,17 +160,17 @@ public abstract class Game implements OnTouchListener, OnKeyListener {
 	}
 
 	/**
-	 * Returns true if the Game object has been initialized and is ready to initialize the GameStates. This method will
+	 * Returns true if the Game object has been initialized and is ready to initialize the Screens. This method will
 	 * return true after {@link #prepare()} has been called.
 	 * 
-	 * @return true if it is safe to initialize the GameStates
+	 * @return true if it is safe to initialize the Screens
 	 */
 	public boolean isPrepared() {
 		return prepared;
 	}
 
 	/**
-	 * This method should be called when the Game object has been initialized and is ready to initialize the GameStates.
+	 * This method should be called when the Game object has been initialized and is ready to initialize the Screens.
 	 * 
 	 * @see Game#isPrepared()
 	 */
@@ -195,98 +179,11 @@ public abstract class Game implements OnTouchListener, OnKeyListener {
 	}
 
 	/**
-	 * Registers a touch listener.<br>
-	 * This Game will listen touch events dispatched to its associated GLView.
-	 */
-	public void enableTouchListener() {
-		glView.setOnTouchListener(this);
-		onTouchListener = true;
-	}
-
-	/**
-	 * If this Game has an enabled touch listener, it will be disabled.<br>
-	 * This Game will no longer listen touch events.
-	 */
-	public void disableTouchListener() {
-		glView.setOnTouchListener(null);
-		onTouchListener = false;
-	}
-
-	/**
-	 * Registers a key listener.<br>
-	 * This Game will listen key events dispatched to its associated GLView.
-	 */
-	public void enableKeyListener() {
-		glView.setOnKeyListener(this);
-		onKeyListener = true;
-	}
-
-	/**
-	 * If this Game has an enabled key listener, it will be disabled.<br>
-	 * This Game will no longer listen key events.
-	 */
-	public void disableKeyListener() {
-		glView.setOnKeyListener(null);
-		onKeyListener = false;
-	}
-
-	/**
-	 * This method is called when a touch event is dispatched to the GLView if the touch listener is enabled.<br>
-	 * In order to enable the touch listener, {@link Game#enableTouchListener()} should be called.<br>
-	 * Sets the current GameState's touch controller MotionEvent.
-	 * 
-	 * @param v View.
-	 * @param event MotionEvent.
-	 * @return true by default (the Game will consume all events).
-	 */
-	@Override
-	public boolean onTouch(View v, MotionEvent event) {
-		GameState activeGameState = getGameStateManager().getActiveGameState();
-		if (activeGameState != null) {
-			activeGameState.getInputManager().getTouchController().setMotionEvent(event);
-		}
-		return true;
-	}
-
-	/**
-	 * This method is called when a key event is dispatched to the GLView if the key listener is enabled.<br>
-	 * In order to enable the touch listener, {@link Game#enableKeyListener()} should be called.<br>
-	 * Sets the current GameState's key controller MotionEvent.
-	 * 
-	 * @param v View.
-	 * @param keyCode KeyCode.
-	 * @param event KeyEvent.
-	 * @return true by default (the Game will consume all events).
-	 */
-	@Override
-	public boolean onKey(View v, int keyCode, KeyEvent event) {
-		GameState activeGameState = getGameStateManager().getActiveGameState();
-		if (activeGameState != null) {
-			activeGameState.getInputManager().getKeyController().setKeyEvent(keyCode, event);
-		}
-		return true;
-	}
-
-	/**
-	 * This method is called from {@link Engine#onBackPressed()}.<br>
-	 * Calls {@link KeyController#onBackPressed()} if the active GameState is not null. Finishes the current Activity
-	 * otherwise.
-	 */
-	public void onBackPressed() {
-		GameState activeGameState = getGameStateManager().getActiveGameState();
-		if (activeGameState != null) {
-			activeGameState.getInputManager().getKeyController().onBackPressed();
-		} else {
-			activity.finish();
-		}
-	}
-
-	/**
 	 * This method is called when the GameThread is paused, usually when {@link Activity#onPause()} is called.
 	 */
 	public void onEnginePaused() {
 		if (initialized) {
-			gameStateManager.pause();
+			screenManager.pause();
 		}
 	}
 
@@ -295,7 +192,7 @@ public abstract class Game implements OnTouchListener, OnKeyListener {
 	 */
 	public void onEngineResumed() {
 		if (initialized) {
-			gameStateManager.resume();
+			screenManager.resume();
 		}
 	}
 
@@ -304,7 +201,7 @@ public abstract class Game implements OnTouchListener, OnKeyListener {
 	 */
 	public void onEngineDisposed() {
 		if (initialized) {
-			gameStateManager.dispose();
+			screenManager.dispose();
 		}
 	}
 
@@ -316,10 +213,10 @@ public abstract class Game implements OnTouchListener, OnKeyListener {
 	 */
 	public void update(float delta) {
 		if (initialized) {
-			gameStateManager.update(delta);
+			screenManager.update(delta);
 		}
 		if (!initialized && prepared) {
-			initialize();
+			initialize(glView.getWidth(), glView.getHeight());
 			initialized = true;
 		}
 	}
@@ -332,13 +229,16 @@ public abstract class Game implements OnTouchListener, OnKeyListener {
 	 */
 	public void draw(Graphics graphics) {
 		if (initialized) {
-			gameStateManager.draw(graphics);
+			screenManager.draw(graphics);
 		}
 	}
 
 	/**
 	 * Initializes the Game objects.
+	 * 
+	 * @param viewWidth Width of the view where the game is going to be rendered.
+	 * @param viewHeight Height of the view where the game is going to be rendered.
 	 */
-	public abstract void initialize();
+	public abstract void initialize(float viewWidth, float viewHeight);
 
 }

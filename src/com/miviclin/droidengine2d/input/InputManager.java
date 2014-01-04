@@ -23,8 +23,19 @@ public class InputManager {
 	 * @param activity Activity.
 	 */
 	public InputManager(Activity activity) {
-		this.touchController = new TouchController();
-		this.keyController = new KeyController(activity);
+		this(activity, new TouchController(), new KeyController(activity));
+	}
+
+	/**
+	 * Creates a new InputManager.
+	 * 
+	 * @param activity Activity.
+	 * @param touchController TouchController.
+	 * @param keyController KeyController.
+	 */
+	public InputManager(Activity activity, TouchController touchController, KeyController keyController) {
+		this.touchController = touchController;
+		this.keyController = keyController;
 		this.accelerometerController = new AccelerometerController(activity, new AccelerometerValuesListener(0.2f));
 	}
 
