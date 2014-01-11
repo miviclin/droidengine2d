@@ -5,6 +5,7 @@ import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.view.KeyEvent;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
@@ -83,6 +84,22 @@ public abstract class EngineActivity extends FragmentActivity {
 		if (engine != null) {
 			engine.onDestroy();
 		}
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (engine != null) {
+			return engine.getGame().getGameInputManager().onKeyDown(keyCode, event);
+		}
+		return super.onKeyDown(keyCode, event);
+	}
+
+	@Override
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
+		if (engine != null) {
+			return engine.getGame().getGameInputManager().onKeyUp(keyCode, event);
+		}
+		return super.onKeyUp(keyCode, event);
 	}
 
 	@Override

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnKeyListener;
 import android.view.View.OnTouchListener;
 
 import com.miviclin.droidengine2d.Engine;
@@ -12,7 +11,7 @@ import com.miviclin.droidengine2d.graphics.GLView;
 import com.miviclin.droidengine2d.screen.OnScreenChangeListener;
 import com.miviclin.droidengine2d.screen.Screen;
 
-public class GameInputManager implements OnScreenChangeListener, OnTouchListener, OnKeyListener {
+public class GameInputManager implements OnScreenChangeListener, OnTouchListener {
 
 	private GLView glView;
 	private InputManager currentInputManager;
@@ -20,7 +19,7 @@ public class GameInputManager implements OnScreenChangeListener, OnTouchListener
 	public GameInputManager(GLView glView) {
 		this.glView = glView;
 		this.currentInputManager = null;
-		setGLViewInputListeners();
+		this.glView.setOnTouchListener(this);
 	}
 
 	@Override
@@ -32,17 +31,24 @@ public class GameInputManager implements OnScreenChangeListener, OnTouchListener
 	public boolean onTouch(View v, MotionEvent event) {
 		if (currentInputManager != null) {
 			currentInputManager.getTouchController().setMotionEvent(event);
+			currentInputManager.getTouchController().processTouchInput();
 			return true;
 		}
 		return false;
 	}
 
-	@Override
-	public boolean onKey(View v, int keyCode, KeyEvent event) {
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (currentInputManager != null) {
 			currentInputManager.getKeyController().setKeyEvent(keyCode, event);
 		}
-		return false;
+		return true;
+	}
+
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
+		if (currentInputManager != null) {
+			currentInputManager.getKeyController().setKeyEvent(keyCode, event);
+		}
+		return true;
 	}
 
 	/**
@@ -66,16 +72,7 @@ public class GameInputManager implements OnScreenChangeListener, OnTouchListener
 
 	public void setGLView(GLView glView) {
 		this.glView = glView;
-		setupGLViewInputListeners();
-	}
-
-	public void setupGLViewInputListeners() {
-		setGLViewInputListeners();
-	}
-
-	public void setGLViewInputListeners() {
 		glView.setOnTouchListener(this);
-		glView.setOnKeyListener(this);
 	}
 
 }
