@@ -2,6 +2,8 @@ package com.miviclin.droidengine2d.input;
 
 import android.view.MotionEvent;
 
+import com.miviclin.collections.PooledLinkedQueue;
+
 /**
  * TouchController.
  * 
@@ -10,51 +12,58 @@ import android.view.MotionEvent;
  */
 public class TouchController {
 
-	private volatile boolean touchDetected;
-	private volatile MotionEvent motionEvent;
-	private TouchListener touchListener;
+	private final Object motionEventQueueLock = new Object();
+
+	private TouchInputProcessor touchInputProcessor;
+	private PooledLinkedQueue<MotionEvent> motionEventQueue;
 
 	/**
 	 * Creates a new TouchController.
 	 */
 	public TouchController() {
-		this.touchDetected = false;
-		this.motionEvent = null;
-		this.touchListener = null;
+		this.touchInputProcessor = null;
+		this.motionEventQueue = new PooledLinkedQueue<MotionEvent>(60);
 	}
 
 	/**
-	 * Sets the MotionEvent of this TouchController. The MotionEvent will be later used when this TouchController calls
-	 * {@link TouchListener#onTouch(MotionEvent)}.
+	 * Queues a MotionEvent for later processing. The event will be recycled when
+	 * {@link TouchController#processTouchInput()} is called.
 	 * 
 	 * @param motionEvent MotionEvent.
 	 */
-	public void setMotionEvent(MotionEvent motionEvent) {
-		this.motionEvent = motionEvent;
+	public void queueMotionEvent(MotionEvent motionEvent) {
 		if (motionEvent != null) {
-			touchDetected = true;
+			synchronized (motionEventQueueLock) {
+				motionEventQueue.add(motionEvent);
+			}
 		}
-	}
-
-	/**
-	 * Sets the {@link TouchListener} of this TouchController.
-	 * 
-	 * @param touchListener TouchListener.
-	 */
-	public void setTouchListener(TouchListener touchListener) {
-		this.touchListener = touchListener;
 	}
 
 	/**
 	 * Processes touch input.<br>
-	 * This method should be called when the game updates, before the update is processed. If a touch event has
-	 * happened, this method will call {@link TouchListener#onTouch(MotionEvent)}.
+	 * This method should be called when the game updates, before the update is processed.<br>
+	 * {@link TouchInputProcessor#processMotionEvent(MotionEvent)} will be called once per MotionEvent queued in this
+	 * TouchController. After that call, {@link MotionEvent#recycle()} will be called on the MotionEvent.
 	 */
 	public void processTouchInput() {
-		if ((touchListener != null) && touchDetected) {
-			touchListener.onTouch(motionEvent);
+		if (touchInputProcessor != null) {
+			MotionEvent motionEvent;
+			synchronized (motionEventQueueLock) {
+				while ((motionEvent = motionEventQueue.poll()) != null) {
+					touchInputProcessor.processMotionEvent(motionEvent);
+					motionEvent.recycle();
+				}
+			}
 		}
-		touchDetected = false;
+	}
+
+	/**
+	 * Sets the {@link TouchInputProcessor} of this TouchController.
+	 * 
+	 * @param touchInputProcessor TouchListener.
+	 */
+	public void setTouchInputProcessor(TouchInputProcessor touchInputProcessor) {
+		this.touchInputProcessor = touchInputProcessor;
 	}
 
 }

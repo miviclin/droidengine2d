@@ -1,5 +1,6 @@
 package com.miviclin.droidengine2d.input;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -27,14 +28,14 @@ public class GameInputManager implements OnScreenChangeListener, OnTouchListener
 		this.currentScreenInputManager = currentScreen.getInputManager();
 	}
 
+	@SuppressLint("Recycle")
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
 		if (currentScreenInputManager != null) {
-			currentScreenInputManager.getTouchController().setMotionEvent(event);
-			currentScreenInputManager.getTouchController().processTouchInput();
-			return true;
+			MotionEvent motionEventToQueue = MotionEvent.obtain(event);
+			currentScreenInputManager.getTouchController().queueMotionEvent(motionEventToQueue);
 		}
-		return false;
+		return true;
 	}
 
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
