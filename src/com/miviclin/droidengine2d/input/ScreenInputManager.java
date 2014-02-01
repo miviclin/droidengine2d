@@ -11,7 +11,7 @@ import com.miviclin.droidengine2d.input.sensor.AccelerometerValuesListener;
  * @author Miguel Vicente Linares
  * 
  */
-public class InputManager {
+public class ScreenInputManager {
 
 	private TouchController touchController;
 	private KeyController keyController;
@@ -22,7 +22,7 @@ public class InputManager {
 	 * 
 	 * @param activity Activity.
 	 */
-	public InputManager(Activity activity) {
+	public ScreenInputManager(Activity activity) {
 		this(activity, new TouchController(), new KeyController(activity));
 	}
 
@@ -33,7 +33,7 @@ public class InputManager {
 	 * @param touchController TouchController.
 	 * @param keyController KeyController.
 	 */
-	public InputManager(Activity activity, TouchController touchController, KeyController keyController) {
+	public ScreenInputManager(Activity activity, TouchController touchController, KeyController keyController) {
 		this.touchController = touchController;
 		this.keyController = keyController;
 		this.accelerometerController = new AccelerometerController(activity, new AccelerometerValuesListener(0.2f));

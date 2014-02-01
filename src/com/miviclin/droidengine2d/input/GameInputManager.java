@@ -14,39 +14,39 @@ import com.miviclin.droidengine2d.screen.Screen;
 public class GameInputManager implements OnScreenChangeListener, OnTouchListener {
 
 	private GLView glView;
-	private InputManager currentInputManager;
+	private ScreenInputManager currentScreenInputManager;
 
 	public GameInputManager(GLView glView) {
 		this.glView = glView;
-		this.currentInputManager = null;
+		this.currentScreenInputManager = null;
 		this.glView.setOnTouchListener(this);
 	}
 
 	@Override
 	public void onScreenChange(Screen previousScreen, Screen currentScreen) {
-		this.currentInputManager = currentScreen.getInputManager();
+		this.currentScreenInputManager = currentScreen.getInputManager();
 	}
 
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
-		if (currentInputManager != null) {
-			currentInputManager.getTouchController().setMotionEvent(event);
-			currentInputManager.getTouchController().processTouchInput();
+		if (currentScreenInputManager != null) {
+			currentScreenInputManager.getTouchController().setMotionEvent(event);
+			currentScreenInputManager.getTouchController().processTouchInput();
 			return true;
 		}
 		return false;
 	}
 
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (currentInputManager != null) {
-			currentInputManager.getKeyController().setKeyEvent(keyCode, event);
+		if (currentScreenInputManager != null) {
+			currentScreenInputManager.getKeyController().setKeyEvent(keyCode, event);
 		}
 		return true;
 	}
 
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
-		if (currentInputManager != null) {
-			currentInputManager.getKeyController().setKeyEvent(keyCode, event);
+		if (currentScreenInputManager != null) {
+			currentScreenInputManager.getKeyController().setKeyEvent(keyCode, event);
 		}
 		return true;
 	}
@@ -59,8 +59,8 @@ public class GameInputManager implements OnScreenChangeListener, OnTouchListener
 	 * @param activity Activity where the Game is running at.
 	 */
 	public void onBackPressed(Activity activity) {
-		if (currentInputManager != null) {
-			currentInputManager.getKeyController().onBackPressed();
+		if (currentScreenInputManager != null) {
+			currentScreenInputManager.getKeyController().onBackPressed();
 		} else {
 			activity.finish();
 		}
