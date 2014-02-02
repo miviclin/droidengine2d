@@ -126,14 +126,6 @@ public class Engine {
 	}
 
 	/**
-	 * Allows intercepting the back button.<br>
-	 * This method should be called from {@link Activity#onBackPressed()}
-	 */
-	public void onBackPressed() {
-		game.getGameInputManager().onBackPressed(game.getActivity());
-	}
-
-	/**
 	 * EngineBuilder is used to build the {@link Engine}.
 	 * 
 	 * @author Miguel Vicente Linares

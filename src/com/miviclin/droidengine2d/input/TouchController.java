@@ -26,15 +26,16 @@ public class TouchController {
 	}
 
 	/**
-	 * Queues a MotionEvent for later processing. The event will be recycled when
+	 * Queues a copy of the specified MotionEvent for later processing. The event will be recycled when
 	 * {@link TouchController#processTouchInput()} is called.
 	 * 
 	 * @param motionEvent MotionEvent.
 	 */
-	public void queueMotionEvent(MotionEvent motionEvent) {
+	public void queueCopyOfMotionEvent(MotionEvent motionEvent) {
 		if (motionEvent != null) {
 			synchronized (motionEventQueueLock) {
-				motionEventQueue.add(motionEvent);
+				MotionEvent motionEventToQueue = MotionEvent.obtain(motionEvent);
+				motionEventQueue.add(motionEventToQueue);
 			}
 		}
 	}

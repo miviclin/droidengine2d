@@ -1,22 +1,31 @@
 package com.miviclin.droidengine2d.input;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 
-import com.miviclin.droidengine2d.Engine;
+import com.miviclin.droidengine2d.EngineActivity;
 import com.miviclin.droidengine2d.graphics.GLView;
 import com.miviclin.droidengine2d.screen.OnScreenChangeListener;
 import com.miviclin.droidengine2d.screen.Screen;
 
+/**
+ * Manages game input delegating event handling to the current {@link ScreenInputManager}.
+ * 
+ * @author Miguel Vicente Linares
+ * 
+ */
 public class GameInputManager implements OnScreenChangeListener, OnTouchListener {
 
 	private GLView glView;
 	private ScreenInputManager currentScreenInputManager;
 
+	/**
+	 * Creates a new GameInputManager.
+	 * 
+	 * @param glView GLView.
+	 */
 	public GameInputManager(GLView glView) {
 		this.glView = glView;
 		this.currentScreenInputManager = null;
@@ -28,49 +37,60 @@ public class GameInputManager implements OnScreenChangeListener, OnTouchListener
 		this.currentScreenInputManager = currentScreen.getInputManager();
 	}
 
-	@SuppressLint("Recycle")
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
 		if (currentScreenInputManager != null) {
-			MotionEvent motionEventToQueue = MotionEvent.obtain(event);
-			currentScreenInputManager.getTouchController().queueMotionEvent(motionEventToQueue);
-		}
-		return true;
-	}
-
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (currentScreenInputManager != null) {
-			currentScreenInputManager.getKeyController().setKeyEvent(keyCode, event);
-		}
-		return true;
-	}
-
-	public boolean onKeyUp(int keyCode, KeyEvent event) {
-		if (currentScreenInputManager != null) {
-			currentScreenInputManager.getKeyController().setKeyEvent(keyCode, event);
+			currentScreenInputManager.getTouchController().queueCopyOfMotionEvent(event);
 		}
 		return true;
 	}
 
 	/**
-	 * This method is called from {@link Engine#onBackPressed()}.<br>
-	 * Calls {@link KeyController#onBackPressed()} if the active Screen is not null. Finishes the current Activity
-	 * otherwise.
+	 * This method is called from {@link EngineActivity#onKeyDown(int, KeyEvent)}.<br>
+	 * Queues a copy of the KeyEvent in the {@link KeyController} of the current {@link ScreenInputManager} for later
+	 * processing.
 	 * 
-	 * @param activity Activity where the Game is running at.
+	 * @param keyCode Key code.
+	 * @param event KeyEvent.
+	 * @return Always returns true.
 	 */
-	public void onBackPressed(Activity activity) {
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (currentScreenInputManager != null) {
-			currentScreenInputManager.getKeyController().onBackPressed();
-		} else {
-			activity.finish();
+			currentScreenInputManager.getKeyController().queueCopyOfKeyEvent(event);
 		}
+		return true;
 	}
 
+	/**
+	 * This method is called from {@link EngineActivity#onKeyUp(int, KeyEvent)}.<br>
+	 * Queues a copy of the KeyEvent in the {@link KeyController} of the current {@link ScreenInputManager} for later
+	 * processing.
+	 * 
+	 * @param keyCode Key code.
+	 * @param event KeyEvent.
+	 * @return Always returns true.
+	 */
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
+		if (currentScreenInputManager != null) {
+			currentScreenInputManager.getKeyController().queueCopyOfKeyEvent(event);
+		}
+		return true;
+	}
+
+	/**
+	 * Returns the GLView of this GameInputManager.
+	 * 
+	 * @return GLView
+	 */
 	public GLView getGLView() {
 		return glView;
 	}
 
+	/**
+	 * Sets the GLView of this GameInputManager.
+	 * 
+	 * @param glView GLView.
+	 */
 	public void setGLView(GLView glView) {
 		this.glView = glView;
 		glView.setOnTouchListener(this);

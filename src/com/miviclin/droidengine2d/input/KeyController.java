@@ -3,7 +3,8 @@ package com.miviclin.droidengine2d.input;
 import android.app.Activity;
 import android.view.KeyEvent;
 
-import com.miviclin.droidengine2d.Game;
+import com.miviclin.collections.Pool;
+import com.miviclin.collections.PooledLinkedQueue;
 
 /**
  * KeyController.
@@ -13,68 +14,106 @@ import com.miviclin.droidengine2d.Game;
  */
 public class KeyController {
 
-	private volatile boolean keyDetected;
-	private volatile int keyCode;
-	private volatile KeyEvent keyEvent;
-	private KeyListener keyListener;
+	private final Object keyEventQueueLock = new Object();
+
+	private KeyInputProcessor keyInputProcessor;
+	private PooledLinkedQueue<KeyEventInfo> keyEventInfoQueue;
+	private KeyEventInfoPool keyEventInfoPool;
 	private Activity activity;
 
 	/**
 	 * Creates a new KeyController.
+	 * 
+	 * @param activity Activity;
 	 */
 	public KeyController(Activity activity) {
-		this.keyDetected = false;
-		this.keyCode = -1;
-		this.keyEvent = null;
-		this.keyListener = null;
+		this.keyInputProcessor = null;
+		this.keyEventInfoQueue = new PooledLinkedQueue<KeyEventInfo>(60);
+
+		int initialCapacityOfKeyEventInfoPool = 60;
+		this.keyEventInfoPool = new KeyEventInfoPool(initialCapacityOfKeyEventInfoPool);
+		for (int i = 0; i < initialCapacityOfKeyEventInfoPool; i++) {
+			keyEventInfoPool.recycle(new KeyEventInfo());
+		}
+
 		this.activity = activity;
 	}
 
 	/**
-	 * Sets the KeyEvent of this KeyController. The KeyEvent will be later used when this KeyController calls
-	 * {@link KeyListener#onKey(int, KeyEvent)}.
+	 * Queues a KeyEventInfo, wich is a copy of the specified KeyEvent, for later processing.<br>
+	 * The event will be recycled when {@link KeyController#processKeyInput()} is called.
 	 * 
-	 * @param keyCode Key code.
 	 * @param keyEvent KeyEvent.
 	 */
-	public void setKeyEvent(int keyCode, KeyEvent keyEvent) {
-		this.keyCode = keyCode;
-		this.keyEvent = keyEvent;
+	public void queueCopyOfKeyEvent(KeyEvent keyEvent) {
 		if (keyEvent != null) {
-			keyDetected = true;
+			synchronized (keyEventQueueLock) {
+				KeyEventInfo keyEventInfo = keyEventInfoPool.obtain();
+				keyEventInfo.copyKeyEventInfo(keyEvent);
+				keyEventInfoQueue.add(keyEventInfo);
+			}
 		}
-	}
-
-	/**
-	 * Sets the {@link KeyListener} of this KeyController.
-	 * 
-	 * @param keyListener KeyListener.
-	 */
-	public void setKeyListener(KeyListener keyListener) {
-		this.keyListener = keyListener;
 	}
 
 	/**
 	 * Processes key input.<br>
 	 * This method should be called when the game updates, before the update is processed. If a key event has happened,
-	 * this method will call {@link KeyListener#onKey(int, KeyEvent)}.
+	 * this method will call {@link KeyInputProcessor#onKey(int, KeyEvent)}.
 	 */
 	public void processKeyInput() {
-		if ((keyListener != null) && keyDetected) {
-			boolean consumed = keyListener.onKey(keyCode, keyEvent);
-			if (!consumed && (keyCode == KeyEvent.KEYCODE_BACK)) {
-				onBackPressed();
+		KeyEventInfo keyEventInfo;
+		synchronized (keyEventQueueLock) {
+			while ((keyEventInfo = keyEventInfoQueue.poll()) != null) {
+				if (keyInputProcessor != null) {
+					keyInputProcessor.processKeyEvent(keyEventInfo);
+				} else if (keyEventInfo.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+					onBackPressed();
+				}
+				keyEventInfoPool.recycle(keyEventInfo);
 			}
 		}
-		keyDetected = false;
 	}
 
 	/**
-	 * This method is called from {@link Game#onBackPressed()}.<br>
-	 * The default implementation simply finishes the current activity.
+	 * This method is called when the back button is pressed and there is no KeyInputProcessor set in this
+	 * KeyController.<br>
+	 * Finishes the Activity referenced by this KeyController.
 	 */
 	public void onBackPressed() {
 		activity.finish();
+	}
+
+	/**
+	 * Sets the {@link KeyInputProcessor} of this KeyController.
+	 * 
+	 * @param keyInputProcessor KeyInputProcessor.
+	 */
+	public void setKeyInputProcessor(KeyInputProcessor keyInputProcessor) {
+		this.keyInputProcessor = keyInputProcessor;
+	}
+
+	/**
+	 * Pool of KeyEventInfo objects.
+	 * 
+	 * @author Miguel Vicente Linares
+	 * 
+	 */
+	private static class KeyEventInfoPool extends Pool<KeyEventInfo> {
+
+		/**
+		 * Creates an empty KeyEventInfoPool with the specified initial capacity.
+		 * 
+		 * @param initialCapacity Initial capacity.
+		 */
+		public KeyEventInfoPool(int initialCapacity) {
+			super(initialCapacity);
+		}
+
+		@Override
+		public KeyEventInfo createObject() {
+			return new KeyEventInfo();
+		}
+
 	}
 
 }
