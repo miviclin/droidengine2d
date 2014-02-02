@@ -207,6 +207,7 @@ public class ScreenManager {
 	 */
 	public void update(float delta) {
 		if (activeScreen != null) {
+			activeScreen.getInputManager().processInput();
 			activeScreen.update(delta);
 		}
 	}
