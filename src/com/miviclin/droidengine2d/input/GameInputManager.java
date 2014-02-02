@@ -40,15 +40,15 @@ public class GameInputManager implements OnScreenChangeListener, OnTouchListener
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
 		if (currentScreenInputManager != null) {
-			currentScreenInputManager.getTouchController().queueCopyOfMotionEvent(event);
+			currentScreenInputManager.getTouchInputController().queueCopyOfMotionEvent(event);
 		}
 		return true;
 	}
 
 	/**
 	 * This method is called from {@link EngineActivity#onKeyDown(int, KeyEvent)}.<br>
-	 * Queues a copy of the KeyEvent in the {@link KeyController} of the current {@link ScreenInputManager} for later
-	 * processing.
+	 * Queues a copy of the KeyEvent in the {@link KeyInputController} of the current {@link ScreenInputManager} for
+	 * later processing.
 	 * 
 	 * @param keyCode Key code.
 	 * @param event KeyEvent.
@@ -56,15 +56,15 @@ public class GameInputManager implements OnScreenChangeListener, OnTouchListener
 	 */
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (currentScreenInputManager != null) {
-			currentScreenInputManager.getKeyController().queueCopyOfKeyEvent(event);
+			currentScreenInputManager.getKeyInputController().queueCopyOfKeyEvent(event);
 		}
 		return true;
 	}
 
 	/**
 	 * This method is called from {@link EngineActivity#onKeyUp(int, KeyEvent)}.<br>
-	 * Queues a copy of the KeyEvent in the {@link KeyController} of the current {@link ScreenInputManager} for later
-	 * processing.
+	 * Queues a copy of the KeyEvent in the {@link KeyInputController} of the current {@link ScreenInputManager} for
+	 * later processing.
 	 * 
 	 * @param keyCode Key code.
 	 * @param event KeyEvent.
@@ -72,7 +72,7 @@ public class GameInputManager implements OnScreenChangeListener, OnTouchListener
 	 */
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
 		if (currentScreenInputManager != null) {
-			currentScreenInputManager.getKeyController().queueCopyOfKeyEvent(event);
+			currentScreenInputManager.getKeyInputController().queueCopyOfKeyEvent(event);
 		}
 		return true;
 	}

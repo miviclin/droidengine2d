@@ -13,8 +13,8 @@ import com.miviclin.droidengine2d.input.sensor.AccelerometerValuesListener;
  */
 public class ScreenInputManager {
 
-	private TouchController touchController;
-	private KeyController keyController;
+	private TouchInputController touchController;
+	private KeyInputController keyController;
 	private AccelerometerController accelerometerController;
 
 	/**
@@ -23,17 +23,17 @@ public class ScreenInputManager {
 	 * @param activity Activity.
 	 */
 	public ScreenInputManager(Activity activity) {
-		this(activity, new TouchController(), new KeyController(activity));
+		this(activity, new TouchInputController(), new KeyInputController(activity));
 	}
 
 	/**
 	 * Creates a new InputManager.
 	 * 
 	 * @param activity Activity.
-	 * @param touchController TouchController.
-	 * @param keyController KeyController.
+	 * @param touchController TouchInputController.
+	 * @param keyController KeyInputController.
 	 */
-	public ScreenInputManager(Activity activity, TouchController touchController, KeyController keyController) {
+	public ScreenInputManager(Activity activity, TouchInputController touchController, KeyInputController keyController) {
 		this.touchController = touchController;
 		this.keyController = keyController;
 		this.accelerometerController = new AccelerometerController(activity, new AccelerometerValuesListener(0.2f));
@@ -49,20 +49,20 @@ public class ScreenInputManager {
 	}
 
 	/**
-	 * Returns the TouchController.
+	 * Returns the TouchInputController.
 	 * 
-	 * @return TouchController
+	 * @return TouchInputController
 	 */
-	public TouchController getTouchController() {
+	public TouchInputController getTouchInputController() {
 		return touchController;
 	}
 
 	/**
-	 * Returns the KeyController.
+	 * Returns the KeyInputController.
 	 * 
-	 * @return KeyController
+	 * @return KeyInputController
 	 */
-	public KeyController getKeyController() {
+	public KeyInputController getKeyInputController() {
 		return keyController;
 	}
 

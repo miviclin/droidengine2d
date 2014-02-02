@@ -7,12 +7,12 @@ import com.miviclin.collections.Pool;
 import com.miviclin.collections.PooledLinkedQueue;
 
 /**
- * KeyController.
+ * KeyInputController.
  * 
  * @author Miguel Vicente Linares
  * 
  */
-public class KeyController {
+public class KeyInputController {
 
 	private final Object keyEventQueueLock = new Object();
 
@@ -22,11 +22,11 @@ public class KeyController {
 	private Activity activity;
 
 	/**
-	 * Creates a new KeyController.
+	 * Creates a new KeyInputController.
 	 * 
 	 * @param activity Activity;
 	 */
-	public KeyController(Activity activity) {
+	public KeyInputController(Activity activity) {
 		this.keyInputProcessor = null;
 		this.keyEventInfoQueue = new PooledLinkedQueue<KeyEventInfo>(60);
 
@@ -41,7 +41,7 @@ public class KeyController {
 
 	/**
 	 * Queues a KeyEventInfo, wich is a copy of the specified KeyEvent, for later processing.<br>
-	 * The event will be recycled when {@link KeyController#processKeyInput()} is called.
+	 * The event will be recycled when {@link KeyInputController#processKeyInput()} is called.
 	 * 
 	 * @param keyEvent KeyEvent.
 	 */
@@ -76,15 +76,15 @@ public class KeyController {
 
 	/**
 	 * This method is called when the back button is pressed and there is no KeyInputProcessor set in this
-	 * KeyController.<br>
-	 * Finishes the Activity referenced by this KeyController.
+	 * KeyInputController.<br>
+	 * Finishes the Activity referenced by this KeyInputController.
 	 */
 	public void onBackPressed() {
 		activity.finish();
 	}
 
 	/**
-	 * Sets the {@link KeyInputProcessor} of this KeyController.
+	 * Sets the {@link KeyInputProcessor} of this KeyInputController.
 	 * 
 	 * @param keyInputProcessor KeyInputProcessor.
 	 */

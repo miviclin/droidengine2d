@@ -11,7 +11,7 @@ import android.view.MotionEvent;
 public interface TouchInputProcessor {
 
 	/**
-	 * This method is called from {@link TouchController#processTouchInput()}.<br>
+	 * This method is called from {@link TouchInputController#processTouchInput()}.<br>
 	 * It should not be called manually.
 	 * 
 	 * @param motionEvent MotionEvent.

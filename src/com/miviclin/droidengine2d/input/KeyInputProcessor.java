@@ -9,7 +9,7 @@ package com.miviclin.droidengine2d.input;
 public interface KeyInputProcessor {
 
 	/**
-	 * This method is called from {@link KeyController#processKeyInput()}.<br>
+	 * This method is called from {@link KeyInputController#processKeyInput()}.<br>
 	 * It should not be called manually.
 	 * 
 	 * @param event KeyEventInfo.
