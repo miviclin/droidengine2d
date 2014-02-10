@@ -48,9 +48,9 @@ public class TouchInputController {
 	 */
 	public void processTouchInput() {
 		if (touchInputProcessor != null) {
-			MotionEvent motionEvent;
 			synchronized (motionEventQueueLock) {
-				while ((motionEvent = motionEventQueue.poll()) != null) {
+				while (!motionEventQueue.isEmpty()) {
+					MotionEvent motionEvent = motionEventQueue.poll();
 					touchInputProcessor.processMotionEvent(motionEvent);
 					motionEvent.recycle();
 				}
