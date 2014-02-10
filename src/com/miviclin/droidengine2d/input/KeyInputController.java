@@ -61,9 +61,9 @@ public class KeyInputController {
 	 * this method will call {@link KeyInputProcessor#onKey(int, KeyEvent)}.
 	 */
 	public void processKeyInput() {
-		KeyEventInfo keyEventInfo;
 		synchronized (keyEventQueueLock) {
-			while ((keyEventInfo = keyEventInfoQueue.poll()) != null) {
+			while (!keyEventInfoQueue.isEmpty()) {
+				KeyEventInfo keyEventInfo = keyEventInfoQueue.poll();
 				if (keyInputProcessor != null) {
 					keyInputProcessor.processKeyEvent(keyEventInfo);
 				} else if (keyEventInfo.getKeyCode() == KeyEvent.KEYCODE_BACK) {
