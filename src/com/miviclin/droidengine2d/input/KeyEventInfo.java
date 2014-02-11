@@ -2,6 +2,8 @@ package com.miviclin.droidengine2d.input;
 
 import android.view.KeyEvent;
 
+import com.miviclin.collections.Pool;
+
 /**
  * KeyEventInfo holds information about a KeyEvent.<br>
  * KeyEvents are inmutable, so DroidEngine2D uses KeyEventInfo to create mutable copies of KeyEvents so they can be
@@ -11,6 +13,8 @@ import android.view.KeyEvent;
  * 
  */
 public class KeyEventInfo {
+
+	private static KeyEventInfoPool keyEventInfoPool = new KeyEventInfoPool();
 
 	private int deviceId;
 	private int source;
@@ -52,11 +56,25 @@ public class KeyEventInfo {
 	}
 
 	/**
+	 * Creates a new KeyEventInfo, copying from an existing KeyEvent.<br>
+	 * The KeyEventInfo is obtained from a pool. If the pool is empty, a new KeyEventInfo will be created.<br>
+	 * When the returned KeyEventInfo is not needed anymore, {@link KeyEventInfo#recycle()} should be called.
+	 * 
+	 * @param keyEvent KeyEvent.
+	 * @return KeyEventInfo.
+	 */
+	public static KeyEventInfo obtain(KeyEvent keyEvent) {
+		KeyEventInfo keyEventInfo = keyEventInfoPool.obtain();
+		keyEventInfo.copyKeyEventInfo(keyEvent);
+		return keyEventInfo;
+	}
+
+	/**
 	 * Copies the information of the specified KeyEvent into this object.
 	 * 
 	 * @param keyEvent KeyEvent.
 	 */
-	void copyKeyEventInfo(KeyEvent keyEvent) {
+	protected void copyKeyEventInfo(KeyEvent keyEvent) {
 		this.downTime = keyEvent.getDownTime();
 		this.eventTime = keyEvent.getEventTime();
 		this.action = keyEvent.getAction();
@@ -68,6 +86,14 @@ public class KeyEventInfo {
 		this.flags = keyEvent.getFlags();
 		this.source = keyEvent.getSource();
 		this.characters = keyEvent.getCharacters();
+	}
+
+	/**
+	 * Recycles the KeyEventInfo, to be re-used by a later caller. After calling this function you must not ever touch
+	 * the event again.
+	 */
+	public void recycle() {
+		keyEventInfoPool.recycle(this);
 	}
 
 	/**
@@ -145,6 +171,38 @@ public class KeyEventInfo {
 	 */
 	public String getCharacters() {
 		return characters;
+	}
+
+	/**
+	 * Pool of KeyEventInfo objects.
+	 * 
+	 * @author Miguel Vicente Linares
+	 * 
+	 */
+	private static class KeyEventInfoPool extends Pool<KeyEventInfo> {
+
+		private static final int DEFAULT_INITIAL_CAPACITY = 60;
+
+		/**
+		 * Creates a KeyEventInfoPool containing 60 KeyEventInfo objects.
+		 */
+		public KeyEventInfoPool() {
+			super(DEFAULT_INITIAL_CAPACITY);
+			for (int i = 0; i < DEFAULT_INITIAL_CAPACITY; i++) {
+				this.recycle(new KeyEventInfo());
+			}
+		}
+
+		@Override
+		public KeyEventInfo createObject() {
+			return new KeyEventInfo();
+		}
+
+		@Override
+		public final void recycle(KeyEventInfo object) {
+			super.recycle(object);
+		}
+
 	}
 
 }

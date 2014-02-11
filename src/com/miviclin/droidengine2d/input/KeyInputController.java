@@ -3,7 +3,6 @@ package com.miviclin.droidengine2d.input;
 import android.app.Activity;
 import android.view.KeyEvent;
 
-import com.miviclin.collections.Pool;
 import com.miviclin.collections.PooledLinkedQueue;
 
 /**
@@ -18,7 +17,6 @@ public class KeyInputController {
 
 	private KeyInputProcessor keyInputProcessor;
 	private PooledLinkedQueue<KeyEventInfo> keyEventInfoQueue;
-	private KeyEventInfoPool keyEventInfoPool;
 	private Activity activity;
 
 	/**
@@ -29,12 +27,6 @@ public class KeyInputController {
 	public KeyInputController(Activity activity) {
 		this.keyInputProcessor = null;
 		this.keyEventInfoQueue = new PooledLinkedQueue<KeyEventInfo>(60);
-
-		int initialCapacityOfKeyEventInfoPool = 60;
-		this.keyEventInfoPool = new KeyEventInfoPool(initialCapacityOfKeyEventInfoPool);
-		for (int i = 0; i < initialCapacityOfKeyEventInfoPool; i++) {
-			keyEventInfoPool.recycle(new KeyEventInfo());
-		}
 
 		this.activity = activity;
 	}
@@ -48,8 +40,7 @@ public class KeyInputController {
 	public void queueCopyOfKeyEvent(KeyEvent keyEvent) {
 		if (keyEvent != null) {
 			synchronized (keyEventQueueLock) {
-				KeyEventInfo keyEventInfo = keyEventInfoPool.obtain();
-				keyEventInfo.copyKeyEventInfo(keyEvent);
+				KeyEventInfo keyEventInfo = KeyEventInfo.obtain(keyEvent);
 				keyEventInfoQueue.add(keyEventInfo);
 			}
 		}
@@ -69,7 +60,7 @@ public class KeyInputController {
 				} else if (keyEventInfo.getKeyCode() == KeyEvent.KEYCODE_BACK) {
 					onBackPressed();
 				}
-				keyEventInfoPool.recycle(keyEventInfo);
+				keyEventInfo.recycle();
 			}
 		}
 	}
@@ -90,30 +81,6 @@ public class KeyInputController {
 	 */
 	public void setKeyInputProcessor(KeyInputProcessor keyInputProcessor) {
 		this.keyInputProcessor = keyInputProcessor;
-	}
-
-	/**
-	 * Pool of KeyEventInfo objects.
-	 * 
-	 * @author Miguel Vicente Linares
-	 * 
-	 */
-	private static class KeyEventInfoPool extends Pool<KeyEventInfo> {
-
-		/**
-		 * Creates an empty KeyEventInfoPool with the specified initial capacity.
-		 * 
-		 * @param initialCapacity Initial capacity.
-		 */
-		public KeyEventInfoPool(int initialCapacity) {
-			super(initialCapacity);
-		}
-
-		@Override
-		public KeyEventInfo createObject() {
-			return new KeyEventInfo();
-		}
-
 	}
 
 }
