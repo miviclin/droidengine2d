@@ -6,26 +6,26 @@ import android.view.KeyEvent;
 import com.miviclin.collections.PooledLinkedQueue;
 
 /**
- * KeyInputController.
+ * Key events can be queued in a KeyProcessor to be processed later.
  * 
  * @author Miguel Vicente Linares
  * 
  */
-public class KeyInputController {
+public class KeyProcessor {
 
 	private final Object keyEventQueueLock = new Object();
 
-	private KeyInputProcessor keyInputProcessor;
+	private KeyEventProcessor keyEventProcessor;
 	private PooledLinkedQueue<KeyEventInfo> keyEventInfoQueue;
 	private Activity activity;
 
 	/**
-	 * Creates a new KeyInputController.
+	 * Creates a new KeyProcessor.
 	 * 
 	 * @param activity Activity;
 	 */
-	public KeyInputController(Activity activity) {
-		this.keyInputProcessor = null;
+	public KeyProcessor(Activity activity) {
+		this.keyEventProcessor = null;
 		this.keyEventInfoQueue = new PooledLinkedQueue<KeyEventInfo>(60);
 
 		this.activity = activity;
@@ -33,30 +33,28 @@ public class KeyInputController {
 
 	/**
 	 * Queues a KeyEventInfo, wich is a copy of the specified KeyEvent, for later processing.<br>
-	 * The event will be recycled when {@link KeyInputController#processKeyInput()} is called.
+	 * The event will be recycled when {@link KeyProcessor#processKeyInput()} is called.
 	 * 
 	 * @param keyEvent KeyEvent.
 	 */
 	public void queueCopyOfKeyEvent(KeyEvent keyEvent) {
-		if (keyEvent != null) {
-			synchronized (keyEventQueueLock) {
-				KeyEventInfo keyEventInfo = KeyEventInfo.obtain(keyEvent);
-				keyEventInfoQueue.add(keyEventInfo);
-			}
+		synchronized (keyEventQueueLock) {
+			KeyEventInfo keyEventInfo = KeyEventInfo.obtain(keyEvent);
+			keyEventInfoQueue.add(keyEventInfo);
 		}
 	}
 
 	/**
 	 * Processes key input.<br>
 	 * This method should be called when the game updates, before the update is processed. If a key event has happened,
-	 * this method will call {@link KeyInputProcessor#onKey(int, KeyEvent)}.
+	 * this method will call {@link KeyEventProcessor#onKey(int, KeyEvent)}.
 	 */
 	public void processKeyInput() {
 		synchronized (keyEventQueueLock) {
 			while (!keyEventInfoQueue.isEmpty()) {
 				KeyEventInfo keyEventInfo = keyEventInfoQueue.poll();
-				if (keyInputProcessor != null) {
-					keyInputProcessor.processKeyEvent(keyEventInfo);
+				if (keyEventProcessor != null) {
+					keyEventProcessor.processKeyEvent(keyEventInfo);
 				} else if (keyEventInfo.getKeyCode() == KeyEvent.KEYCODE_BACK) {
 					onBackPressed();
 				}
@@ -66,21 +64,20 @@ public class KeyInputController {
 	}
 
 	/**
-	 * This method is called when the back button is pressed and there is no KeyInputProcessor set in this
-	 * KeyInputController.<br>
-	 * Finishes the Activity referenced by this KeyInputController.
+	 * This method is called when the back button is pressed and there is no KeyEventProcessor set in this KeyProcessor.<br>
+	 * Finishes the Activity referenced by this KeyProcessor.
 	 */
 	public void onBackPressed() {
 		activity.finish();
 	}
 
 	/**
-	 * Sets the {@link KeyInputProcessor} of this KeyInputController.
+	 * Sets the {@link KeyEventProcessor} of this KeyProcessor.
 	 * 
-	 * @param keyInputProcessor KeyInputProcessor.
+	 * @param keyEventProcessor KeyEventProcessor.
 	 */
-	public void setKeyInputProcessor(KeyInputProcessor keyInputProcessor) {
-		this.keyInputProcessor = keyInputProcessor;
+	public void setKeyEventProcessor(KeyEventProcessor keyEventProcessor) {
+		this.keyEventProcessor = keyEventProcessor;
 	}
 
 }

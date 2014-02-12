@@ -3,15 +3,15 @@ package com.miviclin.droidengine2d.input;
 import android.view.MotionEvent;
 
 /**
- * Touch event listener.
+ * Processes motion events.
  * 
  * @author Miguel Vicente Linares
  * 
  */
-public interface TouchInputProcessor {
+public interface MotionEventProcessor {
 
 	/**
-	 * This method is called from {@link TouchInputController#processTouchInput()}.<br>
+	 * This method is called from {@link TouchProcessor#processTouchInput()}.<br>
 	 * It should not be called manually.
 	 * 
 	 * @param motionEvent MotionEvent.

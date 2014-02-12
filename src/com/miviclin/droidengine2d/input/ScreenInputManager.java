@@ -2,7 +2,7 @@ package com.miviclin.droidengine2d.input;
 
 import android.app.Activity;
 
-import com.miviclin.droidengine2d.input.sensor.AccelerometerController;
+import com.miviclin.droidengine2d.input.sensor.Accelerometer;
 import com.miviclin.droidengine2d.input.sensor.AccelerometerValuesListener;
 
 /**
@@ -13,9 +13,9 @@ import com.miviclin.droidengine2d.input.sensor.AccelerometerValuesListener;
  */
 public class ScreenInputManager {
 
-	private TouchInputController touchController;
-	private KeyInputController keyController;
-	private AccelerometerController accelerometerController;
+	private TouchProcessor touchProcessor;
+	private KeyProcessor keyProcessor;
+	private Accelerometer accelerometer;
 
 	/**
 	 * Creates a new InputManager.
@@ -23,20 +23,20 @@ public class ScreenInputManager {
 	 * @param activity Activity.
 	 */
 	public ScreenInputManager(Activity activity) {
-		this(activity, new TouchInputController(), new KeyInputController(activity));
+		this(activity, new TouchProcessor(), new KeyProcessor(activity));
 	}
 
 	/**
 	 * Creates a new InputManager.
 	 * 
 	 * @param activity Activity.
-	 * @param touchController TouchInputController.
-	 * @param keyController KeyInputController.
+	 * @param touchProcessor TouchProcessor.
+	 * @param keyProcessor KeyProcessor.
 	 */
-	public ScreenInputManager(Activity activity, TouchInputController touchController, KeyInputController keyController) {
-		this.touchController = touchController;
-		this.keyController = keyController;
-		this.accelerometerController = new AccelerometerController(activity, new AccelerometerValuesListener(0.2f));
+	public ScreenInputManager(Activity activity, TouchProcessor touchProcessor, KeyProcessor keyProcessor) {
+		this.touchProcessor = touchProcessor;
+		this.keyProcessor = keyProcessor;
+		this.accelerometer = new Accelerometer(activity, new AccelerometerValuesListener(0.2f));
 	}
 
 	/**
@@ -44,34 +44,34 @@ public class ScreenInputManager {
 	 * This method should be called when the game updates, before the update is processed.
 	 */
 	public void processInput() {
-		touchController.processTouchInput();
-		keyController.processKeyInput();
+		touchProcessor.processTouchInput();
+		keyProcessor.processKeyInput();
 	}
 
 	/**
-	 * Returns the TouchInputController.
+	 * Returns the TouchProcessor.
 	 * 
-	 * @return TouchInputController
+	 * @return TouchProcessor
 	 */
-	public TouchInputController getTouchInputController() {
-		return touchController;
+	public TouchProcessor getTouchProcessor() {
+		return touchProcessor;
 	}
 
 	/**
-	 * Returns the KeyInputController.
+	 * Returns the KeyProcessor.
 	 * 
-	 * @return KeyInputController
+	 * @return KeyProcessor
 	 */
-	public KeyInputController getKeyInputController() {
-		return keyController;
+	public KeyProcessor getKeyProcessor() {
+		return keyProcessor;
 	}
 
 	/**
-	 * Returns the AccelerometerController.
+	 * Returns the Accelerometer.
 	 * 
-	 * @return AccelerometerController
+	 * @return Accelerometer
 	 */
-	public AccelerometerController getAccelerometerController() {
-		return accelerometerController;
+	public Accelerometer getAccelerometer() {
+		return accelerometer;
 	}
 }

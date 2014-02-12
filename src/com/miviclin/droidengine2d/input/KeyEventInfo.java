@@ -14,7 +14,7 @@ import com.miviclin.collections.Pool;
  */
 public class KeyEventInfo {
 
-	private static KeyEventInfoPool keyEventInfoPool = new KeyEventInfoPool();
+	private static final KeyEventInfoPool keyEventInfoPool = new KeyEventInfoPool();
 
 	private int deviceId;
 	private int source;
@@ -33,7 +33,7 @@ public class KeyEventInfo {
 	 * {@link KeyEventInfo#copyKeyEventInfo(KeyEvent)} should be called after creating a KeyEventInfo with this
 	 * constructor.
 	 */
-	KeyEventInfo() {
+	private KeyEventInfo() {
 	}
 
 	/**

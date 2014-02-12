@@ -1,15 +1,15 @@
 package com.miviclin.droidengine2d.input;
 
 /**
- * Key input processor.
+ * Processes key events.
  * 
  * @author Miguel Vicente Linares
  * 
  */
-public interface KeyInputProcessor {
+public interface KeyEventProcessor {
 
 	/**
-	 * This method is called from {@link KeyInputController#processKeyInput()}.<br>
+	 * This method is called from {@link KeyProcessor#processKeyInput()}.<br>
 	 * It should not be called manually.
 	 * 
 	 * @param event KeyEventInfo.

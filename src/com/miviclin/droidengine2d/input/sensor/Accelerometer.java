@@ -7,33 +7,33 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
 /**
- * AccelerometerController.
+ * Accelerometer.
  * 
  * @author Miguel Vicente Linares
  * 
  */
-public class AccelerometerController {
+public class Accelerometer {
 
 	private SensorManager sensorManager;
 	private AccelerometerValuesListener valuesListener;
 	private SensorEventListener customListener;
 
 	/**
-	 * Creates an AccelerometerController with an AccelerometerValuesListener.
+	 * Creates an Accelerometer with an AccelerometerValuesListener.
 	 * 
 	 * @param activity Activity.
 	 */
-	public AccelerometerController(Activity activity) {
+	public Accelerometer(Activity activity) {
 		this(activity, null);
 	}
 
 	/**
-	 * Creates an AccelerometerController with an AccelerometerValuesListener and the specified listener.
+	 * Creates an Accelerometer with an AccelerometerValuesListener and the specified listener.
 	 * 
 	 * @param activity Activity.
 	 * @param customListener SensorEventListener.
 	 */
-	public AccelerometerController(Activity activity, SensorEventListener customListener) {
+	public Accelerometer(Activity activity, SensorEventListener customListener) {
 		this.sensorManager = (SensorManager) activity.getSystemService(Context.SENSOR_SERVICE);
 		this.valuesListener = new AccelerometerValuesListener(0.2f);
 		this.customListener = customListener;
