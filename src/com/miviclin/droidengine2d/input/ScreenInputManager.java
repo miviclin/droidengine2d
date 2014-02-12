@@ -3,10 +3,9 @@ package com.miviclin.droidengine2d.input;
 import android.app.Activity;
 
 import com.miviclin.droidengine2d.input.sensor.Accelerometer;
-import com.miviclin.droidengine2d.input.sensor.AccelerometerValuesListener;
 
 /**
- * InputManager.
+ * ScreenInputManager.
  * 
  * @author Miguel Vicente Linares
  * 
@@ -36,7 +35,7 @@ public class ScreenInputManager {
 	public ScreenInputManager(Activity activity, TouchProcessor touchProcessor, KeyProcessor keyProcessor) {
 		this.touchProcessor = touchProcessor;
 		this.keyProcessor = keyProcessor;
-		this.accelerometer = new Accelerometer(activity, new AccelerometerValuesListener(0.2f));
+		this.accelerometer = new Accelerometer(activity);
 	}
 
 	/**
