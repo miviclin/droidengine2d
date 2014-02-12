@@ -36,7 +36,7 @@ public class Accelerometer {
 	 */
 	public Accelerometer(Activity activity, SensorEventListener customListener) {
 		this.sensorManager = (SensorManager) activity.getSystemService(Context.SENSOR_SERVICE);
-		this.valuesListener = new AccelerometerValuesListener(0.2f);
+		this.valuesListener = new AccelerometerValuesListener(activity, 0.2f);
 		this.customListener = customListener;
 		this.listening = false;
 	}
