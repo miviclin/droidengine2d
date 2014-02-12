@@ -17,6 +17,7 @@ public class Accelerometer {
 	private SensorManager sensorManager;
 	private AccelerometerValuesListener valuesListener;
 	private SensorEventListener customListener;
+	private boolean listening;
 
 	/**
 	 * Creates an Accelerometer with an AccelerometerValuesListener.
@@ -37,6 +38,7 @@ public class Accelerometer {
 		this.sensorManager = (SensorManager) activity.getSystemService(Context.SENSOR_SERVICE);
 		this.valuesListener = new AccelerometerValuesListener(0.2f);
 		this.customListener = customListener;
+		this.listening = false;
 	}
 
 	/**
@@ -48,6 +50,7 @@ public class Accelerometer {
 		if (customListener != null) {
 			sensorManager.registerListener(customListener, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
 		}
+		listening = true;
 	}
 
 	/**
@@ -58,6 +61,16 @@ public class Accelerometer {
 		if (customListener != null) {
 			sensorManager.unregisterListener(customListener);
 		}
+		listening = false;
+	}
+
+	/**
+	 * Returns true if this object is listening the accelerometer.
+	 * 
+	 * @return true if this object is listening the accelerometer, false otherwise
+	 */
+	public boolean isListening() {
+		return listening;
 	}
 
 	/**
