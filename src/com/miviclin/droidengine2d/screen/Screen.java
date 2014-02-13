@@ -2,7 +2,7 @@ package com.miviclin.droidengine2d.screen;
 
 import com.miviclin.droidengine2d.Game;
 import com.miviclin.droidengine2d.graphics.Graphics;
-import com.miviclin.droidengine2d.input.InputManager;
+import com.miviclin.droidengine2d.input.ScreenInputManager;
 
 /**
  * Screen represents a level, menu, screen... of the game.
@@ -15,7 +15,7 @@ public abstract class Screen {
 	private final Game game;
 	private float width;
 	private float height;
-	private InputManager inputManager;
+	private ScreenInputManager inputManager;
 
 	/**
 	 * Creates a new Screen.
@@ -25,7 +25,7 @@ public abstract class Screen {
 	 * @param game Game.
 	 */
 	public Screen(float width, float height, Game game) {
-		this(width, height, new InputManager(game.getActivity()), game);
+		this(width, height, new ScreenInputManager(game.getActivity()), game);
 	}
 
 	/**
@@ -36,7 +36,7 @@ public abstract class Screen {
 	 * @param inputManager InputManager.
 	 * @param game Game.
 	 */
-	public Screen(float width, float height, InputManager inputManager, Game game) {
+	public Screen(float width, float height, ScreenInputManager inputManager, Game game) {
 		this.game = game;
 		this.width = width;
 		this.height = height;
@@ -75,7 +75,7 @@ public abstract class Screen {
 	 * 
 	 * @return InputManager
 	 */
-	public InputManager getInputManager() {
+	public ScreenInputManager getInputManager() {
 		return inputManager;
 	}
 

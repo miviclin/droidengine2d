@@ -1,81 +1,99 @@
 package com.miviclin.droidengine2d.input;
 
-import android.app.Activity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnKeyListener;
 import android.view.View.OnTouchListener;
 
-import com.miviclin.droidengine2d.Engine;
+import com.miviclin.droidengine2d.EngineActivity;
 import com.miviclin.droidengine2d.graphics.GLView;
 import com.miviclin.droidengine2d.screen.OnScreenChangeListener;
 import com.miviclin.droidengine2d.screen.Screen;
 
-public class GameInputManager implements OnScreenChangeListener, OnTouchListener, OnKeyListener {
+/**
+ * Manages game input delegating event handling to the current {@link ScreenInputManager}.
+ * 
+ * @author Miguel Vicente Linares
+ * 
+ */
+public class GameInputManager implements OnScreenChangeListener, OnTouchListener {
 
 	private GLView glView;
-	private InputManager currentInputManager;
+	private ScreenInputManager currentScreenInputManager;
 
+	/**
+	 * Creates a new GameInputManager.
+	 * 
+	 * @param glView GLView.
+	 */
 	public GameInputManager(GLView glView) {
 		this.glView = glView;
-		this.currentInputManager = null;
-		setGLViewInputListeners();
+		this.currentScreenInputManager = null;
+		this.glView.setOnTouchListener(this);
 	}
 
 	@Override
 	public void onScreenChange(Screen previousScreen, Screen currentScreen) {
-		this.currentInputManager = currentScreen.getInputManager();
+		this.currentScreenInputManager = currentScreen.getInputManager();
 	}
 
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
-		if (currentInputManager != null) {
-			currentInputManager.getTouchController().setMotionEvent(event);
-			return true;
+		if (currentScreenInputManager != null) {
+			currentScreenInputManager.getTouchProcessor().queueCopyOfMotionEvent(event);
 		}
-		return false;
-	}
-
-	@Override
-	public boolean onKey(View v, int keyCode, KeyEvent event) {
-		if (currentInputManager != null) {
-			currentInputManager.getKeyController().setKeyEvent(keyCode, event);
-		}
-		return false;
+		return true;
 	}
 
 	/**
-	 * This method is called from {@link Engine#onBackPressed()}.<br>
-	 * Calls {@link KeyController#onBackPressed()} if the active Screen is not null. Finishes the current Activity
-	 * otherwise.
+	 * This method is called from {@link EngineActivity#onKeyDown(int, KeyEvent)}.<br>
+	 * Queues a copy of the KeyEvent in the {@link KeyProcessor} of the current {@link ScreenInputManager} for later
+	 * processing.
 	 * 
-	 * @param activity Activity where the Game is running at.
+	 * @param keyCode Key code.
+	 * @param event KeyEvent.
+	 * @return Always returns true.
 	 */
-	public void onBackPressed(Activity activity) {
-		if (currentInputManager != null) {
-			currentInputManager.getKeyController().onBackPressed();
-		} else {
-			activity.finish();
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (currentScreenInputManager != null) {
+			currentScreenInputManager.getKeyProcessor().queueCopyOfKeyEvent(event);
 		}
+		return true;
 	}
 
+	/**
+	 * This method is called from {@link EngineActivity#onKeyUp(int, KeyEvent)}.<br>
+	 * Queues a copy of the KeyEvent in the {@link KeyProcessor} of the current {@link ScreenInputManager} for later
+	 * processing.
+	 * 
+	 * @param keyCode Key code.
+	 * @param event KeyEvent.
+	 * @return Always returns true.
+	 */
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
+		if (currentScreenInputManager != null) {
+			currentScreenInputManager.getKeyProcessor().queueCopyOfKeyEvent(event);
+		}
+		return true;
+	}
+
+	/**
+	 * Returns the GLView of this GameInputManager.
+	 * 
+	 * @return GLView
+	 */
 	public GLView getGLView() {
 		return glView;
 	}
 
+	/**
+	 * Sets the GLView of this GameInputManager.
+	 * 
+	 * @param glView GLView.
+	 */
 	public void setGLView(GLView glView) {
 		this.glView = glView;
-		setupGLViewInputListeners();
-	}
-
-	public void setupGLViewInputListeners() {
-		setGLViewInputListeners();
-	}
-
-	public void setGLViewInputListeners() {
 		glView.setOnTouchListener(this);
-		glView.setOnKeyListener(this);
 	}
 
 }

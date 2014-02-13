@@ -5,11 +5,14 @@ import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.view.KeyEvent;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 
 import com.miviclin.droidengine2d.graphics.GLView;
+import com.miviclin.droidengine2d.input.ScreenInputManager;
+import com.miviclin.droidengine2d.screen.Screen;
 
 /**
  * EngineActivity manages the life cycle of the Engine.
@@ -86,10 +89,27 @@ public abstract class EngineActivity extends FragmentActivity {
 	}
 
 	@Override
-	public void onBackPressed() {
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (engine != null) {
-			engine.onBackPressed();
+			return engine.getGame().getGameInputManager().onKeyDown(keyCode, event);
 		}
+		return super.onKeyDown(keyCode, event);
+	}
+
+	@Override
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
+		if (engine != null) {
+			return engine.getGame().getGameInputManager().onKeyUp(keyCode, event);
+		}
+		return super.onKeyUp(keyCode, event);
+	}
+
+	/**
+	 * The default implementation of this method does nothing.<br>
+	 * The back button presses are handled by the {@link ScreenInputManager} of the current {@link Screen}.
+	 */
+	@Override
+	public void onBackPressed() {
 	}
 
 	@Override
