@@ -5,7 +5,8 @@ import com.miviclin.droidengine2d.graphics.Graphics;
 import com.miviclin.droidengine2d.input.ScreenInputManager;
 
 /**
- * Screen represents a level, menu, screen... of the game.
+ * Screen represents a level, menu, screen... of the game.<br>
+ * Screens should be initialized in {@link Game#initialize()} or in another Screen.
  * 
  * @author Miguel Vicente Linares
  * 
@@ -13,8 +14,6 @@ import com.miviclin.droidengine2d.input.ScreenInputManager;
 public abstract class Screen {
 
 	private final Game game;
-	private float width;
-	private float height;
 	private ScreenInputManager inputManager;
 
 	/**
@@ -24,23 +23,19 @@ public abstract class Screen {
 	 * @param height Height.
 	 * @param game Game.
 	 */
-	public Screen(float width, float height, Game game) {
-		this(width, height, new ScreenInputManager(game.getActivity()), game);
+	public Screen(Game game) {
+		this(new ScreenInputManager(game.getActivity()), game);
 	}
 
 	/**
 	 * Creates a new Screen.
 	 * 
-	 * @param width Width.
-	 * @param height Height.
-	 * @param inputManager InputManager.
+	 * @param inputManager ScreenInputManager.
 	 * @param game Game.
 	 */
-	public Screen(float width, float height, ScreenInputManager inputManager, Game game) {
-		this.game = game;
-		this.width = width;
-		this.height = height;
+	public Screen(ScreenInputManager inputManager, Game game) {
 		this.inputManager = inputManager;
+		this.game = game;
 	}
 
 	/**
@@ -49,7 +44,7 @@ public abstract class Screen {
 	 * @return width
 	 */
 	public float getWidth() {
-		return width;
+		return game.getViewWidth();
 	}
 
 	/**
@@ -58,7 +53,7 @@ public abstract class Screen {
 	 * @return height
 	 */
 	public float getHeight() {
-		return height;
+		return game.getViewHeight();
 	}
 
 	/**

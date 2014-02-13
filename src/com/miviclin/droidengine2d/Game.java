@@ -22,10 +22,12 @@ public abstract class Game {
 	private final TextureManager textureManager;
 	private final ScreenManager screenManager;
 	private final GameInputManager gameInputManager;
+
+	private volatile boolean initialized;
+
 	private GLView glView;
 	private Camera camera;
 	private boolean prepared;
-	private volatile boolean initialized;
 
 	/**
 	 * Creates a Game with the specified name.
@@ -57,14 +59,14 @@ public abstract class Game {
 			throw new IllegalArgumentException("The Activity can not be null");
 		}
 		this.activity = activity;
-		this.glView = gameInputManager.getGLView();
 		this.textureManager = new TextureManager(activity);
-		this.gameInputManager = gameInputManager;
 		this.screenManager = new ScreenManager();
 		this.screenManager.addOnScreenChangeListener(gameInputManager);
+		this.gameInputManager = gameInputManager;
+		this.initialized = false;
+		this.glView = gameInputManager.getGLView();
 		this.camera = new OrthographicCamera();
 		this.prepared = false;
-		this.initialized = false;
 	}
 
 	/**
@@ -74,6 +76,24 @@ public abstract class Game {
 	 */
 	public Activity getActivity() {
 		return activity;
+	}
+
+	/**
+	 * Returns the width of the view where this Game is rendered.
+	 * 
+	 * @return Width
+	 */
+	public float getViewWidth() {
+		return glView.getWidth();
+	}
+
+	/**
+	 * Returns the height of the view where this Game is rendered.
+	 * 
+	 * @return Height
+	 */
+	public float getViewHeight() {
+		return glView.getHeight();
 	}
 
 	/**
@@ -202,8 +222,9 @@ public abstract class Game {
 			screenManager.update(delta);
 		}
 		if (!initialized && prepared) {
-			initialize(glView.getWidth(), glView.getHeight());
+			initialize();
 			initialized = true;
+			System.gc();
 		}
 	}
 
@@ -220,11 +241,8 @@ public abstract class Game {
 	}
 
 	/**
-	 * Initializes the Game objects.
-	 * 
-	 * @param viewWidth Width of the view where the game is going to be rendered.
-	 * @param viewHeight Height of the view where the game is going to be rendered.
+	 * Initializes at least the initial Screen of this Game.
 	 */
-	public abstract void initialize(float viewWidth, float viewHeight);
+	public abstract void initialize();
 
 }
