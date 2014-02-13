@@ -49,6 +49,21 @@ public class Color {
 	}
 
 	/**
+	 * Creates a new Color, copying from the specified color.
+	 * 
+	 * @param color Color.
+	 */
+	public Color(Color color) {
+		this.r = color.r;
+		this.g = color.g;
+		this.b = color.b;
+		this.a = color.a;
+		this.h = color.h;
+		this.s = color.s;
+		this.v = color.v;
+	}
+
+	/**
 	 * Overwrites this Color with the specified one.<br>
 	 * This Color will be a copy of the specified Color.
 	 * 
