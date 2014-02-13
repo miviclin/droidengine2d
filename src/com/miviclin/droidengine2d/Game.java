@@ -18,7 +18,6 @@ import com.miviclin.droidengine2d.screen.ScreenManager;
  */
 public abstract class Game {
 
-	private final String name;
 	private final Activity activity;
 	private final TextureManager textureManager;
 	private final ScreenManager screenManager;
@@ -31,36 +30,32 @@ public abstract class Game {
 	/**
 	 * Creates a Game with the specified name.
 	 * 
-	 * @param name Name of the Game
 	 * @param activity Activity where the Game runs
 	 */
-	public Game(String name, Activity activity) {
-		this(name, new GLView(activity), activity);
+	public Game(Activity activity) {
+		this(new GLView(activity), activity);
 	}
 
 	/**
 	 * Creates a Game with the specified name and GLView.
 	 * 
-	 * @param name Name of the Game
 	 * @param glView GLView where the game is rendered
 	 * @param activity Activity where the Game runs
 	 */
-	public Game(String name, GLView glView, Activity activity) {
-		this(name, new GameInputManager(glView), activity);
+	public Game(GLView glView, Activity activity) {
+		this(new GameInputManager(glView), activity);
 	}
 
 	/**
 	 * Creates a Game with the specified name and GLView.
 	 * 
-	 * @param name Name of the Game
 	 * @param gameInputManager GameInputManager. The Game will be redered in the GLView of this GameInputManager.
 	 * @param activity Activity where the Game runs
 	 */
-	public Game(String name, GameInputManager gameInputManager, Activity activity) {
+	public Game(GameInputManager gameInputManager, Activity activity) {
 		if (activity == null) {
 			throw new IllegalArgumentException("The Activity can not be null");
 		}
-		this.name = name;
 		this.activity = activity;
 		this.glView = gameInputManager.getGLView();
 		this.textureManager = new TextureManager(activity);
@@ -70,15 +65,6 @@ public abstract class Game {
 		this.camera = new OrthographicCamera();
 		this.prepared = false;
 		this.initialized = false;
-	}
-
-	/**
-	 * Returns the name of the Game.
-	 * 
-	 * @return name of the Game
-	 */
-	public String getName() {
-		return name;
 	}
 
 	/**
