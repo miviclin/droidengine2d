@@ -23,7 +23,6 @@ import com.miviclin.droidengine2d.screen.Screen;
 public abstract class EngineActivity extends FragmentActivity {
 
 	private Engine engine;
-	private Game game;
 	private boolean prepared;
 
 	@Override
@@ -36,7 +35,8 @@ public abstract class EngineActivity extends FragmentActivity {
 		final GLView glView = (GLView) findViewById(getGLViewId());
 
 		engine = createEngine(glView);
-		game = engine.getGame();
+
+		final Game game = engine.getGame();
 		engine.startGame();
 
 		// GLView.getWidth() and GLView.getHeight() return 0 before the view is rendered on screen for the first time,
@@ -145,15 +145,6 @@ public abstract class EngineActivity extends FragmentActivity {
 	 */
 	protected Engine getEngine() {
 		return engine;
-	}
-
-	/**
-	 * Returns the Game.
-	 * 
-	 * @return Game
-	 */
-	protected Game getGame() {
-		return game;
 	}
 
 	/**
