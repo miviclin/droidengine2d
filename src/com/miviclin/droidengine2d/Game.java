@@ -2,13 +2,13 @@ package com.miviclin.droidengine2d;
 
 import android.app.Activity;
 
+import com.miviclin.droidengine2d.gamestate.GameStateManager;
 import com.miviclin.droidengine2d.graphics.GLView;
 import com.miviclin.droidengine2d.graphics.Graphics;
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
 import com.miviclin.droidengine2d.graphics.cameras.OrthographicCamera;
 import com.miviclin.droidengine2d.graphics.texture.TextureManager;
 import com.miviclin.droidengine2d.input.GameInputManager;
-import com.miviclin.droidengine2d.screen.ScreenManager;
 
 /**
  * Game.
@@ -20,7 +20,7 @@ public abstract class Game {
 
 	private final Activity activity;
 	private final TextureManager textureManager;
-	private final ScreenManager screenManager;
+	private final GameStateManager gameStateManager;
 	private final GameInputManager gameInputManager;
 
 	private volatile boolean initialized;
@@ -60,8 +60,8 @@ public abstract class Game {
 		}
 		this.activity = activity;
 		this.textureManager = new TextureManager(activity);
-		this.screenManager = new ScreenManager();
-		this.screenManager.addOnScreenChangeListener(gameInputManager);
+		this.gameStateManager = new GameStateManager();
+		this.gameStateManager.addOnGameStateChangeListener(gameInputManager);
 		this.gameInputManager = gameInputManager;
 		this.initialized = false;
 		this.glView = gameInputManager.getGLView();
@@ -127,12 +127,12 @@ public abstract class Game {
 	}
 
 	/**
-	 * Returns the ScreenManager.
+	 * Returns the GameStateManager.
 	 * 
-	 * @return ScreenManager
+	 * @return GameStateManager
 	 */
-	public ScreenManager getScreenManager() {
-		return screenManager;
+	public GameStateManager getGameStateManager() {
+		return gameStateManager;
 	}
 
 	/**
@@ -166,17 +166,17 @@ public abstract class Game {
 	}
 
 	/**
-	 * Returns true if the Game object has been initialized and is ready to initialize the Screens. This method will
+	 * Returns true if the Game object has been initialized and is ready to initialize the GameStates. This method will
 	 * return true after {@link #prepare()} has been called.
 	 * 
-	 * @return true if it is safe to initialize the Screens
+	 * @return true if it is safe to initialize the GameStates
 	 */
 	public boolean isPrepared() {
 		return prepared;
 	}
 
 	/**
-	 * This method should be called when the Game object has been initialized and is ready to initialize the Screens.
+	 * This method should be called when the Game object has been initialized and is ready to initialize the GameStates.
 	 * 
 	 * @see Game#isPrepared()
 	 */
@@ -189,7 +189,7 @@ public abstract class Game {
 	 */
 	public void onEnginePaused() {
 		if (initialized) {
-			screenManager.pause();
+			gameStateManager.pause();
 		}
 	}
 
@@ -198,7 +198,7 @@ public abstract class Game {
 	 */
 	public void onEngineResumed() {
 		if (initialized) {
-			screenManager.resume();
+			gameStateManager.resume();
 		}
 	}
 
@@ -207,7 +207,7 @@ public abstract class Game {
 	 */
 	public void onEngineDisposed() {
 		if (initialized) {
-			screenManager.dispose();
+			gameStateManager.dispose();
 		}
 	}
 
@@ -219,7 +219,7 @@ public abstract class Game {
 	 */
 	public void update(float delta) {
 		if (initialized) {
-			screenManager.update(delta);
+			gameStateManager.update(delta);
 		}
 		if (!initialized && prepared) {
 			initialize();
@@ -236,12 +236,12 @@ public abstract class Game {
 	 */
 	public void draw(Graphics graphics) {
 		if (initialized) {
-			screenManager.draw(graphics);
+			gameStateManager.draw(graphics);
 		}
 	}
 
 	/**
-	 * Initializes at least the initial Screen of this Game.
+	 * Initializes at least the initial GameState of this Game.
 	 */
 	public abstract void initialize();
 

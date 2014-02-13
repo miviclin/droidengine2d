@@ -10,9 +10,9 @@ import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.miviclin.droidengine2d.gamestate.GameState;
 import com.miviclin.droidengine2d.graphics.GLView;
-import com.miviclin.droidengine2d.input.ScreenInputManager;
-import com.miviclin.droidengine2d.screen.Screen;
+import com.miviclin.droidengine2d.input.GameStateInputManager;
 
 /**
  * EngineActivity manages the life cycle of the Engine.
@@ -39,7 +39,8 @@ public abstract class EngineActivity extends FragmentActivity {
 		final Game game = engine.getGame();
 		engine.startGame();
 
-		// GLView.getWidth() and GLView.getHeight() return 0 before the view is rendered on screen for the first time,
+		// GLView.getWidth() and GLView.getHeight() return 0 before the view is rendered on screen for the first
+		// time,
 		// so we have to wait until the view is rendered for the first time before initializing the Engine
 		glView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 
@@ -106,7 +107,7 @@ public abstract class EngineActivity extends FragmentActivity {
 
 	/**
 	 * The default implementation of this method does nothing.<br>
-	 * The back button presses are handled by the {@link ScreenInputManager} of the current {@link Screen}.
+	 * The back button presses are handled by the {@link GameStateInputManager} of the current {@link GameState}.
 	 */
 	@Override
 	public void onBackPressed() {

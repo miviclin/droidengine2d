@@ -65,7 +65,7 @@ public class AccelerometerValuesListener implements SensorEventListener {
 	 * {@link Configuration#ORIENTATION_PORTRAIT} and the device is held in portrait orientation, or if the current
 	 * orientation is {@link Configuration#ORIENTATION_LANDSCAPE} and the device is held in landscape orientation, the X
 	 * axis is horizontal and points to the right, the Y axis is vertical and points up, and the Z axis points toward
-	 * the outside of the screen face. In this system, coordinates behind the screen have negative Z values.
+	 * the outside of the gameState face. In this system, coordinates behind the gameState have negative Z values.
 	 */
 	public void useCoordinateSystemOfDisplay() {
 		this.useCoordinateSystemOfDisplay = true;
