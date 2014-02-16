@@ -39,24 +39,6 @@ public abstract class GameState {
 	}
 
 	/**
-	 * Returns the width of this GameState.
-	 * 
-	 * @return width
-	 */
-	public float getWidth() {
-		return game.getViewWidth();
-	}
-
-	/**
-	 * Returns the height of this GameState.
-	 * 
-	 * @return height
-	 */
-	public float getHeight() {
-		return game.getViewHeight();
-	}
-
-	/**
 	 * Returns the Game this GameState belongs to.
 	 * 
 	 * @return Game
