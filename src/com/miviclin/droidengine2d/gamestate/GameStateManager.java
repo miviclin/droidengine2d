@@ -189,7 +189,7 @@ public class GameStateManager {
 	public void popActiveGameStates(int numGameStatesToPop) {
 		for (int i = 0; ((i < numGameStatesToPop) && !activeGameStates.empty()); i++) {
 			GameState previousGameState = popActiveGameStateOffStack();
-			GameState currentGameState = activeGameStates.peek();
+			GameState currentGameState = peekActiveGameState();
 			dispatchOnGameStateChangeEvent(previousGameState, currentGameState);
 		}
 	}
