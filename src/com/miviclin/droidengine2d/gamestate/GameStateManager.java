@@ -1,6 +1,7 @@
 package com.miviclin.droidengine2d.gamestate;
 
 import java.util.ArrayList;
+import java.util.Stack;
 
 import android.util.SparseArray;
 
@@ -15,8 +16,8 @@ import com.miviclin.droidengine2d.graphics.Graphics;
  */
 public class GameStateManager {
 
-	private SparseArray<GameState> gameStates;
-	private GameState activeGameState;
+	private SparseArray<GameState> gameStatesRegistry;
+	private Stack<GameState> activeGameStates;
 	private ArrayList<OnGameStateChangeListener> onGameStateChangeListeners;
 
 	/**
@@ -33,16 +34,15 @@ public class GameStateManager {
 	 *            holds the GameStates will be resized automatically.
 	 */
 	public GameStateManager(int initialCapacity) {
-		this.gameStates = new SparseArray<GameState>(initialCapacity);
-		this.activeGameState = null;
+		this.gameStatesRegistry = new SparseArray<GameState>(initialCapacity);
+		this.activeGameStates = new Stack<GameState>();
 		this.onGameStateChangeListeners = new ArrayList<OnGameStateChangeListener>();
 	}
 
 	/**
 	 * Registers a GameState in this GameStateManager using the specified gameStateId.<br>
 	 * If a GameState with the specified gameStateId was previously registered in this GameStateManager, it will be
-	 * replaced by the new one.<br>
-	 * The active GameState will not change.
+	 * replaced by the new one.
 	 * 
 	 * @param gameStateId Identifier of the GameState. It can be used to get the GameState from this GameStateManager
 	 *            later.
@@ -60,88 +60,177 @@ public class GameStateManager {
 	 * @param gameStateId Identifier of the GameState. It can be used to get the GameState from this GameStateManager
 	 *            later.
 	 * @param gameState GameState (can not be null).
-	 * @param activate true to make the GameState the active GameState of this GameStateManager.
+	 * @param push true to push the GameState onto the stack of active GameStates of this GameStateManager.
 	 */
-	public void registerGameState(int gameStateId, GameState gameState, boolean activate) {
+	public void registerGameState(int gameStateId, GameState gameState, boolean push) {
 		if (gameState == null) {
 			throw new IllegalArgumentException("The GameState can not be null");
 		}
-		gameStates.put(gameStateId, gameState);
+		gameStatesRegistry.put(gameStateId, gameState);
 		gameState.onRegister();
-		if (activate) {
-			setActiveGameState(gameStateId);
+		if (push) {
+			pushActiveGameState(gameStateId);
 		}
 	}
 
 	/**
 	 * Unregisters the specified GameState from this GameStateManager.<br>
-	 * If a GameState was registered with the specified gameStateId, {@link GameState#onDispose()} is called on the
-	 * GameState before it is removed from this GameStateManager.
+	 * If a GameState was registered with the specified gameStateId, {@link GameState#dispose()} is called on the
+	 * GameState before it is removed from this GameStateManager.<br>
+	 * If the specified GameState is in the stack of active GameStates it should be removed from the stack first,
+	 * otherwise an exception will be thrown.
 	 * 
 	 * @param gameStateId Identifier of the GameState.
 	 * @return Removed GameState or null
 	 */
 	public GameState unregisterGameState(int gameStateId) {
-		GameState gameState = gameStates.get(gameStateId);
-		if (gameState == activeGameState) {
-			gameState.onDeactivation();
-			activeGameState = null;
+		GameState gameState = gameStatesRegistry.get(gameStateId);
+		if (gameState == null) {
+			return null;
 		}
-		if (gameState != null) {
-			gameState.dispose();
-			gameStates.remove(gameStateId);
+		int indexInStack = activeGameStates.search(gameState);
+		if (indexInStack >= 0) {
+			throw new IllegalStateException("The GameState registered with the gameStateId " + gameStateId + " is " +
+					"currently in the stack of active GameStates. It should be removed from the stack of active " +
+					"GameStates before unregistering it from this GameStateManager.");
 		}
+		gameState.dispose();
+		gameStatesRegistry.remove(gameStateId);
 		return gameState;
 	}
 
 	/**
-	 * Returns the GameState associated with the specified gameStateId.
+	 * Returns the GameState registered with the specified gameStateId.
 	 * 
 	 * @param gameStateId Identifier of the GameState.
 	 * @return GameState or null
 	 */
 	public GameState getGameState(int gameStateId) {
-		return gameStates.get(gameStateId);
+		return gameStatesRegistry.get(gameStateId);
 	}
 
 	/**
-	 * Returns the active GameState of this GameStateManager.
-	 * 
-	 * @return GameState or null
-	 */
-	public GameState getActiveGameState() {
-		return activeGameState;
-	}
-
-	/**
-	 * Sets the active GameState of this GameStateManager.<br>
-	 * The GameState must have been previously registered with the specified gameStateId.
+	 * Replaces the GameState at the top of the stack of active GameStates of this GameStateManager with the specified
+	 * GameState.<br>
+	 * The GameState must have been previously registered with the specified gameStateId.<br>
+	 * This method notifies every {@link OnGameStateChangeListener} registered in this GameStateManager that the
+	 * GameState at the top of the stack of active GameStates has changed.
 	 * 
 	 * @param gameStateId Identifier of the GameState we want to set as the active GameState.
 	 */
-	public void setActiveGameState(int gameStateId) {
-		if (activeGameState != null) {
-			activeGameState.onDeactivation();
+	public void switchActiveGameState(int gameStateId) {
+		GameState previousTopGameState = popActiveGameStateOffStack();
+		GameState currentTopGameState = pushActiveGameStateOntoStack(gameStateId);
+		dispatchOnGameStateChangeEvent(previousTopGameState, currentTopGameState);
+	}
+
+	/**
+	 * Returns the GameState at the top of the stack of active GameStates of this GameStateManager.
+	 * 
+	 * @return GameState or null
+	 */
+	public GameState peekActiveGameState() {
+		if (activeGameStates.empty()) {
+			return null;
 		}
-		GameState gameState = gameStates.get(gameStateId);
-		if (activeGameState != gameState) {
-			dispatchOnGameStateChangeEvent(activeGameState, gameState);
+		return activeGameStates.peek();
+	}
+
+	/**
+	 * Pushes the GameState onto the stack of active GameStates of this GameStateManager.<br>
+	 * The GameState must have been previously registered with the specified gameStateId.<br>
+	 * This method notifies every {@link OnGameStateChangeListener} registered in this GameStateManager that the
+	 * GameState at the top of the stack of active GameStates has changed.
+	 * 
+	 * @param gameStateId Identifier of the GameState we want to set as the active GameState.
+	 */
+	public void pushActiveGameState(int gameStateId) {
+		GameState previousTopGameState = peekActiveGameState();
+		GameState currentTopGameState = pushActiveGameStateOntoStack(gameStateId);
+		dispatchOnGameStateChangeEvent(previousTopGameState, currentTopGameState);
+	}
+
+	/**
+	 * Pushes the GameState onto the stack of active GameStates of this GameStateManager.<br>
+	 * The GameState must have been previously registered with the specified gameStateId.<br>
+	 * This method does not call {@link #dispatchOnGameStateChangeEvent(GameState, GameState)}.
+	 * 
+	 * @param gameStateId Identifier of the GameState we want to set as the active GameState.
+	 * @return The GameState pushed onto the stack of active GameStates
+	 */
+	private GameState pushActiveGameStateOntoStack(int gameStateId) {
+		GameState gameState = gameStatesRegistry.get(gameStateId);
+		if (gameState == null) {
+			throw new GameStateNotRegisteredException(gameStateId);
 		}
-		this.activeGameState = gameState;
-		if (activeGameState != null) {
-			activeGameState.onActivation();
+		activeGameStates.push(gameState);
+		gameState.onActivation();
+		return gameState;
+	}
+
+	/**
+	 * Pops 1 GameState off the stack of active GameStates of this GameStateManager. Also calls
+	 * {@link GameState#onDeactivation()} on the GameState popped off the stack.<br>
+	 * This method notifies every {@link OnGameStateChangeListener} registered in this GameStateManager that the
+	 * GameState at the top of the stack of active GameStates has changed.
+	 */
+	public void popActiveGameState() {
+		popActiveGameStates(1);
+	}
+
+	/**
+	 * Pops the specified number of GameStates off the stack of active GameStates of this GameStateManager. Also calls
+	 * {@link GameState#onDeactivation()} on all the GameStates popped off the stack.<br>
+	 * This method notifies every {@link OnGameStateChangeListener} registered in this GameStateManager that the
+	 * GameState at the top of the stack of active GameStates has changed.
+	 * 
+	 * @param numGameStatesToPop Number of GameStates that will be popped off the stack of active GameStates.
+	 */
+	public void popActiveGameStates(int numGameStatesToPop) {
+		for (int i = 0; ((i < numGameStatesToPop) && !activeGameStates.empty()); i++) {
+			GameState previousGameState = popActiveGameStateOffStack();
+			GameState currentGameState = activeGameStates.peek();
+			dispatchOnGameStateChangeEvent(previousGameState, currentGameState);
 		}
 	}
 
 	/**
-	 * Notifies all listeners that the GameState has changed.
+	 * Pops all GameStates off the stack of active GameStates of this GameStateManager.<br>
+	 * This method notifies every {@link OnGameStateChangeListener} registered in this GameStateManager that the
+	 * GameState at the top of the stack of active GameStates has changed.
 	 * 
-	 * @param previousGameState Previous GameState.
-	 * @param currentGameState Current GameState.
+	 * @see #popActiveGameStates(int)
 	 */
-	private void dispatchOnGameStateChangeEvent(GameState previousGameState, GameState currentGameState) {
+	public void popAllActiveGameStates() {
+		int numGameStatesToPop = activeGameStates.size();
+		popActiveGameStates(numGameStatesToPop);
+	}
+
+	/**
+	 * Pops 1 GameState off the stack of active GameStates of this GameStateManager. Also calls
+	 * {@link GameState#onDeactivation()} on the GameState popped off the stack.<br>
+	 * This method does not call {@link #dispatchOnGameStateChangeEvent(GameState, GameState)}.
+	 * 
+	 * @return The removed GameState or null
+	 */
+	private GameState popActiveGameStateOffStack() {
+		GameState gameState = null;
+		if (!activeGameStates.empty()) {
+			gameState = activeGameStates.pop();
+			gameState.onDeactivation();
+		}
+		return gameState;
+	}
+
+	/**
+	 * Notifies all listeners that the GameState at the top of the stack of active GameStates has changed.
+	 * 
+	 * @param previousGameState Previous GameState at the top of the stack or null if the stack was empty.
+	 * @param currentGameState Current GameState at the top of the stack or null if the stack is empty.
+	 */
+	private void dispatchOnGameStateChangeEvent(GameState previousTopGameState, GameState currentTopGameState) {
 		for (int i = 0; i < onGameStateChangeListeners.size(); i++) {
-			onGameStateChangeListeners.get(i).onGameStateChange(previousGameState, currentGameState);
+			onGameStateChangeListeners.get(i).onGameStateChange(previousTopGameState, currentTopGameState);
 		}
 	}
 
@@ -167,11 +256,11 @@ public class GameStateManager {
 
 	/**
 	 * This method is called when the engine is paused, usually when the activity goes to background.<br>
-	 * Calls {@link GameState#onPause()} on the active GameState.
+	 * Calls {@link GameState#onPause()} on all the active GameStates.
 	 */
 	public void pause() {
-		if (activeGameState != null) {
-			activeGameState.onPause();
+		for (int i = 0; i < activeGameStates.size(); i++) {
+			activeGameStates.get(i).onPause();
 		}
 	}
 
@@ -180,50 +269,53 @@ public class GameStateManager {
 	 * Calls {@link GameState#onResume()} on the active GameState.
 	 */
 	public void resume() {
-		if (activeGameState != null) {
-			activeGameState.onResume();
+		for (int i = 0; i < activeGameStates.size(); i++) {
+			activeGameStates.get(i).onResume();
 		}
 	}
 
 	/**
-	 * Calls {@link GameState#onDispose()} on all GameStates registered in this GameStateManager and removes them from
-	 * the GameStateManager.<br>
+	 * Clears the stack of active GameStates calling {@link #popAllActiveGameStates()} and calls
+	 * {@link GameState#dispose()} on all GameStates registered in this GameStateManager and removes them from the
+	 * GameStateManager.<br>
 	 * This GameStateManager will be left empty.
 	 */
 	public void dispose() {
-		int numGameStates = gameStates.size();
+		popAllActiveGameStates();
+		int numGameStates = gameStatesRegistry.size();
 		for (int i = 0; i < numGameStates; i++) {
-			GameState gameState = gameStates.valueAt(i);
+			GameState gameState = gameStatesRegistry.valueAt(i);
 			if (gameState != null) {
 				gameState.dispose();
 			}
 		}
-		gameStates.clear();
-		activeGameState = null;
+		gameStatesRegistry.clear();
 	}
 
 	/**
-	 * Calls {@link GameState#update(float)} on the active GameState .<br>
+	 * Calls {@link GameState#update(float)} on the GameState at the top of the stack of active GameStates.<br>
 	 * This method is called from {@link Game#update(float)}.
 	 * 
 	 * @param delta Elapsed time, in milliseconds, since the last update.
 	 */
 	public void update(float delta) {
-		if (activeGameState != null) {
-			activeGameState.getInputManager().processInput();
-			activeGameState.update(delta);
+		GameState gameState = peekActiveGameState();
+		if (gameState != null) {
+			gameState.getInputManager().processInput();
+			gameState.update(delta);
 		}
 	}
 
 	/**
-	 * Calls {@link GameState#draw(Graphics)} on the active GameState.<br>
+	 * Calls {@link GameState#draw(Graphics)} on all the GameStates in the stack of active GameStates.<br>
 	 * This method is called from {@link Game#draw(Graphics)}.<br>
 	 * This method is called from the redering thread after {@link GameStateManager#update(float)} has been executed in
 	 * the game thread.
 	 */
 	public void draw(Graphics graphics) {
-		if (activeGameState != null) {
-			activeGameState.draw(graphics);
+		for (int i = 0; i < activeGameStates.size(); i++) {
+			GameState gameState = activeGameStates.get(i);
+			gameState.draw(graphics);
 		}
 	}
 

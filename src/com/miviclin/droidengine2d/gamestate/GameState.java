@@ -108,23 +108,26 @@ public abstract class GameState {
 	public abstract void onRegister();
 
 	/**
-	 * This method is called when this GameState becomes the active GameState in the {@link GameStateManager}.
+	 * This method is called when this GameState is pushed onto the stack of active GameStates of the
+	 * {@link GameStateManager}.
 	 */
 	public abstract void onActivation();
 
 	/**
-	 * This method is called when this GameState stops being the active GameState in the {@link GameStateManager}.
+	 * This method is called when this GameState is popped off the stack of active GameStates of the
+	 * {@link GameStateManager}.
 	 */
 	public abstract void onDeactivation();
 
 	/**
-	 * This method is called when {@link GameStateManager#pause()} is called, if this GameState is the active GameState.
+	 * This method is called when {@link GameStateManager#pause()} is called, if this GameState is in the stack of
+	 * active GameStates of the {@link GameStateManager}.
 	 */
 	public abstract void onPause();
 
 	/**
-	 * This method is called when {@link GameStateManager#resume()} is called, if this GameState is the active
-	 * GameState.
+	 * This method is called when {@link GameStateManager#resume()} is called, if this GameState is the stack of active
+	 * GameStates of the {@link GameStateManager}.
 	 */
 	public abstract void onResume();
 
