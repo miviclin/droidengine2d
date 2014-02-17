@@ -19,8 +19,6 @@ public abstract class GameState {
 	/**
 	 * Creates a new GameState.
 	 * 
-	 * @param width Width.
-	 * @param height Height.
 	 * @param game Game.
 	 */
 	public GameState(Game game) {
