@@ -1,8 +1,12 @@
 package com.miviclin.droidengine2d.gamestate;
 
+import android.app.Activity;
+
 import com.miviclin.droidengine2d.AbstractGame;
 import com.miviclin.droidengine2d.Game;
 import com.miviclin.droidengine2d.graphics.Graphics;
+import com.miviclin.droidengine2d.graphics.cameras.Camera;
+import com.miviclin.droidengine2d.graphics.texture.TextureManager;
 import com.miviclin.droidengine2d.input.GameStateInputManager;
 
 /**
@@ -44,6 +48,46 @@ public abstract class GameState {
 	 */
 	public Game getGame() {
 		return game;
+	}
+
+	/**
+	 * Returns the Activity where the game runs.<br>
+	 * This method is a shorthand for {@code getGame().getActivity()}.
+	 * 
+	 * @return Activity where the game runs
+	 */
+	public Activity getActivity() {
+		return game.getActivity();
+	}
+
+	/**
+	 * Returns the Camera.<br>
+	 * This method is a shorthand for {@code getGame().getCamera()}.
+	 * 
+	 * @return Camera
+	 */
+	public Camera getCamera() {
+		return game.getCamera();
+	}
+
+	/**
+	 * Returns the TextureManager.<br>
+	 * This method is a shorthand for {@code getGame().getTextureManager()}.
+	 * 
+	 * @return TextureManager
+	 */
+	public TextureManager getTextureManager() {
+		return game.getTextureManager();
+	}
+
+	/**
+	 * Returns the GameStateManager.<br>
+	 * This method is a shorthand for {@code getGame().getGameStateManager()}.
+	 * 
+	 * @return GameStateManager
+	 */
+	public GameStateManager getGameStateManager() {
+		return game.getGameStateManager();
 	}
 
 	/**
