@@ -14,7 +14,7 @@ import com.miviclin.droidengine2d.input.GameStateInputManager;
 public abstract class GameState {
 
 	private final Game game;
-	private GameStateInputManager inputManager;
+	private GameStateInputManager gameStateInputManager;
 
 	/**
 	 * Creates a new GameState.
@@ -30,11 +30,11 @@ public abstract class GameState {
 	/**
 	 * Creates a new GameState.
 	 * 
-	 * @param inputManager GameStateInputManager.
+	 * @param gameStateInputManager GameStateInputManager.
 	 * @param game Game.
 	 */
-	public GameState(GameStateInputManager inputManager, Game game) {
-		this.inputManager = inputManager;
+	public GameState(GameStateInputManager gameStateInputManager, Game game) {
+		this.gameStateInputManager = gameStateInputManager;
 		this.game = game;
 	}
 
@@ -48,12 +48,12 @@ public abstract class GameState {
 	}
 
 	/**
-	 * Returns the InputManager.
+	 * Returns the GameInputManager.
 	 * 
-	 * @return InputManager
+	 * @return GameInputManager
 	 */
-	public GameStateInputManager getInputManager() {
-		return inputManager;
+	public GameStateInputManager getGameStateInputManager() {
+		return gameStateInputManager;
 	}
 
 	/**

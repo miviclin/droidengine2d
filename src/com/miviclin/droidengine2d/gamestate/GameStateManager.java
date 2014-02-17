@@ -301,7 +301,7 @@ public class GameStateManager {
 	public void update(float delta) {
 		GameState gameState = peekActiveGameState();
 		if (gameState != null) {
-			gameState.getInputManager().processInput();
+			gameState.getGameStateInputManager().processInput();
 			gameState.update(delta);
 		}
 	}

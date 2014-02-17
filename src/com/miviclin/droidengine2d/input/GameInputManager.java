@@ -35,7 +35,7 @@ public class GameInputManager implements OnGameStateChangeListener, OnTouchListe
 	@Override
 	public void onGameStateChange(GameState previousGameState, GameState currentGameState) {
 		if (currentGameState != null) {
-			this.currentGameStateInputManager = currentGameState.getInputManager();
+			this.currentGameStateInputManager = currentGameState.getGameStateInputManager();
 		} else {
 			this.currentGameStateInputManager = null;
 		}
