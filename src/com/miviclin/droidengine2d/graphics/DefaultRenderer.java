@@ -3,11 +3,11 @@ package com.miviclin.droidengine2d.graphics;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import android.content.Context;
+import android.app.Activity;
 import android.opengl.GLES20;
 
+import com.miviclin.droidengine2d.AbstractGame;
 import com.miviclin.droidengine2d.BuildConfig;
-import com.miviclin.droidengine2d.Game;
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
 
 /**
@@ -18,10 +18,7 @@ import com.miviclin.droidengine2d.graphics.cameras.Camera;
  */
 public class DefaultRenderer implements EngineRenderer {
 
-	private Game game;
-	private Camera camera;
-	private Context context;
-
+	private AbstractGame game;
 	private Graphics graphics;
 
 	/**
@@ -29,15 +26,15 @@ public class DefaultRenderer implements EngineRenderer {
 	 * 
 	 * @param game Game.
 	 */
-	public DefaultRenderer(Game game) {
+	public DefaultRenderer(AbstractGame game) {
 		this.game = game;
-		this.camera = game.getCamera();
-		this.context = game.getActivity();
 	}
 
 	@Override
 	public void onSurfaceCreated(GL10 glUnused, EGLConfig config) {
-		graphics = new Graphics(camera, context);
+		Camera camera = game.getCamera();
+		Activity activity = game.getActivity();
+		graphics = new Graphics(camera, activity);
 		graphics.initialize();
 
 		GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -49,6 +46,7 @@ public class DefaultRenderer implements EngineRenderer {
 
 	@Override
 	public void onSurfaceChanged(GL10 glUnused, int width, int height) {
+		Camera camera = game.getCamera();
 		camera.setViewportDimensions(width, height);
 		camera.update();
 		game.getTextureManager().loadAllTextures();

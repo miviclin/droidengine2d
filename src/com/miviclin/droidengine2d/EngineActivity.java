@@ -36,7 +36,7 @@ public abstract class EngineActivity extends FragmentActivity {
 
 		engine = createEngine(glView);
 
-		final Game game = engine.getGame();
+		final AbstractGame game = engine.getGame();
 		engine.startGame();
 
 		// GLView.getWidth() and GLView.getHeight() return 0 before the view is rendered on screen for the first

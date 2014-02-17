@@ -22,7 +22,7 @@ public class GameThread implements Runnable {
 
 	private final int maxSkippedFrames;
 	private final float idealTimePerFrame;
-	private final Game game;
+	private final AbstractGame game;
 	private final EngineLock engineLock;
 	private final MutexLock pauseLock;
 	private final MutexLock terminateLock;
@@ -39,7 +39,7 @@ public class GameThread implements Runnable {
 	 * @param glView GLView where the Game is rendered.
 	 * @param engineLock EngineLock used to synchronize both threads.
 	 */
-	public GameThread(Game game, GLView glView, EngineLock engineLock) {
+	public GameThread(AbstractGame game, GLView glView, EngineLock engineLock) {
 		this(30, 5, game, glView, engineLock);
 
 	}
@@ -53,7 +53,7 @@ public class GameThread implements Runnable {
 	 * @param glView GLView where the Game is rendered.
 	 * @param engineLock EngineLock used to synchronize both threads.
 	 */
-	public GameThread(int maxFPS, Game game, GLView glView, EngineLock engineLock) {
+	public GameThread(int maxFPS, AbstractGame game, GLView glView, EngineLock engineLock) {
 		this(maxFPS, 5, game, glView, engineLock);
 	}
 
@@ -67,7 +67,7 @@ public class GameThread implements Runnable {
 	 * @param glView GLView where the Game is rendered.
 	 * @param engineLock EngineLock used to synchronize both threads.
 	 */
-	public GameThread(int maxFPS, int maxSkippedFrames, Game game, GLView glView, EngineLock engineLock) {
+	public GameThread(int maxFPS, int maxSkippedFrames, AbstractGame game, GLView glView, EngineLock engineLock) {
 		if (game == null) {
 			throw new IllegalArgumentException("The Game can not be null");
 		}

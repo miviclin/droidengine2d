@@ -1,12 +1,13 @@
 package com.miviclin.droidengine2d.gamestate;
 
+import com.miviclin.droidengine2d.AbstractGame;
 import com.miviclin.droidengine2d.Game;
 import com.miviclin.droidengine2d.graphics.Graphics;
 import com.miviclin.droidengine2d.input.GameStateInputManager;
 
 /**
  * GameState represents a level, menu, screen... of the game.<br>
- * GameStates should be initialized in {@link Game#initialize()} or in another GameState.
+ * GameStates should be initialized in {@link AbstractGame#initialize()} or in another GameState.
  * 
  * @author Miguel Vicente Linares
  * 

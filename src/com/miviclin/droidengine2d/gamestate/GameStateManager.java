@@ -5,7 +5,7 @@ import java.util.Stack;
 
 import android.util.SparseArray;
 
-import com.miviclin.droidengine2d.Game;
+import com.miviclin.droidengine2d.AbstractGame;
 import com.miviclin.droidengine2d.graphics.Graphics;
 
 /**
@@ -294,7 +294,7 @@ public class GameStateManager {
 
 	/**
 	 * Calls {@link GameState#update(float)} on the GameState at the top of the stack of active GameStates.<br>
-	 * This method is called from {@link Game#update(float)}.
+	 * This method is called from {@link AbstractGame#update(float)}.
 	 * 
 	 * @param delta Elapsed time, in milliseconds, since the last update.
 	 */
@@ -308,7 +308,7 @@ public class GameStateManager {
 
 	/**
 	 * Calls {@link GameState#draw(Graphics)} on all the GameStates in the stack of active GameStates.<br>
-	 * This method is called from {@link Game#draw(Graphics)}.<br>
+	 * This method is called from {@link AbstractGame#draw(Graphics)}.<br>
 	 * This method is called from the redering thread after {@link GameStateManager#update(float)} has been executed in
 	 * the game thread.
 	 */
