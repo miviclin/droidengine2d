@@ -34,7 +34,7 @@ import com.miviclin.droidengine2d.graphics.GLView;
  */
 public class Engine {
 
-	private Game game;
+	private AbstractGame game;
 	private GameThread gameThread;
 	private GLRenderer renderer;
 	private GLView glView;
@@ -62,7 +62,7 @@ public class Engine {
 	 * 
 	 * @return Game
 	 */
-	public Game getGame() {
+	public AbstractGame getGame() {
 		return game;
 	}
 
@@ -133,7 +133,7 @@ public class Engine {
 	 */
 	public static final class EngineBuilder {
 
-		private final Game game;
+		private final AbstractGame game;
 		private final GLView glView;
 		private EngineRenderer renderer;
 		private GLRenderer glRenderer;
@@ -148,7 +148,7 @@ public class Engine {
 		 * @param game Game
 		 * @throws IllegalArgumentException if game is null
 		 */
-		public EngineBuilder(Game game) {
+		public EngineBuilder(AbstractGame game) {
 			if (game == null) {
 				throw new IllegalArgumentException("The Game can not be null");
 			}

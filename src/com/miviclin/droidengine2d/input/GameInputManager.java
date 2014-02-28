@@ -6,20 +6,20 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 
 import com.miviclin.droidengine2d.EngineActivity;
+import com.miviclin.droidengine2d.gamestate.GameState;
+import com.miviclin.droidengine2d.gamestate.OnGameStateChangeListener;
 import com.miviclin.droidengine2d.graphics.GLView;
-import com.miviclin.droidengine2d.screen.OnScreenChangeListener;
-import com.miviclin.droidengine2d.screen.Screen;
 
 /**
- * Manages game input delegating event handling to the current {@link ScreenInputManager}.
+ * Manages game input delegating event handling to the current {@link GameStateInputManager}.
  * 
  * @author Miguel Vicente Linares
  * 
  */
-public class GameInputManager implements OnScreenChangeListener, OnTouchListener {
+public class GameInputManager implements OnGameStateChangeListener, OnTouchListener {
 
 	private GLView glView;
-	private ScreenInputManager currentScreenInputManager;
+	private GameStateInputManager currentGameStateInputManager;
 
 	/**
 	 * Creates a new GameInputManager.
@@ -28,26 +28,30 @@ public class GameInputManager implements OnScreenChangeListener, OnTouchListener
 	 */
 	public GameInputManager(GLView glView) {
 		this.glView = glView;
-		this.currentScreenInputManager = null;
+		this.currentGameStateInputManager = null;
 		this.glView.setOnTouchListener(this);
 	}
 
 	@Override
-	public void onScreenChange(Screen previousScreen, Screen currentScreen) {
-		this.currentScreenInputManager = currentScreen.getInputManager();
+	public void onGameStateChange(GameState previousGameState, GameState currentGameState) {
+		if (currentGameState != null) {
+			this.currentGameStateInputManager = currentGameState.getGameStateInputManager();
+		} else {
+			this.currentGameStateInputManager = null;
+		}
 	}
 
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
-		if (currentScreenInputManager != null) {
-			currentScreenInputManager.getTouchProcessor().queueCopyOfMotionEvent(event);
+		if (currentGameStateInputManager != null) {
+			currentGameStateInputManager.getTouchProcessor().queueCopyOfMotionEvent(event);
 		}
 		return true;
 	}
 
 	/**
 	 * This method is called from {@link EngineActivity#onKeyDown(int, KeyEvent)}.<br>
-	 * Queues a copy of the KeyEvent in the {@link KeyProcessor} of the current {@link ScreenInputManager} for later
+	 * Queues a copy of the KeyEvent in the {@link KeyProcessor} of the current {@link GameStateInputManager} for later
 	 * processing.
 	 * 
 	 * @param keyCode Key code.
@@ -55,15 +59,15 @@ public class GameInputManager implements OnScreenChangeListener, OnTouchListener
 	 * @return Always returns true.
 	 */
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (currentScreenInputManager != null) {
-			currentScreenInputManager.getKeyProcessor().queueCopyOfKeyEvent(event);
+		if (currentGameStateInputManager != null) {
+			currentGameStateInputManager.getKeyProcessor().queueCopyOfKeyEvent(event);
 		}
 		return true;
 	}
 
 	/**
 	 * This method is called from {@link EngineActivity#onKeyUp(int, KeyEvent)}.<br>
-	 * Queues a copy of the KeyEvent in the {@link KeyProcessor} of the current {@link ScreenInputManager} for later
+	 * Queues a copy of the KeyEvent in the {@link KeyProcessor} of the current {@link GameStateInputManager} for later
 	 * processing.
 	 * 
 	 * @param keyCode Key code.
@@ -71,8 +75,8 @@ public class GameInputManager implements OnScreenChangeListener, OnTouchListener
 	 * @return Always returns true.
 	 */
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
-		if (currentScreenInputManager != null) {
-			currentScreenInputManager.getKeyProcessor().queueCopyOfKeyEvent(event);
+		if (currentGameStateInputManager != null) {
+			currentGameStateInputManager.getKeyProcessor().queueCopyOfKeyEvent(event);
 		}
 		return true;
 	}

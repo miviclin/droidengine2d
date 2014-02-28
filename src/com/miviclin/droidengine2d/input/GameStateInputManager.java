@@ -5,34 +5,34 @@ import android.app.Activity;
 import com.miviclin.droidengine2d.input.sensor.Accelerometer;
 
 /**
- * ScreenInputManager.
+ * GameStateInputManager.
  * 
  * @author Miguel Vicente Linares
  * 
  */
-public class ScreenInputManager {
+public class GameStateInputManager {
 
 	private TouchProcessor touchProcessor;
 	private KeyProcessor keyProcessor;
 	private Accelerometer accelerometer;
 
 	/**
-	 * Creates a new InputManager.
+	 * Creates a new GameStateInputManager.
 	 * 
 	 * @param activity Activity.
 	 */
-	public ScreenInputManager(Activity activity) {
+	public GameStateInputManager(Activity activity) {
 		this(activity, new TouchProcessor(), new KeyProcessor(activity));
 	}
 
 	/**
-	 * Creates a new InputManager.
+	 * Creates a new GameStateInputManager.
 	 * 
 	 * @param activity Activity.
 	 * @param touchProcessor TouchProcessor.
 	 * @param keyProcessor KeyProcessor.
 	 */
-	public ScreenInputManager(Activity activity, TouchProcessor touchProcessor, KeyProcessor keyProcessor) {
+	public GameStateInputManager(Activity activity, TouchProcessor touchProcessor, KeyProcessor keyProcessor) {
 		this.touchProcessor = touchProcessor;
 		this.keyProcessor = keyProcessor;
 		this.accelerometer = new Accelerometer(activity);
