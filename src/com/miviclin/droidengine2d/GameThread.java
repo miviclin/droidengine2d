@@ -100,10 +100,10 @@ public class GameThread implements Runnable {
 			if (currentState == State.RUNNING) {
 				startingTime = System.currentTimeMillis();
 				skippedFrames = 0;
-				if (engineLock.allowUpdate.get()) {
-					synchronized (engineLock.lock) {
+				if (engineLock.getAllowUpdateFlag().get()) {
+					synchronized (engineLock.getLock()) {
 						game.update((float) idealTimePerFrame);
-						engineLock.allowUpdate.set(false);
+						engineLock.getAllowUpdateFlag().set(false);
 						glView.requestRender();
 					}
 				}
@@ -181,7 +181,7 @@ public class GameThread implements Runnable {
 	public void terminate() {
 		currentState = State.TERMINATED;
 		pauseLock.unlock();
-		engineLock.allowUpdate.set(true);
+		engineLock.getAllowUpdateFlag().set(true);
 		terminateLock.lock();
 	}
 
@@ -190,7 +190,7 @@ public class GameThread implements Runnable {
 	 */
 	public void pause() {
 		currentState = State.PAUSED;
-		engineLock.allowUpdate.set(true);
+		engineLock.getAllowUpdateFlag().set(true);
 	}
 
 	/**
@@ -200,7 +200,7 @@ public class GameThread implements Runnable {
 		if (currentState == State.PAUSED) {
 			currentState = State.RUNNING;
 			game.onEngineResumed();
-			engineLock.allowUpdate.set(true);
+			engineLock.getAllowUpdateFlag().set(true);
 			pauseLock.unlock();
 		}
 	}

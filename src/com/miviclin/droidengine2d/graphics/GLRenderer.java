@@ -31,11 +31,11 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 
 	@Override
 	public final void onDrawFrame(GL10 glUnused) {
-		if (!engineLock.allowUpdate.get()) {
-			synchronized (engineLock.lock) {
+		if (!engineLock.getAllowUpdateFlag().get()) {
+			synchronized (engineLock.getLock()) {
 				engineRenderer.onDrawFrame(glUnused);
 				GLDebugger.getInstance().checkGLError();
-				engineLock.allowUpdate.set(true);
+				engineLock.getAllowUpdateFlag().set(true);
 			}
 		}
 	}

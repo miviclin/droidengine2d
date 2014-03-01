@@ -10,15 +10,34 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class EngineLock {
 
-	public final AtomicBoolean allowUpdate;
-	public final Object lock;
+	private final AtomicBoolean allowUpdateFlag;
+	private final Object lock;
 
 	/**
 	 * Creates an EngineLock.
 	 */
 	public EngineLock() {
-		this.allowUpdate = new AtomicBoolean();
+		this.allowUpdateFlag = new AtomicBoolean();
 		this.lock = new Object();
+	}
+
+	/**
+	 * Returns the allow update flag.<br>
+	 * If this flag is set, the game can be updated.
+	 * 
+	 * @return The allow update flag
+	 */
+	public AtomicBoolean getAllowUpdateFlag() {
+		return allowUpdateFlag;
+	}
+
+	/**
+	 * Returns the object used to lock the GameThread while the rendering thread is working and vice-versa.
+	 * 
+	 * @return Lock object
+	 */
+	public Object getLock() {
+		return lock;
 	}
 
 }
