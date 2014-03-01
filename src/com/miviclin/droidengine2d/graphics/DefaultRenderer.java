@@ -55,12 +55,16 @@ public class DefaultRenderer implements EngineRenderer {
 	@Override
 	public void onDrawFrame(GL10 glUnused) {
 		GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
+
+		if (BuildConfig.DEBUG) {
+			GLDebugger.getInstance().logNumDrawCallsInPreviousFrame();
+		}
+
 		game.draw(graphics);
 		graphics.flush();
 
 		if (BuildConfig.DEBUG) {
-			GLDebugger.getInstance().logNumDrawCallsFrame();
-			GLDebugger.getInstance().resetNumDrawCallsFrame();
+			GLDebugger.getInstance().resetNumDrawCallsInCurrentFrame();
 		}
 	}
 
