@@ -36,6 +36,13 @@ public class MusicManager implements OnCompletionListener {
 		this.volume = -1.0f;
 	}
 
+	@Override
+	public void onCompletion(MediaPlayer player) {
+		synchronized (this) {
+			prepared = false;
+		}
+	}
+
 	/**
 	 * Loads music from the specified file and prepares the MediaPlayer for playing it. Looping is enabled by default.
 	 * 
@@ -258,13 +265,6 @@ public class MusicManager implements OnCompletionListener {
 		if (player != null) {
 			this.volume = volume;
 			player.setVolume(volume, volume);
-		}
-	}
-
-	@Override
-	public void onCompletion(MediaPlayer player) {
-		synchronized (this) {
-			prepared = false;
 		}
 	}
 
