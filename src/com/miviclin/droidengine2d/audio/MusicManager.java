@@ -18,6 +18,9 @@ import com.miviclin.droidengine2d.resources.AssetsLoader;
  */
 public class MusicManager implements OnCompletionListener {
 
+	public static final float MIN_VOLUME = 0.0f;
+	public static final float MAX_VOLUME = 1.0f;
+
 	private MediaPlayer player;
 	private boolean prepared;
 	private boolean loaded;
