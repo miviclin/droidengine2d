@@ -25,7 +25,7 @@ public class KeyProcessor {
 	 * @param activity Activity;
 	 */
 	public KeyProcessor(Activity activity) {
-		this.keyEventProcessor = null;
+		this.keyEventProcessor = new DefaultKeyEventProcessor(activity);
 		this.keyEventInfoQueue = new PooledLinkedQueue<KeyEventInfo>(60);
 
 		this.activity = activity;
