@@ -269,7 +269,7 @@ public class MusicManager implements OnCompletionListener {
 	}
 
 	/**
-	 * Checks if MusicManager supports playing the specified file without loading it.
+	 * Checks if MusicManager supports playing the specified file.
 	 * 
 	 * @param context Context.
 	 * @param ruta File path.
