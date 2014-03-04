@@ -16,7 +16,7 @@ import com.miviclin.droidengine2d.resources.AssetsLoader;
  * @author Miguel Vicente Linares
  * 
  */
-public class MusicManager implements OnCompletionListener {
+public class MusicPlayer implements OnCompletionListener {
 
 	public static final float MIN_VOLUME = 0.0f;
 	public static final float MAX_VOLUME = 1.0f;
@@ -29,7 +29,7 @@ public class MusicManager implements OnCompletionListener {
 	/**
 	 * Creates a new MusicManager.
 	 */
-	public MusicManager() {
+	public MusicPlayer() {
 		this.player = null;
 		this.prepared = false;
 		this.loaded = false;
