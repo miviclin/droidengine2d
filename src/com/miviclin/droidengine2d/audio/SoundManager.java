@@ -29,8 +29,31 @@ public class SoundManager {
 	 *            specified capacity is reached.
 	 */
 	public SoundManager(int maxStreams, int initialCapacity) {
+		initialize(maxStreams, initialCapacity);
+	}
+
+	/**
+	 * Releases all resources (calls {@link #release()}) and resets this SoundManager with the specified parameters.
+	 * 
+	 * @param maxStreams Max number of sounds that can be played at the same time.
+	 * @param initialCapacity Initial capacity of the sound pool. It will be resized if more sounds are loaded after the
+	 *            specified capacity is reached.
+	 */
+	public void reset(int maxStreams, int capacity) {
+		release();
+		initialize(maxStreams, capacity);
+	}
+
+	/**
+	 * Initializes this SoundManager with the specified parameters.
+	 * 
+	 * @param maxStreams Max number of sounds that can be played at the same time.
+	 * @param initialCapacity Initial capacity of the sound pool. It will be resized if more sounds are loaded after the
+	 *            specified capacity is reached.
+	 */
+	private void initialize(int maxStreams, int capacity) {
 		this.soundPool = new SoundPool(maxStreams, AudioManager.STREAM_MUSIC, 0);
-		this.soundMap = new HashMap<String, Integer>((int) ((initialCapacity / 0.75) + 1));
+		this.soundMap = new HashMap<String, Integer>((int) ((capacity / 0.75) + 1));
 	}
 
 	/**
@@ -70,19 +93,6 @@ public class SoundManager {
 		soundPool.release();
 		soundPool = null;
 		soundMap.clear();
-	}
-
-	/**
-	 * Releases all resources (calls {@link #release()}) and resets this SoundManager with the specified parameters.
-	 * 
-	 * @param maxStreams Max number of sounds that can be played at the same time.
-	 * @param initialCapacity Initial capacity of the sound pool. It will be resized if more sounds are loaded after the
-	 *            specified capacity is reached.
-	 */
-	public void reset(int maxStreams, int capacity) {
-		release();
-		this.soundPool = new SoundPool(maxStreams, AudioManager.STREAM_MUSIC, 0);
-		this.soundMap = new HashMap<String, Integer>((int) ((capacity / 0.75) + 1));
 	}
 
 	/**
