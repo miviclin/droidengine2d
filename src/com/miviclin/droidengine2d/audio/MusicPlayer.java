@@ -11,7 +11,7 @@ import android.media.MediaPlayer.OnCompletionListener;
 import com.miviclin.droidengine2d.resources.AssetsLoader;
 
 /**
- * Manages background music streaming.
+ * MusicPlayer can be used to control playback of audio files.
  * 
  * @author Miguel Vicente Linares
  * 
