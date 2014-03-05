@@ -11,12 +11,15 @@ import android.media.MediaPlayer.OnCompletionListener;
 import com.miviclin.droidengine2d.resources.AssetsLoader;
 
 /**
- * Manages background music streaming.
+ * MusicPlayer can be used to control playback of audio files.
  * 
  * @author Miguel Vicente Linares
  * 
  */
-public class MusicManager implements OnCompletionListener {
+public class MusicPlayer implements OnCompletionListener {
+
+	public static final float MIN_VOLUME = 0.0f;
+	public static final float MAX_VOLUME = 1.0f;
 
 	private MediaPlayer player;
 	private boolean prepared;
@@ -26,11 +29,18 @@ public class MusicManager implements OnCompletionListener {
 	/**
 	 * Creates a new MusicManager.
 	 */
-	public MusicManager() {
+	public MusicPlayer() {
 		this.player = null;
 		this.prepared = false;
 		this.loaded = false;
 		this.volume = -1.0f;
+	}
+
+	@Override
+	public void onCompletion(MediaPlayer player) {
+		synchronized (this) {
+			prepared = false;
+		}
 	}
 
 	/**
@@ -258,15 +268,8 @@ public class MusicManager implements OnCompletionListener {
 		}
 	}
 
-	@Override
-	public void onCompletion(MediaPlayer player) {
-		synchronized (this) {
-			prepared = false;
-		}
-	}
-
 	/**
-	 * Checks if MusicManager supports playing the specified file without loading it.
+	 * Checks if MusicManager supports playing the specified file.
 	 * 
 	 * @param context Context.
 	 * @param ruta File path.
