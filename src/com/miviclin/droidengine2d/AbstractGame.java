@@ -174,8 +174,7 @@ public abstract class AbstractGame implements Game {
 	public void update(float delta) {
 		if (initialized) {
 			gameStateManager.update(delta);
-		}
-		if (!initialized && prepared) {
+		} else if (prepared) {
 			initialize();
 			initialized = true;
 			System.gc();
