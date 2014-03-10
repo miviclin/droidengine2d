@@ -3,10 +3,11 @@ package com.miviclin.droidengine2d.util.math;
 import android.opengl.Matrix;
 
 /**
- * 4x4 matrix.
+ * This class represents a 4x4 matrix in OpenGL ES format.
  * 
  * @author Miguel Vicente Linares
  * 
+ * @see android.opengl.Matrix
  */
 public class Matrix4 {
 
