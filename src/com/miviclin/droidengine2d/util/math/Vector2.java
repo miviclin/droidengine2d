@@ -27,7 +27,6 @@ public class Vector2 {
 	 * 
 	 * @param x
 	 * @param y
-	 * @return this Vector2
 	 */
 	public final void set(float x, float y) {
 		this.x = x;
@@ -38,7 +37,6 @@ public class Vector2 {
 	 * Sets the specified values to this Vector2.
 	 * 
 	 * @param vector Vector2 whose values will be copied to this Vector2.
-	 * @return this Vector2
 	 */
 	public final Vector2 set(Vector2 vector) {
 		this.x = vector.x;
@@ -74,7 +72,7 @@ public class Vector2 {
 	 * 
 	 * @param output Output vector.
 	 * @param vector Vector.
-	 * @param escalar Scalar.
+	 * @param scalar Scalar.
 	 */
 	public static final void add(Vector2 output, Vector2 vector, float scalar) {
 		output.x = vector.x + scalar;

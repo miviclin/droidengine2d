@@ -15,18 +15,18 @@ import com.miviclin.droidengine2d.graphics.GLView;
  * Engine manages the game thread and the rendering thread.<br>
  * <br>
  * WARNING: {@link Engine#onPause()}, {@link Engine#onResume()} and {@link Engine#onDestroy()} should be called from
- * {@link Activity#onPause()}, {@link Activity#onResume()} and {@link Activity#onDestroy()} respectively.<br>
- * It is also possible to intercept the back button calling {@link Engine#onBackPressed()} from
- * {@link Activity#onBackPressed()}<br>
- * DroidEngine2D uses OpenGL ES 2.0, so a compatibility check should be performed. For example:
+ * {@link Activity#onPause()}, {@link Activity#onResume()} and {@link Activity#onDestroy()} respectively. DroidEngine2D
+ * uses OpenGL ES 2.0, so a compatibility check should be performed. For example:
  * 
  * <pre>
- * {@code Engine engine;
+ * <code>
+ * Engine engine;
  * if (ActivityUtilities.detectOpenGLES20(activity)) {
  *     engine = new Engine(...);
  * } else {
  *     // Tell the user that his/her device does not support OpenGL ES 2.0
  * }
+ * </code>
  * </pre>
  * 
  * @author Miguel Vicente Linares
@@ -79,7 +79,7 @@ public class Engine {
 	 * Sets a new GLView. Also sets the GLRenderer to the new GLView and starts the GL thread.<br>
 	 * Calling this method manually when the Engine is first created is not needed.
 	 * 
-	 * @param GLView New GLView
+	 * @param glView New GLView
 	 */
 	public void setGLView(GLView glView) {
 		this.glView = glView;
@@ -101,7 +101,7 @@ public class Engine {
 
 	/**
 	 * Pauses the game thread and the rendering thread.<br>
-	 * This method should be called from {@link Activity.onPause()}
+	 * This method should be called from {@link Activity#onPause()}
 	 */
 	public void onPause() {
 		glView.onPause();
@@ -110,7 +110,7 @@ public class Engine {
 
 	/**
 	 * Resumes the game thread and the rendering thread.<br>
-	 * This method should be called from {@link Activity.onResume()}
+	 * This method should be called from {@link Activity#onResume()}
 	 */
 	public void onResume() {
 		glView.onResume();

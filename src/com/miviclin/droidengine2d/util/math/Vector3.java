@@ -83,7 +83,7 @@ public class Vector3 {
 	 * 
 	 * @param output Output vector.
 	 * @param vector Vector.
-	 * @param escalar Scalar.
+	 * @param scalar Scalar.
 	 */
 	public static final void add(Vector3 output, Vector3 vector, float scalar) {
 		output.x = vector.x + scalar;

@@ -22,7 +22,7 @@ public interface EngineRenderer {
 	public abstract void onSurfaceChanged(GL10 glUnused, int width, int height);
 
 	/**
-	 * This method is called from {@link GLRenderer##onDrawFrame(GL10)}
+	 * This method is called from {@link GLRenderer#onDrawFrame(GL10)}
 	 */
 	public abstract void onDrawFrame(GL10 glUnused);
 

@@ -24,8 +24,6 @@ public class UnsupportedMaterialException extends RuntimeException {
 	 * <pre>
 	 * The following material is not supported: {@code <name of the specified material>}
 	 * </pre>
-	 * 
-	 * @param detailMessage The detail message for this exception.
 	 */
 	public UnsupportedMaterialException(Class<? extends Material> unsupportedMaterialClass) {
 		super("The following material is not supported: " + unsupportedMaterialClass.getName());

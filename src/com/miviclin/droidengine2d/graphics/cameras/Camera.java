@@ -181,7 +181,7 @@ public abstract class Camera {
 	 * Sets the distance from the camera to the back of the viewing volume.<br>
 	 * Changes will not be visible untill {@link #update()} is called.
 	 * 
-	 * @param near New far value.
+	 * @param far New far value.
 	 */
 	public final void setFar(float far) {
 		this.far = far;

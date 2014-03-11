@@ -70,7 +70,7 @@ public class TransformUtilities {
 	 * @param ty Translation in the Y axis.
 	 * @param ox X coordinate of the rotation point (origin).
 	 * @param oy Y coordinate of the rotation point (origin).
-	 * @param rotationAroundCenter Rotation angle around the origin (scale / 2).
+	 * @param rotationAroundPoint Rotation angle around the origin (scale / 2).
 	 * @param sx Scale in the X axis.
 	 * @param sy Scale in the Y axis.
 	 */
@@ -171,7 +171,7 @@ public class TransformUtilities {
 	 * @param ty Translation in the Y axis.
 	 * @param ox X coordinate of the rotation point (origin).
 	 * @param oy Y coordinate of the rotation point (origin).
-	 * @param rotationAroundCenter Rotation angle around the origin (scale / 2).
+	 * @param rotationAroundPoint Rotation angle around the origin (scale / 2).
 	 * @param sx Scale in the X axis.
 	 * @param sy Scale in the Y axis.
 	 */

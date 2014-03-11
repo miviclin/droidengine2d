@@ -41,7 +41,7 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 	 * Creates a new RectangleBatchRenderer.
 	 * 
 	 * @param verticesDataStride Data stride of the vertices.
-	 * @param shaderProgram ShaderProgram.
+	 * @param batchCapacity Maximum size of this GraphicsBatch.
 	 */
 	public RectangleBatchRenderer(int verticesDataStride, int batchCapacity) {
 		super(batchCapacity);

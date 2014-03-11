@@ -47,7 +47,7 @@ public class KeyProcessor {
 	/**
 	 * Processes key input.<br>
 	 * This method should be called when the game updates, before the update is processed. If a key event has happened,
-	 * this method will call {@link KeyEventProcessor#onKey(int, KeyEvent)}.
+	 * this method will call {@link KeyEventProcessor#processKeyEvent(KeyEventInfo)}.
 	 */
 	public void processKeyInput() {
 		synchronized (keyEventQueueLock) {

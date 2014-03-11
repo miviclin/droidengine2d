@@ -28,7 +28,6 @@ public abstract class TextureMaterialBatchRendererBase<M extends Material> exten
 	 * 
 	 * @param verticesDataStride Data stride of the vertices.
 	 * @param context Context.
-	 * @param shaderProgram ShaderProgram.
 	 */
 	public TextureMaterialBatchRendererBase(int verticesDataStride, Context context) {
 		super(verticesDataStride, 32);

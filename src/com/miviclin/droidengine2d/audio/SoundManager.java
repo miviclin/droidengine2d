@@ -39,9 +39,9 @@ public class SoundManager {
 	 * @param initialCapacity Initial capacity of the sound pool. It will be resized if more sounds are loaded after the
 	 *            specified capacity is reached.
 	 */
-	public void reset(int maxStreams, int capacity) {
+	public void reset(int maxStreams, int initialCapacity) {
 		release();
-		initialize(maxStreams, capacity);
+		initialize(maxStreams, initialCapacity);
 	}
 
 	/**
