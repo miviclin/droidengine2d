@@ -64,7 +64,8 @@ public class BlendingOptions {
 	 * 
 	 * @param sourceFactor Source factor.
 	 * @param destinationFactor Destination factor.
-	 * @param blendEquationMode Blending equation.
+	 * @param blendEquationMode Blending equation. This setting will only work in Android Ice Cream Sandwich or newer
+	 *            versions.
 	 * 
 	 * @see GLES20#glBlendFunc(int, int)
 	 * @see GLES20#glBlendEquation(int)
@@ -137,7 +138,7 @@ public class BlendingOptions {
 	}
 
 	/**
-	 * Returns the blending equation.
+	 * Returns the blending equation. This setting will only work in Android Ice Cream Sandwich or newer versions.
 	 * 
 	 * @return {@link GLES20#GL_FUNC_ADD}, {@link GLES20#GL_FUNC_SUBTRACT} o {@link GLES20#GL_FUNC_REVERSE_SUBTRACT}
 	 * 
@@ -148,7 +149,7 @@ public class BlendingOptions {
 	}
 
 	/**
-	 * Sets the blending equation.
+	 * Sets the blending equation. This setting will only work in Android Ice Cream Sandwich or newer versions.
 	 * 
 	 * @param blendEquationMode {@link GLES20#GL_FUNC_ADD}, {@link GLES20#GL_FUNC_SUBTRACT} or
 	 *            {@link GLES20#GL_FUNC_REVERSE_SUBTRACT}

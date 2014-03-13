@@ -9,6 +9,7 @@ import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 
 import android.opengl.GLES20;
+import android.os.Build;
 
 import com.miviclin.droidengine2d.BuildConfig;
 import com.miviclin.droidengine2d.graphics.GLDebugger;
@@ -204,7 +205,10 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 
 		BlendingOptions blendingOptions = getCurrentBatchBlendingOptions();
 		GLES20.glBlendFunc(blendingOptions.getSourceFactor(), blendingOptions.getDestinationFactor());
-		GLES20.glBlendEquation(blendingOptions.getBlendEquationMode());
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
+			GLES20.glBlendEquation(blendingOptions.getBlendEquationMode());
+		}
 
 		GLES20.glDrawElements(GLES20.GL_TRIANGLES, indexBuffer.limit(), GLES20.GL_UNSIGNED_SHORT, indexBuffer);
 
