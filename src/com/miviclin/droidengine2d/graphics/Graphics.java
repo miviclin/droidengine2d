@@ -1,3 +1,17 @@
+/*   Copyright 2013-2014 Miguel Vicente Linares
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 package com.miviclin.droidengine2d.graphics;
 
 import java.util.HashMap;
@@ -178,7 +192,7 @@ public class Graphics {
 		FontChar lastChar = null;
 		float cosR, sinR;
 		for (int i = 0; i < textLength; i++) {
-			currentChar = font.getCharacter((int) text.charAt(i));
+			currentChar = font.getCharacter(text.charAt(i));
 			if (lastChar != null) {
 				posX += lastChar.getKernings().get(currentChar.getId()) * scaleRatio;
 			}

@@ -1,7 +1,8 @@
-#v0.8.0 (2014-03-14)
+#v0.8.0 (2014-03-15)
 
 **Changes:**
 
+- Licensed the code under the Apache License, Version 2.0.
 - Fully redesigned game state management.
 - Fully redesigned input processing.
 - Renamed MusicManager to MusicPlayer.

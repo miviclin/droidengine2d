@@ -1,3 +1,17 @@
+/*   Copyright 2013-2014 Miguel Vicente Linares
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 package com.miviclin.droidengine2d.graphics;
 
 /**
@@ -301,21 +315,28 @@ public class Color {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		Color other = (Color) obj;
-		if (Float.floatToIntBits(a) != Float.floatToIntBits(other.a))
+		if (Float.floatToIntBits(a) != Float.floatToIntBits(other.a)) {
 			return false;
-		if (Float.floatToIntBits(b) != Float.floatToIntBits(other.b))
+		}
+		if (Float.floatToIntBits(b) != Float.floatToIntBits(other.b)) {
 			return false;
-		if (Float.floatToIntBits(g) != Float.floatToIntBits(other.g))
+		}
+		if (Float.floatToIntBits(g) != Float.floatToIntBits(other.g)) {
 			return false;
-		if (Float.floatToIntBits(r) != Float.floatToIntBits(other.r))
+		}
+		if (Float.floatToIntBits(r) != Float.floatToIntBits(other.r)) {
 			return false;
+		}
 		return true;
 	}
 
