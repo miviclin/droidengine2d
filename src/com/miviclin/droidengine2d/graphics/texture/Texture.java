@@ -1,3 +1,17 @@
+/*   Copyright 2013-2014 Miguel Vicente Linares
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 package com.miviclin.droidengine2d.graphics.texture;
 
 import android.content.Context;
@@ -181,34 +195,47 @@ public class Texture implements Comparable<Texture> {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		Texture other = (Texture) obj;
-		if (height != other.height)
+		if (height != other.height) {
 			return false;
-		if (loaded != other.loaded)
+		}
+		if (loaded != other.loaded) {
 			return false;
-		if (magFilter != other.magFilter)
+		}
+		if (magFilter != other.magFilter) {
 			return false;
-		if (minFilter != other.minFilter)
+		}
+		if (minFilter != other.minFilter) {
 			return false;
+		}
 		if (path == null) {
-			if (other.path != null)
+			if (other.path != null) {
 				return false;
-		} else if (!path.equals(other.path))
+			}
+		} else if (!path.equals(other.path)) {
 			return false;
-		if (textureId != other.textureId)
+		}
+		if (textureId != other.textureId) {
 			return false;
-		if (width != other.width)
+		}
+		if (width != other.width) {
 			return false;
-		if (wrapS != other.wrapS)
+		}
+		if (wrapS != other.wrapS) {
 			return false;
-		if (wrapT != other.wrapT)
+		}
+		if (wrapT != other.wrapT) {
 			return false;
+		}
 		return true;
 	}
 
