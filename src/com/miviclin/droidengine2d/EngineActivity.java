@@ -15,10 +15,10 @@
 package com.miviclin.droidengine2d;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.view.KeyEvent;
 import android.view.ViewTreeObserver;
 import android.view.Window;
@@ -34,7 +34,7 @@ import com.miviclin.droidengine2d.input.GameStateInputManager;
  * @author Miguel Vicente Linares
  * 
  */
-public abstract class EngineActivity extends FragmentActivity {
+public abstract class EngineActivity extends Activity {
 
 	private Engine engine;
 	private boolean prepared;
@@ -53,8 +53,7 @@ public abstract class EngineActivity extends FragmentActivity {
 		final AbstractGame game = engine.getGame();
 		engine.startGame();
 
-		// GLView.getWidth() and GLView.getHeight() return 0 before the view is rendered on screen for the first
-		// time,
+		// GLView.getWidth() and GLView.getHeight() return 0 before the view is rendered on screen for the first time,
 		// so we have to wait until the view is rendered for the first time before initializing the Engine
 		glView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 
