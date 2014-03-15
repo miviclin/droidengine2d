@@ -1,3 +1,17 @@
+/*   Copyright 2013-2014 Miguel Vicente Linares
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 package com.miviclin.droidengine2d.graphics;
 
 import android.opengl.GLES20;
@@ -14,13 +28,14 @@ import android.util.Log;
  */
 public final class GLDebugger {
 
-	public static final int FLAG_NO_LOGGING = 0;
-	public static final int FLAG_LOG_NUM_DRAW_CALLS_FRAME = 1;
+	private static final GLDebugger INSTANCE = new GLDebugger();
 
-	private static GLDebugger instance = null;
+	public static final int FLAG_NO_LOGGING = 0;
+	public static final int FLAG_LOG_NUM_DRAW_CALLS = 1;
 
 	private boolean debugModeEnabled;
-	private int numDrawCallsFrame;
+	private int numDrawCallsInCurrentFrame;
+	private int numDrawCallsInPreviousFrame;
 	private int logFlags;
 
 	/**
@@ -28,8 +43,9 @@ public final class GLDebugger {
 	 */
 	private GLDebugger() {
 		this.debugModeEnabled = false;
-		this.numDrawCallsFrame = 0;
-		this.logFlags = GLDebugger.FLAG_NO_LOGGING;
+		this.numDrawCallsInCurrentFrame = 0;
+		this.numDrawCallsInPreviousFrame = 0;
+		this.logFlags = FLAG_NO_LOGGING;
 	}
 
 	/**
@@ -38,10 +54,7 @@ public final class GLDebugger {
 	 * @return GLDebugger
 	 */
 	public static GLDebugger getInstance() {
-		if (GLDebugger.instance == null) {
-			GLDebugger.instance = new GLDebugger();
-		}
-		return GLDebugger.instance;
+		return INSTANCE;
 	}
 
 	/**
@@ -83,7 +96,6 @@ public final class GLDebugger {
 				throwGLException(errorCode);
 			} else {
 				debugModeEnabled = true;
-				// Para limpiar los flags de error de OpenGL
 				while (true) {
 					if (GLES20.glGetError() == GLES20.GL_NO_ERROR) {
 						break;
@@ -101,7 +113,7 @@ public final class GLDebugger {
 	 * @throws GLException
 	 */
 	private static void throwGLException(int errorCode) {
-		throw new GLException(errorCode, "GLError " + errorCode + ", " + GLDebugger.getErrorString(errorCode));
+		throw new GLException(errorCode, "GLError " + errorCode + ", " + getErrorString(errorCode));
 	}
 
 	/**
@@ -119,43 +131,85 @@ public final class GLDebugger {
 	}
 
 	/**
-	 * Returns the number of registered draw calls.<br>
-	 * In order to register a draw call, {@link #incrementNumDrawCallsFrame()} should be called after the draw call is
-	 * executed.<br>
-	 * Also {@link #resetNumDrawCallsFrame()} should be called at the end of each frame.
+	 * Returns the number of draw calls registered in the current frame.<br>
+	 * In order to register a draw call, {@link #incrementNumDrawCallsInCurrentFrame()} should be called after the draw
+	 * call is executed.<br>
+	 * Also {@link #resetNumDrawCallsInCurrentFrame()} should be called at the end of each frame.
 	 * 
-	 * @return Number of registered draw calls per frame.
+	 * @return Number of draw calls registered in the current frame.
+	 * 
+	 * @see GLDebugger#incrementNumDrawCallsInCurrentFrame()
+	 * @see GLDebugger#resetNumDrawCallsInCurrentFrame()
+	 * @see GLDebugger#getNumDrawCallsInPreviousFrame()
 	 */
-	public int getNumDrawCallsFrame() {
-		return numDrawCallsFrame;
+	public int getNumDrawCallsInCurrentFrame() {
+		return numDrawCallsInCurrentFrame;
 	}
 
 	/**
-	 * Increments the number of registered draw calls.<br>
+	 * Returns the number of draw calls registered in the previously rendered frame.
+	 * 
+	 * @return Number of draw calls registered in the previously rendered frame.
+	 * 
+	 * @see GLDebugger#getNumDrawCallsInCurrentFrame()
+	 * @see GLDebugger#incrementNumDrawCallsInCurrentFrame()
+	 * @see GLDebugger#resetNumDrawCallsInCurrentFrame()
+	 */
+	public int getNumDrawCallsInPreviousFrame() {
+		return numDrawCallsInPreviousFrame;
+	}
+
+	/**
+	 * Increments the number of draw calls registered in the current frame.<br>
 	 * This method should be called after each draw call in order to register it.
-	 */
-	public void incrementNumDrawCallsFrame() {
-		numDrawCallsFrame++;
-	}
-
-	/**
-	 * Resets the number of registered draw calls.<br>
-	 * This method should be called at the end of each frame.
-	 */
-	public void resetNumDrawCallsFrame() {
-		numDrawCallsFrame = 0;
-	}
-
-	/**
-	 * Logs the number of registered draw calls. If the flag {@link GLDebugger#FLAG_LOG_NUM_DRAW_CALLS_FRAME} is
-	 * disabled, this method does not do anything.
 	 * 
-	 * @see #getNumDrawCallsFrame()
+	 * @see GLDebugger#getNumDrawCallsInCurrentFrame()
+	 * @see GLDebugger#resetNumDrawCallsInCurrentFrame()
+	 * @see GLDebugger#getNumDrawCallsInPreviousFrame()
 	 */
-	public void logNumDrawCallsFrame() {
-		if ((logFlags & GLDebugger.FLAG_LOG_NUM_DRAW_CALLS_FRAME) == GLDebugger.FLAG_LOG_NUM_DRAW_CALLS_FRAME) {
-			Log.d(DefaultRenderer.class.getSimpleName(), "draw calls: "
-					+ GLDebugger.getInstance().getNumDrawCallsFrame());
+	public void incrementNumDrawCallsInCurrentFrame() {
+		numDrawCallsInCurrentFrame++;
+	}
+
+	/**
+	 * Sets the number of draw calls registered in the previous frame to the number of draw calls registered in the
+	 * current frame and resets the number of draw calls registered in the current frame.<br>
+	 * This method should be called at the end of each frame.
+	 * 
+	 * @see GLDebugger#getNumDrawCallsInCurrentFrame()
+	 * @see GLDebugger#incrementNumDrawCallsInCurrentFrame()
+	 * @see GLDebugger#getNumDrawCallsInPreviousFrame()
+	 */
+	public void resetNumDrawCallsInCurrentFrame() {
+		numDrawCallsInPreviousFrame = numDrawCallsInCurrentFrame;
+		numDrawCallsInCurrentFrame = 0;
+	}
+
+	/**
+	 * Logs the number of draw calls registered in the current frame. If the flag
+	 * {@link GLDebugger#FLAG_LOG_NUM_DRAW_CALLS} is disabled, this method does not do anything.
+	 * 
+	 * @see #getNumDrawCallsInCurrentFrame()
+	 */
+	public void logNumDrawCallsInCurrentFrame() {
+		boolean flagLogNumDrawCallsSet = ((logFlags & FLAG_LOG_NUM_DRAW_CALLS) == FLAG_LOG_NUM_DRAW_CALLS);
+		if (flagLogNumDrawCallsSet) {
+			String tag = getClass().getSimpleName();
+			Log.d(tag, "Number of draw calls in the current frame: " + getNumDrawCallsInCurrentFrame());
+		}
+	}
+
+	/**
+	 * Logs the number of draw calls registered in the previously rendered frame. If the flag
+	 * {@link GLDebugger#FLAG_LOG_NUM_DRAW_CALLS} is disabled, this method does not do anything.
+	 * 
+	 * @see #getNumDrawCallsInPreviousFrame()
+	 */
+	public void logNumDrawCallsInPreviousFrame() {
+		boolean flagLogNumDrawCallsSet = ((logFlags & FLAG_LOG_NUM_DRAW_CALLS) == FLAG_LOG_NUM_DRAW_CALLS);
+		if (flagLogNumDrawCallsSet) {
+			String tag = getClass().getSimpleName();
+			Log.d(tag, "Number of draw calls in the previous frame: " + getNumDrawCallsInPreviousFrame());
 		}
 	}
 

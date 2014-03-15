@@ -1,3 +1,17 @@
+/*   Copyright 2013-2014 Miguel Vicente Linares
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 package com.miviclin.droidengine2d.util.math;
 
 /**
@@ -27,7 +41,6 @@ public class Vector2 {
 	 * 
 	 * @param x
 	 * @param y
-	 * @return this Vector2
 	 */
 	public final void set(float x, float y) {
 		this.x = x;
@@ -38,7 +51,6 @@ public class Vector2 {
 	 * Sets the specified values to this Vector2.
 	 * 
 	 * @param vector Vector2 whose values will be copied to this Vector2.
-	 * @return this Vector2
 	 */
 	public final Vector2 set(Vector2 vector) {
 		this.x = vector.x;
@@ -74,7 +86,7 @@ public class Vector2 {
 	 * 
 	 * @param output Output vector.
 	 * @param vector Vector.
-	 * @param escalar Scalar.
+	 * @param scalar Scalar.
 	 */
 	public static final void add(Vector2 output, Vector2 vector, float scalar) {
 		output.x = vector.x + scalar;

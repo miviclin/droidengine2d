@@ -1,14 +1,27 @@
+/*   Copyright 2013-2014 Miguel Vicente Linares
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 package com.miviclin.droidengine2d.util;
 
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
-import android.content.pm.ActivityInfo;
 import android.content.pm.ConfigurationInfo;
-import android.media.AudioManager;
+import android.content.res.Configuration;
 import android.os.Build;
-import android.view.Window;
-import android.view.WindowManager;
+import android.view.Display;
+import android.view.Surface;
 
 import com.miviclin.droidengine2d.BuildConfig;
 
@@ -18,7 +31,14 @@ import com.miviclin.droidengine2d.BuildConfig;
  * @author Miguel Vicente Linares
  * 
  */
-public class ActivityUtilities {
+public final class ActivityUtilities {
+
+	/**
+	 * Private constructor to prevent the instantiation of this utility class.
+	 */
+	private ActivityUtilities() {
+		super();
+	}
 
 	/**
 	 * Checks if the device supports OpenGL ES 2.0.<br>
@@ -39,58 +59,27 @@ public class ActivityUtilities {
 	}
 
 	/**
-	 * Changes the orientation of the Activity to PORTRAIT.
+	 * Calculates the default orientation of the device.<br>
+	 * The default orientation of most phones is portrait, and the default orientation of most tablets is landscape.
 	 * 
 	 * @param activity Activity.
+	 * @return {@link Configuration#ORIENTATION_PORTRAIT} or {@link Configuration#ORIENTATION_LANDSCAPE}
 	 */
-	public static void setOrientationToPortrait(Activity activity) {
-		activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-	}
+	public static int getDefaultOrientationOfDevice(Activity activity) {
+		Configuration configuration = activity.getResources().getConfiguration();
+		boolean orientationLandscape = (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE);
 
-	/**
-	 * Changes the orientation of the Activity to LANDSCAPE.
-	 * 
-	 * @param activity Activity.
-	 */
-	public static void setOrientationToLandscape(Activity activity) {
-		activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-	}
+		Display display = activity.getWindowManager().getDefaultDisplay();
+		int rotation = display.getRotation();
+		boolean parallelToDefaultVerticalAxis = (rotation == Surface.ROTATION_0) || (rotation == Surface.ROTATION_180);
 
-	/**
-	 * Hides the title of the Activity.
-	 * 
-	 * @param activity Activity.
-	 */
-	public static void hideTitle(Activity activity) {
-		activity.requestWindowFeature(Window.FEATURE_NO_TITLE);
-	}
+		boolean defaultOrientationLandscape = (parallelToDefaultVerticalAxis && orientationLandscape) ||
+				(!parallelToDefaultVerticalAxis && !orientationLandscape);
 
-	/**
-	 * Sets the Activity to full screen.
-	 * 
-	 * @param activity Activity.
-	 */
-	public static void setToFullscreen(Activity activity) {
-		activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
-	}
-
-	/**
-	 * Sets the Activity to keep the screen on as long as it is visible to the user.
-	 * 
-	 * @param activity Activity.
-	 */
-	public static void keepScreenOn(Activity activity) {
-		activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-	}
-
-	/**
-	 * Sets the Activity to allow the hardware buttons to control the volume of music playback.
-	 * 
-	 * @param activity Activity.
-	 */
-	public static void controlMusicPlayBackStream(Activity activity) {
-		activity.setVolumeControlStream(AudioManager.STREAM_MUSIC);
+		if (defaultOrientationLandscape) {
+			return Configuration.ORIENTATION_LANDSCAPE;
+		}
+		return Configuration.ORIENTATION_PORTRAIT;
 	}
 
 }

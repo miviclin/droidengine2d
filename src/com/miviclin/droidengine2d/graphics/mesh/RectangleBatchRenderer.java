@@ -1,3 +1,17 @@
+/*   Copyright 2013-2014 Miguel Vicente Linares
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 package com.miviclin.droidengine2d.graphics.mesh;
 
 import static com.miviclin.droidengine2d.util.PrimitiveTypeSize.SIZE_OF_FLOAT;
@@ -9,6 +23,7 @@ import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 
 import android.opengl.GLES20;
+import android.os.Build;
 
 import com.miviclin.droidengine2d.BuildConfig;
 import com.miviclin.droidengine2d.graphics.GLDebugger;
@@ -27,7 +42,7 @@ import com.miviclin.droidengine2d.util.math.Vector2;
  * 
  * @param <M> Material
  */
-public abstract class RectangleBatchRenderer<M extends Material> extends GraphicsBatch<M> {
+public abstract class RectangleBatchRenderer<M extends Material> extends GraphicsBatchRenderer<M> {
 
 	private int verticesDataStride;
 
@@ -41,7 +56,7 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 	 * Creates a new RectangleBatchRenderer.
 	 * 
 	 * @param verticesDataStride Data stride of the vertices.
-	 * @param shaderProgram ShaderProgram.
+	 * @param batchCapacity Maximum size of this GraphicsBatch.
 	 */
 	public RectangleBatchRenderer(int verticesDataStride, int batchCapacity) {
 		super(batchCapacity);
@@ -204,12 +219,15 @@ public abstract class RectangleBatchRenderer<M extends Material> extends Graphic
 
 		BlendingOptions blendingOptions = getCurrentBatchBlendingOptions();
 		GLES20.glBlendFunc(blendingOptions.getSourceFactor(), blendingOptions.getDestinationFactor());
-		GLES20.glBlendEquation(blendingOptions.getBlendEquationMode());
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
+			GLES20.glBlendEquation(blendingOptions.getBlendEquationMode());
+		}
 
 		GLES20.glDrawElements(GLES20.GL_TRIANGLES, indexBuffer.limit(), GLES20.GL_UNSIGNED_SHORT, indexBuffer);
 
 		if (BuildConfig.DEBUG) {
-			GLDebugger.getInstance().incrementNumDrawCallsFrame();
+			GLDebugger.getInstance().incrementNumDrawCallsInCurrentFrame();
 		}
 
 		getCurrentBatchBlendingOptions().copy(getNextBatchBlendingOptions());

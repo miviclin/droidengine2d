@@ -1,3 +1,17 @@
+/*   Copyright 2013-2014 Miguel Vicente Linares
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 package com.miviclin.droidengine2d;
 
 import android.util.Log;
@@ -22,7 +36,7 @@ public class GameThread implements Runnable {
 
 	private final int maxSkippedFrames;
 	private final float idealTimePerFrame;
-	private final Game game;
+	private final AbstractGame game;
 	private final EngineLock engineLock;
 	private final MutexLock pauseLock;
 	private final MutexLock terminateLock;
@@ -39,7 +53,7 @@ public class GameThread implements Runnable {
 	 * @param glView GLView where the Game is rendered.
 	 * @param engineLock EngineLock used to synchronize both threads.
 	 */
-	public GameThread(Game game, GLView glView, EngineLock engineLock) {
+	public GameThread(AbstractGame game, GLView glView, EngineLock engineLock) {
 		this(30, 5, game, glView, engineLock);
 
 	}
@@ -53,7 +67,7 @@ public class GameThread implements Runnable {
 	 * @param glView GLView where the Game is rendered.
 	 * @param engineLock EngineLock used to synchronize both threads.
 	 */
-	public GameThread(int maxFPS, Game game, GLView glView, EngineLock engineLock) {
+	public GameThread(int maxFPS, AbstractGame game, GLView glView, EngineLock engineLock) {
 		this(maxFPS, 5, game, glView, engineLock);
 	}
 
@@ -67,7 +81,7 @@ public class GameThread implements Runnable {
 	 * @param glView GLView where the Game is rendered.
 	 * @param engineLock EngineLock used to synchronize both threads.
 	 */
-	public GameThread(int maxFPS, int maxSkippedFrames, Game game, GLView glView, EngineLock engineLock) {
+	public GameThread(int maxFPS, int maxSkippedFrames, AbstractGame game, GLView glView, EngineLock engineLock) {
 		if (game == null) {
 			throw new IllegalArgumentException("The Game can not be null");
 		}
@@ -100,10 +114,10 @@ public class GameThread implements Runnable {
 			if (currentState == State.RUNNING) {
 				startingTime = System.currentTimeMillis();
 				skippedFrames = 0;
-				if (engineLock.allowUpdate.get()) {
-					synchronized (engineLock.lock) {
-						game.update((float) idealTimePerFrame);
-						engineLock.allowUpdate.set(false);
+				if (engineLock.getAllowUpdateFlag().get()) {
+					synchronized (engineLock.getLock()) {
+						game.update(idealTimePerFrame);
+						engineLock.getAllowUpdateFlag().set(false);
 						glView.requestRender();
 					}
 				}
@@ -114,7 +128,7 @@ public class GameThread implements Runnable {
 					sleep(waitingTime, 0.333f);
 				}
 				while ((waitingTime < 0) && (skippedFrames < maxSkippedFrames) && (currentState == State.RUNNING)) {
-					game.update((float) idealTimePerFrame);
+					game.update(idealTimePerFrame);
 					waitingTime += idealTimePerFrame;
 					skippedFrames++;
 				}
@@ -181,7 +195,7 @@ public class GameThread implements Runnable {
 	public void terminate() {
 		currentState = State.TERMINATED;
 		pauseLock.unlock();
-		engineLock.allowUpdate.set(true);
+		engineLock.getAllowUpdateFlag().set(true);
 		terminateLock.lock();
 	}
 
@@ -190,7 +204,7 @@ public class GameThread implements Runnable {
 	 */
 	public void pause() {
 		currentState = State.PAUSED;
-		engineLock.allowUpdate.set(true);
+		engineLock.getAllowUpdateFlag().set(true);
 	}
 
 	/**
@@ -200,7 +214,7 @@ public class GameThread implements Runnable {
 		if (currentState == State.PAUSED) {
 			currentState = State.RUNNING;
 			game.onEngineResumed();
-			engineLock.allowUpdate.set(true);
+			engineLock.getAllowUpdateFlag().set(true);
 			pauseLock.unlock();
 		}
 	}

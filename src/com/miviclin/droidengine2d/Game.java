@@ -1,337 +1,59 @@
+/*   Copyright 2013-2014 Miguel Vicente Linares
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 package com.miviclin.droidengine2d;
 
 import android.app.Activity;
-import android.view.KeyEvent;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.View.OnKeyListener;
-import android.view.View.OnTouchListener;
 
-import com.miviclin.droidengine2d.graphics.GLView;
-import com.miviclin.droidengine2d.graphics.Graphics;
+import com.miviclin.droidengine2d.gamestate.GameStateManager;
 import com.miviclin.droidengine2d.graphics.cameras.Camera;
-import com.miviclin.droidengine2d.graphics.cameras.OrthographicCamera;
 import com.miviclin.droidengine2d.graphics.texture.TextureManager;
-import com.miviclin.droidengine2d.scene.Scene;
-import com.miviclin.droidengine2d.scene.SceneManager;
 
 /**
- * Game.
+ * Public interface for Games.
  * 
  * @author Miguel Vicente Linares
  * 
  */
-public abstract class Game implements OnTouchListener, OnKeyListener {
-
-	private final String name;
-	private final Activity activity;
-	private final TextureManager textureManager;
-	private final SceneManager sceneManager;
-	private GLView glView;
-	private Camera camera;
-	private boolean prepared;
-	private volatile boolean initialized;
-	private boolean onTouchListener;
-	private boolean onKeyListener;
-
-	/**
-	 * Creates a Game with the specified name.
-	 * 
-	 * @param name Name of the Game
-	 * @param activity Activity where the Game runs
-	 */
-	public Game(String name, Activity activity) {
-		this(name, new GLView(activity), activity);
-	}
-
-	/**
-	 * Creates a Game with the specified name and GLView.
-	 * 
-	 * @param name Name of the Game
-	 * @param glView GLView where the game is rendered
-	 * @param activity Activity where the Game runs
-	 */
-	public Game(String name, GLView glView, Activity activity) {
-		if (activity == null) {
-			throw new IllegalArgumentException("The Activity can not be null");
-		}
-		this.name = name;
-		this.activity = activity;
-		this.glView = glView;
-		this.textureManager = new TextureManager(activity);
-		this.sceneManager = new SceneManager();
-		this.camera = new OrthographicCamera();
-		this.prepared = false;
-		this.initialized = false;
-		this.onTouchListener = false;
-		this.onKeyListener = false;
-	}
-
-	/**
-	 * Returns the name of the Game.
-	 * 
-	 * @return name of the Game
-	 */
-	public String getName() {
-		return name;
-	}
+public interface Game {
 
 	/**
 	 * Returns the Activity where the game runs.
 	 * 
 	 * @return Activity where the game runs
 	 */
-	public Activity getActivity() {
-		return activity;
-	}
-
-	/**
-	 * Returns the width of the View where the game is rendered.
-	 * 
-	 * @return width of the View where the game is rendered
-	 */
-	public int getGameViewWidth() {
-		return glView.getWidth();
-	}
-
-	/**
-	 * Returns the height of the View where the game is rendered.
-	 * 
-	 * @return height of the View where the game is rendered
-	 */
-	public int getGameViewHeight() {
-		return glView.getHeight();
-	}
-
-	/**
-	 * Returns the GLView where the game is rendered.<br>
-	 * This method is only visible to the famework because it is only needed to set up the GLView.
-	 * 
-	 * @return GLView where the game is rendered
-	 */
-	GLView getGLView() {
-		return glView;
-	}
-
-	/**
-	 * Sets a new GLView. All listeners in the old GLView will be linked to the new one.<br>
-	 * This method is only visible to the famework because it is only needed to set up the GLView.
-	 * 
-	 * @param nuevo GLView
-	 */
-	void setGLView(GLView glView) {
-		boolean onTouchListener = this.onTouchListener;
-		boolean onKeyListener = this.onKeyListener;
-		if (this.glView != null) {
-			disableTouchListener();
-			disableKeyListener();
-		}
-		this.glView = glView;
-		if (onTouchListener) {
-			enableTouchListener();
-		}
-		if (onKeyListener) {
-			enableKeyListener();
-		}
-	}
-
-	/**
-	 * Returns the TextureManager.
-	 * 
-	 * @return TextureManager
-	 */
-	public TextureManager getTextureManager() {
-		return textureManager;
-	}
-
-	/**
-	 * Returns the SceneManager.
-	 * 
-	 * @return SceneManager
-	 */
-	public SceneManager getSceneManager() {
-		return sceneManager;
-	}
+	public Activity getActivity();
 
 	/**
 	 * Returns the Camera.
 	 * 
 	 * @return Camera
 	 */
-	public Camera getCamera() {
-		return camera;
-	}
+	public Camera getCamera();
 
 	/**
-	 * Sets a new Camera to the Game.
+	 * Returns the TextureManager.
 	 * 
-	 * @param camera Camera. Can not be null.
+	 * @return TextureManager
 	 */
-	public void setCamera(Camera camera) {
-		if (camera == null) {
-			throw new IllegalArgumentException("The camera can not be null");
-		}
-		this.camera = camera;
-	}
+	public TextureManager getTextureManager();
 
 	/**
-	 * Returns true if the Game object has been initialized and is ready to initialize the Scenes. This method will
-	 * return true after {@link #prepare()} has been called.
+	 * Returns the GameStateManager.
 	 * 
-	 * @return true if it is safe to initialize the Scenes
+	 * @return GameStateManager
 	 */
-	public boolean isPrepared() {
-		return prepared;
-	}
-
-	/**
-	 * This method should be called when the Game object has been initialized and is ready to initialize the Scenes.
-	 * 
-	 * @see Game#isPrepared()
-	 */
-	public void prepare() {
-		this.prepared = true;
-	}
-
-	/**
-	 * Registers a touch listener.<br>
-	 * This Game will listen touch events dispatched to its associated GLView.
-	 */
-	public void enableTouchListener() {
-		glView.setOnTouchListener(this);
-		onTouchListener = true;
-	}
-
-	/**
-	 * If this Game has an enabled touch listener, it will be disabled.<br>
-	 * This Game will no longer listen touch events.
-	 */
-	public void disableTouchListener() {
-		glView.setOnTouchListener(null);
-		onTouchListener = false;
-	}
-
-	/**
-	 * Registers a key listener.<br>
-	 * This Game will listen key events dispatched to its associated GLView.
-	 */
-	public void enableKeyListener() {
-		glView.setOnKeyListener(this);
-		onKeyListener = true;
-	}
-
-	/**
-	 * If this Game has an enabled key listener, it will be disabled.<br>
-	 * This Game will no longer listen key events.
-	 */
-	public void disableKeyListener() {
-		glView.setOnKeyListener(null);
-		onKeyListener = false;
-	}
-
-	/**
-	 * This method is called when a touch event is dispatched to the GLView if the touch listener is enabled.<br>
-	 * In order to enable the touch listener, {@link Game#enableTouchListener()} should be called.<br>
-	 * Sets the current scene's touch controller MotionEvent.
-	 * 
-	 * @param v View.
-	 * @param event MotionEvent.
-	 * @return true by default (the Game will consume all events).
-	 */
-	@Override
-	public boolean onTouch(View v, MotionEvent event) {
-		Scene activeScene = getSceneManager().getActiveScene();
-		if (activeScene != null) {
-			activeScene.getTouchController().setMotionEvent(event);
-		}
-		return true;
-	}
-
-	/**
-	 * This method is called when a key event is dispatched to the GLView if the key listener is enabled.<br>
-	 * In order to enable the touch listener, {@link Game#enableKeyListener()} should be called.<br>
-	 * Sets the current scene's key controller MotionEvent.
-	 * 
-	 * @param v View.
-	 * @param keyCode KeyCode.
-	 * @param event KeyEvent.
-	 * @return true by default (the Game will consume all events).
-	 */
-	@Override
-	public boolean onKey(View v, int keyCode, KeyEvent event) {
-		Scene activeScene = getSceneManager().getActiveScene();
-		if (activeScene != null) {
-			activeScene.getKeyController().setKeyEvent(keyCode, event);
-		}
-		return true;
-	}
-
-	/**
-	 * This method is called from {@link Engine#onBackPressed()}.<br>
-	 * Destroys the Activity where this Game is running.
-	 */
-	public void onBackPressed() {
-		getActivity().finish();
-	}
-
-	/**
-	 * This method is called when the GameThread is paused, usually when {@link Activity#onPause()} is called.
-	 */
-	public void onEnginePaused() {
-		if (initialized) {
-			sceneManager.pause();
-		}
-	}
-
-	/**
-	 * This method is called when the GameThread is resumed, usually when {@link Activity#onResume()} is called.
-	 */
-	public void onEngineResumed() {
-		if (initialized) {
-			sceneManager.resume();
-		}
-	}
-
-	/**
-	 * This method is called when the GameThread is destroyed, usually when {@link Activity#onDestroy()} is called.
-	 */
-	public void onEngineDisposed() {
-		if (initialized) {
-			sceneManager.dispose();
-		}
-	}
-
-	/**
-	 * Updates the game logic.<br>
-	 * This method is called from the game thread.
-	 * 
-	 * @param delta Elapsed time, in milliseconds, since the last update.
-	 */
-	public void update(float delta) {
-		if (initialized) {
-			sceneManager.update(delta);
-		}
-		if (!initialized && prepared) {
-			initialize();
-			initialized = true;
-		}
-	}
-
-	/**
-	 * Renders the game objects.<br>
-	 * This method is called from the redering thread after {@link #update(float)} has been executed in the game thread.
-	 * 
-	 * @param graphics Graphics.
-	 */
-	public void draw(Graphics graphics) {
-		if (initialized) {
-			sceneManager.draw(graphics);
-		}
-	}
-
-	/**
-	 * Initializes the Game objects.
-	 */
-	public abstract void initialize();
+	public GameStateManager getGameStateManager();
 
 }

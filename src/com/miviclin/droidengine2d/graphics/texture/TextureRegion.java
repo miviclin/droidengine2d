@@ -1,3 +1,17 @@
+/*   Copyright 2013-2014 Miguel Vicente Linares
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 package com.miviclin.droidengine2d.graphics.texture;
 
 /**
@@ -17,6 +31,8 @@ public class TextureRegion {
 	private float y;
 	private float width;
 	private float height;
+	private boolean flippedHorizontally;
+	private boolean flippedVertically;
 
 	/**
 	 * Creates a new TextureRegion.
@@ -36,30 +52,27 @@ public class TextureRegion {
 		setHeight(height);
 		setX(x);
 		setY(y);
+		this.flippedHorizontally = false;
+		this.flippedVertically = false;
 	}
 
 	/**
-	 * Flips the U coordinate of this TextureRegion.
+	 * Creates a new TextureRegion, copying from the specified TextureRegion.
 	 * 
-	 * @return Returns this TextureRegion
+	 * @param textureRegion TextureRegion.
 	 */
-	public TextureRegion flipX() {
-		float u = u1;
-		u1 = u2;
-		u2 = u;
-		return this;
-	}
-
-	/**
-	 * Flips the V coordinate of this TextureRegion.
-	 * 
-	 * @return Returns this TextureRegion
-	 */
-	public TextureRegion flipY() {
-		float v = v1;
-		v1 = v2;
-		v2 = v;
-		return this;
+	public TextureRegion(TextureRegion textureRegion) {
+		this.texture = textureRegion.texture;
+		this.u1 = textureRegion.u1;
+		this.v1 = textureRegion.v1;
+		this.u2 = textureRegion.u2;
+		this.v2 = textureRegion.v2;
+		this.x = textureRegion.x;
+		this.y = textureRegion.y;
+		this.width = textureRegion.width;
+		this.height = textureRegion.height;
+		this.flippedHorizontally = textureRegion.flippedHorizontally;
+		this.flippedVertically = textureRegion.flippedVertically;
 	}
 
 	/**
@@ -76,7 +89,7 @@ public class TextureRegion {
 	 * 
 	 * @return U1 (value between 0.0f and 1.0f).
 	 */
-	public float getU1() {
+	public final float getU1() {
 		return u1;
 	}
 
@@ -85,7 +98,7 @@ public class TextureRegion {
 	 * 
 	 * @return V1 (value between 0.0f and 1.0f).
 	 */
-	public float getV1() {
+	public final float getV1() {
 		return v1;
 	}
 
@@ -94,7 +107,7 @@ public class TextureRegion {
 	 * 
 	 * @return U2 (value between 0.0f and 1.0f).
 	 */
-	public float getU2() {
+	public final float getU2() {
 		return u2;
 	}
 
@@ -103,7 +116,7 @@ public class TextureRegion {
 	 * 
 	 * @return V2 (value between 0.0f and 1.0f).
 	 */
-	public float getV2() {
+	public final float getV2() {
 		return v2;
 	}
 
@@ -200,4 +213,43 @@ public class TextureRegion {
 		}
 		this.height = height;
 	}
+
+	/**
+	 * Returns true if this TextureRegion is flipped horizontally.
+	 * 
+	 * @return true if this TextureRegion is flipped horizontally, false otherwise
+	 */
+	public final boolean isFlippedHorizontally() {
+		return flippedHorizontally;
+	}
+
+	/**
+	 * Flips this TextureRegion horizontally.
+	 */
+	public final void flipHorizontally() {
+		float previousU1 = u1;
+		u1 = u2;
+		u2 = previousU1;
+		flippedHorizontally = !flippedHorizontally;
+	}
+
+	/**
+	 * Returns true if this TextureRegion is flipped vertically.
+	 * 
+	 * @return true if this TextureRegion is flipped vertically, false otherwise
+	 */
+	public final boolean isFlippedVertically() {
+		return flippedVertically;
+	}
+
+	/**
+	 * Flips this TextureRegion vertically.
+	 */
+	public final void flipVertically() {
+		float previousV1 = v1;
+		v1 = v2;
+		v2 = previousV1;
+		flippedVertically = !flippedVertically;
+	}
+
 }

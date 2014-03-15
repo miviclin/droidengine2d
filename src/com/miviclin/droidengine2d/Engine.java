@@ -1,3 +1,17 @@
+/*   Copyright 2013-2014 Miguel Vicente Linares
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 package com.miviclin.droidengine2d;
 
 import android.app.Activity;
@@ -15,18 +29,18 @@ import com.miviclin.droidengine2d.graphics.GLView;
  * Engine manages the game thread and the rendering thread.<br>
  * <br>
  * WARNING: {@link Engine#onPause()}, {@link Engine#onResume()} and {@link Engine#onDestroy()} should be called from
- * {@link Activity#onPause()}, {@link Activity#onResume()} and {@link Activity#onDestroy()} respectively.<br>
- * It is also possible to intercept the back button calling {@link Engine#onBackPressed()} from
- * {@link Activity#onBackPressed()}<br>
- * DroidEngine2D uses OpenGL ES 2.0, so a compatibility check should be performed. For example:
+ * {@link Activity#onPause()}, {@link Activity#onResume()} and {@link Activity#onDestroy()} respectively. DroidEngine2D
+ * uses OpenGL ES 2.0, so a compatibility check should be performed. For example:
  * 
  * <pre>
- * {@code Engine engine;
+ * <code>
+ * Engine engine;
  * if (ActivityUtilities.detectOpenGLES20(activity)) {
  *     engine = new Engine(...);
  * } else {
  *     // Tell the user that his/her device does not support OpenGL ES 2.0
  * }
+ * </code>
  * </pre>
  * 
  * @author Miguel Vicente Linares
@@ -34,7 +48,7 @@ import com.miviclin.droidengine2d.graphics.GLView;
  */
 public class Engine {
 
-	private Game game;
+	private AbstractGame game;
 	private GameThread gameThread;
 	private GLRenderer renderer;
 	private GLView glView;
@@ -62,7 +76,7 @@ public class Engine {
 	 * 
 	 * @return Game
 	 */
-	public Game getGame() {
+	public AbstractGame getGame() {
 		return game;
 	}
 
@@ -79,7 +93,7 @@ public class Engine {
 	 * Sets a new GLView. Also sets the GLRenderer to the new GLView and starts the GL thread.<br>
 	 * Calling this method manually when the Engine is first created is not needed.
 	 * 
-	 * @param GLView New GLView
+	 * @param glView New GLView
 	 */
 	public void setGLView(GLView glView) {
 		this.glView = glView;
@@ -101,7 +115,7 @@ public class Engine {
 
 	/**
 	 * Pauses the game thread and the rendering thread.<br>
-	 * This method should be called from {@link Activity.onPause()}
+	 * This method should be called from {@link Activity#onPause()}
 	 */
 	public void onPause() {
 		glView.onPause();
@@ -110,7 +124,7 @@ public class Engine {
 
 	/**
 	 * Resumes the game thread and the rendering thread.<br>
-	 * This method should be called from {@link Activity.onResume()}
+	 * This method should be called from {@link Activity#onResume()}
 	 */
 	public void onResume() {
 		glView.onResume();
@@ -126,14 +140,6 @@ public class Engine {
 	}
 
 	/**
-	 * Allows intercepting the back button.<br>
-	 * This method should be called from {@link Activity#onBackPressed()}
-	 */
-	public void onBackPressed() {
-		game.onBackPressed();
-	}
-
-	/**
 	 * EngineBuilder is used to build the {@link Engine}.
 	 * 
 	 * @author Miguel Vicente Linares
@@ -141,7 +147,7 @@ public class Engine {
 	 */
 	public static final class EngineBuilder {
 
-		private final Game game;
+		private final AbstractGame game;
 		private final GLView glView;
 		private EngineRenderer renderer;
 		private GLRenderer glRenderer;
@@ -156,7 +162,7 @@ public class Engine {
 		 * @param game Game
 		 * @throws IllegalArgumentException if game is null
 		 */
-		public EngineBuilder(Game game) {
+		public EngineBuilder(AbstractGame game) {
 			if (game == null) {
 				throw new IllegalArgumentException("The Game can not be null");
 			}

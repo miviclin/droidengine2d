@@ -1,15 +1,32 @@
+/*   Copyright 2013-2014 Miguel Vicente Linares
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 package com.miviclin.droidengine2d;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.view.KeyEvent;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.miviclin.droidengine2d.gamestate.GameState;
 import com.miviclin.droidengine2d.graphics.GLView;
+import com.miviclin.droidengine2d.input.GameStateInputManager;
 
 /**
  * EngineActivity manages the life cycle of the Engine.
@@ -17,10 +34,9 @@ import com.miviclin.droidengine2d.graphics.GLView;
  * @author Miguel Vicente Linares
  * 
  */
-public abstract class EngineActivity extends FragmentActivity {
+public abstract class EngineActivity extends Activity {
 
 	private Engine engine;
-	private Game game;
 	private boolean prepared;
 
 	@Override
@@ -29,11 +45,12 @@ public abstract class EngineActivity extends FragmentActivity {
 
 		setWindowFlags();
 
-		setContentView(getContentViewID());
-		final GLView glView = (GLView) findViewById(getGLViewID());
+		setContentView(getContentViewId());
+		final GLView glView = (GLView) findViewById(getGLViewId());
 
 		engine = createEngine(glView);
-		game = engine.getGame();
+
+		final AbstractGame game = engine.getGame();
 		engine.startGame();
 
 		// GLView.getWidth() and GLView.getHeight() return 0 before the view is rendered on screen for the first time,
@@ -86,10 +103,27 @@ public abstract class EngineActivity extends FragmentActivity {
 	}
 
 	@Override
-	public void onBackPressed() {
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (engine != null) {
-			engine.onBackPressed();
+			return engine.getGame().getGameInputManager().onKeyDown(keyCode, event);
 		}
+		return super.onKeyDown(keyCode, event);
+	}
+
+	@Override
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
+		if (engine != null) {
+			return engine.getGame().getGameInputManager().onKeyUp(keyCode, event);
+		}
+		return super.onKeyUp(keyCode, event);
+	}
+
+	/**
+	 * The default implementation of this method does nothing.<br>
+	 * The back button presses are handled by the {@link GameStateInputManager} of the current {@link GameState}.
+	 */
+	@Override
+	public void onBackPressed() {
 	}
 
 	@Override
@@ -104,8 +138,8 @@ public abstract class EngineActivity extends FragmentActivity {
 	 * This method is called from {@link #onConfigurationChanged(Configuration)} if the Engine has been initialized.
 	 */
 	public void onConfigurationChanged() {
-		setContentView(getContentViewID());
-		engine.setGLView((GLView) findViewById(getGLViewID()));
+		setContentView(getContentViewId());
+		engine.setGLView((GLView) findViewById(getGLViewId()));
 	}
 
 	/**
@@ -128,15 +162,6 @@ public abstract class EngineActivity extends FragmentActivity {
 	}
 
 	/**
-	 * Returns the Game.
-	 * 
-	 * @return Game
-	 */
-	protected Game getGame() {
-		return game;
-	}
-
-	/**
 	 * Creates an Engine and returns it.<br>
 	 * The Engine object returned by this method is the Engine that will be managed by this Activity.<br>
 	 * This method is called from {@link EngineActivity#onCreate(Bundle)}
@@ -152,14 +177,14 @@ public abstract class EngineActivity extends FragmentActivity {
 	 * 
 	 * @return Content View ID
 	 */
-	public abstract int getContentViewID();
+	public abstract int getContentViewId();
 
 	/**
 	 * Returns the ID of the GLView (defined in the layout xml file) where the game will be rendered.
 	 * 
 	 * @return GLView ID
 	 */
-	public abstract int getGLViewID();
+	public abstract int getGLViewId();
 
 	/**
 	 * Returns the orientation of the activity.<br>

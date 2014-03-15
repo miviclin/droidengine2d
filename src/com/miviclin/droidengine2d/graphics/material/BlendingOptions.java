@@ -1,3 +1,17 @@
+/*   Copyright 2013-2014 Miguel Vicente Linares
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 package com.miviclin.droidengine2d.graphics.material;
 
 import android.opengl.GLES20;
@@ -64,7 +78,8 @@ public class BlendingOptions {
 	 * 
 	 * @param sourceFactor Source factor.
 	 * @param destinationFactor Destination factor.
-	 * @param blendEquationMode Blending equation.
+	 * @param blendEquationMode Blending equation. This setting will only work in Android Ice Cream Sandwich or newer
+	 *            versions.
 	 * 
 	 * @see GLES20#glBlendFunc(int, int)
 	 * @see GLES20#glBlendEquation(int)
@@ -137,7 +152,7 @@ public class BlendingOptions {
 	}
 
 	/**
-	 * Returns the blending equation.
+	 * Returns the blending equation. This setting will only work in Android Ice Cream Sandwich or newer versions.
 	 * 
 	 * @return {@link GLES20#GL_FUNC_ADD}, {@link GLES20#GL_FUNC_SUBTRACT} o {@link GLES20#GL_FUNC_REVERSE_SUBTRACT}
 	 * 
@@ -148,7 +163,7 @@ public class BlendingOptions {
 	}
 
 	/**
-	 * Sets the blending equation.
+	 * Sets the blending equation. This setting will only work in Android Ice Cream Sandwich or newer versions.
 	 * 
 	 * @param blendEquationMode {@link GLES20#GL_FUNC_ADD}, {@link GLES20#GL_FUNC_SUBTRACT} or
 	 *            {@link GLES20#GL_FUNC_REVERSE_SUBTRACT}

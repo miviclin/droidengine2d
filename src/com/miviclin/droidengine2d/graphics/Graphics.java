@@ -1,3 +1,17 @@
+/*   Copyright 2013-2014 Miguel Vicente Linares
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 package com.miviclin.droidengine2d.graphics;
 
 import java.util.HashMap;
@@ -13,8 +27,9 @@ import com.miviclin.droidengine2d.graphics.material.TextureColorMaterial;
 import com.miviclin.droidengine2d.graphics.material.TextureHsvMaterial;
 import com.miviclin.droidengine2d.graphics.material.TextureMaterial;
 import com.miviclin.droidengine2d.graphics.material.TransparentTextureMaterial;
+import com.miviclin.droidengine2d.graphics.material.UnsupportedMaterialException;
 import com.miviclin.droidengine2d.graphics.mesh.ColorMaterialBatchRenderer;
-import com.miviclin.droidengine2d.graphics.mesh.GraphicsBatch;
+import com.miviclin.droidengine2d.graphics.mesh.GraphicsBatchRenderer;
 import com.miviclin.droidengine2d.graphics.mesh.RectangleBatchRenderer;
 import com.miviclin.droidengine2d.graphics.mesh.TextureColorMaterialBatchRenderer;
 import com.miviclin.droidengine2d.graphics.mesh.TextureHsvMaterialBatchRenderer;
@@ -109,7 +124,7 @@ public class Graphics {
 	public <M extends Material> void drawRect(M material, Transform transform) {
 		RectangleBatchRenderer batchRenderer = renderers.get(material.getClass());
 		if (batchRenderer == null) {
-			throw new UnsupportedMaterialException();
+			throw new UnsupportedMaterialException(material.getClass());
 		}
 
 		Vector2 scale = transform.getScale();
@@ -158,7 +173,7 @@ public class Graphics {
 
 		RectangleBatchRenderer batchRenderer = renderers.get(TextureColorMaterial.class);
 		if (batchRenderer == null) {
-			throw new UnsupportedMaterialException();
+			throw new UnsupportedMaterialException(TextureColorMaterial.class);
 		}
 		if (fontSizePx < 1 || fontSizePx < 1) {
 			throw new IllegalArgumentException("fontSizePx has to be at least 1");
@@ -177,7 +192,7 @@ public class Graphics {
 		FontChar lastChar = null;
 		float cosR, sinR;
 		for (int i = 0; i < textLength; i++) {
-			currentChar = font.getCharacter((int) text.charAt(i));
+			currentChar = font.getCharacter(text.charAt(i));
 			if (lastChar != null) {
 				posX += lastChar.getKernings().get(currentChar.getId()) * scaleRatio;
 			}
@@ -267,8 +282,8 @@ public class Graphics {
 	/**
 	 * Returns true if there is one or more elements pending to be rendered in the currently selected renderer.
 	 * 
-	 * @return true if {@link GraphicsBatch#begin()} has been called, but {@link GraphicsBatch#end()} has not been
-	 *         called yet on the currently selected renderer, false otherwise
+	 * @return true if {@link GraphicsBatchRenderer#begin()} has been called, but {@link GraphicsBatchRenderer#end()}
+	 *         has not been called yet on the currently selected renderer, false otherwise
 	 */
 	protected boolean isInBeginEndPair() {
 		return inBeginEndPair;

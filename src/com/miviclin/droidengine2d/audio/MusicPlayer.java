@@ -1,3 +1,17 @@
+/*   Copyright 2013-2014 Miguel Vicente Linares
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 package com.miviclin.droidengine2d.audio;
 
 import java.io.IOException;
@@ -11,12 +25,15 @@ import android.media.MediaPlayer.OnCompletionListener;
 import com.miviclin.droidengine2d.resources.AssetsLoader;
 
 /**
- * Manages background music streaming.
+ * MusicPlayer can be used to control playback of audio files.
  * 
  * @author Miguel Vicente Linares
  * 
  */
-public class MusicManager implements OnCompletionListener {
+public class MusicPlayer implements OnCompletionListener {
+
+	public static final float MIN_VOLUME = 0.0f;
+	public static final float MAX_VOLUME = 1.0f;
 
 	private MediaPlayer player;
 	private boolean prepared;
@@ -26,11 +43,18 @@ public class MusicManager implements OnCompletionListener {
 	/**
 	 * Creates a new MusicManager.
 	 */
-	public MusicManager() {
+	public MusicPlayer() {
 		this.player = null;
 		this.prepared = false;
 		this.loaded = false;
 		this.volume = -1.0f;
+	}
+
+	@Override
+	public void onCompletion(MediaPlayer player) {
+		synchronized (this) {
+			prepared = false;
+		}
 	}
 
 	/**
@@ -258,15 +282,8 @@ public class MusicManager implements OnCompletionListener {
 		}
 	}
 
-	@Override
-	public void onCompletion(MediaPlayer player) {
-		synchronized (this) {
-			prepared = false;
-		}
-	}
-
 	/**
-	 * Checks if MusicManager supports playing the specified file without loading it.
+	 * Checks if MusicManager supports playing the specified file.
 	 * 
 	 * @param context Context.
 	 * @param ruta File path.

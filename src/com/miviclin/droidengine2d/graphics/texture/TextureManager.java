@@ -1,3 +1,17 @@
+/*   Copyright 2013-2014 Miguel Vicente Linares
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 package com.miviclin.droidengine2d.graphics.texture;
 
 import java.util.ArrayList;
@@ -8,7 +22,6 @@ import android.content.Context;
 import android.util.SparseArray;
 
 import com.miviclin.droidengine2d.graphics.text.Font;
-import com.miviclin.droidengine2d.util.Pool;
 
 /**
  * TextureManager.
@@ -21,7 +34,7 @@ public final class TextureManager {
 	private Context context;
 	private HashMap<String, TextureRegion> textureRegions;
 	private ArrayList<Texture> activeTextures;
-	private Pool<Texture> removedTextures;
+	private ArrayList<Texture> removedTextures;
 	private int texturesToLoad;
 
 	/**
@@ -45,7 +58,7 @@ public final class TextureManager {
 		this.textureRegions = new HashMap<String, TextureRegion>(mapCapacity);
 		this.context = context;
 		this.activeTextures = new ArrayList<Texture>(initialCapacityForTextures);
-		this.removedTextures = new Pool<Texture>(initialCapacityForTextures);
+		this.removedTextures = new ArrayList<Texture>(initialCapacityForTextures);
 		this.texturesToLoad = 0;
 	}
 
@@ -175,7 +188,7 @@ public final class TextureManager {
 				high = mid - 1;
 			} else {
 				removedTexture = activeTextures.remove(mid);
-				removedTextures.put(removedTexture);
+				removedTextures.add(removedTexture);
 				if (!removedTexture.isLoaded()) {
 					texturesToLoad--;
 				}
@@ -190,7 +203,7 @@ public final class TextureManager {
 	 */
 	public void removeAllTextures() {
 		for (int i = activeTextures.size() - 1; i >= 0; i--) {
-			removedTextures.put(activeTextures.remove(i));
+			removedTextures.add(activeTextures.remove(i));
 		}
 		texturesToLoad = 0;
 	}
@@ -204,7 +217,7 @@ public final class TextureManager {
 	 */
 	public void clearRemovedTextures() {
 		for (int i = removedTextures.size() - 1; i >= 0; i--) {
-			removedTextures.get().delete();
+			removedTextures.get(i).delete();
 		}
 	}
 
@@ -221,7 +234,7 @@ public final class TextureManager {
 				activeTextures.remove(i).delete();
 			}
 			if (i < removedTexturesSize) {
-				removedTextures.get().delete();
+				removedTextures.get(i).delete();
 			}
 		}
 		texturesToLoad = 0;

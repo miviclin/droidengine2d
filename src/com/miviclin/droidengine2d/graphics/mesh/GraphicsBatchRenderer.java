@@ -1,3 +1,17 @@
+/*   Copyright 2013-2014 Miguel Vicente Linares
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 package com.miviclin.droidengine2d.graphics.mesh;
 
 import com.miviclin.droidengine2d.graphics.material.BlendingOptions;
@@ -10,7 +24,7 @@ import com.miviclin.droidengine2d.graphics.shader.ShaderProgram;
  * @author Miguel Vicente Linares
  * 
  */
-public abstract class GraphicsBatch<M extends Material> {
+public abstract class GraphicsBatchRenderer<M extends Material> {
 
 	private final BlendingOptions currentBatchBlendingOptions;
 	private final BlendingOptions nextBatchBlendingOptions;
@@ -27,7 +41,7 @@ public abstract class GraphicsBatch<M extends Material> {
 	 * 
 	 * @param maxBatchSize Maximum size of this GraphicsBatch.
 	 */
-	public GraphicsBatch(int maxBatchSize) {
+	public GraphicsBatchRenderer(int maxBatchSize) {
 		this.currentBatchBlendingOptions = new BlendingOptions();
 		this.nextBatchBlendingOptions = new BlendingOptions();
 		this.inBeginEndPair = false;

@@ -1,3 +1,17 @@
+/*   Copyright 2013-2014 Miguel Vicente Linares
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 package com.miviclin.droidengine2d.graphics.mesh;
 
 import android.content.Context;
@@ -28,7 +42,6 @@ public abstract class TextureMaterialBatchRendererBase<M extends Material> exten
 	 * 
 	 * @param verticesDataStride Data stride of the vertices.
 	 * @param context Context.
-	 * @param shaderProgram ShaderProgram.
 	 */
 	public TextureMaterialBatchRendererBase(int verticesDataStride, Context context) {
 		super(verticesDataStride, 32);
@@ -45,7 +58,7 @@ public abstract class TextureMaterialBatchRendererBase<M extends Material> exten
 	}
 
 	/**
-	 * Adds a sprite to this batch.<br>
+	 * Adds a rectangle with texture to this batch.<br>
 	 * If the batch was full, it will be rendered in one draw call and it will be left empty. Then, the specified
 	 * rectangle will be added to this batch.
 	 * 
@@ -56,7 +69,7 @@ public abstract class TextureMaterialBatchRendererBase<M extends Material> exten
 	 * @param rotation Rotation angle around the origin.
 	 * @param camera Camera.
 	 */
-	protected void setupSprite(TextureRegion textureRegion, Vector2 position, Vector2 scale, Vector2 origin,
+	protected void setupTexturedRectangle(TextureRegion textureRegion, Vector2 position, Vector2 scale, Vector2 origin,
 			float rotation, Camera camera) {
 
 		boolean textureChanged = checkTextureChanged(textureRegion);

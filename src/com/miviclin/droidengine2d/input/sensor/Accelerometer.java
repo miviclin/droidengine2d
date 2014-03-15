@@ -1,9 +1,22 @@
+/*   Copyright 2013-2014 Miguel Vicente Linares
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 package com.miviclin.droidengine2d.input.sensor;
 
 import android.app.Activity;
 import android.content.Context;
 import android.hardware.Sensor;
-import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
@@ -13,45 +26,33 @@ import android.hardware.SensorManager;
  * @author Miguel Vicente Linares
  * 
  */
-public class Accelerometer implements SensorEventListener {
+public class Accelerometer {
 
-	private volatile float lowPassFilterAttenuation;
-	private volatile float[] accelerometerValues;
 	private SensorManager sensorManager;
+	private AccelerometerValuesListener valuesListener;
+	private SensorEventListener customListener;
+	private boolean listening;
 
 	/**
-	 * Creates an Accelerometer and starts registering values.
+	 * Creates an Accelerometer with an AccelerometerValuesListener.
 	 * 
 	 * @param activity Activity.
 	 */
 	public Accelerometer(Activity activity) {
-		this(0.2f, activity);
+		this(activity, null);
 	}
 
 	/**
-	 * Creates an Accelerometer and starts registering values.
+	 * Creates an Accelerometer with an AccelerometerValuesListener and the specified listener.
 	 * 
-	 * @param lowPassFilterAttenuation Low pass filter attenuation value.
 	 * @param activity Activity.
+	 * @param customListener SensorEventListener.
 	 */
-	public Accelerometer(float lowPassFilterAttenuation, Activity activity) {
-		this.lowPassFilterAttenuation = lowPassFilterAttenuation;
-		accelerometerValues = new float[3];
-		sensorManager = (SensorManager) activity.getSystemService(Context.SENSOR_SERVICE);
-
-		Sensor accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-		sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
-	}
-
-	@Override
-	public void onSensorChanged(SensorEvent event) {
-		if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-			SensorUtilities.lowPassFilter(event.values, accelerometerValues, 3, lowPassFilterAttenuation);
-		}
-	}
-
-	@Override
-	public void onAccuracyChanged(Sensor sensor, int accuracy) {
+	public Accelerometer(Activity activity, SensorEventListener customListener) {
+		this.sensorManager = (SensorManager) activity.getSystemService(Context.SENSOR_SERVICE);
+		this.valuesListener = new AccelerometerValuesListener(activity, 0.2f);
+		this.customListener = customListener;
+		this.listening = false;
 	}
 
 	/**
@@ -59,58 +60,58 @@ public class Accelerometer implements SensorEventListener {
 	 */
 	public void startListening() {
 		Sensor accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-		sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
+		sensorManager.registerListener(valuesListener, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
+		if (customListener != null) {
+			sensorManager.registerListener(customListener, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
+		}
+		listening = true;
 	}
 
 	/**
 	 * Stops listening the accelerometer.
 	 */
 	public void stopListening() {
-		sensorManager.unregisterListener(this);
+		sensorManager.unregisterListener(valuesListener);
+		if (customListener != null) {
+			sensorManager.unregisterListener(customListener);
+		}
+		listening = false;
 	}
 
 	/**
-	 * Returns the attenuation value of the low pass filter.
+	 * Returns true if this object is listening the accelerometer.
 	 * 
-	 * @return the attenuation value of the low pass filter
+	 * @return true if this object is listening the accelerometer, false otherwise
 	 */
-	public float getLowPassFilterAttenuation() {
-		return lowPassFilterAttenuation;
+	public boolean isListening() {
+		return listening;
 	}
 
 	/**
-	 * Sets the attenuation value of the low pass filter
+	 * Returns the AccelerometerValuesListener.
 	 * 
-	 * @param lowPassFilterAttenuation New value.
+	 * @return AccelerometerValuesListener
 	 */
-	public void setLowPassFilterAttenuation(float lowPassFilterAttenuation) {
-		this.lowPassFilterAttenuation = lowPassFilterAttenuation;
+	public AccelerometerValuesListener getValuesListener() {
+		return valuesListener;
 	}
 
 	/**
-	 * Returns the X component of the vector read from the accelerometer.
+	 * Returns the custom listener.
 	 * 
-	 * @return X
+	 * @return SensorEventListener
 	 */
-	public float getX() {
-		return accelerometerValues[0];
+	public SensorEventListener getCustomListener() {
+		return customListener;
 	}
 
 	/**
-	 * Returns the Y component of the vector read from the accelerometer.
+	 * Sets the custom listener.
 	 * 
-	 * @return Y
+	 * @param listener SensorEventListener.
 	 */
-	public float getY() {
-		return accelerometerValues[1];
+	public void setCustomListener(SensorEventListener listener) {
+		this.customListener = listener;
 	}
 
-	/**
-	 * Returns the Z component of the vector read from the accelerometer.
-	 * 
-	 * @return Z
-	 */
-	public float getZ() {
-		return accelerometerValues[2];
-	}
 }
