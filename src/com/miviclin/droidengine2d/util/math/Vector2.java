@@ -41,10 +41,12 @@ public class Vector2 {
 	 * 
 	 * @param x
 	 * @param y
+	 * @return this Vector2
 	 */
-	public final void set(float x, float y) {
+	public final Vector2 set(float x, float y) {
 		this.x = x;
 		this.y = y;
+		return this;
 	}
 
 	/**
