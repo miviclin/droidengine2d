@@ -246,7 +246,7 @@ public class Vector3 {
 	 * @param x The X coordinate of this vector will be multiplied by this value.
 	 * @param y The Y coordinate of this vector will be multiplied by this value.
 	 * @param z The Z coordinate of this vector will be multiplied by this value.
-	 * @return this Vector2
+	 * @return this Vector3
 	 */
 	public final Vector3 multiply(float x, float y, float z) {
 		this.x *= x;
@@ -439,6 +439,21 @@ public class Vector3 {
 	 */
 	public static final float length(Vector3 vector) {
 		return (float) Math.sqrt(vector.x * vector.x + vector.y * vector.y + vector.z * vector.z);
+	}
+
+	/**
+	 * Sets the length of this vector.<br>
+	 * 
+	 * @param length New length.
+	 * @return this Vector3
+	 */
+	public final Vector3 setLength(float length) {
+		if (length < 0) {
+			throw new IllegalArgumentException("The specified length must be positive or zero.");
+		}
+		normalize();
+		multiply(length);
+		return this;
 	}
 
 	/**
