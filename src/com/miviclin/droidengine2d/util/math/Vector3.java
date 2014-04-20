@@ -442,6 +442,21 @@ public class Vector3 {
 	}
 
 	/**
+	 * Sets the length of this vector.<br>
+	 * 
+	 * @param length New length.
+	 * @return this Vector3
+	 */
+	public final Vector3 setLength(float length) {
+		if (length < 0) {
+			throw new IllegalArgumentException("The specified length must be positive or zero.");
+		}
+		normalize();
+		multiply(length);
+		return this;
+	}
+
+	/**
 	 * Normalizes this vector.
 	 * 
 	 * @return this Vector3
