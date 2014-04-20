@@ -246,7 +246,7 @@ public class Vector3 {
 	 * @param x The X coordinate of this vector will be multiplied by this value.
 	 * @param y The Y coordinate of this vector will be multiplied by this value.
 	 * @param z The Z coordinate of this vector will be multiplied by this value.
-	 * @return this Vector2
+	 * @return this Vector3
 	 */
 	public final Vector3 multiply(float x, float y, float z) {
 		this.x *= x;
