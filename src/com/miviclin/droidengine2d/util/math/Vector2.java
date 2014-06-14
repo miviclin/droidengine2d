@@ -41,10 +41,12 @@ public class Vector2 {
 	 * 
 	 * @param x
 	 * @param y
+	 * @return this Vector2
 	 */
-	public final void set(float x, float y) {
+	public final Vector2 set(float x, float y) {
 		this.x = x;
 		this.y = y;
+		return this;
 	}
 
 	/**
@@ -363,6 +365,21 @@ public class Vector2 {
 	 */
 	public static final float length(Vector2 vector) {
 		return (float) Math.sqrt(vector.x * vector.x + vector.y * vector.y);
+	}
+
+	/**
+	 * Sets the length of this vector.<br>
+	 * 
+	 * @param length New length.
+	 * @return this Vector2
+	 */
+	public final Vector2 setLength(float length) {
+		if (length < 0) {
+			throw new IllegalArgumentException("The specified length must be positive or zero.");
+		}
+		normalize();
+		multiply(length);
+		return this;
 	}
 
 	/**
