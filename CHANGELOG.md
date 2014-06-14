@@ -1,3 +1,9 @@
+#v0.8.1 (2014-06-14)
+
+**Changes:**
+
+- Added minor fixes in Vector2 and Vector3.
+
 #v0.8.0 (2014-03-15)
 
 **Changes:**
