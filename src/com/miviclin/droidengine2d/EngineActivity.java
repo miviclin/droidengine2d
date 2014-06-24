@@ -51,7 +51,7 @@ public abstract class EngineActivity extends Activity {
 		engine = createEngine(glView);
 
 		final AbstractGame game = engine.getGame();
-		engine.startGame();
+		engine.start();
 
 		// GLView.getWidth() and GLView.getHeight() return 0 before the view is rendered on screen for the first time,
 		// so we have to wait until the view is rendered for the first time before initializing the Engine
@@ -82,7 +82,7 @@ public abstract class EngineActivity extends Activity {
 	public void onPause() {
 		super.onPause();
 		if (engine != null) {
-			engine.onPause();
+			engine.pause();
 		}
 	}
 
@@ -90,7 +90,7 @@ public abstract class EngineActivity extends Activity {
 	public void onResume() {
 		super.onResume();
 		if (engine != null) {
-			engine.onResume();
+			engine.resume();
 		}
 	}
 
@@ -98,7 +98,7 @@ public abstract class EngineActivity extends Activity {
 	public void onDestroy() {
 		super.onDestroy();
 		if (engine != null) {
-			engine.onDestroy();
+			engine.destroy();
 		}
 	}
 

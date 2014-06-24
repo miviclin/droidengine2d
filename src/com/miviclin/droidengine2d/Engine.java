@@ -28,7 +28,7 @@ import com.miviclin.droidengine2d.graphics.GLView;
 /**
  * Engine manages the game thread and the rendering thread.<br>
  * <br>
- * WARNING: {@link Engine#onPause()}, {@link Engine#onResume()} and {@link Engine#onDestroy()} should be called from
+ * WARNING: {@link Engine#pause()}, {@link Engine#resume()} and {@link Engine#destroy()} should be called from
  * {@link Activity#onPause()}, {@link Activity#onResume()} and {@link Activity#onDestroy()} respectively. DroidEngine2D
  * uses OpenGL ES 2.0, so a compatibility check should be performed. For example:
  * 
@@ -107,7 +107,7 @@ public class Engine {
 	/**
 	 * Starts the game thread and the rendering thread.
 	 */
-	public void startGame() {
+	public void start() {
 		gameThread.start();
 		glView.setRenderer(renderer);
 		glView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
@@ -117,7 +117,7 @@ public class Engine {
 	 * Pauses the game thread and the rendering thread.<br>
 	 * This method should be called from {@link Activity#onPause()}
 	 */
-	public void onPause() {
+	public void pause() {
 		glView.onPause();
 		gameThread.pause();
 	}
@@ -126,7 +126,7 @@ public class Engine {
 	 * Resumes the game thread and the rendering thread.<br>
 	 * This method should be called from {@link Activity#onResume()}
 	 */
-	public void onResume() {
+	public void resume() {
 		glView.onResume();
 		gameThread.resume();
 	}
@@ -135,7 +135,7 @@ public class Engine {
 	 * Destroys the game thread and releases resources.<br>
 	 * This method should be called from {@link Activity#onDestroy()}
 	 */
-	public void onDestroy() {
+	public void destroy() {
 		gameThread.terminate();
 	}
 
